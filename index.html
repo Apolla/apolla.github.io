@@ -463,77 +463,6 @@ hexo deploy
 
 
   
-    <article id="post-masonry 的使用技巧" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/22/masonry 的使用技巧/" class="article-date">
-  	<time datetime="2015-05-22T07:21:42.000Z" itemprop="datePublished">2015-05-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/22/masonry 的使用技巧/">masonry 的使用技巧</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>做项目时一直使用Autolayout进行自适应布局，后来发现直观性太差，隔壁项目组同事向我推荐了masonry。
-</code></pre><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><ol>
-<li>再引入头文件时先定义两个宏，节省开发资源</li>
-</ol>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只要添加了这个宏，就不用带mas_前缀</span></span><br><span class="line"><span class="meta">#define MAS_SHORTHAND</span></span><br><span class="line"><span class="comment">// 只要添加了这个宏，equalTo就等价于mas_equalTo</span></span><br><span class="line"><span class="meta">#define MAS_SHORTHAND_GLOBALS</span></span><br><span class="line"><span class="comment">// 这个头文件一定要放在上面两个宏的后面</span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"Masonry.h"</span></span></span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>常用方法</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line"> <span class="comment">//设置约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_makeConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *))block;</span><br><span class="line"><span class="comment">//如果之前已经有约束,则更新新的约束,如果没有约束,则添加约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_updateConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *))block;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将之前的约束全部删除,添加新的约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_remakeConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *make))block;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>范例</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//添加两个控件</span></span><br><span class="line">  <span class="built_in">UIView</span> *blueView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  blueView.backgroundColor = [<span class="built_in">UIColor</span> blueColor];</span><br><span class="line">  blueView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line">  [<span class="keyword">self</span>.view addSubview:blueView];</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">UIView</span> *redView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  redView.backgroundColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">  redView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line"> [<span class="keyword">self</span>.view addSubview:redView];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//给蓝色View设置约束</span></span><br><span class="line"> [blueView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">     make.left.equalTo(<span class="keyword">self</span>.view.mas_left).offset(<span class="number">30</span>);<span class="comment">//和父view的左边间距为30;</span></span><br><span class="line">     make.bottom.equalTo(<span class="keyword">self</span>.view.mas_bottom).offset(<span class="number">-30</span>);<span class="comment">//和父view的底部间距为30;</span></span><br><span class="line">     make.right.equalTo(redView.mas_left).offset(<span class="number">-30</span>);<span class="comment">//和红色view的间距为30;</span></span><br><span class="line">     make.height.mas_equalTo(<span class="number">50</span>);<span class="comment">//蓝色view的高度为50</span></span><br><span class="line"> &#125;];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//给红色View设置约束</span></span><br><span class="line"> [redView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">     make.right.equalTo(<span class="keyword">self</span>.view.mas_right).offset(<span class="number">-30</span>);<span class="comment">//和父view的右边间距为30;</span></span><br><span class="line">     make.bottom.equalTo(blueView.mas_bottom);<span class="comment">//和蓝色view的底部对齐</span></span><br><span class="line">   make.height.equalTo(blueView.mas_height);<span class="comment">//和蓝色view的高度相等</span></span><br><span class="line">    make.width.equalTo(blueView.mas_width);<span class="comment">//和蓝色view的宽度相等</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>例：如果添加了宏则可以简化方法为</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[blueView mas_remakeConstraints:^(MASConstraintMaker *make) &#123;&#125;];</span><br><span class="line">[blueView remakeConstraints:^(MASConstraintMaker *make) &#123;&#125;];</span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/masonry/">masonry</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-ios渐变色" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -572,6 +501,77 @@ hexo deploy
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渐变色/">渐变色</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-masonry 的使用技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/22/masonry 的使用技巧/" class="article-date">
+  	<time datetime="2015-03-22T05:33:42.000Z" itemprop="datePublished">2015-03-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/22/masonry 的使用技巧/">masonry的使用技巧</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>做项目时一直使用Autolayout进行自适应布局，后来发现直观性太差，隔壁项目组同事向我推荐了masonry。
+</code></pre><h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><ol>
+<li>再引入头文件时先定义两个宏，节省开发资源</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只要添加了这个宏，就不用带mas_前缀</span></span><br><span class="line"><span class="meta">#define MAS_SHORTHAND</span></span><br><span class="line"><span class="comment">// 只要添加了这个宏，equalTo就等价于mas_equalTo</span></span><br><span class="line"><span class="meta">#define MAS_SHORTHAND_GLOBALS</span></span><br><span class="line"><span class="comment">// 这个头文件一定要放在上面两个宏的后面</span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"Masonry.h"</span></span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>常用方法</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line"> <span class="comment">//设置约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_makeConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *))block;</span><br><span class="line"><span class="comment">//如果之前已经有约束,则更新新的约束,如果没有约束,则添加约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_updateConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *))block;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将之前的约束全部删除,添加新的约束</span></span><br><span class="line">- (<span class="built_in">NSArray</span> *)mas_remakeConstraints:(<span class="keyword">void</span>(^)(MASConstraintMaker *make))block;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//添加两个控件</span></span><br><span class="line">  <span class="built_in">UIView</span> *blueView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  blueView.backgroundColor = [<span class="built_in">UIColor</span> blueColor];</span><br><span class="line">  blueView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line">  [<span class="keyword">self</span>.view addSubview:blueView];</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">UIView</span> *redView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  redView.backgroundColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">  redView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line"> [<span class="keyword">self</span>.view addSubview:redView];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//给蓝色View设置约束</span></span><br><span class="line"> [blueView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">     make.left.equalTo(<span class="keyword">self</span>.view.mas_left).offset(<span class="number">30</span>);<span class="comment">//和父view的左边间距为30;</span></span><br><span class="line">     make.bottom.equalTo(<span class="keyword">self</span>.view.mas_bottom).offset(<span class="number">-30</span>);<span class="comment">//和父view的底部间距为30;</span></span><br><span class="line">     make.right.equalTo(redView.mas_left).offset(<span class="number">-30</span>);<span class="comment">//和红色view的间距为30;</span></span><br><span class="line">     make.height.mas_equalTo(<span class="number">50</span>);<span class="comment">//蓝色view的高度为50</span></span><br><span class="line"> &#125;];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//给红色View设置约束</span></span><br><span class="line"> [redView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">     make.right.equalTo(<span class="keyword">self</span>.view.mas_right).offset(<span class="number">-30</span>);<span class="comment">//和父view的右边间距为30;</span></span><br><span class="line">     make.bottom.equalTo(blueView.mas_bottom);<span class="comment">//和蓝色view的底部对齐</span></span><br><span class="line">   make.height.equalTo(blueView.mas_height);<span class="comment">//和蓝色view的高度相等</span></span><br><span class="line">    make.width.equalTo(blueView.mas_width);<span class="comment">//和蓝色view的宽度相等</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例：如果添加了宏则可以简化方法为</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[blueView mas_remakeConstraints:^(MASConstraintMaker *make) &#123;&#125;];</span><br><span class="line">[blueView remakeConstraints:^(MASConstraintMaker *make) &#123;&#125;];</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/masonry/">masonry</a></li></ul>
 	</div>
 
       
