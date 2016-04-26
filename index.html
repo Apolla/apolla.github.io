@@ -72,12 +72,12 @@
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
 						<li>Menu</li>
-						<li>Tags</li>
+						<li>Тэги</li>
 						
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>О сайте</li>
 						
 					</ul>
 				</div>
@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/hexo-github/" style="font-size: 10px;">hexo+github</a> <a href="/tags/后台/" style="font-size: 10px;">后台</a> <a href="/tags/私人博客/" style="font-size: 10px;">私人博客</a> <a href="/tags/音频/" style="font-size: 10px;">音频</a>
+						<a href="/tags/hexo-github/" style="font-size: 10px;">hexo+github</a> <a href="/tags/后台/" style="font-size: 10px;">后台</a> <a href="/tags/渐变色/" style="font-size: 10px;">渐变色</a> <a href="/tags/私人博客/" style="font-size: 10px;">私人博客</a> <a href="/tags/音频/" style="font-size: 10px;">音频</a>
 					</div>
 				</section>
 				
@@ -445,6 +445,65 @@ hexo deploy
 	<a class="article-category-link" href="/categories/音频处理/">音频处理 </a>
 	</div>
 
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-ios渐变色" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/22/ios渐变色/" class="article-date">
+  	<time datetime="2015-03-22T05:33:42.000Z" itemprop="datePublished">2015-03-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/22/ios渐变色/">ios渐变色</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前做项目的时候导航栏需要渐变色，本来打算让UI出图，但是需求上要求是可能会变，为了不影响UI心情，以及增加他老人家的工作量，就去研究了一下渐变色。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span><br><span class="line">*实现阴影效果</span><br><span class="line">*yyView 你要设置的View</span><br><span class="line">*isDown yes：从上到下由深到浅 no:由浅到深</span><br><span class="line">*当然色值可以自己改，不过我懒得抽了，自己看看吧</span><br><span class="line">*/</span></span><br><span class="line">- (<span class="keyword">void</span>)setRuanYinying:(<span class="built_in">UIView</span>*)yyView andIsDown:(<span class="built_in">BOOL</span>)isDown</span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//开始的颜色</span></span><br><span class="line"><span class="built_in">UIColor</span> *beginColor = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0</span> green:<span class="number">0</span> blue:<span class="number">0</span> alpha:<span class="number">0.5</span>];</span><br><span class="line"><span class="comment">//结束的颜色</span></span><br><span class="line"><span class="built_in">UIColor</span> *endColor =[<span class="built_in">UIColor</span> colorWithRed:<span class="number">0</span> green:<span class="number">0</span> blue:<span class="number">0</span> alpha:<span class="number">0</span>];</span><br><span class="line"><span class="keyword">if</span> (!isDown) &#123;</span><br><span class="line">beginColor=[<span class="built_in">UIColor</span> colorWithRed:<span class="number">0</span> green:<span class="number">0</span> blue:<span class="number">0</span> alpha:<span class="number">0</span>];;</span><br><span class="line">endColor=[<span class="built_in">UIColor</span> colorWithRed:<span class="number">0</span> green:<span class="number">0</span> blue:<span class="number">0</span> alpha:<span class="number">0.5</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSNumber</span> *begin = [<span class="built_in">NSNumber</span> numberWithFloat:<span class="number">0.0</span>];</span><br><span class="line"><span class="built_in">NSNumber</span> *end = [<span class="built_in">NSNumber</span> numberWithFloat:<span class="number">1.0</span>];</span><br><span class="line"><span class="built_in">CAGradientLayer</span> *headLayer = [<span class="built_in">CAGradientLayer</span> layer];</span><br><span class="line">headLayer.colors = [<span class="built_in">NSArray</span> arrayWithObjects:beginColor.CGColor,endColor.CGColor, <span class="literal">nil</span>];</span><br><span class="line"><span class="comment">//颜色分割线（整个headLayer是一个整体）</span></span><br><span class="line">headLayer.locations = @[begin,end];</span><br><span class="line">headLayer.frame = yyView.bounds;</span><br><span class="line">[yyView.layer insertSublayer:headLayer atIndex:<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>转载请注明原地址，Apolla的博客 <a href="http://apolla.github.io/" target="_blank" rel="external">http://apolla.github.io/</a> 谢谢！</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/渐变色/">渐变色</a></li></ul>
+	</div>
+
+      
 
       
       <div class="clearfix"></div>
