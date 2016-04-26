@@ -26,7 +26,7 @@
 
 
 开始实现iOS 4开始引入的multitask，我们可以实现像ipod程序那样在后台播放音频了。如果音频操作是用苹果官方的AVFoundation.framework实现，像用AvAudioPlayer，AvPlay">
-<meta property="og:updated_time" content="2016-04-25T15:48:38.000Z">
+<meta property="og:updated_time" content="2016-04-26T01:56:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apolla’s home">
 <meta name="twitter:description" content="firsttitle: ISO后台播放音乐date: 2016-04-25 22:56:09tags:
@@ -240,7 +240,7 @@
 <li>音频处理 </li>
 </ul>
 <hr>
-<h2 id="开始实现"><a href="#开始实现" class="headerlink" title="开始实现"></a>开始实现</h2><p>iOS 4开始引入的multitask，我们可以实现像ipod程序那样在后台播放音频了。如果音频操作是用苹果官方的AVFoundation.framework实现，像用AvAudioPlayer，AvPlayer播放的话，要实现完美的后台音频播放，依据app的功能需要，可能需要实现几个关键的功能。<br>首先，播放音频之前先要设置AVAudioSession模式，通常只用来播放的App可以设为AVAudioSessionCategoryPlayback即可。模式意义及其他模式请参考文档。<br>1 //后台播放音频设置<br>2 AVAudioSession session = [AVAudioSession sharedInstance];<br>3 [session setActive:YES error:nil];<br>4 [session setCategory:AVAudioSessionCategoryPlayback error:nil];<br>1.通知IOS该app支持background audio。缺省情况下，当按下home键时，当前正在运行的程序被suspend，状态从active变成in-active，也就是说如果正在播放音频，按下HOME后就会停止。这里需要让app在按在HOME后，转到后台运行而非被suspend，解决办法是在程序的-info.plist中增加required background modes这个key项，并选择App plays audio or streams audio/video using AirPlay这个value项（如果用过Xcode5.0，在TARGETS－Capabilities－Background Modes设置为ON，勾选Audio and AirPlay选项）。<br>2.如果你在后台播放使用的时加载网络音频，恰巧网速很慢，音频被停止下来这时候程序也随之suspend，曾经有山寨的解决办法是专门起一个player的实例连续不停的放同一无声音片断，阻止程序被suspend。这里提供的方法是通过申请后台taskID达到后台切换播放文件的功能。<br>即使声明taskID也最多只能在后台运行600秒钟。（在ios7sdk中可以使用NSURLSession来实现后台缓冲）<br>（一般情况下，按HOME将程序送到后台，可以有5或10秒时间可以进行一些收尾工作，具体时间[[UIApplication sharedApplication]() backgroundTimeRemaining]返回值，超时后app会被suspend。）<br>3.ipod播放程序在后台时，双击HOME键，会有个控制界面，可以对它进行播放控制(暂停开始、上一曲、下一曲)。如果您想让您的app可以像ipod一样在后台也可以方便的通过双击HOME键来控制(在ios7中是使用上拉菜单控制)，就要用到远程控制事件了。<br>首先在viewdidload等初始化的地方声明App接收远程控制事件，并在相应地方结束声明<br>    (void) viewWillAppear:(BOOL)animated<br>    {<br>    [super viewWillAppear:animated];<br>    [UIApplication sharedApplication] beginReceivingRemoteControlEvents];<br>    [self becomeFirstResponder];<br>    }</p>
+<h2 id="开始实现"><a href="#开始实现" class="headerlink" title="开始实现"></a>开始实现</h2><p>iOS 4开始引入的multitask，我们可以实现像ipod程序那样在后台播放音频了。如果音频操作是用苹果官方的AVFoundation.framework实现，像用AvAudioPlayer，AvPlayer播放的话，要实现完美的后台音频播放，依据app的功能需要，可能需要实现几个关键的功能。<br>首先，播放音频之前先要设置AVAudioSession模式，通常只用来播放的App可以设为AVAudioSessionCategoryPlayback即可。模式意义及其他模式请参考文档。<br>    1 //后台播放音频设置<br>    2 AVAudioSession session = [AVAudioSession sharedInstance];<br>    3 [session setActive:YES error:nil];<br>    4 [session setCategory:AVAudioSessionCategoryPlayback error:nil];<br>1.通知IOS该app支持background audio。缺省情况下，当按下home键时，当前正在运行的程序被suspend，状态从active变成in-active，也就是说如果正在播放音频，按下HOME后就会停止。这里需要让app在按在HOME后，转到后台运行而非被suspend，解决办法是在程序的-info.plist中增加required background modes这个key项，并选择App plays audio or streams audio/video using AirPlay这个value项（如果用过Xcode5.0，在TARGETS－Capabilities－Background Modes设置为ON，勾选Audio and AirPlay选项）。<br>2.如果你在后台播放使用的时加载网络音频，恰巧网速很慢，音频被停止下来这时候程序也随之suspend，曾经有山寨的解决办法是专门起一个player的实例连续不停的放同一无声音片断，阻止程序被suspend。这里提供的方法是通过申请后台taskID达到后台切换播放文件的功能。<br>即使声明taskID也最多只能在后台运行600秒钟。（在ios7sdk中可以使用NSURLSession来实现后台缓冲）<br>（一般情况下，按HOME将程序送到后台，可以有5或10秒时间可以进行一些收尾工作，具体时间[<a href="">UIApplication sharedApplication</a> backgroundTimeRemaining]返回值，超时后app会被suspend。）<br>3.ipod播放程序在后台时，双击HOME键，会有个控制界面，可以对它进行播放控制(暂停开始、上一曲、下一曲)。如果您想让您的app可以像ipod一样在后台也可以方便的通过双击HOME键来控制(在ios7中是使用上拉菜单控制)，就要用到远程控制事件了。<br>首先在viewdidload等初始化的地方声明App接收远程控制事件，并在相应地方结束声明<br>    (void) viewWillAppear:(BOOL)animated<br>    {<br>    [super viewWillAppear:animated];<br>    [UIApplication sharedApplication] beginReceivingRemoteControlEvents];<br>    [self becomeFirstResponder];<br>    }</p>
 <pre><code>-(void) viewWillDisappear:(BOOL)animated
 {
 [super viewWillDisappear:animated];
@@ -252,63 +252,7 @@
 {
        return YES;
 }
-</code></pre><p>当然也不一定是在viewcontroller中，也可以是在applicationDidEnterBackground:方法中开始接受远程控制，applicationDidBecomeActive:中结束接受远程控制，但是当前的appdelegate中要继承与UIResponder，因为在激活远程控制以后要把当前类变成第一响应，重写canBecomeFirstResponder方法。<br>最后定义 remoteControlReceivedWithEvent，处理具体的播放、暂停、前进、后退等具体事件<br>//重写父类方法，接受外部事件的处理<br>    -(void) remoteControlReceivedWithEvent: (UIEvent ) receivedEvent {<br>        if (receivedEvent.type == UIEventTypeRemoteControl) {</p>
-<pre><code>        switch (receivedEvent.subtype) {
-
-            case UIEventSubtypeRemoteControlTogglePlayPause:
-                [self playAndStopSong:self.playButton];
-                break;
-
-            case UIEventSubtypeRemoteControlPreviousTrack:
-                [self playLastButton:self.lastButton];
-                break;
-
-            case UIEventSubtypeRemoteControlNextTrack:
-                [self playNextSong:self.nextButton];
-                break;
-
-            case UIEventSubtypeRemoteControlPlay:
-                [self playAndStopSong:self.playButton];
-                break;
-
-            case UIEventSubtypeRemoteControlPause:
-                [self playAndStopSong:self.playButton];
-                break;
-
-            default:
-                break;
-        }
-    }
-}
-</code></pre><p>其它外部事件也可通过这种方式实现，如“摇一摇”响应等。<br>至此，您有播放App已经基本完成了，其次插拔耳机是否响应停止播放时间需要进一步研究耳机检测和声音路由切换的问题，再次不详细讲述。<br>还有一些开发者可能会发现，有一些音视频app在定义的时候自定一些控件可以调节系统的音量大小，不需要用户调整音量按钮。经查看相关的资料总结出有两种方法：<br>一种是调用控件MPVolumeView在屏幕中创建一个音量条，拖动可以改变系统的音量大小。<br>另一种是使用MPMusicPlayerController类，可以自定义控件调整系统音量的大小（但是在ios7sdk中已经被弃用，估计以后几个版本中可能找不到这个方法了）。<br>    MPMusicPlayerController mpc = [MPMusicPlayerController applicationMusicPlayer];<br>    mpc.volume = 0;  //0.01.0<br>在一些其他的音乐播放软件中如:酷我、qq音乐等，你会发在播放的时候，当设备锁屏以后依然可以看到用户播放的音乐名称、演唱者、专辑名称、音乐时长、专辑图片等信息。这些就需要在用户切换完歌去的时候，在程序中设置信息了。<br>//设置锁屏状态，显示的歌曲信息<br>    -(void)configNowPlayingInfoCenter{<br>        if (NSClassFromString(@”MPNowPlayingInfoCenter”)) {<br>            NSDictionary info = [self.musicList objectAtIndex:playIndex];<br>            NSMutableDictionary dict = [[NSMutableDictionary alloc] init];</p>
-<pre><code>        //歌曲名称
-        [dict setObject:[info objectForKey:@&quot;name&quot;] forKey:MPMediaItemPropertyTitle];
-
-        //演唱者
-        [dict setObject:[info objectForKey:@&quot;singer&quot;] forKey:MPMediaItemPropertyArtist];
-
-        //专辑名
-        [dict setObject:[info objectForKey:@&quot;album&quot;] forKey:MPMediaItemPropertyAlbumTitle];
-
-        //专辑缩略图
-        UIImage image = [UIImage imageNamed:[info objectForKey:@&quot;image&quot;]];
-        MPMediaItemArtwork artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
-        [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
-
-        //音乐剩余时长
-        [dict setObject:[NSNumber numberWithDouble:self.player.duration] forKey:MPMediaItemPropertyPlaybackDuration];
-
-        //音乐当前播放时间 在计时器中修改
-        //[dict setObject:[NSNumber numberWithDouble:0.0] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-
-        //设置锁屏状态下屏幕显示播放音乐信息
-        [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:dict];
-    }
-}
-</code></pre><p>上面的if (NSClassFromString(@”MPNowPlayingInfoCenter”))语句，说是为了避免了版本兼容问题，这个API貌似只出现在5里面。<br>下面就在计时器中不断刷新锁屏状态下的播放进度条了。<br>    //计时器修改进度<br>    -(void)changeProgress:(NSTimer )sender{<br>        if(self.player){<br>            //当前播放时间<br>            NSMutableDictionary dict = [NSMutableDictionary dictionaryWithDictionary:[[MPNowPlayingInfoCenter defaultCenter] nowPlayingInfo]];<br>            [dict setObject:[NSNumber numberWithDouble:self.player.currentTime] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime]; //音乐当前已经过时间<br>            [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:dict];</p>
-<pre><code>    }
-}
-</code></pre><p>当前的很多常见的播放器都可以在锁屏状态下显示显示歌词，经过一番查找后，终于找到方法(详情:点击查看)，大致就是根据播放的时间和歌词显示时间，利用计时器不断的用歌词和专辑封面合成图片，达到显示歌词的效果。还有就是在屏幕变暗停止这一操作、屏幕点亮的时候开始计时器，以节省电量和cpu，有两种方法可以监听上述现象：<br>一种是监听内核层DarwinNotification，在Darwin中，有很多的系统事件，但apple的api文档描述这些api使用有限制，也就是灰色地带的api，所以能不用则不用；<br>另一种方法可以通过notifygetstate来获取com.apple.springboard.hasBlankedScreen 的状态值，通过状态值我们可以判断屏幕状态，屏幕亮或者暗系统会给出不同状态值，然后根据状态值，通过NotificationCenter发送消息通知给相应的函数处理。</p>
+</code></pre><p>当然也不一定是在viewcontroller中，也可以是在applicationDidEnterBackground:方法中开始接受远程控制，applicationDidBecomeActive:中结束接受远程控制，但是当前的appdelegate中要继承与UIResponder，因为在激活远程控制以后要把当前类变成第一响应，重写canBecomeFirstResponder方法。<br>最后定义 remoteControlReceivedWithEvent，处理具体的播放、暂停、前进、后退等具体事件<br>    //重写父类方法，接受外部事件的处理<br>    -(void) remoteControlReceivedWithEvent: (UIEvent ) receivedEvent {<br>        if (receivedEvent.type == UIEventTypeRemoteControl) {<br>            switch (receivedEvent.subtype) {<br>                case UIEventSubtypeRemoteControlTogglePlayPause:<br>                    [self playAndStopSong:self.playButton];<br>                    break;<br>                case UIEventSubtypeRemoteControlPreviousTrack:<br>                    [self playLastButton:self.lastButton];<br>                    break;<br>                case UIEventSubtypeRemoteControlNextTrack:<br>                    [self playNextSong:self.nextButton];<br>                    break;<br>                case UIEventSubtypeRemoteControlPlay:<br>                    [self playAndStopSong:self.playButton];<br>                    break;<br>                case UIEventSubtypeRemoteControlPause:<br>                    [self playAndStopSong:self.playButton];<br>                    break;<br>                default:<br>                    break;<br>            }<br>        }<br>    }<br>其它外部事件也可通过这种方式实现，如“摇一摇”响应等。<br>至此，您有播放App已经基本完成了，其次插拔耳机是否响应停止播放时间需要进一步研究耳机检测和声音路由切换的问题，再次不详细讲述。<br>还有一些开发者可能会发现，有一些音视频app在定义的时候自定一些控件可以调节系统的音量大小，不需要用户调整音量按钮。经查看相关的资料总结出有两种方法：<br>一种是调用控件MPVolumeView在屏幕中创建一个音量条，拖动可以改变系统的音量大小。<br>另一种是使用MPMusicPlayerController类，可以自定义控件调整系统音量的大小（但是在ios7sdk中已经被弃用，估计以后几个版本中可能找不到这个方法了）。<br>    MPMusicPlayerController mpc = [MPMusicPlayerController applicationMusicPlayer];<br>    mpc.volume = 0;  //0.01.0<br>在一些其他的音乐播放软件中如:酷我、qq音乐等，你会发在播放的时候，当设备锁屏以后依然可以看到用户播放的音乐名称、演唱者、专辑名称、音乐时长、专辑图片等信息。这些就需要在用户切换完歌去的时候，在程序中设置信息了。<br>//设置锁屏状态，显示的歌曲信息<br>    -(void)configNowPlayingInfoCenter{<br>        if (NSClassFromString(@”MPNowPlayingInfoCenter”)) {<br>            NSDictionary info = [self.musicList objectAtIndex:playIndex];<br>            NSMutableDictionary dict = [[NSMutableDictionary alloc] init];<br>            //歌曲名称<br>            [dict setObject:[info objectForKey:@”name”] forKey:MPMediaItemPropertyTitle];<br>            //演唱者<br>            [dict setObject:[info objectForKey:@”singer”] forKey:MPMediaItemPropertyArtist];<br>            //专辑名<br>            [dict setObject:[info objectForKey:@”album”] forKey:MPMediaItemPropertyAlbumTitle];<br>            //专辑缩略图<br>            UIImage image = [UIImage imageNamed:[info objectForKey:@”image”]];<br>            MPMediaItemArtwork artwork = [[MPMediaItemArtwork alloc] initWithImage:image];<br>            [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];<br>            //音乐剩余时长<br>            [dict setObject:[NSNumber numberWithDouble:self.player.duration] forKey:MPMediaItemPropertyPlaybackDuration];<br>            //音乐当前播放时间 在计时器中修改<br>            //[dict setObject:[NSNumber numberWithDouble:0.0] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];<br>            //设置锁屏状态下屏幕显示播放音乐信息<br>            [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:dict];<br>        }<br>    }<br>上面的if (NSClassFromString(@”MPNowPlayingInfoCenter”))语句，说是为了避免了版本兼容问题，这个API貌似只出现在5里面。<br>下面就在计时器中不断刷新锁屏状态下的播放进度条了。<br>    //计时器修改进度<br>    -(void)changeProgress:(NSTimer )sender{<br>        if(self.player){<br>            //当前播放时间<br>            NSMutableDictionary dict = [NSMutableDictionary dictionaryWithDictionary:[[MPNowPlayingInfoCenter defaultCenter] nowPlayingInfo]];<br>            [dict setObject:[NSNumber numberWithDouble:self.player.currentTime] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime]; //音乐当前已经过时间<br>            [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:dict];<br>        }<br>    }<br>当前的很多常见的播放器都可以在锁屏状态下显示显示歌词，经过一番查找后，终于找到方法(详情:点击查看)，大致就是根据播放的时间和歌词显示时间，利用计时器不断的用歌词和专辑封面合成图片，达到显示歌词的效果。还有就是在屏幕变暗停止这一操作、屏幕点亮的时候开始计时器，以节省电量和cpu，有两种方法可以监听上述现象：<br>一种是监听内核层DarwinNotification，在Darwin中，有很多的系统事件，但apple的api文档描述这些api使用有限制，也就是灰色地带的api，所以能不用则不用；<br>另一种方法可以通过notifygetstate来获取com.apple.springboard.hasBlankedScreen 的状态值，通过状态值我们可以判断屏幕状态，屏幕亮或者暗系统会给出不同状态值，然后根据状态值，通过NotificationCenter发送消息通知给相应的函数处理。</p>
 
       
     </div>
