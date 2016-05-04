@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/03/22/masonry 的使用技巧/index.html">
 <meta property="og:site_name" content="Apolla’s home">
 <meta property="og:description" content="&amp;#x505A;&amp;#x9879;&amp;#x76EE;&amp;#x65F6;&amp;#x4E00;&amp;#x76F4;&amp;#x4F7F;&amp;#x7528;Autolayout&amp;#x8FDB;&amp;#x884C;&amp;#x81EA;&amp;#x9002;&amp;#x5E94;&amp;#x5E03;&amp;#x5C40;&amp;#xFF0C;&amp;#x540E;&amp;#x6765;&amp;#x53D1;&amp;#x73B0;&amp;#x76F4;&amp;#x89C2;&amp;#x6027;&amp;#x592">
-<meta property="og:updated_time" content="2016-04-26T09:33:01.000Z">
+<meta property="og:updated_time" content="2016-05-04T02:32:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="masonry的使用技巧">
 <meta name="twitter:description" content="&amp;#x505A;&amp;#x9879;&amp;#x76EE;&amp;#x65F6;&amp;#x4E00;&amp;#x76F4;&amp;#x4F7F;&amp;#x7528;Autolayout&amp;#x8FDB;&amp;#x884C;&amp;#x81EA;&amp;#x9002;&amp;#x5E94;&amp;#x5E03;&amp;#x5C40;&amp;#xFF0C;&amp;#x540E;&amp;#x6765;&amp;#x53D1;&amp;#x73B0;&amp;#x76F4;&amp;#x89C2;&amp;#x6027;&amp;#x592">
@@ -78,7 +78,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -115,7 +115,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/hexo-github/" style="font-size: 10px;">hexo+github</a> <a href="/tags/masonry/" style="font-size: 10px;">masonry</a> <a href="/tags/后台/" style="font-size: 10px;">后台</a> <a href="/tags/渐变色/" style="font-size: 10px;">渐变色</a> <a href="/tags/私人博客/" style="font-size: 10px;">私人博客</a> <a href="/tags/音频/" style="font-size: 10px;">音频</a>
+						<a href="/tags/Swift/" style="font-size: 20px;">Swift</a> <a href="/tags/hexo-github/" style="font-size: 10px;">hexo+github</a> <a href="/tags/masonry/" style="font-size: 10px;">masonry</a> <a href="/tags/后台/" style="font-size: 10px;">后台</a> <a href="/tags/截屏/" style="font-size: 10px;">截屏</a> <a href="/tags/渐变色/" style="font-size: 10px;">渐变色</a> <a href="/tags/私人博客/" style="font-size: 10px;">私人博客</a> <a href="/tags/音频/" style="font-size: 10px;">音频</a>
 					</div>
 				</section>
 				
@@ -247,8 +247,10 @@
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//&#x6DFB;&#x52A0;&#x4E24;&#x4E2A;&#x63A7;&#x4EF6;</span></span><br><span class="line">  <span class="built_in">UIView</span> *blueView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  blueView.backgroundColor = [<span class="built_in">UIColor</span> blueColor];</span><br><span class="line">  blueView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line">  [<span class="keyword">self</span>.view addSubview:blueView];</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">UIView</span> *redView = [[<span class="built_in">UIView</span> alloc] init];</span><br><span class="line">  redView.backgroundColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line">  redView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</span><br><span class="line"> [<span class="keyword">self</span>.view addSubview:redView];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//&#x7ED9;&#x84DD;&#x8272;View&#x8BBE;&#x7F6E;&#x7EA6;&#x675F;</span></span><br><span class="line"> [blueView mas_makeConstraints:^(MASConstraintMaker *make) {</span><br><span class="line">     make.left.equalTo(<span class="keyword">self</span>.view.mas_left).offset(<span class="number">30</span>);<span class="comment">//&#x548C;&#x7236;view&#x7684;&#x5DE6;&#x8FB9;&#x95F4;&#x8DDD;&#x4E3A;30;</span></span><br><span class="line">     make.bottom.equalTo(<span class="keyword">self</span>.view.mas_bottom).offset(<span class="number">-30</span>);<span class="comment">//&#x548C;&#x7236;view&#x7684;&#x5E95;&#x90E8;&#x95F4;&#x8DDD;&#x4E3A;30;</span></span><br><span class="line">     make.right.equalTo(redView.mas_left).offset(<span class="number">-30</span>);<span class="comment">//&#x548C;&#x7EA2;&#x8272;view&#x7684;&#x95F4;&#x8DDD;&#x4E3A;30;</span></span><br><span class="line">     make.height.mas_equalTo(<span class="number">50</span>);<span class="comment">//&#x84DD;&#x8272;view&#x7684;&#x9AD8;&#x5EA6;&#x4E3A;50</span></span><br><span class="line"> }];</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//&#x7ED9;&#x7EA2;&#x8272;View&#x8BBE;&#x7F6E;&#x7EA6;&#x675F;</span></span><br><span class="line"> [redView mas_makeConstraints:^(MASConstraintMaker *make) {</span><br><span class="line">     make.right.equalTo(<span class="keyword">self</span>.view.mas_right).offset(<span class="number">-30</span>);<span class="comment">//&#x548C;&#x7236;view&#x7684;&#x53F3;&#x8FB9;&#x95F4;&#x8DDD;&#x4E3A;30;</span></span><br><span class="line">     make.bottom.equalTo(blueView.mas_bottom);<span class="comment">//&#x548C;&#x84DD;&#x8272;view&#x7684;&#x5E95;&#x90E8;&#x5BF9;&#x9F50;</span></span><br><span class="line">   make.height.equalTo(blueView.mas_height);<span class="comment">//&#x548C;&#x84DD;&#x8272;view&#x7684;&#x9AD8;&#x5EA6;&#x76F8;&#x7B49;</span></span><br><span class="line">    make.width.equalTo(blueView.mas_width);<span class="comment">//&#x548C;&#x84DD;&#x8272;view&#x7684;&#x5BBD;&#x5EA6;&#x76F8;&#x7B49;</span></span><br><span class="line">}];</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>&#x4F8B;&#xFF1A;&#x5982;&#x679C;&#x6DFB;&#x52A0;&#x4E86;&#x5B8F;&#x5219;&#x53EF;&#x4EE5;&#x7B80;&#x5316;&#x65B9;&#x6CD5;&#x4E3A;</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[blueView mas_remakeConstraints:^(MASConstraintMaker *make) {}];</span><br><span class="line">[blueView remakeConstraints:^(MASConstraintMaker *make) {}];</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[blueView mas_remakeConstraints:^(MASConstraintMaker *make) {}];</span><br><span class="line">[blueView remakeConstraints:^(MASConstraintMaker *make) {}];</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
+<p>&#x8F6C;&#x8F7D;&#x8BF7;&#x6CE8;&#x660E;&#x539F;&#x5730;&#x5740;&#xFF0C;Apolla&#x7684;&#x535A;&#x5BA2; <a href="http://apolla.github.io/" target="_blank" rel="external">http://apolla.github.io/</a> &#x8C22;&#x8C22;&#xFF01;</p>
 
       
     </div>
