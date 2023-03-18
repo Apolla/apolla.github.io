@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    直播  (四) : 如何做一款inke版的APP - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            直播  (四) : 如何做一款inke版的APP   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%9B%B4%E6%92%AD.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;直播</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <h1><a id="%E4%B8%80%E3%80%81%E7%9B%B4%E6%92%AD%E7%8E%B0%E7%8A%B6%E7%AE%80%E4%BB%8B" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>一、直播现状简介</h1>
+<h2><a id="1%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E5%B1%82%E9%9D%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.技术实现层面</h2>
+<p>技术相对都比较成熟，设备也都支持硬编码。iOS还提供现成的Video ToolBox框架，可以对摄像头和流媒体数据结构进行处理，但Video ToolBox框架只兼容8.0以上版本，8.0以下就需要用x264的库软编了。<br />
+github 上有现成的开源实现，推流、美颜、水印、弹幕、点赞动画、滤镜、播放都有。技术其实不是很难，而且现在很多云厂商都提供SDK，七牛云、金山云、乐视云、 腾讯云、百度云、斗鱼直播伴侣推流端，功能几乎都是一样的，没啥亮点，不同的是整个直播平台服务差异和接入的简易性。后端现在 RTMP/HTTP-FLV 清一色，App挂个源站直接接入云厂商或CDN就OK。</p>
+<h2><a id="2%E7%9B%B4%E6%92%AD%E4%BC%98%E5%8C%96%E5%B1%82%E9%9D%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.直播优化层面</h2>
+<p>其实最难的难点是提高首播时间、服务质量即Qos（Quality of Service，服务质量），如何在丢包率20%的情况下还能保障稳定、流畅的直播体验，需要考虑以下方案：<br />
+1）为加快首播时间，收流服务器主动推送 GOP :（Group of Pictures:策略影响编码质量)所谓GOP，意思是画面组，一个GOP就是一组连续的画面至边缘节点，边缘节点缓存 GOP，播放端则可以快速加载，减少回源延迟<br />
+<img src="media/16791192499939/16791195011647.png" alt="image.png" /></p>
+<p>2）GOP 丢帧，为解决延时，为什么会有延时，网络抖动、网络拥塞导致的数据发送不出去，丢完之后所有的时间戳都要修改，切记，要不客户端就会卡一个 GOP的时间，是由于 PTS（Presentation Time Stamp，PTS主要用于度量解码后的视频帧什么时候被显示出来） 和 DTS 的原因，或者播放器修正 DTS 和 PTS 也行（推流端丢GOD更复杂，丢 p 帧之前的 i 帧会花屏）<br />
+<img src="media/16791192499939/16791195011663.png" alt="image.png" /></p>
+<p>3）纯音频丢帧，要解决音视频不同步的问题，要让视频的 delta增量到你丢掉音频的delta之后，再发音频，要不就会音视频不同步<br />
+4）源站主备切换和断线重连<br />
+5）根据TCP拥塞窗口做智能调度，当拥塞窗口过大说明节点服务质量不佳，需要切换节点和故障排查<br />
+6）增加上行、下行带宽探测接口，当带宽不满足时降低视频质量，即降低码率<br />
+7）定时获取最优的推流、拉流链路IP，尽可能保证提供最好的服务<br />
+8)监控必须要，监控各个节点的Qos状态，来做整个平台的资源配置优化和调度</p>
+<p><img src="media/16791192499939/16791195011683.png" alt="image.png" /></p>
+<p>9）如果产品从推流端、CDN、播放器都是自家的，保障 Qos 优势非常大<br />
+10）当直播量非常大时，要加入集群管理和调度，保障 Qos<br />
+11）播放端通过增加延时来减少网络抖动，通过快播来减少延时。</p>
+<h2><a id="3%E8%BF%90%E8%90%A5%E6%88%90%E6%9C%AC%E5%92%8C%E5%AE%A2%E6%88%B7%E4%BD%93%E9%AA%8C" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.运营成本和客户体验</h2>
+<p>根据网上的数据，斗鱼 TV 为 3 亿人民币，战旗 TV 为 1.5 亿人民币，龙珠为 1.2 亿人民币，虎牙为 3000 万 + 人民币。<br />
+运营和推广：这个就比较烧钱了，一些做移动直播、游戏直播、秀场直播的A轮至少得上千万。<br />
+用户体验：流畅、不卡顿、不花屏、断线重连、丢包策略、首画加载速度、丰富的礼物系统，为了提高用户体验，可以在后台加载其他页面数据，但要在用户体验和内存优化方面找到平衡点。</p>
+<h1><a id="%E4%BA%8C%E3%80%81%E6%B5%81%E5%AA%92%E4%BD%93%E4%BC%A0%E8%BE%93" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>二、流媒体传输</h1>
+<p>1.TCP：TCP为点对点的协议，虽然能保证了数据传输的可靠性，但是对服务器资源耗费较大，在数据流大的场合难以保证数据流传输的实时性。<br />
+2.UDP：UDP为不可靠传输协议，不需要维护连接状态，也不认为每个数据包都必须到达接受端，因此网络负荷比TCP小，传输速度也要比TCP快；但在网络越拥挤时，越有更多的数据包丢失。<br />
+3.RTMP：RTMP一个专门为高效传输视频，音频和数据而设计的协议。它通过建立一个二进制TCP连接或者连接HTTP隧道实现实时的视频和声音传输。<br />
+4.FFmpeg：FFmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为流的开源计算机程序。采用LGPL或GPL许可证。它提供了录制、转换以及流化音视频的完整解决方案<br />
+<img src="media/16791192499939/16791195011705.png" alt="image.png" /></p>
+<h1><a id="%E4%B8%89%E3%80%81%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%EF%BC%9A%E9%87%87%E9%9B%86%E7%AB%AF" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>三、项目搭建：采集端</h1>
+<p><strong>1.目前比较知名的有VideoCore</strong><br />
+目 前国内很多知名的推流框架都是对VideoCore的二次开发。这个框架主要使用C++写的，支持RTMP推流，但对于iOS开发者来说有点晦涩难懂（精 通C++的除外）。想开源和免费的可以选择现在的几个知名项目VideoCore + GPUImage+基于GPU的美颜滤镜 ,播放用IJKPlayer自己修改。</p>
+<p><strong>2.国内比较火的LiveVideoCoreSDK</strong><br />
+框架提供IOS苹果手机的RTMP推流填写RTMP服务地址，直接就可以进行推流，SDK下载后简单的工程配置后能直接运行，实现了美颜直播和滤镜功能，基于OpenGL，前后摄像头随时切换，提供RTMP连接状态的回调。<br />
+这 个框架是国内比较早的一款推流框架有不少在使用这个SDK，功能非常齐全，作者也比较牛，用来学习推流采集相关内容非常好，但是集成到工程中有些困难（对 于我来说）。总的来说这是一款非常厉害的推流SDK，几乎全部使用C++写的，编译效率非常好，如果有实力的话推荐使用这个框架来做自己项目的推流端。</p>
+<p><strong>3.可读性比较好的推流LFLiveKit</strong><br />
+框架支持RTMP（Real Time Messaging Protocol ）：实时消息传输协议，Adobe公司的。<br />
+HlS (HTTP Live Streaming) ：苹果自家的动态码率自适应技术。主要用于PC和Apple终端的音视频服务。包括一个m3u(8)的索引文件，TS媒体分片文件和key加密串文件。<br />
+推荐这个框架第一是因为它主要使用OC写的，剩下的用C语言写的，框架文件十分清晰，这对不精通C++的初学者提供了很大的便利，并且拓展性非常强，支持动态切换码率功能，支持美颜功能。</p>
+<p><strong>4.美颜功能</strong><br />
+美颜的话一般都是使用的GPUImage基于OpenGl开发，纯OC语言，这个框架十分强大，可以做出各种不同滤镜，可拓展性高。如果对美颜没有具体思路可以直接用BeautifyFace，可以加入到项目中，很方便的实现美颜效果。</p>
+<h1><a id="%E5%9B%9B%E3%80%81%E9%A1%B9%E7%9B%AE%E5%85%B7%E4%BD%93%E6%90%AD%E5%BB%BA" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>四、项目具体搭建</h1>
+<h2><a id="1%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%BE%8E%E9%A2%9C%EF%BC%9F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.如何实现美颜？</h2>
+<p>美颜功能使用的是BeautifyFace，它可以很快速的实现美颜功能，效果不错，它的底层还是基于的GPUImage，对GPUImage十分喜爱<br />
+的Developer，可以参照BeautifyFace，写出一个属于自己的美颜功能，并且添加各种滤镜。</p>
+<h2><a id="2%E6%82%AC%E6%B5%AE-tabbar%E7%9A%84%E5%AE%9E%E7%8E%B0" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.悬浮TabBar的实现</h2>
+<p>这个TabBar看着像是用自定义TabBar做的，但事实上它还是用的系统的TabBar,给系统的tabBar.backgroundImage设置一张设计好的背景图片。<br />
+<img src="media/16791192499939/16791195011730.png" alt="image.png" /><br />
+添加后会发现顶部有一条阴影线，并且TabBar的高度也不够。阴影线与上图绿色线条之间变成了透明颜色，实现下面方法隐藏阴影线，并且调高TabBar的高度。<br />
+<img src="media/16791192499939/16791195011756.png" alt="image.png" /></p>
+<pre class="line-numbers"><code class="language-objectivec">//隐藏阴影线
+[[UITabBar appearance] setShadowImage:[UIImage new]];
+- (void)setupTabBarBackgroundImage {
+      UIImage *image = [UIImage imageNamed:@&quot;tab_bg&quot;];
+      CGFloat top = 40;  //顶端盖高度
+      CGFloat bottom = 40 ;  //底端盖高度
+      CGFloat left = 100;  //左端盖宽度
+      CGFloat right = 100;  //右端盖宽度
+      UIEdgeInsets insets = UIEdgeInsetsMake(top, left, bottom, right);
+      //指定为拉伸模式，伸缩后重新赋值
+      UIImage *TabBgImage = [image resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];
+      self.tabBar.backgroundImage = TabBgImage;
+      [[UITabBar appearance] setShadowImage:[UIImage new]];
+      [[UITabBar appearance] setBackgroundImage:[[UIImage alloc]init]];
+  }
+//自定义TabBar高度
+- (void)viewWillLayoutSubviews {
+      CGRect tabFrame = self.tabBar.frame;
+      tabFrame.size.height = 60;
+      tabFrame.origin.y = self.view.frame.size.height - 60;
+      self.tabBar.frame = tabFrame;
+  }
+</code></pre>
+<h2><a id="3%E6%92%AD%E6%94%BE%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.播放端的实现</h2>
+<p>播 放端用的针对RTMP优化过的ijkplayer（），ijkplayer是基于FFmpeg的跨平台播放器，这个开源项目已经被多个 App 使用，其中映客、美拍和斗鱼使用了 ijkplayer（5700+?） 。在本文的末未提供了，已经打包好的ijkplayer，直接拖入项目就可以使用。省去了编译的过程（编译十分麻烦，并且容易出错）。播放端调用 ijkplayer参考VoideSun的简仿映客所写，如有关于ijkplayer的问题，可以请教这位大牛（<a href="http://www.jianshu.com/p/a9fcc50bbfa3">VoiderSun</a>）。</p>
+<pre class="line-numbers"><code class="language-objectivec">- (void)goPlaying {
+    //获取url
+          self.url = [NSURL URLWithString:_liveUrl];
+    _player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.url withOptions:nil];
+    UIView *playerview = [self.player view];
+    UIView *displayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.PlayerView = displayView;
+    [self.view addSubview:self.PlayerView];
+    //自动调整自己的宽度和高度
+          playerview.frame = self.PlayerView.bounds;
+    playerview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.PlayerView insertSubview:playerview atIndex:1];
+    [_player setScalingMode:IJKMPMovieScalingModeAspectFill];
+}
+</code></pre>
+<h2><a id="4%E6%8E%A8%E9%80%81%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.推送端的实现</h2>
+<p>使 用的是LFLiveKit，推流端可以选择很多GitHub上的开源项目替代LFLiveKit，比如上面所提到的VideoCore,和 LiveVideoCoreSDK。商用的话可以选择各大厂商的SDK，网易直播云、七牛、腾讯、百度、新浪、其中金山直播云本人用过。使用直播云的好处 就是能快速上线App，功能十分齐全，可以播放器和推流端，服务器一套下来，有专业客服人员帮助集成到工程中，缺点就是流量费太贵了，具体可以了解下各大 厂商的收费标准。</p>
+<pre class="line-numbers"><code class="language-objectivec">- (UIButton*)startLiveButton{
+      if(!_startLiveButton){
+          _startLiveButton = [UIButton new];
+          //位置
+          _startLiveButton.frame = CGRectMake((XJScreenW - 200) * 0.5, XJScreenH - 100, 200, 40);
+          _startLiveButton.layer.cornerRadius = _startLiveButton.frame.size.height * 0.5;
+          [_startLiveButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+          [_startLiveButton.titleLabel setFont:[UIFont systemFontOfSize:16]];
+          [_startLiveButton setTitle:@&quot;开始直播&quot; forState:UIControlStateNormal];
+          [_startLiveButton setBackgroundColor:[UIColor grayColor]];
+          _startLiveButton.exclusiveTouch = YES;
+          __weak typeof(self) _self = self;
+          [_startLiveButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
+              _self.startLiveButton.selected = !_self.startLiveButton.selected;
+              if(_self.startLiveButton.selected){
+                  [_self.startLiveButton setTitle:@&quot;结束直播&quot; forState:UIControlStateNormal];
+                  LFLiveStreamInfo *stream = [LFLiveStreamInfo new];
+                  stream.url = @&quot;rtmp://daniulive.com:1935/live/stream238&quot;;
+                  [_self.session startLive:stream];
+              }else{
+                  [_self.startLiveButton setTitle:@&quot;开始直播&quot; forState:UIControlStateNormal];
+                  [_self.session stopLive];
+              }
+          }];
+      }
+      return _startLiveButton;
+  }
+</code></pre>
+<p>stream.url是服务器的地址，推流完成后使用VLC播放。别人家的服务器，不建议推流时间过长（&lt; 1分钟），建议搭建自己的RTMP服务器</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

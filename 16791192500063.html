@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    直播（一）HTTP Live Streaming直播(iOS直播)技术分析与实现 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            直播（一）HTTP Live Streaming直播(iOS直播)技术分析与实现   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%9B%B4%E6%92%AD.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;直播</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p><strong>HTTP Live Streaming直播(iOS直播)技术分析与实现</strong><br />
+花了一些时间研究了<strong>HTTP Live Streaming</strong>（<strong>HLS</strong>）技术，并实现了一个HLS编码器<strong>HLSLiveEncoder</strong>，当然，C++写的。其功能是采集摄像头与麦克风，实时进行H.264视频编码和AAC音频编码，并按照HLS的协议规范，生成分段的标准TS文件以及m3u8索引文件。通过我的<strong>HLSLiveEncoder</strong>和第三方Http服务器（例如：Nginx），成功实现了<strong>HTTP Live Streaming</strong>直播，并在iphone上测试通过。<br />
+<strong>HLS技术要点分析</strong><br />
+<strong>HTTP Live Streaming</strong>（<strong>HLS</strong>）是苹果公司(Apple Inc.)实现的基于HTTP的流媒体传输协议，可实现流媒体的直播和点播，主要应用在<strong>iOS</strong>系统，为<strong>iOS</strong>设备（如iPhone、iPad）提供音视频直播和点播方案。<strong>HLS</strong>点播，基本上就是常见的分段HTTP点播，不同在于，它的分段非常小。要实现<strong>HLS</strong>点播，重点在于对媒体文件分段，目前有不少开源工具可以使用，这里我就不再讨论，只谈HLS直播技术。<br />
+相对于常见的流媒体直播协议，例如<a href="http://www.cnblogs.com/haibindev/archive/2011/12/29/2305712.html">RTMP协议</a>、RTSP协议、MMS协议等，HLS直播最大的不同在于，直播客户端获取到的，并不是一个完整的数据流。HLS协议在服务器端将直播数据流存储为连续的、很短时长的媒体文件（<strong>MPEG-TS</strong>格式），而客户端则不断的下载并播放这些小文件，因为服务器端总是会将最新的直播数据生成新的小文件，这样客户端只要不停的按顺序播放从服务器获取到的文件，就实现了直播。由此可见，基本上可以认为，HLS是以点播的技术方式来实现直播。由于数据通过HTTP协议传输，所以完全不用考虑防火墙或者代理的问题，而且分段文件的时长很短，客户端可以很快的选择和切换码率，以适应不同带宽条件下的播放。不过HLS的这种技术特点，决定了它的延迟一般总是会高于普通的流媒体直播协议。<br />
+根据以上的了解要实现<strong>HTTP Live Streaming</strong>直播，需要研究并实现以下技术关键点</p>
+<ol>
+<li>采集视频源和音频源的数据</li>
+<li>对原始数据进行H264编码和AAC编码</li>
+<li>视频和音频数据封装为MPEG-TS包</li>
+<li>HLS分段生成策略及m3u8索引文件</li>
+<li>HTTP传输协议</li>
+</ol>
+<p>其中第1点和第2点，我之前的文章中已经提到过了，而最后一点，我们可以借助现有的HTTP服务器，所以，实现第3点和第4点是关键所在。<br />
+<strong>程序框架与实现          **<br />
+通过以上分析，实现</strong>HLS LiveEncoder<strong>直播编码器，其逻辑和流程基本上很清楚了：分别开启音频与视频编码线程，通过</strong>DirectShow**（或其他）技术来实现音视频采集，随后分别调用libx264和libfaac进行视频和音频编码。两个编码线程实时编码音视频数据后，根据自定义的分片策略，存储在某个<strong>MPEG-TS</strong>格式分段文件中，当完成一个分段文件的存储后，更新m3u8索引文件。如下图所示：</p>
+<p><img src="media/16791192500063/16791192843600.png" alt="image.png" /><br />
+上图中<strong>HLSLiveEncoder</strong>当收到视频和音频数据后，需要首先判断，当前分片是否应该结束，并创建新分片，以延续TS分片的不断生成。需要注意的是，新的分片，应当从关键帧开始，防止播放器解码失败。核心代码如下所示：</p>
+<p><img src="media/16791192500063/16791192843611.png" alt="image.png" /><br />
+TsMuxer的接口也是比较简单的。</p>
+<p><img src="media/16791192500063/16791192843627.png" alt="image.png" /><br />
+**HLS分段生成策略和m3u8   **<br />
+<strong>1. 分段策略</strong></p>
+<ul>
+<li>HLS的分段策略，基本上推荐是10秒一个分片，当然，具体时间还要根据分好后的分片的实际时长做标注</li>
+<li>通常来说，为了缓存等方面的原因，在索引文件中会保留最新的三个分片地址，以类似“滑动窗口”的形式，进行更新。</li>
+</ul>
+<p><strong>2. m3u8文件简介</strong><br />
+m3u8，是<strong>HTTP Live Streaming</strong>直播的索引文件。m3u8基本上可以认为就是.m3u格式文件，区别在于，m3u8文件使用<strong>UTF-8</strong>字符编码。<br />
+#EXTM3U                     m3u文件头，必须放在第一行<br />
+#EXT-X-MEDIA-SEQUENCE       第一个TS分片的序列号<br />
+#EXT-X-TARGETDURATION       每个分片TS的最大的时长<br />
+#EXT-X-ALLOW-CACHE          是否允许cache<br />
+#EXT-X-ENDLIST              m3u8文件结束符<br />
+#EXTINF                     extra info，分片TS的信息，如时长，带宽等<br />
+一个简单的m3u8索引文件</p>
+<p><img src="media/16791192500063/16791192843646.png" alt="image.png" /><br />
+<strong>运行效果          **<br />
+在Nginx工作目录下启动</strong>HLSLiveEncoder**，并用VLC播放器连接播放</p>
+<p><img src="media/16791192500063/16791192843667.png" alt="image.png" /><br />
+通过iPhone播放的效果</p>
+<p><img src="media/16791192500063/16791192843697.png" alt="image.png" /></p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

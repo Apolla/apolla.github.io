@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    面试   (六) :原理篇/2 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            面试   (六) :原理篇/2   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;葵花宝典</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p>2015年11月25日 星期三<br />
+10:09<br />
+lldb（gdb）常用的调试命令？<br />
+• po：打印对象，会调用对象description方法。是print-object的简写<br />
+• expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令<br />
+• print：也是打印命令，需要指定类型<br />
+• bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈<br />
+• br l：是breakpoint list的简写<br />
+BAD_ACCESS在什么情况下出现？<br />
+•访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息<br />
+•死循环<br />
+如何调试BAD_ACCESS错误<br />
+•设置全局断点快速定位问题代码所在行<br />
+开启僵尸对象调试功能</p>
+<p>简述下Objective-C中调用方法的过程（runtime）<br />
+• Objective-C是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)，整个过程介绍如下：<br />
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类<br />
+○然后在该类中的方法列表以及其父类方法列表中寻找方法运行<br />
+○如果，在最顶层的父类（一般也就NSObject）中依然找不到相应的方法时，程序在运行时会挂掉并抛出异常unrecognized selector sent to XXX<br />
+○但是在这之前，objc的运行时会给出三次拯救程序崩溃的机会，这三次拯救程序奔溃的说明见问题《什么时候会报unrecognized selector的异常》中的说明<br />
+•补充说明：Runtime铸就了Objective-C是动态语言的特性，使得C语言具备了面向对象的特性，在程序运行期创建，检查，修改类、对象及其对应的方法，这些操作都可以使用runtime中的对应方法实现。</p>
+<p>什么是method swizzling（俗称黑魔法）<br />
+•简单说就是进行方法交换<br />
+•在Objective-C中调用一个方法，其实是向一个对象发送消息，查找消息的唯一依据是selector的名字。利用Objective-C的动态特性，可以实现在运行时偷换selector对应的方法实现，达到给方法挂钩的目的<br />
+•每个类都有一个方法列表，存放着方法的名字和方法实现的映射关系，selector的本质其实就是方法名，IMP有点类似函数指针，指向具体的Method实现，通过selector就可以找到对应的IMP</p>
+<ul>
+<li>交换方法的几种实现方式
+<ul>
+<li>利用 method_exchangeImplementations 交换两个方法的实现</li>
+<li>利用 class_replaceMethod 替换方法的实现</li>
+<li>利用 method_setImplementation 来直接设置某个方法的IMP</li>
+</ul>
+</li>
+</ul>
+<p>objc中向一个nil对象发送消息将会发生什么？<br />
+•在Objective-C中向nil发送消息是完全有效的——只是在运行时不会有任何作用<br />
+○如果一个方法返回值是一个对象，那么发送给nil的消息将返回0(nil)<br />
+○如果方法返回值为指针类型，其指针大小为小于或者等于sizeof(void*)<br />
+○float，double，long double或者long long的整型标量，发送给nil的消息将返回0<br />
+○如果方法返回值为结构体,发送给nil的消息将返回0。结构体中各个字段的值将都是0<br />
+○如果方法的返回值不是上述提到的几种情况，那么发送给nil的消息的返回值将是未定义的<br />
+•具体原因分析<br />
+○ objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)<br />
+○为了方便理解这个内容，还是贴一个objc的源代码</p>
+<p>struct objc_class<br />
+{<br />
+// isa指针指向Meta Class，因为Objc的类的本身也是一个Object，<br />
+//为了处理这个关系，runtime就创造了Meta Class，<br />
+//当给类发送[NSObject alloc]这样消息时，实际上是把这个消息发给了Class Object<br />
+Class isa OBJC_ISA_AVAILABILITY;<br />
+#if !<strong>OBJC2</strong><br />
+Class super_class OBJC2_UNAVAILABLE; //父类<br />
+const char*name OBJC2_UNAVAILABLE;//类名<br />
+longversion OBJC2_UNAVAILABLE;//类的版本信息，默认为0<br />
+longinfo OBJC2_UNAVAILABLE;//类信息，供运行期使用的一些位标识<br />
+longinstance_size OBJC2_UNAVAILABLE;//该类的实例变量大小<br />
+structobjc_ivar_list *ivars OBJC2_UNAVAILABLE;//该类的成员变量链表<br />
+structobjc_method_list **methodLists OBJC2_UNAVAILABLE;//方法定义的链表<br />
+//方法缓存，对象接到一个消息会根据isa指针查找消息对象，<br />
+//这时会在method Lists中遍历，<br />
+//如果cache了，常用的方法调用时就能够提高调用的效率。<br />
+//这个方法缓存只存在一份，不是每个类的实例对象都有一个方法缓存<br />
+//子类会在自己的方法缓存中缓存父类的方法，父类在自己的方法缓存中也会缓存自己的方法，而不是说子类就不缓存父类方法了<br />
+struct objc_cache *cache OBJC2_UNAVAILABLE;<br />
+structobjc_protocol_list *protocols OBJC2_UNAVAILABLE;//协议链表<br />
+#endif<br />
+} OBJC2_UNAVAILABLE;<br />
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类，然后在该类中的方法列表以及其父类方法列表中寻找方法运行，然后再发送消息的时候，objc_msgSend方法不会返回值，所谓的返回内容都是具体调用时执行的。<br />
+○如果向一个nil对象发送消息，首先在寻找对象的isa指针时就是0地址返回了，所以不会出现任何错误</p>
+<p>objc中向一个对象发送消息[obj foo]和objc_msgSend()函数之间有什么关系？<br />
+• [obj foo];在objc动态编译时，会被转意为：objc_msgSend(obj,@selector(foo));<br />
+什么时候会报unrecognized selector的异常？<br />
+•当调用该对象上某个方法,而该对象上没有实现这个方法的时候， 可以通过“消息转发”进行解决，如果还是不行就会报unrecognized selector异常<br />
+• objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)，整个过程介绍如下：<br />
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类<br />
+○然后在该类中的方法列表以及其父类方法列表中寻找方法运行<br />
+○如果，在最顶层的父类中依然找不到相应的方法时，程序在运行时会挂掉并抛出异常unrecognized selector sent to XXX。但是在这之前，objc的运行时会给出三次拯救程序崩溃的机会<br />
+•三次拯救程序崩溃的机会<br />
+○ Method resolution<br />
+§ objc运行时会调用+resolveInstanceMethod:或者+resolveClassMethod:，让你有机会提供一个函数实现。<br />
+§如果你添加了函数并返回  YES，那运行时系统就会重新启动一次消息发送的过程<br />
+§如果resolve方法返回NO，运行时就会移到下一步，消息转发<br />
+○ Fast forwarding<br />
+§如果目标对象实现了-forwardingTargetForSelector:，Runtime这时就会调用这个方法，给你把这个消息转发给其他对象的机会<br />
+§只要这个方法返回的不是nil和self，整个消息发送的过程就会被重启，当然发送的对象会变成你返回的那个对象。<br />
+§否则，就会继续Normal Fowarding。<br />
+§这里叫Fast，只是为了区别下一步的转发机制。因为这一步不会创建任何新的对象，但Normal forwarding转发会创建一个NSInvocation对象，相对Normal forwarding转发更快点，所以这里叫Fast forwarding<br />
+○ Normal forwarding<br />
+§这一步是Runtime最后一次给你挽救的机会。<br />
+§首先它会发送-methodSignatureForSelector:消息获得函数的参数和返回值类型。<br />
+§如果-methodSignatureForSelector:返回nil，Runtime则会发出-doesNotRecognizeSelector:消息，程序这时也就挂掉了。<br />
+§如果返回了一个函数签名，Runtime就会创建一个NSInvocation对象并发送-forwardInvocation:消息给目标对象</p>
+<p>HTTP协议中POST方法和GET方法有那些区别?<br />
+• GET用于向服务器请求数据，POST用于提交数据<br />
+• GET请求，请求参数拼接形式暴露在地址栏，而POST请求参数则放在请求体里面，因此GET请求不适合用于验证密码等操作<br />
+• GET请求的URL有长度限制，POST请求不会有长度限制<br />
+使用block时什么情况会发生引用循环，如何解决？<br />
+在block内如何修改block外部变量？<br />
+使用系统的某些block api（如UIView的block版本写动画时），是否也考虑循环引用问题？<br />
+•系统的某些block api中，UIView的block版本写动画时不需要考虑，但也有一些api需要考虑<br />
+•以下这些使用方式不会引起循环引用的问题</p>
+<p>[UIView animateWithDuration:duration animations:^<br />
+{ [self.superview layoutIfNeeded]; }];<br />
+[[NSOperationQueue mainQueue] addOperationWithBlock:^<br />
+{ self.someProperty = xyz; }];<br />
+[[NSNotificationCenter defaultCenter] addObserverForName:@&quot;someNotification&quot;<br />
+object: nil<br />
+queue:[NSOperationQueue mainQueue]<br />
+usingBlock:^(NSNotification * notification)<br />
+{ self.someProperty = xyz; }];<br />
+•但如果方法中的一些参数是 成员变量，那么可以造成循环引用，如GCD、NSNotificationCenter调用就要小心一点，比如GCD内部如果引用了self，而且GCD的参数是 成员变量，则要考虑到循环引用，举例如下：<br />
+○ GCD<br />
+§分析：self--&gt;_operationsQueue--&gt;block--&gt;self形成闭环，就造成了循环引用</p>
+<p>__weak <strong>typeof</strong>(self) weakSelf =self;<br />
+dispatch_group_async(_operationsGroup, _operationsQueue, ^<br />
+{<br />
+[weakSelf doSomething];<br />
+[weakSelf doSomethingElse];<br />
+} );<br />
+○ NSNotificationCenter<br />
+§分析：self--&gt;_observer--&gt;block--&gt;self形成闭环，就造成了循环引用<br />
+○<br />
+__weak <strong>typeof</strong>(self) weakSelf =self;<br />
+_observer = [[NSNotificationCenter defaultCenter]<br />
+addObserverForName: @&quot;testKey&quot;<br />
+object: nil<br />
+queue: nil<br />
+usingBlock:^(NSNotification *note){<br />
+[weakSelf dismissModalViewControllerAnimated: YES];<br />
+}];</p>
+<p>已使用 Microsoft OneNote 2016 创建。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

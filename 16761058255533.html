@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/02/11</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%BB%84%E4%BB%B6%E5%8C%96.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;组件化</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <h3><a id="%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E4%B8%BB%E8%A6%81%E6%83%B3%E4%BB%8B%E7%BB%8D%E4%BB%A5%E4%B8%8B%E5%87%A0%E4%B8%AA%E9%83%A8%E5%88%86%EF%BC%9A" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>这篇文章主要想介绍以下几个部分：</h3>
+<ul>
+<li>subspecs基本概念</li>
+<li>实际应用的好处</li>
+<li>如何对含有subspecs的CocoaPods库进行二进制化</li>
+</ul>
+<h4><a id="%E4%BB%80%E4%B9%88%E6%98%AFcocoapods%E7%9A%84subspecs" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>什么是CocoaPods的subspecs</h4>
+<p>来一个直观点的。顺便为自己的<a href="https://link.jianshu.com?t=https://github.com/baidao/YTXAnimations">YTXAnimations</a>做个广告。</p>
+<p>在Podfile中，它是这样的：</p>
+<pre class="line-numbers"><code class="language-plain_text">pod 'YTXAnimations', '~&gt; 1.2.4', :subspecs =&gt; [&quot;AnimateCSS&quot;, &quot;Transformer&quot;]
+
+</code></pre>
+<p>在App中Pods/YTXAnimations文件目录下它是这样的：</p>
+<p><img src="media/16761058255533/16761060139104.jpg" alt="" /></p>
+<p>在CocoaPods项目开发时是这样的：</p>
+<p><img src="media/16761058255533/16761060060742.jpg" alt="" /></p>
+<p>在podspec里是这样的：</p>
+<pre class="line-numbers"><code class="language-plain_text">    YTXAnimateCSS   = { :spec_name =&gt; &quot;AnimateCSS&quot; }
+    YTXCSShake   = { :spec_name =&gt; &quot;CSShake&quot; }
+    YTXMagicCSS   = { :spec_name =&gt; &quot;MagicCSS&quot; }
+
+    $animations = [YTXAnimateCSS, YTXCSShake, YTXMagicCSS]
+
+    $animations.each do |sync_spec|
+        s.subspec sync_spec[:spec_name] do |ss|
+
+            specname = sync_spec[:spec_name]
+
+            sources = [&quot;Pod/Classes/UIView+YTX#{specname}.*&quot;, &quot;Pod/Classes/YTXAnimationsUtil.{h,m}&quot;]
+
+            ss.source_files = sources
+
+            if sync_spec[:dependency]
+                sync_spec[:dependency].each do |dep|
+                    ss.dependency dep[:name], dep[:version]
+                end
+            end
+
+        end
+    end
+
+    s.subspec &quot;Transformer&quot; do |ss|
+      ss.source_files = [&quot;Pod/Classes/YTXGooeyCircleLayer.{h,m}&quot;, &quot;Pod/Classes/YTXCountDownShowLayer.{h,m}&quot;]
+    end
+
+</code></pre>
+<p>==在一个podspec里我可以定义它的subspecs，给使用方提供了一种灵活的方式去获取相关源码，而不是全部源码。subspec之间也可以有依赖关系，依赖其他第三方库等。==</p>
+<p>如果是这样的用的话，就是全量。</p>
+<pre class="line-numbers"><code class="language-plain_text">pod 'YTXAnimations', '~&gt; 1.2.4'
+
+</code></pre>
+<p>也有不少在github第三方库用了subspecs。比如：<a href="https://link.jianshu.com?t=https://github.com/orta/ARAnalytics">ARAnalytics</a>。</p>
+<h3><a id="%E8%B0%88%E8%B0%88%E4%BD%9C%E7%94%A8%EF%BC%9Asubspecs%E8%BF%99%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%89%B9%E5%88%AB%E9%80%82%E5%90%88%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91%E3%80%82" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>谈谈作用：subspecs这种模式特别适合组件化开发。</h3>
+<p>比如有两个业务team A和B。他们各自维护一个业务组件A和业务组件B。原则上业务组件A和业务组件B之间不能相互依赖。但是很多时候组件A需要调用组件B的功能，接受组件B的回调。架构的时候我们会使用依赖协议或者依赖下沉等等方式去除他们之间的耦合。</p>
+<p>但问题是我们还是需要集成在一起调试的。</p>
+<p>一般做法就是在业务组件A的Example项目的Podfile中，加上依赖业务组件B：</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'TestBusinessAExampleApp' do
+  pod 'BusinessA', :path =&gt; &quot;../&quot;
+  pod 'BusinessB', '~&gt;1.2.1'
+end
+
+</code></pre>
+<p>然后在Example App中串联起A和B，以达到调试的目的。</p>
+<p>组件B作为一个业务肯定是很庞大的，所以编译慢。二进制化可以解决这个问题。作为Team A的人，我不需要关注组件B是否太大编译慢，依赖等问题。</p>
+<p>举个例子，比如外卖和电影，外卖会送电影票。</p>
+<p>很容易想到！业务组件A只依赖业务组件B的部分。组件B应该把这部分其实对外的内容尽量做成一个subspec或者正常结构划分，划分成依赖其中几个subspec。这样业务组件A需要关心的事就更少了。当发生问题，Team A不得已想要查看业务组件B的源代码以查看是否问题出在了业务组件B的时候，Team A的人员面对的不是整个业务组件B的业务源代码，而是部分其实对外的源代码。缩小依赖的二进制文件大小或源代码数量也是有显而易见的好处的。</p>
+<p>嗯，调试源代码，我们应该：</p>
+<ul>
+<li>删除Pods目录</li>
+<li>pod cache clean --all</li>
+<li>IS_SOURCE=1 pod install</li>
+</ul>
+<p>嗯，这已经在公司内部达成了一致，使用IS_SOURCE。</p>
+<p>现在的业务组件A的Example项目的Podfile中应该变成了这样：</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'TestBusinessAExampleApp' do
+  pod 'BusinessA', :path =&gt; &quot;../&quot;
+  pod 'BusinessB', '~&gt;1.2.1' , :subspecs =&gt; [&quot;SomeBusinessXXX&quot;]
+end
+
+</code></pre>
+<p>进一步的如果有个业务组件C要和业务组件B打交道，它的Example项目的Podfile应该这样写：</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'TestBusinessCExampleApp' do
+  pod 'BusinessC', :path =&gt; &quot;../&quot;
+  pod 'BusinessB', '~&gt;1.2.1' , :subspecs =&gt; [&quot;SomeBusinessTTT&quot;]
+end
+
+</code></pre>
+<p>在主项目App中的Podfile是这样写：</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'DaMeiTuanApp' do
+  pod 'BusinessA', '~&gt;3.0.5'
+  pod 'BusinessB', '~&gt;1.2.1'
+  pod 'BusinessC', '~&gt;2.2.0'
+end
+
+</code></pre>
+<h3><a id="%E4%B8%8B%E9%9D%A2%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%AF%B4subspec%E5%A6%82%E4%BD%95%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%EF%BC%8C%E5%A6%82%E4%BD%95%E5%9C%A8podspec%E4%B8%AD%E5%AE%9A%E4%B9%89" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>下面开始说说subspec如何二进制化，如何在podspec中定义</h3>
+<p>==如果没有特别说明，没有讲到细节的内容或方式都应该在教程一里==</p>
+<p>在教程一里面提到有subspecs的CocoaPods的组件二进制化方案，说了两个方案。最后选择的方案：是对每一个subspec都做份二进制并保持它们之间依赖的相互关系。</p>
+<p><strong>为什么不使用全集？也就是把所有源码都变成.a呢？</strong></p>
+<ul>
+<li>使用方的Podfile就需要改写了。</li>
+<li>使用方本来希望只用AnimateCSS和Transformer，现在不得不把CSShake和MagicCSS也包含进来了。</li>
+</ul>
+<p><strong>接下来以实际项目YTXUtilCategory作为例子来讲解。</strong></p>
+<p><strong>方案就是：是对每一个subspec都做份二进制并保持它们之间依赖的相互关系。</strong></p>
+<p>YTXUtilCategory是我们的一个提供公共通用方法和Category的类。在二进制化之前它大概是长这个样子的：</p>
+<p><img src="media/16761058255533/16761059907683.jpg" alt="" /></p>
+<p>二进制化之前它的podspec是这样的：</p>
+<pre class="line-numbers"><code class="language-plain_text">Pod::Spec.new do |s|
+  .......
+  _all_names = []
+
+  _GTMBase64         = { :spec_name =&gt; &quot;GTMBase64&quot;,        :source_files =&gt; ['Pod/Classes/GTMBase64/GTM*.{h,m}'              ] }
+
+  _UIColor           = { :spec_name =&gt; &quot;UIColor&quot;,          :source_files =&gt; ['Pod/Classes/UIColor/UIColor+*.{h,m}'          ] }
+  _UIView            = { :spec_name =&gt; &quot;UIView&quot;,           :source_files =&gt; ['Pod/Classes/UIView/UIView+*.{h,m}'           ] }
+  _UIImage           = { :spec_name =&gt; &quot;UIImage&quot;,          :source_files =&gt; ['Pod/Classes/UIImage/UIImage+*.{h,m}'          ] }
+  _UIDevice          = { :spec_name =&gt; &quot;UIDevice&quot;,         :source_files =&gt; ['Pod/Classes/UIDevice/UIDevice+*.{h,m}'         ] }
+  _UITableView       = { :spec_name =&gt; &quot;UITableView&quot;,      :source_files =&gt; ['Pod/Classes/UITableView/UITableView+*.{h,m}'      ] }
+  _UIViewController  = { :spec_name =&gt; &quot;UIViewController&quot;, :source_files =&gt; ['Pod/Classes/UIViewController/UIViewController+*.{h,m}' ] }
+  _UIButton          = { :spec_name =&gt; &quot;UIButton&quot;,         :source_files =&gt; ['Pod/Classes/UIButton/UIButton+*.{h,m}'           ] }
+
+  _NSURL             = { :spec_name =&gt; &quot;NSURL&quot;,            :source_files =&gt; ['Pod/Classes/NSUR/NSURL+*.{h,m}'            ] }
+  _NSArray           = { :spec_name =&gt; &quot;NSArray&quot;,          :source_files =&gt; ['Pod/Classes/NSArray/NSArray+*.{h,m}'          ] }
+  _NSDictionary      = { :spec_name =&gt; &quot;NSDictionary&quot;,     :source_files =&gt; ['Pod/Classes/NSDictionary/NSDictionary+*.{h,m}'     ] }
+  _NSDate            = { :spec_name =&gt; &quot;NSDate&quot;,           :source_files =&gt; ['Pod/Classes/NSDate/NSDate+*.{h,m}'           ] ,     :dependency =&gt; [{:name =&gt; &quot;DateTools&quot;,    :version =&gt; &quot;~&gt; 1.0&quot;    }] }
+
+  _NSString          = { :spec_name =&gt; &quot;NSString&quot;,         :source_files =&gt; ['Pod/Classes/NSString/NSString+*.{h,m}'         ],
+    :sub_dependency =&gt; [_GTMBase64] }
+
+  _Util              = { :spec_name =&gt; &quot;Util&quot;,             :source_files =&gt; ['Pod/Classes/Util/*.{h,m}'         ]}
+
+  _FoundationAll     = { :spec_name =&gt; &quot;FoundationAll&quot;,    :sub_dependency =&gt; [_NSString, _NSURL, _NSDate, _NSArray, _NSDictionary    ] }
+
+  _UIAll             = { :spec_name =&gt; &quot;UIAll&quot;,            :sub_dependency =&gt; [_UIColor, _UIView, _UIImage, _UIButton, _UIDevice, _UITableView, _UIViewController        ] }
+
+  _all_subspec = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSDate, _NSArray, _NSString, _NSDictionary, _Util, _FoundationAll, _UIAll]
+
+  _all_subspec.each do |spec|
+      s.subspec spec[:spec_name] do |ss|
+
+          specname = spec[:spec_name]
+
+          _all_names &lt;&lt; specname
+          if spec[:source_files]
+              ss.source_files = spec[:source_files]
+          end
+
+          if spec[:sub_dependency]
+              spec[:sub_dependency].each do |dep|
+                  ss.dependency &quot;YTXUtilCategory/#{dep[:spec_name]}&quot;
+              end
+          end
+
+          if spec[:dependency]
+              spec[:dependency].each do |dep|
+                  ss.dependency dep[:name], dep[:version]
+              end
+          end
+
+      end
+  end
+
+  spec_names = _all_names[0...-1].join(&quot;, &quot;) + &quot; 和 &quot; + _all_names[-1]
+
+  s.description = &quot;拆分了这些subspec:#{spec_names}&quot;
+
+end
+
+</code></pre>
+<p>通过分析代码可以知道：</p>
+<ul>
+<li>有这些subspecs：GTMBase64, UIColor, UIView, UIImage, UIDevice, UITableView, UIViewController, UIButton, NSURL, NSDate, NSArray, NSString, NSDictionary, Util, FoundationAll, UIAll</li>
+<li>NSDate依赖第三方DateTools。</li>
+<li>NSString依赖兄弟GTMBase64。</li>
+<li>FoundationAll依赖兄弟subspecs，自己没什么内容，或者说提供一个灵活的方式一口气纳入所有相关Foundation内容。</li>
+<li>UIAll依赖兄弟subspecs，和FoundationAll想要做的是一样的。</li>
+</ul>
+<p>相信各位读者看了这个podspec也就知道怎么创建自己的subspec了。或者看看<a href="https://link.jianshu.com?t=https://github.com/orta/ARAnalytics">ARAnalytics</a>的podspec。</p>
+<p>在App中的Podflie是这样用的：</p>
+<pre class="line-numbers"><code class="language-plain_text">pod 'YTXUtilCategory','~&gt; 1.2.0'
+
+</code></pre>
+<p>或</p>
+<pre class="line-numbers"><code class="language-plain_text">pod 'YTXUtilCategory','~&gt; 1.2.0', :subspecs =&gt; [&quot;UIColor&quot;, &quot;FoundationALL&quot;]
+
+</code></pre>
+<p>从分析的结果来看我应该创建这些target：</p>
+<p><img src="media/16761058255533/16761059743761.jpg" alt="" /></p>
+<p>在Example/Podfile中根据target的名字增加以下内容并pod install：</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'YTXUtilCategoryGTMBase64Binary' do
+
+end
+
+.........省略
+
+target 'YTXUtilCategoryNSDateBinary' do
+  pod 'DateTools', '~&gt; 1.0'
+end
+
+target 'YTXUtilCategoryUtilBinary' do
+
+end
+
+</code></pre>
+<p>注意YTXUtilCategoryNSDateBinary，把它的第三方依赖加上。版本和podspec里描写的一致。</p>
+<p>在根目录增加两个shell脚本。</p>
+<p>buildbinary.sh和教程一的基本一致，只是改了第一行：</p>
+<pre class="line-numbers"><code class="language-plain_text">#获得第一个参数
+PROJECT_NAME=$1
+# 编译工程
+BINARY_NAME=&quot;${PROJECT_NAME}Binary&quot;
+
+</code></pre>
+<p>buildallbinary.sh</p>
+<pre class="line-numbers"><code class="language-plain_text">pushd &quot;$(dirname &quot;$0&quot;)&quot; &gt; /dev/null
+SCRIPT_DIR=$(pwd -L)
+popd &gt; /dev/null
+#也可以写个for循环
+./buildbinary.sh YTXUtilCategoryGTMBase64
+......省略
+./buildbinary.sh YTXUtilCategoryUtil
+
+</code></pre>
+<p>执行</p>
+<pre class="line-numbers"><code class="language-plain_text">./buildallbinary.sh
+
+</code></pre>
+<p>得到结果：<br />
+![subspecsbinarybuildresult] (<a href="https://link.jianshu.com?t=https://cloud.githubusercontent.com/assets/2350193/16981721/6ec1af32-4e9e-11e6-9c4a-37e6018ebf5c.png">https://cloud.githubusercontent.com/assets/2350193/16981721/6ec1af32-4e9e-11e6-9c4a-37e6018ebf5c.png</a>)</p>
+<p>更改podspec内容为：</p>
+<pre class="line-numbers"><code class="language-plain_text">Pod::Spec.new do |s|
+  ......省略
+  _all_names = []
+
+  _GTMBase64         = { :spec_name =&gt; &quot;GTMBase64&quot;}
+
+  _UIColor           = { :spec_name =&gt; &quot;UIColor&quot;}
+  _UIView            = { :spec_name =&gt; &quot;UIView&quot;}
+  _UIImage           = { :spec_name =&gt; &quot;UIImage&quot;}
+  _UIDevice          = { :spec_name =&gt; &quot;UIDevice&quot;}
+  _UITableView       = { :spec_name =&gt; &quot;UITableView&quot;}
+  _UIViewController  = { :spec_name =&gt; &quot;UIViewController&quot;}
+  _UIButton          = { :spec_name =&gt; &quot;UIButton&quot;}
+
+  _NSURL             = { :spec_name =&gt; &quot;NSURL&quot;}
+  _NSArray           = { :spec_name =&gt; &quot;NSArray&quot;}
+  _NSDictionary      = { :spec_name =&gt; &quot;NSDictionary&quot;}
+  _NSDate            = { :spec_name =&gt; &quot;NSDate&quot;, :dependency =&gt; [{:name =&gt; &quot;DateTools&quot;,    :version =&gt; &quot;~&gt; 1.0&quot;    }] }
+
+  _NSString          = { :spec_name =&gt; &quot;NSString&quot;, :sub_dependency =&gt; [_GTMBase64] }
+
+  _Util              = { :spec_name =&gt; &quot;Util&quot;}
+
+  _temp = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSArray, _NSDictionary, _NSDate, _NSString, _Util]
+
+  puts '-------------------------------------------------------------------'
+  if ENV['IS_SOURCE']
+    puts '-------------------------------------------------------------------'
+    puts &quot;Notice:#{s.name} is source now&quot;
+    puts '-------------------------------------------------------------------'
+
+    _temp.each do |spec|
+      spec[:source_files]=[&quot;Pod/Classes/#{spec[:spec_name]}/*.{h,m}&quot;]
+    end
+
+  else
+    puts '-------------------------------------------------------------------'
+    puts &quot;Notice:#{s.name} is binary now&quot;
+    puts '-------------------------------------------------------------------'
+
+    _temp.each do |spec|
+        spec[:source_files]=[&quot;Pod/Products/#{s.name}#{spec[:spec_name]}/include/**&quot;]
+        spec[:public_header_files]=[&quot;Pod/Products/#{s.name}#{spec[:spec_name]}/include/*.h&quot;]
+        spec[:vendored_libraries]=[&quot;Pod/Products/#{s.name}#{spec[:spec_name]}/lib/*.a&quot;]
+    end
+  end
+
+  _FoundationAll     = { :spec_name =&gt; &quot;FoundationAll&quot;,    :sub_dependency =&gt; [_NSString, _NSURL, _NSDate, _NSArray, _NSDictionary    ] }
+
+  _UIAll             = { :spec_name =&gt; &quot;UIAll&quot;,            :sub_dependency =&gt; [_UIColor, _UIView, _UIImage, _UIButton, _UIDevice, _UITableView, _UIViewController        ] }
+
+  _all_subspec = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSDate, _NSArray, _NSString, _NSDictionary, _Util, _FoundationAll, _UIAll]
+
+  _all_subspec.each do |spec|
+      s.subspec spec[:spec_name] do |ss|
+
+          specname = spec[:spec_name]
+
+          _all_names &lt;&lt; specname
+          if spec[:source_files]
+              ss.source_files = spec[:source_files]
+          end
+
+          if spec[:public_header_files]
+              ss.public_header_files = spec[:public_header_files]
+          end
+
+          if spec[:vendored_libraries]
+              ss.ios.vendored_libraries = spec[:vendored_libraries]
+          end
+
+          if spec[:sub_dependency]
+              spec[:sub_dependency].each do |dep|
+                  ss.dependency &quot;YTXUtilCategory/#{dep[:spec_name]}&quot;
+              end
+          end
+
+          if spec[:dependency]
+              spec[:dependency].each do |dep|
+                  ss.dependency dep[:name], dep[:version]
+              end
+          end
+
+      end
+  end
+
+  spec_names = _all_names[0...-1].join(&quot;, &quot;) + &quot; 和 &quot; + _all_names[-1]
+
+  s.description = &quot;拆分了这些subspec:#{spec_names}&quot;
+
+end
+
+</code></pre>
+<p>难点其实在于podspec如何写，如何描述subspec之间的关系，如何拆分subspec。</p>
+<p>假如a.h和b.h都用到了c.h，而a.h隶属于subspec A，而b.h隶属于subspec B。那你应该做一个subspec C其中包含c.h。而A和B都依赖C。</p>
+<p>要避免a.h依赖b.h，b.h依赖a.h这种循环依赖的问题。</p>
+<p><strong>到此为止，含有subspec的CocoaPods库就这么简单的完成了。</strong></p>
+<h3><a id="%E5%90%8E%E8%AE%B0%EF%BC%8C%E5%9C%A8%E5%81%9Asubspec%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>后记，在做subspec二进制化遇到的问题</h3>
+<pre class="line-numbers"><code class="language-plain_text">_all_sync.each do |sync_spec|
+  ...
+  ss.prefix_header_contents = &quot;#define YTX_#{specname.upcase}_EXISTS 1&quot;
+  ... 
+end
+
+</code></pre>
+<p>注意ss. ss.prefix_header_contents这段。加了一个宏。然后在这里会用到:</p>
+<pre class="line-numbers"><code class="language-plain_text">#import &quot;YTXRestfulModel.h&quot;
+
+#ifdef YTX_USERDEFAULTSTORAGESYNC_EXISTS
+#import &quot;YTXRestfulModelUserDefaultStorageSync.h&quot;
+#endif
+
+#ifdef YTX_AFNETWORKINGREMOTESYNC_EXISTS
+#import &quot;AFNetworkingRemoteSync.h&quot;
+#endif
+
+#ifdef YTX_YTXREQUESTREMOTESYNC_EXISTS
+#import &quot;YTXRestfulModelYTXRequestRemoteSync.h&quot;
+#endif
+
+#ifdef YTX_FMDBSYNC_EXISTS
+#import &quot;YTXRestfulModelFMDBSync.h&quot;
+#import &quot;NSValue+YTXRestfulModelFMDBSync.h&quot;
+#endif
+
+</code></pre>
+<p>在源码的情况下，如果我想要用YTXRequestRemote这个subspec，那么引入YTXRequestRemote时会自带宏YTX_YTXREQUESTREMOTESYNC_EXISTS，YTXRestfulModel在编译时会根据宏引入相关头文件。</p>
+<p>问题来了，宏都是预编译的。当我编译出二进制时，内容已经决定了。这样就丧失了subspec的动态性了。所以关键的问题在于当初设计的时候没有考虑好。</p>
+<p>希望大家看到这个例子后，避免将来遇到相思的问题。目前没有想到好的解决方案，所以这个库并没有二进制化。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    直播  (十) : IOS安装FFmpeg问题总结 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            直播  (十) : IOS安装FFmpeg问题总结   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%9B%B4%E6%92%AD.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;直播</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p><strong>说一下我自己的情况。还有（ios下的ffmpegh可以下载，代码由我改，基本没啥问题）</strong><br />
+<strong>下载地址：</strong><a href="http://download.csdn.net/detail/nil88/9351775">ffmpegh</a><strong>(怎么用可以看文章）</strong></p>
+<p>1、我是自己下载ffmpeg2.8.3版本，然后加最新的faac,x264来编译的arm64，armv7,armv7s（iphone所有的arm架构了，我是真机测试，所有不用i386了）。<br />
+编译的脚本从这里弄的：<br />
+<a href="http://blog.csdn.net/leixiaohua1020/article/details/47071547">http://blog.csdn.net/leixiaohua1020/article/details/47071547</a></p>
+<p>2、编译好这几个脚本后，就可以把Fat-ffmpeg下的include放到项目目录下，SearchFileHeader设置下，指定到这个地方即可。然后就是lib导入到项目copy file的方式。然后把libbfaac.a,libx264.a（从上面的脚本生成的各自的fat目录下)。</p>
+<p>3、这样之后，可以把libz.dylib放入项目（这个可以从/usr/local/lib下面导入进去）。即添加lib是用Other Folder然后跑到这个目录即可找到它。</p>
+<p>4、这一切准备好，其实如果会自己调用ffmpeg库，基本也可以写代码了。不过懒人一般都跟我一样，想直接调用ffmpeg。那接着看吧。</p>
+<p>如何直接调用ffmpeg命令？<br />
+先分析下：我们这知道编译出来的几个库（libavcodec.a...等）都只是库，然后include也只是头文件。一个好的库就是一个框架，最好不要跟其他的有什么关系，而你在终端输入的ffmpeg 或者ffmpeg -L等，都跟这个库没有太大的直接关系，也就说ffmpeg.c是调用了库里面的东西，然后编译出来的一个工具。ok，很显然了。我们要使用ffmpeg命令，那只有把ffmpeg.h,ffmpeg.c等代码放入我们的项目，然后重新编译，以便我们调用。<br />
+思路搞定，那么接下来就是把ffmpeg.h,ffmpeg.c以及ffmpeg.c依赖的文件放到我们的xcode项目了。好的，我们直接从ffmpeg2.8.3目录下<br />
+发现了我们要找的文件。全部弄进XCODE后，你会发现有一些头文件比如 &lt;avutil/internal.h&gt;找不到这类的。当然了，ios下的ffmpeg的include文件确实没有这个东西。</p>
+<p>为什么呢？<br />
+我猜应该是这些头文件在ios的arm下不支持，也就不需要了。（大神吐槽，我是新手）。于是没办法，我只有把这些没有的头文件删除掉，看看影响那些代码（这个优点冒险，还有一个方法就是找到这些头文件然后放到include目录下，我没这么做。我就喜欢冒险，相信直觉）。影响的代码其实还不少，凭经验把这些去掉。差不多文件如下就可以了（看ffmpegh下)：<br />
+<img src="media/16791192499610/16791196417503.png" alt="image.png" /></p>
+<p>当然了，改了之后，还有一个点，就是这里面的代码调用了time.h，就是上面的文章提到的问题。我是把include下面的time.h改了名字，改成ffmpegtime.h，然后你在xcode运行下，就发现只有一个文件ffmpeg.c调用它，修改即可。</p>
+<p>最后，修改下ffmpeg.c的main入口为ffmpeg_main,再在.h文件加入申明即可。</p>
+<p>到这里，你可以写一个UIViewController来调用ffmpeg了！恭喜！</p>
+<p>命令可以运行了，但是整个ios程序退出了。原因如转的原文！</p>
+<p>好了，其实重点肯定就是ffmpegh下的几个文件，这个对ios比较重要！</p>
+<p>借鉴:<a href="http://blog.sina.com.cn/s/blog_47522f7f0102vbwp.html">原文链接</a></p>
+<p>ffmpeg是一个多平台多媒体处理工具，处理视频和音频的功能非常强大。目前在网上搜到的iOS上使用FFMPEG的资料都比较陈旧，而FFMPEG更新迭代比较快； 且网上的讲解不够详细，对于初次接触FFMPEG的新手（例如我）来说确实不太好使用。为了防止忘记，这里对iOS下使用FFMPEG做一个总结。</p>
+<ol>
+<li>
+<p>FFMPEG层次结构的简单理解<br />
+要使用FFMPEG，首先需要理解FFMPEG的代码结构。根据志哥的提示，ffmpeg的代码是包括两部分的，一部分是library，一部分是tool。api都是在library里面，如果直接调api来操作视频的话，就需要写c或者c++了。另一部分是tool，使用的是命令行，则不需要自己去编码来实现视频操作的流程。实际上tool只不过把命令行转换为api的操作而已。</p>
+</li>
+<li>
+<p>预热-在mac os下使用ffmpeg<br />
+在mac os下使用ffmpeg比较简单，可以直接使用命令行来操作。首先安装ffmpeg，这里默认系统已经安装好brew，只需要在终端上输入：<br />
+brew install ffmpeg<br />
+等待安装结束即可。<br />
+安装结束后，尝试以下命令：<br />
+ffmpeg -i input.mp4 output.avi<br />
+如果能顺利转换，表明安装成功</p>
+</li>
+<li>
+<p>编译能在iOS下使用的FFMPEG library库<br />
+这一步是编译1所说的library，编译好之后可以调用FFMPEG的api。网上有一些方法，但都要自己手动编译，稍显复杂而且比较陈旧。按照app store的需求，编译出来的包还必须支持arm64。我在万能的github中找到一个能够&quot;一键编译&quot;的脚本，地址如下：<br />
+<a href="https://github.com/kewlbear/FFmpeg-iOS-build-script">https://github.com/kewlbear/FFmpeg-iOS-build-script</a><br />
+而且写这个脚本的歪果仁挺好人，更新很及时，已经更新到了最新的2.5.3版本。下载下来，只有一个build-ffmpeg.sh脚本文件。在终端中转至脚本的目录，执行命令：<br />
+./build-ffmpeg.sh<br />
+脚本则会自动从github中把ffmpeg源码下到本地并开始编译。<br />
+编译结束后，文件目录如下：<br />
+其中，ffmpeg-2.5.3是源码，FFmpeg-iOS是编译出来的库，里面有我们需要的.a静态库，一共有7个。<br />
+执行命令：<br />
+lipo -info libavcodec.a<br />
+查看.a包支持的架构，这几个包都支持了armv7 armv7s i386 x86_64 arm64这几个架构，这个脚本果真是业界良心啊～～～</p>
+</li>
+</ol>
+<p>4.在xcode中引入FFMPEG library库<br />
+新建工程，把上面编译好的FFmpeg-iOS拖到xcode工程中，添加一个头文件引用</p>
+<p>#include &quot;avformat.h&quot;<br />
+添加一个api语句：<br />
+av_register_all();<br />
+添加一个空的类，把执行文件.m后缀改为.mm，开启混编模式。<br />
+添加相应的framework，包括avfoundation和coremedia。<br />
+运行工程，如果没有报错，则表明编译成功。</p>
+<p>5.在xcode项目中使用命令行<br />
+执行到第4步，已经可以使用library库了。但是如果要对视频进行操作，还是需要手动写很多代码去调用api，工作量较大，自然不如直接写命令行方便。为了命令行能够在xcode工程中使用，还需要做以下工作：<br />
+（1）添加源码中的tools,具体文件包括：</p>
+<p>（2）添加Header Search Paths<br />
+在target--build setting中搜索Header Search Paths，并在Header Search Paths下面添加源码ffmpeg-2.5.3和scratch的路径。<br />
+（3）修改ffmpeg.h和ffmpeg.c源码<br />
+如果此时run这个工程，则会报错，原因是工程里面有2个main函数，此时处理方法为：<br />
+在ffmpeg.h中添加一个函数声明：<br />
+int ffmpeg_main(int argc, char <strong>argv);<br />
+在ffmpeg.c中找到main函数，把main函数改为ffmpeg_main。<br />
+（4）调用命令行范例<br />
+添加头文件：#import &quot;ffmpeg.h&quot;<br />
+调用命令行<br />
+int numberOfArgs = 16;<br />
+char</strong> arguments = calloc(numberOfArgs, sizeof(char*));</p>
+<p>arguments[0] = &quot;ffmpeg&quot;;<br />
+arguments[1] = &quot;-i&quot;;<br />
+arguments[2] = inputPath;<br />
+arguments[3] = &quot;-ss&quot;;<br />
+arguments[4] = &quot;0&quot;;<br />
+arguments[5] = &quot;-t&quot;;<br />
+arguments[6] = durationChar;<br />
+arguments[7] = &quot;-vcodec&quot;;<br />
+arguments[8] = &quot;copy&quot;;<br />
+arguments[9] = &quot;-acodec&quot;;<br />
+arguments[10] = &quot;aac&quot;;<br />
+arguments[11] = &quot;-strict&quot;;<br />
+arguments[12] = &quot;-2&quot;;<br />
+arguments[13] = &quot;-b:a&quot;;<br />
+arguments[14] = &quot;32k&quot;;<br />
+arguments[15] = outputPath;</p>
+<p>int result = ffmpeg_main(numberOfArgs, arguments);<br />
+其中inputpath和outputpath是文件路径。经测试，这两个路径不支持asset-library://协议和<a href="http://file/%E5%8D%8F%E8%AE%AE%EF%BC%8C%E6%89%80%E4%BB%A5%E5%A6%82%E6%9E%9C%E6%98%AF%E8%A6%81%E7%94%A8%E7%9B%B8%E5%86%8C%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%8C%E6%88%91%E7%9B%AE%E5%89%8D%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E6%98%AF%E6%8A%8A%E5%AE%83%E6%8B%B7%E8%B4%9D%E5%88%B0%E6%B2%99%E7%9B%92%E9%87%8C%E9%9D%A2%E3%80%82%E5%A6%82%E6%9E%9C%E7%94%A8%E4%BA%86%5BURL">file://<br />
+协议，所以如果是要用相册的文件，我目前的解决办法是把它拷贝到沙盒里面。</a></p>
+<ol start="6">
+<li>
+<p>改关闭进程为关闭线程<br />
+如果顺利进行到了第5步，在app中是能够用命令行处理视频了，但会出现一个问题，app会退出。经肖大神提醒，发现了命令行执行完毕之后会退出进程。而iOS下只能启动一个进程，因此必须改关闭进程为关闭线程，或者直接把关闭进程的方法给注掉。<br />
+在ffmpeg.c中可以看到，执行退出进程的方法是exit_program，定位到了cmdutils.c中执行了c语言的exit方法。这里我将它改为了pthread_exit（需要添加#include 头文件）。在xcode项目中使用时，则可以用NSThread来新开一个线程，执行完毕之后，把线程关闭了即可。再使用NSThreadWillExitNotification通知，即可监听线程退出的情况。</p>
+</li>
+<li>
+<p>修复ffmpeg.c里面的一个bug<br />
+在实际项目中，可能需要多次调用命令行，但在多次调用命令行的过程中，发现ffmpeg.c的代码中会访问空属性导致程序崩溃。逐步debug后发现，很多指针已经置空了，但它们的计数却没有置零，不知道是不是ffmpeg.c的一个bug。修复方法如下：在ffmpeg_cleanup方法下，将各个计数器置零，包括：<br />
+nb_filtergraphs<br />
+nb_output_files<br />
+nb_output_streams<br />
+nb_input_files<br />
+nb_input_streams<br />
+置零之后，重复使用ffmpeg_main方法一切正常。</p>
+</li>
+</ol>
+<p>以上是近期研究ffmpeg的一些小结，目前对于ffmpeg还是处于刚认识阶段，对于其api的使用、命令行的具体参数等，都还需要继续研究和学习。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

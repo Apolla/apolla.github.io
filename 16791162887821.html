@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    Runloop实际使用 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            Runloop实际使用   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;碎片芝士收藏</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <h2><a id="%E5%89%8D%E8%A8%80" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>前言</h2>
+<p>Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop</p>
+<h2><a id="%E7%BA%BF%E7%A8%8B%E4%BF%9D%E6%B4%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>线程保活</h2>
+<p>在实际开发中，我们通常会遇到常驻线程的创建，比如说发送心跳包，这就可以在一个常驻线程来发送心跳包，而不干扰主线程的行为，再比如音频处理，这也可以在一个常驻线程中来处理。以前在Objective-C中使用的AFNetworking 1.0就使用了RunLoop来进行线程的保活。</p>
+<pre class="line-numbers"><code class="language-swift">var thread = Thread()
+func createLiveThread () {
+thread = Thread.init(block: {
+	let port = NSMachPort ()
+	RunLoop .current .add (port, forMode : .default)
+	RunLoop.current. run ( )
+})
+thread.start
+</code></pre>
+<p>值得注意的是RunLoop的mode中至少需要一个port/timer/observer，否则RunLoop只会执行一次就退出了</p>
+<h2><a id="%E5%81%9C%E6%AD%A2runloop" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>停止Runloop</h2>
+<p>离开RunLoop一共有两种方法：其一是给RunLoop配置一个超时的时间，其二是主动通知RunLoop离开。Apple在文档中是推荐第一种方式的，如果能直接定量的管理，这种方式当然是最好的</p>
+<h3><a id="%E8%AE%BE%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>设置超时时间</h3>
+<p>然而实际中我们无法准确的去设置超时的时刻，比如在线程保活的例子中，我们需要保证线程的RunLoop一直保持运行中，所以结束的时间是一个变量，而不是常量，要达到这个目标我们可以结合一下RunLoop提供的API，在开始的时候，设置RunLoop超时时间为无限，但是在结束时，设置RunLoop超时时间为当前，这样变相通过控制timeout的时间停止了RunLoop，具体代码如下</p>
+<pre class="line-numbers"><code class="language-swift">var thread: Thread?
+var isStopped = false
+func createLiveThread () {
+thread = Thread (block: { [weak self] in
+	guard let self = self else { return }
+	let port = NSMachPort ()
+	RunLoop. current. add (port, forMode: •default)
+	while !isStopped {
+		RunLoop. current. run (mode: •default, before: Date.distantFuture)
+		}
+	})
+	thread?.start ()
+}
+func stop () {
+	self.perform(#selector (stopThread), on: thread!, with: nil, waitUntilDone:false)
+}
+@objc func stopThread () {
+	isStopped = true
+	RunLoop. current. run (mode: •default, before: Date ())
+	self.thread = nil
+}   
+</code></pre>
+<h3><a id="%E7%9B%B4%E6%8E%A5%E5%81%9C%E6%AD%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>直接停止</h3>
+<p>CoreFoundation提供了API：<strong>CFRunLoopStop()</strong> 但是这个方法只会停止当前这次循环的RunLoop，并不会完全停止RunLoop。那么有没有其它的策略呢？我们知道RunLoop的Mode中必须要至少有一个port/timer/observer才会工作，否则就会退出，而CF提供的API中正好有：</p>
+<pre class="line-numbers"><code class="language-swift">CF_EXPORT void CFRunLoopRemoveSource(CFRunLoopRef rl, CFRunLoopSourceRef source, CFRunLoopMode mode);CF_EXPORT void CFRunLoopRemoveObserver(CFRunLoopRef rl, CFRunLoopObserverRef observer, CFRunLoopMode mode);CF_EXPORT void CFRunLoopRemoveTimer(CFRunLoopRef rl, CFRunLoopTimerRef timer, CFRunLoopMode mode)
+
+</code></pre>
+<p>所以很自然的联想到如果移除source/timer/observer, <strong>那么这个方案可不可以停止RunLoop呢?</strong><br />
+** 答案是否定的，这一点在Apple的官方文档中有比较详细的描述：**</p>
+<blockquote>
+<p>❝Although removing a run loop’s input sources and timers may also cause the run loop to exit, this is not a reliable way to stop a run loop. Some system routines and input sources to a run loop to handle needed events. Because your code might not be aware of these input sources, it would be unable to remove them, which would prevent the run loop from exiting.</p>
+</blockquote>
+<h2><a id="%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>延迟加载图片</h2>
+<p>这是一个很常见的使用方式，因为我们在滑动scrollView/tableView/collectionView的过程，总会给cell设置图片，但是直接给cell的imageView设置图片的过程中，会涉及到图片的解码操作，这个就会占用CPU的计算资源，可能导致主线程发生卡顿，所以这里可以将这个操作，不放在trackingMode，而是放在defaultMode中，通过一种取巧的方式来解决可能的性能问题</p>
+<pre class="line-numbers"><code class="language-swift">func setupImageView() {
+	performSelector (onMainThread: #selector (setupImage),with: nil, waitUntilDone: false,modes: [RunLoop. Mode.default.rawValue ])
+	{
+        
+    }
+}
+@objc func setupImage ( ) {
+	imageView.setImage()
+}
+</code></pre>
+<h2><a id="%E5%8D%A1%E9%A1%BF%E7%9B%91%E6%B5%8B" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>卡顿监测</h2>
+<p>目前来说，一共有三种卡顿监测的方案，然而基本上每一种卡顿监测的方案都和RunLoop是有关联的</p>
+<h3><a id="cadisplaylink-fps" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>CADisplayLink(FPS)</h3>
+<p>YYFPSLabel采用的就是这个方案，FPS（Frames Per Second）代表每秒渲染的帧数，一般来说，如果App的FPS保持50～60之间，用户的体验就是比较流畅的，但是Apple自从iPhone支持120HZ的高刷之后，它发明了一种ProMotion的动态屏幕刷新率的技术，这种方式基本就不能使用了，但是这里依旧提供已作参考。<br />
+这里值得注意的技术细节是使用了NSObject来做方法的转发，在OC中可以使用NSProxy来做消息的转发，效率更高。</p>
+<pre class="line-numbers"><code class="language-swift">// 抽象的超类，用来充当其它对象的一个替身
+// Timer/CADisplayLink可以使用NSProxy做消息转发，可以避免循环引用
+// swift中我们是没发使用NSInvocation的，所以我们直接使用NSobject来做消息转发
+class WeakProxy: NSObject {
+    private weak var target: NSObjectProtocol?
+    
+    init(target: NSObjectProtocol) {
+        self.target = target
+        super.init()
+    }
+    
+    override func responds(to aSelector: Selector!) -&gt; Bool {
+        return (target?.responds(to: aSelector) ?? false) || super.responds(to: aSelector)
+    }
+    
+    override func forwardingTarget(for aSelector: Selector!) -&gt; Any? {
+        return target
+    }
+}
+
+
+class FPSLabel: UILabel {
+    var link: CADisplayLink!
+    var count: Int = 0
+    var lastTime: TimeInterval = 0.0
+    
+    
+    fileprivate let defaultSize = CGSize.init(width: 80, height: 20)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        if frame.size.width == 0 || frame.size.height == 0 {
+            self.frame.size = defaultSize
+        }
+        
+        layer.cornerRadius = 5.0
+        clipsToBounds = true
+        textAlignment = .center
+        isUserInteractionEnabled = false
+        backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        
+        link = CADisplayLink.init(target: WeakProxy.init(target: self), selector: #selector(FPSLabel.tick(link:)))
+        link.add(to: RunLoop.main, forMode: .common)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError(&quot;init(coder:) has not been implemented&quot;)
+    }
+    
+    deinit {
+        link.invalidate()
+    }
+    
+    @objc func tick(link: CADisplayLink) {
+        guard lastTime != 0 else {
+            lastTime = link.timestamp
+            return
+        }
+        
+        count += 1
+        
+        let timeDuration = link.timestamp - lastTime
+        
+        // 1、设置刷新的时间: 这里是设置为1秒（即每秒刷新）
+        guard timeDuration &gt;= 1.0 else { return }
+        
+        // 2、计算当前的FPS
+        let fps = Double(count)/timeDuration
+        count = 0
+        lastTime = link.timestamp
+        
+        // 3、开始设置FPS了
+        let progress = fps/60.0
+        let color = UIColor(hue: CGFloat(0.27 * (progress - 0.2)), saturation: 1, brightness: 0.9, alpha: 1)
+        self.text = &quot;\(Int(round(fps))) FPS&quot;
+        self.textColor = color
+    }
+}
+</code></pre>
+<h3><a id="%E5%AD%90%E7%BA%BF%E7%A8%8Bping" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>子线程Ping</h3>
+<p>这种方法是创建了一个子线程，通过GCD给主线程添加异步任务：修改是否超时的参数，然后让子线程休眠一段时间，如果休眠的时间结束之后，超时参数未修改，那说明给主线程的任务并没有执行，那么这就说明主线程的上一个任务还没有做完，那就说明卡顿了，这种方式其实和RunLoop没有太多的关联，它不依赖RunLoop的状态。在ANREye(<a href="https://link.juejin.cn?target=https%3A%2F%2Flink.zhihu.com%2F%3Ftarget%3Dhttps%253A%2F%2Fgithub.com%2Fzixun%2FANREye">github.com/zixun/ANREy…</a>)中是采用子线程Ping的方式来监测卡顿的</p>
+<pre class="line-numbers"><code class="language-swift"> class PingMonitor {   
+    static let timeoutInterval: TimeInterval = 0.2
+    static let queueIdentifier: String = &quot;com.queue.PingMonitor&quot;
+    
+    private var queue: DispatchQueue = DispatchQueue(label: queueIdentifier)
+    private var isMonitor: Bool = false
+    private var semphore: DispatchSemaphore = DispatchSemaphore(value: 0)
+    
+    func startMonitor() {
+        guard isMonitor == false else { return }
+        
+        isMonitor = true
+        
+        queue.async {
+            while self.isMonitor {
+                
+                var timeout = true
+                
+                DispatchQueue.main.async {
+                    timeout = false
+                    self.semphore.signal()
+                }
+                
+                Thread.sleep(forTimeInterval:PingMonitor.timeoutInterval)
+                
+                // 说明等了timeoutInterval之后，主线程依然没有执行派发的任务，这里就认为它是处于卡顿的
+                if timeout == true {
+                    //TODO: 这里需要取出崩溃方法栈中的符号来判断为什么出现了卡顿
+                    // 可以使用微软的框架:PLCrashReporter
+                }
+                
+                self.semphore.wait()
+            }
+        }
+    }
+}
+</code></pre>
+<p>这个方法在正常情况下会每隔一段时间让主线程执行GCD派发的任务，会造成部分资源的浪费，而且它是一种主动的去Ping主线程，并不能很及时的发现卡顿问题，所以这种方法会有一些缺点</p>
+<h3><a id="%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>实时监控</h3>
+<p>而我们知道，主线程中任务都是通过RunLoop来管理执行的，所以我们可以通过监听RunLoop的状态来知道是否会出现卡顿的情况，一般来说，我们会监测两种状态：第一种是kCFRunLoopAfterWaiting 的状态，第二种是kCFRunLoopBeforeSource的状态。为什么是两种状态呢？<br />
+首先看第一种状态kCFRunLoopAfterWaiting ，它会在RunLoop被唤醒之后回调这种状态，然后根据被唤醒的端口来处理不同的任务，如果处理任务的过程中耗时过长，那么下一次检查的时候，它依然是这个状态，这个时候就可以说明它卡在了这个状态了，然后可以通过一些策略来提取出方法栈，来判断卡顿的代码。同理，第二种状态也是一样的，说明一直处于kCFRunLoopBeforeSource 状态，而没有进入下一状态（即休眠），也发生了卡顿</p>
+<pre class="line-numbers"><code class="language-swift">class RunLoopMonitor {
+    private init() {}
+    
+    static let shared: RunLoopMonitor = RunLoopMonitor()
+    
+    var timeoutCount = 0
+    var runloopObserver: CFRunLoopObserver?
+    var runLoopActivity: CFRunLoopActivity?
+    var dispatchSemaphore: DispatchSemaphore?
+    
+    // 原理：进入睡眠前方法的执行时间过长导致无法进入睡眠，或者线程唤醒之后，一直没进入下一步
+    func beginMonitor() {
+        let uptr = Unmanaged.passRetained(self).toOpaque()
+        let vptr = UnsafeMutableRawPointer(uptr)
+        var context = CFRunLoopObserverContext.init(version: 0, info: vptr, retain: nil, release: nil, copyDescription: nil)
+        
+        runloopObserver = CFRunLoopObserverCreate(kCFAllocatorDefault,
+                                                  CFRunLoopActivity.allActivities.rawValue,
+                                                  true,
+                                                  0,
+                                                  observerCallBack(),
+                                                  &amp;context)
+        CFRunLoopAddObserver(CFRunLoopGetMain(), runloopObserver, .commonModes)
+        
+        // 初始化的信号量为0
+        dispatchSemaphore = DispatchSemaphore(value: 0)
+        
+        DispatchQueue.global().async {
+            while true {
+                // 方案一：可以通过设置单次超时时间来判断 比如250毫秒
+        // 方案二：可以通过设置连续多次超时就是卡顿 戴铭在GCDFetchFeed中认为连续三次超时80秒就是卡顿
+                let st = self.dispatchSemaphore?.wait(timeout: .now() + .milliseconds(80))
+                
+                if st == .timedOut {
+                    guard !self.runloopObserver else {
+                        self.dispatchSemaphore = nil
+                        self.runLoopActivity = nil
+                        self.timeoutCount = 0
+                        return
+                    }
+                    
+                    if self.runLoopActivity == .afterWaiting || self.runLoopActivity == .beforeSources {
+                        self.timeoutCount += 1
+                        
+                        if self.timeoutCount &lt; 3 { continue }
+                        
+                        DispatchQueue.global().async {
+                            let config = PLCrashReporterConfig(signalHandlerType: .BSD, symbolicationStrategy: .all)
+                            guard let crashReporter = PLCrashReporter(configuration: config) else { return }
+                            let data = crashReporter.generateLiveReport()
+                            
+                            do {
+                                let reporter = try PLCrashReport(data: data)
+                                
+                                let report = PLCrashReportTextFormatter.stringValue(for: reporter, with: PLCrashReportTextFormatiOS) ?? &quot;&quot;
+                                
+                                NSLog(&quot;------------卡顿时方法栈:\n \(report)\n&quot;)
+                            } catch _ {
+                                NSLog(&quot;解析crash data错误&quot;)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func end() {
+        guard let _ = runloopObserver else { return }
+        CFRunLoopRemoveObserver(CFRunLoopGetMain(), runloopObserver, .commonModes)
+        runloopObserver = nil
+    }
+    
+    private func observerCallBack() -&gt; CFRunLoopObserverCallBack {
+        return { (observer, activity, context) in
+            let weakself = Unmanaged&lt;RunLoopMonitor&gt;.fromOpaque(context!).takeUnretainedValue()
+            weakself.runLoopActivity = activity
+            weakself.dispatchSemaphore?.signal()
+        }
+    }
+}
+</code></pre>
+<h2><a id="crash%E9%98%B2%E6%8A%A4" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Crash防护</h2>
+<p>Crash防护是一个很有意思的点，处于应用层的APP，在执行了某些不被操作系统允许的操作之后会触发操作系统抛出异常信号，但是因为没有处理这些异常从而被系操作系统杀掉的线程，比如常见的闪退。这里不对Crash做详细的描述，我会在下一个模块来描述iOS中的异常。要明确的是，有些场景下，是希望可以捕获到系统抛出的异常，然后将App从错误中恢复，重新启动，而不是被杀死。而对应在代码中，我们需要去手动的重启主线程，已达到继续运行App的目的</p>
+<pre class="line-numbers"><code class="language-swift">let runloop = CFRunLoopGetCurrent ( )
+guard let allModes = CFRunLoopCopyA11Modes (runloop) as? [CFRunLoopMode] else
+	return
+}
+while true {
+	for mode in allModes {
+		CFRunLoopRunInMode (mode, 0.001, false)
+	}
+}
+</code></pre>
+<p>CFRunLoopRunInMode(mode, 0.001, false) 因为无法确定RunLoop到底是怎样启动的，所以采用了这种方式来启动RunLoop的每一个Mode，也算是一种替代方案了。因为CFRunLoopRunInMode 在运行的时候本身就是一个循环并不会退出，所以while循环不会一直执行，只是在mode退出之后，while循环遍历需要执行的mode，直到继续在一个mode中常驻。<br />
+这里只是重启RunLoop，其实在Crash防护里最重要的还是要监测到何时发送崩溃，捕获系统的exception信息，以及singal信息等等，捕获到之后再对当前线程的方法栈进行分析，定位为crash的成因</p>
+<h2><a id="%E6%80%BB%E7%BB%93" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结</h2>
+<p>本篇文章我从线程保活开始介绍了RunLoop在实际开发中的使用，然后主要是介绍了卡顿监测和Crash防护中的高阶使用，当然，RunLoop的运用远不止这些，如果有更多更好的使用，希望大家可以留言交流<br />
+参考：<br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fqq_45836906%2Farticle%2Fdetails%2F119578794">RunLoop详解</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fstreamery%2Farticle%2Fdetails%2F107737548">RunLoop之线程保活</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2FKevinAshen%2Farticle%2Fdetails%2F99651068%3Fspm%3D1001.2014.3001.5502">浅谈RunLoop</a></p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

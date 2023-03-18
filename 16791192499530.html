@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    直播  (七) : :最简单的基于FFmpeg的推流器 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            直播  (七) : :最简单的基于FFmpeg的推流器   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%9B%B4%E6%92%AD.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;直播</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p>本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。</p>
+<p>在这个推流器的基础上可以进行多种方式的修改，实现各式各样的推流器。例如：</p>
+<ul>
+<li>将输入文件改为网络流URL，可以实现转流器。</li>
+<li>将输入的文件改为回调函数（内存读取）的形式，可以推送内存中的视频数据。</li>
+<li>将输入文件改为系统设备（通过libavdevice），同时加上编码的功能，可以实现实时推流器（现场直播）。</li>
+</ul>
+<blockquote>
+<p>PS：本程序并不包含视频转码的功能。</p>
+</blockquote>
+<h1><a id="%E7%AE%80%E4%BB%8B" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>简介</h1>
+<p>RTMP推流器（Streamer）的在流媒体系统中的作用可以用下图表示。首先将视频数据以RTMP的形式发送到流媒体服务器端（Server，比如FMS，Red5，Wowza等），然后客户端（一般为Flash Player）通过访问流媒体服务器就可以收看实时流了。<br />
+运行本程序之前需要先运行RTMP流媒体服务器，并在流媒体服务器上建立相应的Application。有关流媒体服务器的操作不在本文的论述范围内，在此不再详述。本程序运行后，即可通过RTMP客户端（例如 Flash Player, FFplay等等）收看推送的直播流。</p>
+<blockquote>
+<p>需要要注意的地方</p>
+</blockquote>
+<p>封装格式<br />
+RTMP采用的封装格式是FLV。因此在指定输出流媒体的时候需要指定其封装格式为“flv”。同理，其他流媒体协议也需要指定其封装格式。例如采用UDP推送流媒体的时候，可以指定其封装格式为“mpegts”。</p>
+<h1><a id="%E5%BB%B6%E6%97%B6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>延时</h1>
+<p>发送流媒体的数据的时候需要延时。不然的话，FFmpeg处理数据速度很快，瞬间就能把所有的数据发送出去，流媒体服务器是接受不了的。因此需要按照视频实际的帧率发送数据。本文记录的推流器在视频帧与帧之间采用了av_usleep()函数休眠的方式来延迟发送。这样就可以按照视频的帧率发送数据了，参考代码如下。</p>
+<pre class="line-numbers"><code class="language-objectivec">	int64_t start_time=av_gettime();
+	while (1) {
+
+	Important:Delay
+	if(pkt.stream_index==videoindex){
+		AVRational time_base=ifmt_ctx-&gt;streams[videoindex]-&gt;time_base;
+		AVRational time_base_q={1,AV_TIME_BASE};
+		int64_t pts_time = av_rescale_q(pkt.dts, time_base, time_base_q);
+		int64_t now_time = av_gettime() - start_time;
+		if (pts_time &gt; now_time)
+		av_usleep(pts_time - now_time);
+	}
+
+}
+
+</code></pre>
+<p>i</p>
+<h1><a id="ptsdts%E9%97%AE%E9%A2%98" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>PTS/DTS问题</h1>
+<p>没有封装格式的裸流（例如H.264裸流）是不包含PTS、DTS这些参数的。在发送这种数据的时候，需要自己计算并写入AVPacket的PTS，DTS，duration等参数。这里还没有深入研究，简单写了一点代码，如下所示。</p>
+<pre class="line-numbers"><code class="language-objectivec">//FIX：No PTS (Example: Raw H.264)
+//Simple Write PTS
+if(pkt.pts==AV_NOPTS_VALUE){
+	//Write PTS
+	AVRational time_base1=ifmt_ctx-&gt;streams[videoindex]-&gt;time_base;
+	Duration between 2 frames (us)
+	int64_t calc_duration=(double)AV_TIME_BASE/av_q2d(ifmt_ctx-&gt;streams[videoindex]-&gt;r_frame_rate);
+	//Parameters
+	pkt.pts=(double)(frame_index*calc_duration)/(double)(av_q2d(time_base1)*AV_TIME_BASE);
+	pkt.dts=pkt.pts;
+	pkt.duration=(double)calc_duration/(double)(av_q2d(time_base1)*AV_TIME_BASE);
+}
+
+</code></pre>
+<h2><a id="%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>程序流程图</h2>
+<p>程序的流程图如下图所示。可以看出和《最简单的基于FFMPEG的封装格式转换器（无编解码）》中的封装格式转换器比较类似。它们之间比较明显的区别在于：</p>
+<ol>
+<li>Streamer输出为URL</li>
+<li>Streamer包含了延时部分<br />
+<img src="media/16791192499530/16791195850920.png" alt="image.png" /></li>
+</ol>
+<h2><a id="%E4%BB%A3%E7%A0%81" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码</h2>
+<p>代码如下。</p>
+<pre class="line-numbers"><code class="language-objectivec">/**
+* 最简单的基于FFmpeg的推流器（推送RTMP）
+* Simplest FFmpeg Streamer (Send RTMP)
+*
+*
+* 本例子实现了推送本地视频至流媒体服务器（以RTMP为例）。
+* 是使用FFmpeg进行流媒体推送最简单的教程。
+*
+* This example stream local media files to streaming media
+* server (Use RTMP as example).
+* It's the simplest FFmpeg streamer.
+*
+*/
+
+#include &lt;stdio.h&gt;
+
+#define __STDC_CONSTANT_MACROS
+
+#ifdef _WIN32
+
+Windows
+extern &quot;C&quot;
+{
+	#include &quot;libavformat/avformat.h&quot;
+	#include &quot;libavutil/mathematics.h&quot;
+	#include &quot;libavutil/time.h&quot;
+};
+
+#else
+Linux...
+
+#ifdef __cplusplus
+extern &quot;C&quot;
+{
+	#endif
+	#include &lt;libavformat/avformat.h&gt;
+	#include &lt;libavutil/mathematics.h&gt;
+	#include &lt;libavutil/time.h&gt;
+	#ifdef __cplusplus
+};
+#endif
+#endif
+
+int main(int argc, char* argv[])
+{
+	AVOutputFormat *ofmt = NULL;
+	//输入对应一个AVFormatContext，输出对应一个AVFormatContext
+	（Input AVFormatContext and Output AVFormatContext）
+	AVFormatContext *ifmt_ctx = NULL, *ofmt_ctx = NULL;
+	AVPacket pkt;
+	const char *in_filename, *out_filename;
+	int ret, i;
+	int videoindex=-1;
+	int frame_index=0;
+	int64_t start_time=0;
+	in_filename  = &quot;cuc_ieschool.mov&quot;;
+	in_filename  = &quot;cuc_ieschool.mkv&quot;;
+	in_filename  = &quot;cuc_ieschool.ts&quot;;
+	in_filename  = &quot;cuc_ieschool.mp4&quot;;
+	in_filename  = &quot;cuc_ieschool.h264&quot;;
+	in_filename  = &quot;cuc_ieschool.flv&quot;;//输入URL（Input file URL）
+	in_filename  = &quot;shanghai03_p.h264&quot;;
+
+	out_filename = &quot;rtmp://localhost/publishlive/livestream&quot;;输出 URL（Output URL）[RTMP]
+	out_filename = &quot;rtp://233.233.233.233:6666&quot;;输出 URL（Output URL）[UDP]
+
+	av_register_all();
+	//Network
+	avformat_network_init();
+	//输入（Input）
+	if ((ret = avformat_open_input(&amp;ifmt_ctx, in_filename, 0, 0)) &lt; 0) {
+		printf( &quot;Could not open input file.&quot;);
+		goto end;
+	}
+	if ((ret = avformat_find_stream_info(ifmt_ctx, 0)) &lt; 0) {
+		printf( &quot;Failed to retrieve input stream information&quot;);
+		goto end;
+	}
+
+	for(i=0; i&lt;ifmt_ctx-&gt;nb_streams; i++)
+		if(ifmt_ctx-&gt;streams[i]-&gt;codec-&gt;codec_type==AVMEDIA_TYPE_VIDEO){
+		videoindex=i;
+		break;
+	}
+
+	av_dump_format(ifmt_ctx, 0, in_filename, 0);
+
+	//输出（Output）
+
+	avformat_alloc_output_context2(&amp;ofmt_ctx, NULL, &quot;flv&quot;, out_filename); RTMP
+	avformat_alloc_output_context2(&amp;ofmt_ctx, NULL, &quot;mpegts&quot;, out_filename);UDP
+
+	if (!ofmt_ctx) {
+		printf( &quot;Could not create output context\n&quot;);
+		ret = AVERROR_UNKNOWN;
+		goto end;
+	}
+	ofmt = ofmt_ctx-&gt;oformat;
+	for (i = 0; i &lt; ifmt_ctx-&gt;nb_streams; i++) {
+	//根据输入流创建输出流（Create output AVStream according to input AVStream）
+		AVStream *in_stream = ifmt_ctx-&gt;streams[i];
+		AVStream *out_stream = avformat_new_stream(ofmt_ctx, in_stream-&gt;codec-&gt;codec);
+		if (!out_stream) {
+			printf( &quot;Failed allocating output stream\n&quot;);
+			ret = AVERROR_UNKNOWN;
+			goto end;
+	}
+
+	//复制AVCodecContext的设置（Copy the settings of AVCodecContext）
+	ret = avcodec_copy_context(out_stream-&gt;codec, in_stream-&gt;codec);
+	if (ret &lt; 0) {
+			printf( &quot;Failed to copy context from input to output stream codec context\n&quot;);
+		goto end;
+	}
+	out_stream-&gt;codec-&gt;codec_tag = 0;
+	if (ofmt_ctx-&gt;oformat-&gt;flags &amp; AVFMT_GLOBALHEADER)
+		out_stream-&gt;codec-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;
+	}
+
+	//Dump Format
+	av_dump_format(ofmt_ctx, 0, out_filename, 1);
+	//打开输出URL（Open output URL）
+	if (!(ofmt-&gt;flags &amp; AVFMT_NOFILE)) {
+	ret = avio_open(&amp;ofmt_ctx-&gt;pb, out_filename, AVIO_FLAG_WRITE);
+	if (ret &lt; 0) {
+		printf( &quot;Could not open output URL '%s'&quot;, out_filename);
+		goto end;
+	}
+	}
+
+	//写文件头（Write file header）
+	ret = avformat_write_header(ofmt_ctx, NULL);
+	if (ret &lt; 0) {
+		printf( &quot;Error occurred when opening output URL\n&quot;);
+		goto end;
+	}
+
+	start_time=av_gettime();
+	while (1) {
+	AVStream *in_stream, *out_stream;
+	//获取一个AVPacket（Get an AVPacket）
+	ret = av_read_frame(ifmt_ctx, &amp;pkt);
+	if (ret &lt; 0)
+	break;
+	//FIX：No PTS (Example: Raw H.264)
+	//Simple Write PTS
+	if(pkt.pts==AV_NOPTS_VALUE){
+		//Write PTS
+		AVRational time_base1=ifmt_ctx-&gt;streams[videoindex]-&gt;time_base;
+		Duration between 2 frames (us)
+		int64_t calc_duration=(double)AV_TIME_BASE/av_q2d(ifmt_ctx-&gt;streams[videoindex]-&gt;r_frame_rate);
+		//Parameters
+		pkt.pts=(double)(frame_index*calc_duration)/(double)(av_q2d(time_base1)*AV_TIME_BASE);
+	pkt.dts=pkt.pts;
+	pkt.duration=(double)calc_duration/(double)(av_q2d(time_base1)*AV_TIME_BASE);
+	}
+
+	//Important:Delay
+	if(pkt.stream_index==videoindex){
+		AVRational time_base=ifmt_ctx-&gt;streams[videoindex]-&gt;time_base;
+		AVRational time_base_q={1,AV_TIME_BASE};
+		int64_t pts_time = av_rescale_q(pkt.dts, time_base, time_base_q);
+		int64_t now_time = av_gettime() - start_time;
+		if (pts_time &gt; now_time)
+		av_usleep(pts_time - now_time);
+
+	}
+
+	in_stream  = ifmt_ctx-&gt;streams[pkt.stream_index];
+	out_stream = ofmt_ctx-&gt;streams[pkt.stream_index];
+	/* copy packet */
+	//转换PTS/DTS（Convert PTS/DTS）
+	pkt.pts = av_rescale_q_rnd(pkt.pts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+	pkt.dts = av_rescale_q_rnd(pkt.dts, in_stream-&gt;time_base, out_stream-&gt;time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+	pkt.duration = av_rescale_q(pkt.duration, in_stream-&gt;time_base, out_stream-&gt;time_base);
+	pkt.pos = -1;
+	Print to Screen
+	if(pkt.stream_index==videoindex){
+		printf(&quot;Send %8d video frames to output URL\n&quot;,frame_index);
+		frame_index++;
+	}
+	ret = av_write_frame(ofmt_ctx, &amp;pkt);
+	ret = av_interleaved_write_frame(ofmt_ctx, &amp;pkt);
+
+	if (ret &lt; 0) {
+		printf( &quot;Error muxing packet\n&quot;);
+		break;
+	}
+
+	av_free_packet(&amp;pkt);
+
+	}
+	//写文件尾（Write file trailer）
+	av_write_trailer(ofmt_ctx);
+	end:
+	avformat_close_input(&amp;ifmt_ctx);
+/* close output */
+	if (ofmt_ctx &amp;&amp; !(ofmt-&gt;flags &amp; AVFMT_NOFILE))
+	avio_close(ofmt_ctx-&gt;pb);
+	avformat_free_context(ofmt_ctx);
+	if (ret &lt; 0 &amp;&amp; ret != AVERROR_EOF) {
+		printf( &quot;Error occurred.\n&quot;);
+		return -1;
+	}
+	return 0;
+}
+</code></pre>
+<h2><a id="%E7%BB%93%E6%9E%9C" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>结果</h2>
+<p>程序开始运行后。截图如下所示。<br />
+<img src="media/16791192499530/16791195850936.png" alt="image.png" /></p>
+<p>可以通过网页播放器播放推送的直播流。<br />
+例如下图所示，使用Flash Media Server 的Samples文件夹下的videoPlayer播放直播流的截图如下图所示。（直播地址：rtmp://localhost/publishlive/livestream）<br />
+<img src="media/16791192499530/16791195850951.png" alt="image.png" /></p>
+<p>此外，也可以通过FFplay这样的客户端播放直播流。</p>
+<h1><a id="%E4%B8%8B%E8%BD%BD" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>下载</h1>
+<p>simplest ffmpeg streamer</p>
+<p>项目主页<br />
+SourceForge：<a href="https://sourceforge.net/projects/simplestffmpegstreamer/">https://sourceforge.net/projects/simplestffmpegstreamer/</a><br />
+Github：<a href="https://github.com/leixiaohua1020/simplest_ffmpeg_streamer">https://github.com/leixiaohua1020/simplest_ffmpeg_streamer</a><br />
+开源中国：<a href="http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_streamer">http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_streamer</a></p>
+<p>CSDN下载地址：<br />
+<a href="http://download.csdn.net/detail/leixiaohua1020/8005311">http://download.csdn.net/detail/leixiaohua1020/8005311</a></p>
+<h1><a id="%E6%9B%B4%E6%96%B01-1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>更新-1.1</h1>
+<p>这次考虑到了跨平台的要求，调整了源代码。经过这次调整之后，源代码可以在以下平台编译通过：</p>
+<p>VC++：打开sln文件即可编译，无需配置。<br />
+cl.exe：打开compile_cl.bat即可命令行下使用cl.exe进行编译，注意可能需要按照VC的安装路径调整脚本里面的参数。编译命令如下。</p>
+<pre class="line-numbers"><code class="language-objectivec">::VS2010 Environment
+call &quot;D:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat&quot;
+::include
+@set INCLUDE=include;%INCLUDE%;
+::lib
+@set LIB=lib;%LIB%;
+::compile and link
+cl simplest_ffmpeg_streamer.cpp /link avcodec.lib avformat.lib avutil.lib ^
+avdevice.lib avfilter.lib postproc.lib swresample.lib swscale.lib /OPT:NOREF
+</code></pre>
+<p>MinGW：MinGW命令行下运行compile_mingw.sh即可使用MinGW的g++进行编译。编译命令如下。</p>
+<pre class="line-numbers"><code class="language-objectivec">g++ simplest_ffmpeg_streamer.cpp -g -o simplest_ffmpeg_streamer.exe \
+-I /usr/local/include -L /usr/local/lib -lavformat -lavcodec -lavutil
+</code></pre>
+<p>GCC：Linux或者MacOS命令行下运行compile_gcc.sh即可使用GCC进行编译。编译命令如下。</p>
+<pre class="line-numbers"><code class="language-objectivec">cc simplest_ffmpeg_streamer.cpp -g -o simplest_ffmpeg_streamer.out \
+-I /usr/local/include -L /usr/local/lib -lavformat -lavcodec -lavutil
+</code></pre>
+<p>PS：相关的编译命令已经保存到了工程文件夹中</p>
+<p>CSDN下载地址：<a href="http://download.csdn.net/detail/leixiaohua1020/8445455">http://download.csdn.net/detail/leixiaohua1020/8445455</a><br />
+SourceForge上已经更新。</p>
+<h1><a id="%E6%9B%B4%E6%96%B01-2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>更新-1.2</h1>
+<p>增加了下列工程：<br />
+simplest_ffmpeg_receiver: 将流媒体数据保存成本地文件。</p>
+<p>CSDN项目下载地址：<a href="http://download.csdn.net/detail/leixiaohua1020/8924345">http://download.csdn.net/detail/leixiaohua1020/8924345</a><br />
+SourceForge、Github等上面已经更新。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

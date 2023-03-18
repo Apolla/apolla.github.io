@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    CoreBluetooth系列教程(二)：蓝牙常用API - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            CoreBluetooth系列教程(二)：蓝牙常用API   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='coreBluetooth.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;coreBluetooth</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p>上篇讲了蓝牙相关的基本概念，现在结合代码讲讲具体实现。首先需要创建一个CBCentralManager对象，检查蓝牙的状态，只有蓝牙为poweredOn状态，才可进行下一步连接动作。</p>
+<h3><a id="cbcentralmanager%E5%88%9D%E5%A7%8B%E5%8C%96" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>CBCentralManager 初始化</h3>
+<pre class="line-numbers"><code class="language-swift">//先导入`CoreBluetooth` 框架
+ var centralManager: CBCentralManager!
+    //设置deleagte、queue、可选参数options，options可以为nil,也可设置CBCentralManagerOptionShowPowerAlertKey蓝牙提醒弹窗和CBCentralManagerOptionRestoreIdentifierKey字符串(一个唯一的标识符，用来恢复蓝牙连接的，在后台的长连接中可能用到)
+    override init() {
+        super.init()
+        
+        self.centralManager = CBCentralManager(delegate: self, queue: nil)
+    }
+    
+    init(stateRestoreIdentifier: String) {
+        super.init()
+        
+        self.centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionRestoreIdentifierKey: stateRestoreIdentifier])
+    }
+
+</code></pre>
+<h3><a id="%E4%B8%BB%E8%A6%81api%E7%9A%84%E4%BD%BF%E7%94%A8" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>主要API的使用</h3>
+<pre class="line-numbers"><code class="language-swift">  // 获取已连接的设备
+    open func retrieveConnectedPeripherals(withServices serviceUUIDs: [CBUUID]) -&gt; [CBPeripheral]
+  // 扫描设备(serviceUUIDs:需要扫描的设备serviceUUID数组，设置为nil,则扫描附近所有蓝牙设备，通常为了提高效率，填入特定的serviceUUID数组)
+   open func scanForPeripherals(withServices serviceUUIDs: [CBUUID]?, options: [String : Any]? = nil)
+  // 停止扫描
+    open func stopScan()
+  // 连接设备
+    open func connect(_ peripheral: CBPeripheral, options: [String : Any]? = nil)
+ // 断开连接
+    open func cancelPeripheralConnection(_ peripheral: CBPeripheral)
+
+</code></pre>
+<h3><a id="cbcentralmanagerdelegate%E7%9A%84%E5%9B%9E%E8%B0%83" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>CBCentralManagerDelegate的回调</h3>
+<pre class="line-numbers"><code class="language-swift">// 蓝牙状态变更
+ func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state.rawValue {
+        case 0: // .unknown
+            
+        case 1: // .resetting
+            
+        case 2: // .unsupported
+            
+        case 3: // .unauthorized
+            
+        case 4: // .poweredOff(蓝牙关闭)
+            
+        case 5: // .poweredOn(蓝牙打开)
+            
+        default:
+            fatalError(&quot;Unsupported BLE CentralState&quot;)
+        }
+    }
+
+// 扫描到设备  advertisementData：广播包数据 RSSI：信号强度
+  func centralManager(_ central: CBCentralManager,
+                        didDiscover peripheral: CBPeripheral,
+                        advertisementData: [String: Any],
+                        rssi RSSI: NSNumber) {
+        
+    }
+// 设备成功连接
+ func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+       
+    }
+
+// 设备连接失败
+optional func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?)  {
+
+}
+// 设备连接断开
+ func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+
+}
+</code></pre>
+<p>与设备连接成功后，会生成一个CBPeripheral对象，用来操作设备数据的读写和监听等。</p>
+<h3><a id="cbperipheral%E7%9A%84%E4%BD%BF%E7%94%A8" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>CBPeripheral的使用</h3>
+<pre class="line-numbers"><code class="language-swift">public enum CBPeripheralState : Int, @unchecked Sendable {
+
+    
+    case disconnected = 0 // 连接断开
+
+    case connecting = 1 // 正在连接中
+
+    case connected = 2 // 已连接
+
+    @available(watchOS 2.0, *)
+    case disconnecting = 3 //断开连接中
+}
+// 设备写入服务类型，注意要根据设备读取的特征值来写入，否则写入报错。
+public enum CBCharacteristicWriteType : Int, @unchecked Sendable {
+
+    
+    case withResponse = 0
+
+    case withoutResponse = 1
+}
+open class CBPeripheral : CBPeer {
+  // 蓝牙名称
+    open var name: String? { get }
+ // 信号强度
+    open var rssi: NSNumber? { get }
+// 连接状态
+    open var state: CBPeripheralState { get }
+// 扫描到的设备服务
+    open var services: [CBService]? { get }
+// 写入方式是withResponse还是withoutResponse
+    open var canSendWriteWithoutResponse: Bool { get }
+// 连接成功,检索当前连接的信号强度，回调方法：peripheral:didReadRSSI:error:
+    open func readRSSI()
+// 扫描设备可用的服务，serviceUUIDs 需要扫描的设备的服务的id，如果为nil，则扫描所有的服务，回调方法：peripheral:didDiscoverServices:
+    open func discoverServices(_ serviceUUIDs: [CBUUID]?)
+// includedServiceUUIDs  需要发现的服务service中的服务id列表，如果为nil，则扫描服务内所有的服务，较慢，不推荐使用。回调方法：peripheral:didDiscoverIncludedServicesForService:error:
+    open func discoverIncludedServices(_ includedServiceUUIDs: [CBUUID]?, for service: CBService) 
+//  characteristicUUIDs  数组，内含需要被发现的所有特征值类型，如果为nil，则为所有特征值。回调方法为:peripheral:didDiscoverCharacteristicsForService:error:
+    open func discoverCharacteristics(_ characteristicUUIDs: [CBUUID]?, for service: CBService)
+// characteristic   需要读取的服务特征值，回调方法：  peripheral:didUpdateValueForCharacteristic:error:
+    open func readValue(for characteristic: CBCharacteristic)
+// 获取向一个写服务可发送的最大字节数
+    open func maximumWriteValueLength(for type: CBCharacteristicWriteType) -&gt; Int
+//   data:需要写入的数据 characteristic:写服务特征  type: 写服务的 类型(有/无响应)，需要注意的是，传入的type是根据characteristic!.properties.rawValue &amp; CBCharacteristicProperties.writeWithoutResponse.rawValue 来决定，否则随意传入type会导致写入失败。
+    open func writeValue(_ data: Data, for characteristic: CBCharacteristic, type: CBCharacteristicWriteType)
+// 根据characteristic的properties来设置，若为true，说明只要有数据更新就会回调新数据。
+    open func setNotifyValue(_ enabled: Bool, for characteristic: CBCharacteristic)
+}
+</code></pre>
+<p>CBPeripheralDelegate的回调</p>
+<pre class="line-numbers"><code class="language-swift">// 设备名称更新
+optional func peripheralDidUpdateName(_ peripheral: CBPeripheral) {
+
+}
+// peripheral :需要更新的设备 invalidatedServices:失效的服务
+    optional func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+
+}
+// peripheral :需要更新的设备 error：出现错误的原因。readRSSI的回调方法。
+    optional func peripheralDidUpdateRSSI(_ peripheral: CBPeripheral, error: Error?) {
+
+}
+// peripheral :需要更新的设备 RSSI:设备的RSSI。readRSSI的回调方法
+    optional func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+
+}
+// peripheral：扫描到的设备  error ：错误原因。discoverServices的回调方法。
+    optional func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+
+}
+// peripheral：当前设备 service : 设备服务  error:错误原因。 discoverIncludedServices:forService的回调
+    optional func peripheral(_ peripheral: CBPeripheral, didDiscoverIncludedServicesFor service: CBService, error: Error?) {
+
+}
+// peripheral：当前设备 service: 设备服务 error:错误原因。discoverCharacteristics:forService的回调
+    optional func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+
+}
+//  peripheral：当前设备 characteristic：设备特征 error:错误原因。当前设备特征值有更新就回调。
+    optional func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+
+}
+// peripheral：当前设备 characteristic：设备特征 error:错误原因。writeValue:forCharacteristic:type的回调
+    optional func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+
+}
+// peripheral：当前设备 characteristic：设备特征 error:错误原因。setNotifyValue:forCharacteristic的回调。
+    optional func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+
+}
+</code></pre>
+<p>一个设备有多个service，每个service都有多个characteristic,一层层找下来找到我们需要操作的characteristic，然后按硬件的要求进行读写和监听等操作。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

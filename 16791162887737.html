@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    云音乐 Swift 混编 Module 化实践 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            云音乐 Swift 混编 Module 化实践   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;碎片芝士收藏</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <h2><a id="%E8%83%8C%E6%99%AF" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>背景</h2>
+<p>云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下：<br />
+<img src="media/16791162887737/16791164287226.png" alt="image.png" /><br />
+组件化后混编的场景主要集中在 Framework 内混编和 Framework 之间混编，Framework 内的混编成本较低，重头主要在 Framework 间的混编。<br />
+在云音乐中集成的创新业务，因为依赖的历史基础库较少，已经投入使用 Swift。主站业务迟迟没有投入，主要原因是涉及到大量的 OC 业务基础库和公共基础库不支持 Swift 混编，OC 组件库参与混编的前提是要完成 Module 化。<br />
+<img src="media/16791162887737/16791164287244.png" alt="image.png" /><br />
+以上是我们实现混编计划的几个阶段，本文主要介绍在支持云音乐 Swift 混编过程中，Module 化阶段的分析与实践。</p>
+<h2><a id="%E4%BB%80%E4%B9%88%E6%98%AFmodules" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>什么是 Modules</h2>
+<p>早在 2012 苹果就提出了 Modules 的概念（比 Swift 发布还要早），Module 是组件的抽象描述，包含组件接口以及实现。它的核心目的是为了解决 C 系语言的扩展性和稳定性问题。<br />
+Cocoa 框架很早就支持了 Module，并且前向兼容，正因为它的兼容性，纯 Objective-C 开发对它的感知可能不强。</p>
+<pre class="line-numbers"><code class="language-swift">AFramework.framework
+├─ Headers
+├─ Info.plist
+├─ Modules
+│    └─ module.modulemap
+└─ AFramework
+</code></pre>
+<p>Module 化的 OC 二进制 Framework 组件，在 Modules 目录下存在一个 .modulemap 格式的文件，它描述了组件对外暴露的能力。当引用的组件包含 modulemap，Clang 编译器会从中查找头文件，进行 Module 编译，并将编译结果缓存。<br />
+<img src="media/16791162887737/16791164287259.png" alt="image.png" /><br />
+Clang 编译器要求 Swift 引用的 Objective-C 组件必须支持 Module 特性。我们把 OC 组件支持 Module 的过程，称为 Module 化。</p>
+<h2><a id="%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AFmodules" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>如何开启 Modules</h2>
+<p>Xcode Project Target 支持在 「Building Settings -&gt; Defines Module」设置 Module 开关。<br />
+如果使用 CocoaPods 组件集成，支持如下几种方式进行 Module 化：</p>
+<ol>
+<li>在 Podfile 添加 use_modular_headers! 为所有 pod 开启 Module；</li>
+<li>在 Podfile 为每个 pod 单独设置 :modular_headers =&gt; true；</li>
+<li>在 pod 的 podspec 文件中设置 s.pod_target_xcconfig = { 'DEFINES_MODULE' =&gt; 'YES' }；</li>
+<li>在 Podfile 使用 use_frameworks! :linkage =&gt; :static。</li>
+</ol>
+<p>前三种方式在编译产物是 .a 静态库时生效，如果使用了 use_framework!，源码编译产物是 Framework，默认就会包含 modulemap。</p>
+<h2><a id="module%E5%8C%96%E7%8E%B0%E7%8A%B6%E5%88%86%E6%9E%90" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module 化现状分析</h2>
+<p>云音乐工程使用 CocoaPods 集成依赖库，几乎所有库已经完成 Framework 静态化，而大部分静态库都是在未打开 Module 下的编译产物。<br />
+那么要让 OC 静态库支持 Module，直观的方案是，直接打开 Module 化开关，重新构建 Framework 静态库，让产物包含 modulemap。<br />
+然而直接打开开关，组件大概率会编译失败。原因主要有两点：</p>
+<ol>
+<li>组件的 Module 具有依赖传递性，当前组件打开 Module 编译，要求它所有的依赖库，都已经完成 Module 化。在云音乐庞大的组件体系里面，即使理清其中的依赖关系，用自动化的方式自下而上构建，成功的可能性也极低。</li>
+<li>历史代码存在不少引用方式不规范，宏定义「奇淫技巧」，以及 PCH 隐式依赖等问题，这些问题导致组件库本身无法正常 Module 编译。</li>
+</ol>
+<h2><a id="module%E5%8C%96%E6%96%B9%E6%A1%88" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module 化方案</h2>
+<p>目前云音乐的二进制组件主要分为三种类型：</p>
+<ul>
+<li>Module Framework</li>
+<li>非 Module Framework</li>
+<li>.a 静态库</li>
+</ul>
+<p>Module Framework 是在 Defines Module 打开时的编译产物，这种类型没有改造成本，只需要在 CI 阶段，将不同架构的 Framework 封装成 XCFramework 压缩并上传到服务器。<br />
+对于非 Module Framework 我们尝试了一种成本比较低的方案，在组件库 Module 关闭的条件下，先将其编译成静态库，再用脚本自动化生成对应的 modulemap 文件，放到 Famework/Modules 目录。<br />
+<img src="media/16791162887737/16791164287279.png" alt="image.png" /><br />
+主动塞 modulemap 的方案之所以可行和 Clang Module 的编译原理有关。当使用 #import &lt;NMSetting/NMAppSetting.h&gt; 引用依赖时, Clang 首先会去 NMSetting.framework 的 Header 目录下查找对应的头文件是否存在，然后在 Modules 目录下查找 modulemap 文件。<br />
+modulemap 中包含的 umbrella header 对应的是组件公开头文件的集合。如果引用的头文件能找到，Clang 就会使用 Module 编译。</p>
+<pre class="line-numbers"><code class="language-swift">// NMSetting.framework/Modules/NMSetting.modulemap
+
+framework module NMSetting {
+  umbrella header &quot;NMSetting-umbrella.h&quot;
+
+  export *
+  module * { export * }
+}
+</code></pre>
+<p>Clang 并不关心 modulemap 来源，只会按照固定的路径去查找它是否存在。所以采用主动添加 modulemap 的方式，能达到「欺骗」编译器的目的。<br />
+这种方式的好处是，只要当前组件被引用时能正常 Module 编译即可，不需要考虑它依赖组件的 Module 编译是否有问题。缺点是不彻底，假设静态库组件公开头文件，存在不符合 Module 规范的情况，即使有 modulemap，编译时依然会抛出错误：</p>
+<pre class="line-numbers"><code class="language-swift">Could not build moudle 'xxx'.
+</code></pre>
+<p>对于未知的 Module 编译问题，只能拉对应的源码针对性的解决。<br />
+以下是我们遇到的一些比较典型的 Module 问题，以及对应的解决思路。</p>
+<h2><a id="module%E5%8C%96%E9%97%AE%E9%A2%98" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module 化问题</h2>
+<h3><a id="%E5%AE%8F%E5%AE%9A%E4%B9%89%E6%89%BE%E4%B8%8D%E5%88%B0" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>宏定义找不到</h3>
+<p>在使用 OC 开发时，习惯于在 .h 文件定义一些宏，方便外部访问，然而 Swift 不支持定义宏，在引用 OC 的宏定义时，会将其转为全局常量。不过转换能力比较有限，仅支持基本的字面量值，以及基本运算符表达式。<br />
+例如：</p>
+<pre class="line-numbers"><code class="language-swift">#define MAX_RESOLUTION 1268
+#define HALF_RESOLUTION (MAX_RESOLUTION / 2)
+</code></pre>
+<p>转换为：</p>
+<pre class="line-numbers"><code class="language-swift">let MAX_RESOLUTION = 1268
+let IS_HIGH_RES = 634
+</code></pre>
+<p>宏定义的内容如果包含 OC 的语法实现，那么这个宏对 Swift 是不可见的。如果要支持 Swift 访问，需要对宏进行包装。</p>
+<pre class="line-numbers"><code class="language-swift">// Constant.h
+#define PIC_SIZE CGSizeMake(60, 60)
+
++ (CGSize)picSize;
+
+// Constant.m
++ (CGSize)picSize {
+    return PIC_SIZE;
+}
+</code></pre>
+<p>以上的宏问题还算比较直观，在云音乐组件中，还存在一些使用 #include 预处理指令，来使用宏的场景。<br />
+C 系语言传统的 #include 引用是基于文本替换的方式实现的，利用这个特性能够屏蔽宏的实现细节。</p>
+<pre class="line-numbers"><code class="language-swift">// A.h
+#define NM_DEFINES_KEY(key, des) FOUNDATION_EXTERN NSString *const key;
+#include &quot;ItemList.h&quot;
+#undef C
+
+// ItemList.h
+NM_DEFINES_KEY(AKey, @&quot;a key&quot;)
+NM_DEFINES_KEY(BKey, @&quot;b key&quot;)
+</code></pre>
+<p>在非 Clang Module 下编译，上述代码能够正常工作，然而在打开 Module 之后，宏定义 NM_DEFINES_KEY 就找不到了。<br />
+这是因为 Module 编译时，#include 不再是简单的文本替换模式，而是与 module 建立链接关系。<br />
+下面是一个开启 Module 编译的例子，main.m 文件的预处理结果，共只有几行代码。</p>
+<pre class="line-numbers"><code class="language-swift">// main.m preprocess result.
+
+#pragma clang module import UIKit /* clang -E: implicit import for #import &lt;UIKit/UIKit.h&gt; */
+
+# 10 &quot;/Users/jxf/Documents/Workspace/Demo/ModuleDemo/ModuleDemo/main.m&quot; 2
+
+int main(int argc, char * argv[]) {
+    NSString * appDelegateClassName;
+}
+</code></pre>
+<p>如果未开启 Module，UIKit 的所有头文件都会被复制进来，代码量将达到数万行。<br />
+正因为这种差异，Module 编译时 #include &quot;ItemList.h&quot; 不会将内容复制到 A.h 文件，就会导致无法访问到它的宏定义。<br />
+Module 提供了相应的解决方案，就是自定义 modulemap。前面已经介绍，默认情况下 modulemap 的格式为：</p>
+<pre class="line-numbers"><code class="language-swift">framework module FrameworkName {
+  umbrella header &quot;FrameworkName-umbrella.h&quot;
+
+  export *
+  module * { export * }
+}
+</code></pre>
+<p>FrameworkName-umbrella.h 包含当前组件对外暴露的所有头文件，该文件会在使用 CocoaPods 集成时同步生成。我们可以使用 textual header 关键声明头文件，这样该头文件在被导入时，会降级为文本替换的形式。</p>
+<pre class="line-numbers"><code class="language-swift">framework module FrameworkName {
+  umbrella header &quot;FrameworkName-umbrella.h&quot;
+  textual header &quot;ItemList.h&quot;
+
+  export *
+  module * { export * }
+}
+</code></pre>
+<p>自定义 modulemap 还有一些额外的配置，需要自己生成组件公开的头文件集合 umbrella.h，并在 podspec 指定该 modulemap，。</p>
+<pre class="line-numbers"><code class="language-swift">s.module_map = &quot;#{s.name}.modulemap&quot;
+</code></pre>
+<p>在我们 CI 打包流程中，如果检测到组件自定义了 modulemap 就会使用自定义的文件，不再自动塞入模版化的 modulemap。<br />
+如果 ItemList.h 不需要对外暴露，还有一种更简单的方案，直接在 podspec 将其声明为私有，这样在静态库 Headers 目录下就不会导出，也就不会出现 Module 编译问题。</p>
+<h3><a id="%E5%A4%B4%E6%96%87%E4%BB%B6%E7%BC%BA%E5%A4%B1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>头文件缺失</h3>
+<p>云音乐业务基础库默认会使用 PCH（Precompiled Headers） 文件，它的好处主要有两点，一是能一定程度上提高编译效率，二是为当前组件库提供统一外部依赖，这种依赖关系是隐式的，PCH 已经添加的依赖，组件内使用时不需要再手动 import。<br />
+这种方式确实能提供便利性，随着业务的快速迭代，大家也都适应了不引头文件的习惯，然而依靠隐式依赖关系，为 Module 编译留下了隐患。<br />
+看个具体的例子：</p>
+<pre class="line-numbers"><code class="language-swift">// &lt;B/NMEventModel.h&gt;
+
+#import &lt;UIKit/UIKit.h&gt;
+
+@interface NMEventModel : NSObject
+@property (nullable, nonatomic, strong) NMEvent *event;
+@end
+</code></pre>
+<p>B 组件中的 NMEventModel 引用了 NMEvent，它来自另一个组件库 A，A 已经在 B.pch 中 import，所以在 B 组件源码编译时能通过隐式依赖找到 NMEvent。<br />
+当 C 组件同时引用 A 组件和 B 组件的静态库时，因为 B 组件静态化后已经没有 PCH，正常来说访问 NMEventModel.h 应该编译报找不到 NMEvent 才对，而实际上在非 Module 编译时是不会有问题的。</p>
+<pre class="line-numbers"><code class="language-swift">// C/Header.h
+
+#import &lt;A/NMEvent.h&gt;
+#import &lt;B/NMEventModel.h&gt;
+</code></pre>
+<p>这是因为在非 Module 环境下 #import &lt;A/NMEvent.h&gt; 会把 NMEvent 的定义复制到当前文件，为 NMEventModel.h 编译提供了上下文环境。<br />
+然而当开启 Module 编译时，会报 B 组件是非 Module 的错误（Module 依赖传递性），错误原因是 NMEventModel.h 头文件找不到NMEvent类。<br />
+其实还是前面介绍的 Clang Module import 机制改变的原因，开启 Module 后，会使用独立的上下文编译 B 组件的 NMEventModel.h，缺少了NMEvent上下文。<br />
+要解决该场景下的问题，比较粗暴的方式是，在 Module 编译上下文中注入它的 PCH 依赖。但是对于二进制组件来说，它已经没有 PCH 了，如果显式地暴露 PCH，仅仅是为了头文件的 Module 编译，会导致依赖关系进一步恶化。<br />
+我们对这种情况做了针对性的治理，补充缺失的头文件依赖，历史库解决完一波后，默认都开启 Module 编译，如果开发过程中，使用不当编译器会及时反馈。对于新组件库增加 PCH 卡口限制。</p>
+<h3><a id="a%E9%9D%99%E6%80%81%E5%BA%93" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>.a 静态库</h3>
+<p>Module 化的关键是需要有 modulemap 文件，而历史的二方、三方库，有些是.a的静态库。<br />
+.a 文件只是可执行文件的集合，不包含资源文件，针对这种情况需要使用 Framework 进行二次封装。<br />
+主要有两种方案：<br />
+第一种，在 .a 文件目录注入一个空的 .swift 文件，并在 podspec 指定 source_files 和 swift_version，pod install 时 Cocopods 会自动生成对应的 modulemap 文件。<br />
+第二种，采用 CocoaPods 插件，在 pre_install 阶段，设置pod_target.should_build，让 CocoPods 自动生成 modulemap。<br />
+方案二的成本相对较低，最终我们采用了方案二。</p>
+<h2><a id="%E6%80%BB%E7%BB%93" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结</h2>
+<p>Objective-C 组件库 Module 化是支持 Swift 混编的基础，Module 化的核心是提供 modulemap 文件，要生成 modulemap，组件需打开 Module 编译，这个过程中可能会遇到各种未知问题。<br />
+云音乐在治理过程中遇到的问题相对比较收敛，主要集中在 Module 编译方式的变化，导致一些上下文信息丢失，一部分问题能够通过自动化的方案解决，而有些问题仍然需要进行人工验证。</p>
+<h2><a id="%E8%A7%84%E5%88%92%E5%B1%95%E6%9C%9B" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>规划展望</h2>
+<p><strong>Module 组件防劣化。</strong> 在 Module 化完成后，需防止再次劣化，我们在本地源码开发阶段开启 Module，尽可能早的暴露问题。针对 PCH 禁止公开的头文件对它隐式依赖，并限制新组件使用 PCH。<br />
+<strong>Objective-C 接口兼容性改造。</strong> OC 接口转成 Swift 可能会存在一些安全性和易用性问题，甚至有些 API 无法实现自动桥接，都需要进行改造。<br />
+<strong>规范化头文件引用。</strong> 头文件不规范问题，导致 Module 编译失效，也是比较常见的例子。通过在 CI 阶段对新增代码的头文件引用方式进行校验，避免不规范的代码合入。<br />
+<em>参考资料：</em><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fclang.llvm.org%2Fdocs%2FModules.html%23id12">clang.llvm.org/docs/Module…</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fllvm.org%2Fdevmtg%2F2012-11%2FGregor-Modules.pdf">llvm.org/devmtg/2012…</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.apple.com%2Fdocumentation%2Fswift%2Fusing-imported-c-macros-in-swift">developer.apple.com/documentati…</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.apple.com%2Fdocumentation%2Fswift%2Fimporting-objective-c-into-swift">developer.apple.com/documentati…</a><br />
+<a href="https://link.juejin.cn?target=https%3A%2F%2Ftech.meituan.com%2F2021%2F02%2F25%2Fswift-objective-c.html">tech.meituan.com/2021/02/25/…</a></p>
+<p>作者：网易云音乐技术团队<br />
+链接：<a href="https://juejin.cn/post/7207269389474037817">https://juejin.cn/post/7207269389474037817</a><br />
+来源：稀土掘金<br />
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

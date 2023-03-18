@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    iOS CocoaPods组件平滑二进制化解决方案及详细教程 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            iOS CocoaPods组件平滑二进制化解决方案及详细教程   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/01/30</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%BB%84%E4%BB%B6%E5%8C%96.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;组件化</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <h2><a id="%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E4%BB%B6%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%EF%BC%9F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>什么是组件二进制化？</h2>
+<p>在iOS开发中，事实标准是我们使用<code>CocoaPods</code>生成、管理和使用<code>library</code>。这里的<code>library</code>就是一个模块、组件或库。二进制化指的是通过编译把组件的源码转换成静态库或动态库，以提高该组件在App项目中的编译速度。</p>
+<blockquote>
+<p>我们的方案是转换成静态库，也就是.a格式的文件加上暴露出来的头文件。</p>
+</blockquote>
+<h2><a id="%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E5%91%A2%EF%BC%9F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>为什么我们需要二进制化呢？</h2>
+<p>在我们App开发中，我们逐渐的抽象了很多模块、业务、UI等把他转换成私有<code>CocoaPod</code>库。其中有一个是用<code>C++</code>和<code>Objective-C</code>混写的，源码格式为.mm。在app项目编译时.mm部分代码编译非常慢。这作为一个契机让我们去考虑如何加快编译速度。</p>
+<p>这个混写的<code>CocoaPod</code>库叫做<code>YTXChart</code>，之后会以此库为例反复提到。</p>
+<p>另外随着业务的扩展，私有<code>CocoaPod</code>库和第三方<code>CocoaPod</code>库越来越多，App项目中的文件也越来越多。每次<code>pod install</code>安装新库或<code>pod update</code>更新库的时候，重新编译的过程需要等待很长时间。这也向我们提出了加快编译速度的需求。</p>
+<p>另外如果想要做组件化的话，一定要做二进制化。</p>
+<p>所以我们想到了二进制化的方案来解决这个问题，并且很多大公司也是这么做的。</p>
+<h2><a id="%E8%BF%99%E5%B8%A6%E6%9D%A5%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%9F%E4%B8%80%E6%AD%A5%E5%B0%B1%E4%BD%8D%E8%BF%98%E6%98%AF%E5%B9%B3%E6%BB%91%E8%BF%87%E5%BA%A6%E3%80%82" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>这带来一个新问题？一步就位还是平滑过度。</h2>
+<p>对我们来说，这是一个尝试，不可能开始就决定把所有的私有<code>CocoaPod</code>库二进制化，也不可能决定把所有第三方<code>CocoaPod</code>库二进制化。当务之急的情况是加快<code>YTXChart</code>库编译速度。所以必须找到一个方案平滑过度。<br />
+我们的App中的<code>podflie</code>是这样的</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'jryMobile' do 
+    pod 'AFNetworking', '~&gt; 2.6.3'
+    pod 'Mantle', '~&gt; 1.5.7'
+    pod 'DateTools', '~&gt; 1.7.0'
+    pod 'ReactiveCocoa', '~&gt; 2.3.1'
+    pod 'CocoaAsyncSocket', '~&gt; 7.4.1'
+    pod 'FMDB', '~&gt; 2.5'
+    pod 'MWPhotoBrowser', '~&gt; 1.4.1'
+    pod 'MZFormSheetController', '~&gt; 2.3.6'
+    pod 'HMSegmentedControl', '~&gt; 1.5.1'
+    pod 'UMengAnalytics', '~&gt; 3.5.8'
+    pod 'UMengFeedback', '~&gt; 2.3.4'
+    pod 'TSMessagesNW', '~&gt; 0.9.15'
+    pod 'TPKeyboardAvoiding', '~&gt; 1.2.9'
+    pod 'SDWebImage', '~&gt; 3.7'
+    pod 'JHChainableAnimations', '~&gt; 1.3.0'
+    pod 'BarrageRenderer', '~&gt; 1.7.0'
+    pod 'MJRefresh', '~&gt; 3.1.7'
+    pod 'YTXAnimations', '~&gt; 1.2.4', :subspecs =&gt; [&quot;AnimateCSS&quot;, &quot;Transformer&quot;]
+    pod 'YTXMediaIJKPlayer', '~&gt; 0.2.1'
+    pod 'YTXTradeBusinessType', '~&gt; 1.1.0'
+    pod 'YTXServerId', '~&gt; 0.1.4'
+    pod 'YTXUtilCategory','~&gt; 1.2.0'
+    pod 'YTXScreenShotManager', '~&gt; 0.1.7'
+    pod 'YTXRequest', '~&gt; 1.0.0'
+    pod 'YTXCommonSocket', '~&gt; 0.1.9'
+    pod 'YTXChartSocket', '~&gt; 0.5.1'
+# 希望是二进制化的
+    pod 'YTXChart', '~&gt; 0.17.0'
+    pod 'YTXRestfulModel', '~&gt; 1.2.2', :subspecs =&gt; [&quot;RACSupport&quot;, &quot;YTXRequestRemoteSync&quot;, &quot;FMDBSync&quot;, &quot;UserDefaultStorageSync&quot;]
+    pod 'YTXWebViewJavaScriptBridge', '~&gt; 0.1.2'
+    pod 'YTXCheckForAppUpdates', '~&gt; 1.0.0'
+    #    pod 'YTXVideoAVPlayer', '~&gt; 0.5.0'
+    pod 'YTXChatUI', '~&gt; 0.3.2'
+    pod 'PNChart', '~&gt;0.8.9'
+    #pod 'EaseMobSDKFull', :git =&gt; ' https://github.com/easemob/sdk-ios-cocoapods-integration.git', :tag =&gt; '2.2.0'
+    # EaseMobSDKFull 更新地址' https://github.com/easemob/sdk-ios-cocoapods-integration.git'
+    #pod 'AFgzipRequestSerializer', '~&gt; 0.0.2'
+    pod 'AdhocSDK', '~&gt; 2.2.1'
+    pod 'FLEX', '~&gt; 2.0', :configurations =&gt; ['Debug']
+    pod 'React', :path =&gt; './ReactComponent/node_modules/react-native', :subspecs =&gt; [
+    'Core',
+    'RCTImage',
+    'RCTNetwork',
+    'RCTText',
+    'RCTWebSocket',
+    # 添加其他你想在工程中使用的依赖。
+    ]
+    pod 'CodePush', :path =&gt; './ReactComponent/node_modules/react-native-code-push'
+end
+</code></pre>
+<h3><a id="%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%B9%E6%A1%88%E9%9C%80%E6%B1%82%E7%82%B9" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>平滑二进制方案需求点</h3>
+<ul>
+<li>其他的CocoaPod库都还是源码。<code>YTXChart</code>为二进制化。</li>
+<li>以后能够逐步迭代把更多的以<code>YTX</code>开头的<code>CocoaPod</code>库进行二进制化，而不影响主App。</li>
+<li>能够提供一种方式把二进制化<code>CocoaPod</code>库切换回源码<code>CocoaPod</code>库以便调试。尽量做的方便。</li>
+<li>解决<code>YTXChart</code>引用依赖的问题。（<code>YTXChart</code>还依赖了第三方<code>AFNetworking</code>和私有<code>YTXServerId</code>。保证生成的静态库中不会含有<code>AFNetworking</code>的内容和<code>YTXServerId</code>的内容并且能够编译通过）</li>
+<li>利用原来的<code>YTXChart.git</code>，不创建新项目，不创建新的<code>git</code>库。因为我们的二进制化库的生成还是来自于源码，当源码更新时，我们需要一种非常快捷的方式去生成二进制的东西，不希望<code>copy</code>源码到某处，或者增加一个<code>git submodule</code>。</li>
+<li>希望App源码和<code>YTXChart</code>中的源码尽量少或者没有改动。</li>
+<li>希望App中的<code>Podfile</code>尽量少或者没有改动。</li>
+<li>希望<code>Podfile</code>中的版本号保持风格一致，不会出现<code>'~&gt; 2.2.1.binary'</code>这种情况。<br />
+用原来的那一个<code>CocoaPods Repo Spec</code>。</li>
+</ul>
+<blockquote>
+<p>以下这个解决方案的教程满足了以上所有需求点</p>
+</blockquote>
+<blockquote>
+<p>注意，以下的例子基于Cocoapods@1.0.1，而且目前只能是1.0.1</p>
+</blockquote>
+<h4><a id="%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E6%BA%90%E7%A0%81%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E5%BA%93" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>第一步：源码生成静态库</h4>
+<p>如果你是通过命令<code>pod lipo create</code>创建的<code>CocoaPod</code>库并且<code>pod install</code>的话，它的目录结构应该像这样子（只列出重要的）：</p>
+<pre class="line-numbers"><code class="language-plain_text">YTXChart 
+  |-Example
+    |-YTXChart
+    |-Pods
+    |-YTXChart.xcodeproj
+    |-YTXChart.xcworkspace
+    |-Podfile
+    \-Podfile.lock
+  |-Pod
+    |-Assets
+    \-Classes
+  \-YTXChart.podspec
+</code></pre>
+<p>在<code>xcode</code>中创建新<code>Target YTXChartBinaryFile-&gt;New-&gt;Target-&gt;Framework &amp; Library-&gt;Cocoa Touch Static Library</code><br />
+如果你们的项目最低支持到<code>iOS8</code>可以创建<code>Dynamic Framework</code><br />
+注意在<code>Podfile中</code>加入以下这段</p>
+<pre class="line-numbers"><code class="language-plain_text">target 'YTXChartBinary' do
+end
+然后pod install
+</code></pre>
+<blockquote>
+<p>解释：<code>Cocoapods@1.0.1</code>会在<code>Header Search Path</code>自动加入内容。如果你用<code>CocoaPods@0.39.0</code>则需要自己加<code>Header Search Path</code>保证依赖库<code>YTXServerId</code>和<code>AFNetwork</code>能够被找到。如图：</p>
+</blockquote>
+<p>然后把<code>Pod/Classes</code>中的源码拖入到<code>YTXChartBinary</code>中，这样选择（这样会<code>link</code>源码而不是复制）：</p>
+<p>然后变成这样子：</p>
+<ul>
+<li><code>Headers</code>需要自己加，里面是你需要暴露的头文件</li>
+</ul>
+<p>在<code>YTXChartBinary Target</code>中的<code>Build Settings</code>下找到<code>iOS Deployment Target</code>选择和<code>YTXChart.podspec</code>中的<code>s.platform</code>保持一致。这里是<code>7.0YTXChartBinary Target-&gt;Build Settings-&gt;iOS Deployment Target</code></p>
+<ul>
+<li>在根目录创建<code>shell</code>脚本<code>buildbinary.sh</code></li>
+<li>你也可以创建一个<code>Aggregate Target</code>用来执行<code>shell</code>脚本</li>
+</ul>
+<blockquote>
+<p>代码如下：</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-plain_text">PROJECT_NAME=&quot;YTXChart&quot;
+BINARY_NAME=&quot;${PROJECT_NAME}Binary&quot;
+cd Example
+INSTALL_DIR=$PWD/../Pod/Products 
+rm -fr &quot;${INSTALL_DIR}&quot; 
+mkdir $INSTALL_DIR 
+WRK_DIR=build
+BUILD_PATH=${WRK_DIR}
+DEVICE_INCLUDE_DIR=${BUILD_PATH}/Release-iphoneos/usr/local/include 
+DEVICE_DIR=${BUILD_PATH}/Release-iphoneos/lib${BINARY_NAME}.a 
+SIMULATOR_DIR=${BUILD_PATH}/Release-iphonesimulator/lib${BINARY_NAME}.a 
+RE_OS=&quot;Release-iphoneos&quot; 
+RE_SIMULATOR=&quot;Release-iphonesimulator&quot;
+xcodebuild -configuration &quot;Release&quot; -workspace &quot;${PROJECT_NAME}.xcworkspace&quot; -scheme &quot;${BINARY_NAME}&quot; -sdk iphoneos clean build CONFIGURATION_BUILD_DIR=&quot;${WRK_DIR}/${RE_OS}&quot; LIBRARY_SEARCH_PATHS=&quot;./Pods/build/${RE_OS}&quot; 
+xcodebuild ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration &quot;Release&quot; -workspace &quot;${PROJECT_NAME}.xcworkspace&quot; -scheme &quot;${BINARY_NAME}&quot; -sdk iphonesimulator clean build CONFIGURATION_BUILD_DIR=&quot;${WRK_DIR}/${RE_SIMULATOR}&quot; LIBRARY_SEARCH_PATHS=&quot;./Pods/build/${RE_SIMULATOR}&quot;
+if [ -d &quot;${INSTALL_DIR}&quot; ] 
+then 
+rm -rf &quot;${INSTALL_DIR}&quot; 
+fi 
+mkdir -p &quot;${INSTALL_DIR}&quot;
+cp -rp &quot;${DEVICE_INCLUDE_DIR}&quot; &quot;${INSTALL_DIR}/&quot;
+INSTALL_LIB_DIR=${INSTALL_DIR}/lib 
+mkdir -p &quot;${INSTALL_LIB_DIR}&quot;
+lipo -create &quot;${DEVICE_DIR}&quot; &quot;${SIMULATOR_DIR}&quot; -output &quot;${INSTALL_LIB_DIR}/lib${BINARY_NAME}.a&quot; 
+lipo -remove i386 &quot;${INSTALL_LIB_DIR}/lib${BINARY_NAME}.a&quot; -output &quot;${INSTALL_LIB_DIR}/lib${PROJECT_NAME}.a&quot; 
+rm -r &quot;${WRK_DIR}&quot;
+</code></pre>
+<p>这个脚本写的并不是很好。说说主要做了什么。<code>Release</code>不同的静态库，真机和模拟器的。只构建<code>x86_64</code>，不构建<code>i386</code>加快速度</p>
+<pre class="line-numbers"><code class="language-plain_text">xcodebuild -configuration &quot;Release&quot; -workspace &quot;${PROJECT_NAME}.xcworkspace&quot; -scheme &quot;${BINARY_NAME}&quot; -sdk iphoneos clean build CONFIGURATION_BUILD_DIR=&quot;${WRK_DIR}/${RE_OS}&quot; LIBRARY_SEARCH_PATHS=&quot;./Pods/build/${RE_OS}&quot; 
+xcodebuild ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration &quot;Release&quot; -workspace &quot;${PROJECT_NAME}.xcworkspace&quot; -scheme &quot;${BINARY_NAME}&quot; -sdk iphonesimulator clean build CONFIGURATION_BUILD_DIR=&quot;${WRK_DIR}/${RE_SIMULATOR}&quot; LIBRARY_SEARCH_PATHS=&quot;./Pods/build/${RE_SIMULATOR}&quot;
+</code></pre>
+<ul>
+<li>通过<code>lipo</code>命令合并。新.a使用<code>project name</code>是因为要和App项目的<code>OTHER_LDFLAGS</code>兼容<code>-l&quot;YTXChart&quot;</code></li>
+</ul>
+<blockquote>
+<p><code>lipo -create &quot;${DEVICE_DIR}&quot; &quot;${SIMULATOR_DIR}&quot; -output &quot;${INSTALL_LIB_DIR}/lib${PROJECT_NAME}.a&quot;</code></p>
+</blockquote>
+<blockquote>
+<p>结果：</p>
+</blockquote>
+<h4><a id="%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%A0%E9%99%A4i386" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>为什么要删除i386</h4>
+<p>实际上，二进制化方案就是以空间换时间。我们这个<code>YTXChart</code>库生成的<code>.a</code>去除<code>i386</code>之后大小有<code>166.3M</code>。上传到<code>git</code>仓库后，<code>git</code>会压缩。增加了<code>33M</code>左右。而作为二进制文件，<code>git</code>是没法做增量的。所以每次上传<code>.a</code>都会大大增加<code>git</code>库大小，增加硬盘使用量。考虑到我们的服务器硬盘只有60个G能用，以后还会二进制化很多组件。</p>
+<p>所以得出：尽量压缩二进制文件大小；尽量不上传.a，直到发布某个版本时才上传。</p>
+<p>当然，如果你的服务器硬盘是1T的话，我觉得你也可以随便搞。</p>
+<blockquote>
+<p>现在文件目录是这样子的：</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-plain_text">YTXChart 
+  |-Example
+    |-YTXChart
+    |-Pods
+    |-YTXChart.xcodeproj
+    |-YTXChart.xcworkspace
+    |-YTXChartBinary //空的
+    |-Podfile
+    \-Podfile.lock
+  |-Pod
+    |-Assets
+    |-Classes //里面是源码
+    \-Products
+      |-include
+         |-xxx.h
+         |-...
+         \-xxx.h
+      \-lib
+         \- libYTXChartBinary.a
+  \-YTXChart.podspec
+</code></pre>
+<h2><a id="%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93%E3%80%82" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>第二步：测试生成的静态库。</h2>
+<p>修改<code>YTXChart.podspec</code>如下：</p>
+<pre class="line-numbers"><code class="language-plain_text">Pod::Spec.new do |s| 
+  s.name             = &quot;YTXChart&quot;
+  s.version          = &quot;0.17.7&quot;
+  s.summary          = &quot;YTXChart for pod&quot;
+# This description is used to generate tags and improve search results.
+#   * Think: What does it do? Why did you write it? What is the focus?
+#   * Try to keep it short, snappy and to the point.
+#   * Write the description between the DESC delimiters below.
+#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.description      = &quot;银天下Chart, 依赖AFNetworking&quot;
+  s.homepage         = &quot; http://gitlab.baidao.com/ios/YTXChart.git&quot;
+  # s.screenshots     = &quot;www.example.com/screenshots_1&quot;, &quot;www.example.com/screenshots_2&quot;
+  s.license          = 'MIT'
+  s.author           = { &quot;caojun-mac&quot; =&gt; &quot;78612846@qq.com&quot; }
+  s.source           = { :git =&gt; &quot; http://gitlab.baidao.com/ios/YTXChart.git&quot;, :tag =&gt; s.version }
+  # s.social_media_url = ' https://twitter.com/'
+  s.platform     = :ios, '7.0'
+  s.requires_arc = true
+
+  s.source_files = 'Pod/Products/include/**'
+  s.public_header_files = 'Pod/Products/include/*.h'
+  s.ios.vendored_libraries = 'Pod/Products/lib/libYTXChart.a'
+
+  s.libraries = 'sqlite3', 'c++'
+  s.dependency 'YTXServerId'
+  s.dependency 'AFNetworking', '~&gt; 2.0'
+end
+</code></pre>
+<blockquote>
+<p>注意<code>s.sourcefiles</code>和<code>s.publicheaderfiles</code>和<code>s.ios.vendoredlibraries</code>的路径</p>
+</blockquote>
+<p><code>Exampl/Podfile</code> 是长这样子的：</p>
+<pre class="line-numbers"><code class="language-plain_text">source ' http://gitlab.baidao.com/ios/ytx-pod-specs.git' 
+source ' https://github.com/CocoaPods/Specs.git'
+target 'YTXChart_Example' do 
+  pod &quot;YTXChart&quot;, :path =&gt; &quot;../&quot;
+  pod 'ReactiveCocoa', '~&gt; 2.5'
+  pod 'YTXChartSocket'
+  pod 'AFNetworking', '~&gt; 2.0'
+end
+target 'YTXChartBinary' do
+end
+target 'YTXChart_Tests' do 
+  pod &quot;YTXChart&quot;, :path =&gt; &quot;../&quot;
+  pod 'Kiwi'
+end
+</code></pre>
+<p>执行<code>pod install</code>后应该是这样子的，然后跑起来没问题</p>
+<p>执行<code>pod lib lint --sources=' http://gitlab.baidao.com/ios/ytx-pod-specs.git</code>,<code>master'--verbose --use-libraries --fail-fast</code>也是好的<br />
+至此我们构建出一个静态库，只包含<code>YTXChart</code>的内容，不包含依赖<code>AFNetwork</code>和<code>YTXServerId</code>的内容</p>
+<blockquote>
+<p>证明：把<code>s.dependency 'AFNetworking', '~&gt; 2.0'</code>去除再执行<code>pod lib lint ' http://gitlab.baidao.com/ios/ytx-pod-specs.git,master' --verbose --use-libraries --fail-fast</code>会报出找不到AFNetwork相关文件。</p>
+</blockquote>
+<p>题外话：因为CocoaPods1.0.1不支持C++项目的lint（这是一个defect），所以这个时候我会切回CocoaPods@0.39.0来lint和publish。而前面pod instal增加Search Path是依靠CocoaPods@1.0.1。如果你不是.mm混写的，是不会有这个问题的。尽管使用CocoaPods@1.0.1。强行当作没看到这个题外话。</p>
+<h3><a id="%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%A7%A3%E5%86%B3%E5%A6%82%E4%BD%95%E5%9C%A8%E6%BA%90%E7%A0%81%E5%92%8C%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD%E5%88%87%E6%8D%A2%E4%BF%AE%E6%94%B9ytxchart-podspec%E4%B8%BA%E4%BB%A5%E4%B8%8B%E5%86%85%E5%AE%B9%EF%BC%9A" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>下一步解决如何在源码和二进制中切换修改YTXChart.podspec为以下内容：</h3>
+<pre class="line-numbers"><code class="language-plain_text">#
+# Be sure to run `pod lib lint YTXChart.podspec' to ensure this is a
+# valid spec before submitting.
+#
+# Any lines starting with a # are optional, but their use is encouraged
+# To learn more about a Podspec see  http://guides.cocoapods.org/syntax/podspec.html
+#
+Pod::Spec.new do |s| 
+  s.name             = &quot;YTXChart&quot;
+  s.version          = &quot;0.17.7&quot;
+  s.summary          = &quot;YTXChart for pod&quot;
+# This description is used to generate tags and improve search results.
+#   * Think: What does it do? Why did you write it? What is the focus?
+#   * Try to keep it short, snappy and to the point.
+#   * Write the description between the DESC delimiters below.
+#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.description      = &quot;银天下Chart, 依赖AFNetworking&quot;
+  s.homepage         = &quot; http://gitlab.baidao.com/ios/YTXChart.git&quot;
+  # s.screenshots     = &quot;www.example.com/screenshots_1&quot;, &quot;www.example.com/screenshots_2&quot;
+  s.license          = 'MIT'
+  s.author           = { &quot;caojun-mac&quot; =&gt; &quot;78612846@qq.com&quot; }
+  s.source           = { :git =&gt; &quot; http://gitlab.baidao.com/ios/YTXChart.git&quot;, :tag =&gt; s.version }
+  # s.social_media_url = ' https://twitter.com/'
+  s.platform     = :ios, '7.0'
+  s.requires_arc = true
+
+if ENV['IS_SOURCE']
+    puts '-------------------------------------------------------------------'
+    puts 'Notice:YTXChart is source now'
+    puts '-------------------------------------------------------------------'
+      s.source_files  = &quot;Pod/Classes/painter/*.{h,m,mm}&quot;, &quot;Pod/Classes/painterview/*.{h,m,mm}&quot;, &quot;Pod/Classes/chart/*.{h,m,mm}&quot;, &quot;Pod/Classes/core/*.{h,mm}&quot;, &quot;Pod/Classes/core/**/*.{h,m,mm,inl}&quot; 
+  else
+    puts '-------------------------------------------------------------------'
+    puts 'Notice:YTXChart is binary now'
+    puts '-------------------------------------------------------------------'
+    s.source_files = 'Pod/Products/include/**'
+    s.public_header_files = 'Pod/Products/include/*.h'
+    s.ios.vendored_libraries = 'Pod/Products/lib/libYTXChart.a'
+  end
+  s.libraries = 'sqlite3', 'c++'
+  s.dependency 'YTXServerId'
+  s.dependency 'AFNetworking', '~&gt; 2.0'
+end
+</code></pre>
+<p>注意这段<code>if ENV['IS_SOURCE']</code>。我们的需求是优先使用二进制，偶尔才会切回源码。</p>
+<ul>
+<li>删除<code>Example/Pods</code>目录。</li>
+<li>执行<code>IS_SOURCE=1 pod install</code>。你会看到<code>Example/Pods/YTXChart/</code>里面都是源码</li>
+<li>输出<code>Notice:YTXChart Now is source</code></li>
+<li>进一步跑起模拟器，因为是源码编译用了很长时间，模拟器起来，一切也是好的</li>
+<li>再试下<code>pod cache clean --all &amp;&amp; IS_SOURCE=1 pod lib lint</code>也是好的</li>
+<li>再试下<code>pod cache clean --all &amp;&amp; pod lib lint也是好的</code></li>
+<li>现在我们通过if else简单地实现了本地Example App项目切换源码和二进制。</li>
+<li>发布到自己的<code>pod repo spec</code></li>
+</ul>
+<p>发布就和正常发布没有任何区别。</p>
+<h3><a id="%E6%A3%80%E6%9F%A5%E4%BB%8Espec-repo%E7%9A%84-source%E4%B8%AD%E5%AE%89%E8%A3%85" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>检查从<code>spec repo</code>的<code>source</code>中安装</h3>
+<p><code>Podfile</code>修改为<code>pod 'YTXChart', '~&gt; 0.17.7'</code></p>
+<blockquote>
+<p>以下两步很重要</p>
+</blockquote>
+<ul>
+<li><code>pod cache clean --all</code></li>
+<li>删除<code>Example/Pods</code></li>
+<li>然后<code>pod install</code></li>
+<li>检查Example/Pods/YTXServerId/和Example/Pods/AFNetwork/发现都是.h .m源码。</li>
+<li>检查Example/Pods/YTXChart/里的是二进制.a和头文件。跑起App并没有问题。<br />
+尝试切回源码</li>
+<li>如果你直接IS_SOURCE=1 pod install你会发现Example/Pods/YTXChart/里的内容都变成了空</li>
+</ul>
+<h3><a id="%E8%BF%99%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E5%91%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>这是为什么呢</h3>
+<pre class="line-numbers"><code class="language-plain_text">因为pod cache了一个podspec.json。可以通过pod cache list查看。他cache了一个描述如何从s.source中找到相关文件。现在的描述还是从Pod/Products/下去找，自然为空。
+
+为了避免这个问题，所以必须执行上面两步。这个是唯一的问题，目前我还找不到更好的解决方案。切换的行为只是偶尔发生，这是可以接受的。
+执行2步。再次IS_SOURCE=1 pod install你就发现Example/Pods/YTXChart/里的内容都变成了.h .mm源码。跑起App也是好的。
+为什么lint之前要cache clean。原理是一样的。如果YTXChart依赖的YTXServerId也被做成了二进制化就需要cache clean。不过你也可以这样pod cache clean YTXServerId
+特别注意IS_SOURCE应当作为一个所有非二进制化Pod库的统一标识，并且通知你们的项目组里所有成员。pod install可能会有某几个已经二进制化的库使用二进制的内容。IS_SOURCE=1 pod install时，所有的库都将会是源码的内容。
+</code></pre>
+<h3><a id="%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>版本管理</h3>
+<p>请参考这篇我的文章CocoaPod版本规范</p>
+<h3><a id="%E5%AE%8C%E6%95%B4%E5%88%86%E6%9E%90" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>完整分析</h3>
+<p>当你发布完成之后，查看。我们发现在Spec Repo中对应版本的podspec就是我们的YTXChart/podspec。CocoaPod从s.sourcegit地址和tag下载对应的代码，Pod/Products和Pod/Classes里的内容都存在当你使用IS_SOURCE=1时ENV['IS_SOURCE']会为true。CocoaPods通过s.source_files从下载代码的路径找到源码构建Example/Pods和YTXChart.xcworkspace</p>
+<p>明白了上面的过程，来再分析下为什么要在切换源码和二进制化时删除cache和Pods目录。放几张图就明白了</p>
+<p>删除cache和Pods目录。IS_SOURCE=1 pod install观察json。</p>
+<h2><a id="%E6%80%BB%E7%BB%93%EF%BC%9A" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结：</h2>
+<ul>
+<li>没有使用submodule或新的git仓库来构建出一个不包含依赖内容的静态库。一份原来的git仓库。</li>
+<li>没有因为构建二进制库而需要增加冗余的源代码。所以当你修改Pod/Classes中的源码，可以方便简单地执行buildbinary.sh脚本来构建出静态库。一份源码。</li>
+<li>共用了一份YTXChart.podspec</li>
+<li>没有大量修改YTXChart.podspec</li>
+<li>使用pod lib lint和IS_SOURCE=1 pod lib lint检查通过。</li>
+<li>没有修改Podfile。这个Example的Podflie只是测试需要才改的。主App项目中的Podfile可以一行都不改。不会出现'~&gt; 2.2.1.binary'。</li>
+<li>App中的源码不会因为使用了二进制CocoaPods组件而做任何修改。</li>
+<li>没有手动配置Search Path，这样更容易。</li>
+<li>在Example App中可以通过IS_SOURCE灵活地切换源码和二进制静态库。唯一一个问题每次切换要删除Pods目录和pod cache clean --all</li>
+<li>跑起Example App总是好的。</li>
+<li>没有影响到其他库，我可以逐步平滑地把YTXXXX一个一个做成二进制。</li>
+</ul>
+<h3><a id="%E4%B8%8B%E4%B8%80%E6%AD%A5%E7%9B%AE%E6%A0%87" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>下一步目标</h3>
+<ul>
+<li>逐步平滑地把YTXXXX一个一个做成二进制</li>
+<li>进一步的把第三方如AFNetwork在私有spec repo中做份镜像也提供二进制化</li>
+<li>把Podfile中绝大部分组件都做成二进制（RN这种本地安装模式和有sub spec的库目前不打算二进制化）</li>
+</ul>
+<h3><a id="%E5%85%B3%E4%BA%8E%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%8C%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%9C%A8%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>关于资源文件，资源文件在二进制化中的配置是一样的</h3>
+<p>另外，使用二进制化的CocoaPods库不会增加ipa的大小。所以我们应当优先用二进制化的东西，这可以加快Archive速度。</p>
+<h3><a id="%E5%85%B3%E4%BA%8E%E6%9C%89sub-spec%E7%9A%84cocoapods%E7%BB%84%E4%BB%B6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>关于有sub spec的CocoaPods组件</h3>
+<p>两个方案：</p>
+<ul>
+<li>提供一个全集</li>
+<li>对每一个sub spec都做份二进制并保持它们之间依赖的相互关系</li>
+</ul>
+<h2><a id="%E8%B5%B0%E8%BF%87%E7%9A%84%E5%BC%AF%E8%B7%AF%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>走过的弯路！！！！！！！！！！！！！！！</h2>
+<p>现在这个解决方案看起来简单，但在当初的探索过程中并不是那么顺利。以下是不成功的尝试！<br />
+创建另一个YTXChartBinary.podspec</p>
+<ul>
+<li>把生成的Products目录放到YTXChartBinary下</li>
+<li>把YTXChartBinary.podspec目录放到YTXChartBinary下</li>
+<li>Podfile中通过增加Binary字段安装二进制化如pod 'YTXChartBinary', '~&gt; 0.17.7'<br />
+问题</li>
+<li>要维护2个podspec。版本号很可能不统一。</li>
+<li>当pod spec lint报错：找不到相关文件。</li>
+<li>Podfile中通过增加Binary字段来切换，非常不方便。</li>
+<li>要改App源码。当安装二进制的时候需要改成。来回切换都需要改，极不方便。</li>
+<li>要改App源码。这次一劳永逸。直接这样使用&quot;YTXChart.h&quot;。但这样也不好。<br />
+创建另一个专门放二进制化的Spec Repo，通过不同的Source来区分<br />
+解决了要改App源码的问题。只需要在Podfile中加个source。</li>
+</ul>
+<p>不同的source例子source ' <a href="http://gitlab.baidao.com/ios/ytx-binary-pod-specs.git">http://gitlab.baidao.com/ios/ytx-binary-pod-specs.git</a>'<br />
+source ' <a href="http://gitlab.baidao.com/ios/ytx-pod-specs.git">http://gitlab.baidao.com/ios/ytx-pod-specs.git</a>'</p>
+<p>问题</p>
+<ul>
+<li>发布两次，lint两次。</li>
+<li>创建了2个Spec Repo。</li>
+</ul>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,minimum-scale=0.8, maximum-scale=0.8,user-scalable=no,viewport-fit=cover">
+    <title>
+      
+    iOS后台保活 - 宋明的博客
+    
+    </title>
+    
+
+    
+    
+    <link href="atom.xml" rel="alternate" title="宋明的博客" type="application/atom+xml">
+    <link rel="stylesheet" href="asset/css/style.min.css">
+    <link rel="stylesheet" href="asset/css/doc.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- 百度分析 -->
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/live2d-widget@3.x/lib/L2Dwidget.min.js"></script>
+    
+    <script src="asset/app.js"></script>
+</head>
+  <body style="overflow-x: hidden;">
+    <section class="hero">
+      <div class="hero-head">
+          <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="container">
+              <div class="navbar-brand">
+                
+                <a target="self" class="navbar-item " href="index.html">Home</a>
+                
+                <a target="_self" class="navbar-item " href="archives.html">Archives</a>
+                
+
+                <a role="button" id="navbarSNSRssSwitchBtn" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarSNSRssButtons">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+            
+              <div id="navbarSNSRssButtons" class="navbar-menu">
+                <div class="navbar-start">
+                  
+                </div>
+            
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <!--buttons start-->
+                    <div class="buttons">
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      <a href="mailto: 1317345135@qq.com" target="_blank" title="email">
+                        <span class="icon is-large has-text-grey-darker">
+                          <svg class="svg-inline--fa fa-email fa-w-14 fa-lg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1208" width="200" height="200"><path fill="currentColor" d="M935.335233 153.62202h-846.666656a84.666666 84.666666 0 0 0-84.666666 84.666666v550.333327a84.666666 84.666666 0 0 0 84.666666 84.666665h846.666656a84.666666 84.666666 0 0 0 84.666666-84.666665v-550.333327a84.666666 84.666666 0 0 0-84.666666-84.666666z m-27.293711 213.952665L557.558216 549.672927a94.993177 94.993177 0 0 1-87.065555 0.197555l-354.612218-182.202664a42.333333 42.333333 0 0 1 38.698311-75.308177l354.606573 182.202664a10.196689 10.196689 0 0 0 9.341556-0.022577l350.477662-182.089776a42.333333 42.333333 0 1 1 39.034155 75.127555z" fill="#2c2c2c" p-id="1209"></path></svg>
+                        </span>
+                      </a>
+                      
+                      
+                      <a href="atom.xml" target="_blank" title="RSS">
+                        <span class="icon is-large has-text-black-bis">
+                          <svg class="svg-inline--fa fa-rss fa-w-14 fa-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="rss" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z"></path></svg><!-- <i class="fas fa-rss fa-lg"></i> -->
+                        </span>
+                      </a>
+                    </div>
+                    <!--buttons end-->
+
+                  </div>
+                </div>
+                </div>
+              </div>
+            </nav>
+      </div>
+
+ <div class="hero-body ct-body"></div>
+      
+</section>
+<section class="ct-body">
+  <div class="container">
+    <div class="columns is-variable bd-klmn-columns is-4">
+      <div class="column is-two-thirds">
+        <div class="post-body single-content">      
+          <div class="card-image">
+            <figure class="random-img">
+            </figure>
+          </div>
+          <h1 class="title">
+            iOS后台保活   
+          </h1>
+           
+          <div class="media">
+            
+            <figure class="media-left">
+              <p class="image is-48x48">
+                
+                  <img class="is-rounded" src="">
+              </p>
+            </figure>
+            
+            <div class="media-content">
+              <div class="content">
+                <p style="line-height: 30px; font-size: 12px;">
+                  
+                  <a href="http://apolla.cc">宋明</a>
+                  &nbsp;&nbsp;&nbsp;<span style="color: #ccc;">|</span>&nbsp;&nbsp;&nbsp;
+                  
+                  <span class="date"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;2023/03/18</span>
+                  
+                  <span class="tran-posted-in">posted in</span>&nbsp; 
+                  
+                  
+                    <span class="posted-in"><a href='%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html'><i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;碎片芝士收藏</a></span>
+                       
+                  
+
+                  
+
+                  
+                  
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="markdown-body single-content">
+          <p>项目内嵌了H5导出的包 但是APP进入后台会导致未加载页面无法响应，故此想到后台保活策略 参考网上教程<a href="https://blog.csdn.net/WangQingLei0307/article/details/112002904">https://blog.csdn.net/WangQingLei0307/article/details/112002904</a><br />
+<img src="media/16791162887780/16791164370243.png" alt="image.png" /></p>
+<p>首先我们就要在Background Modes把音乐对应权限打开。</p>
+<p>这个权限打开后，我们的工作就已经完成了1/3了</p>
+<p>接下来我就就要在app进入后台的时候开始播放无声音的mp3。</p>
+<p>我这里对音乐播放器进行了简单的封装，方便使用 SXAudioSessionObject</p>
+<p>.h</p>
+<pre class="line-numbers"><code class="language-objectivec">#import &lt;Foundation/Foundation.h&gt;
+
+NS_ASSUME_NONNULL_BEGIN
+
+    @interface SXAudioSessionObject : NSObject
+
+/// 创建单利
++ (SXAudioSessionObject *)shareManager;
+
+/// 创建音乐播放器
+- (void)creatAVAudioSessionObject;
+
+/// 开始播放音乐
+- (void)startPlayAudioSession;
+
+/// 停止播放音乐
+- (void)stopPlayAudioSession;
+
+@end
+
+NS_ASSUME_NONNULL_END
+</code></pre>
+<p>.m</p>
+<pre class="line-numbers"><code class="language-objectivec">#import &quot;SXAudioSessionObject.h&quot;
+#import &lt;AVFoundation/AVFoundation.h&gt;
+#import &lt;AudioToolbox/AudioToolbox.h&gt;
+
+@interface SXAudioSessionObject()
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@end
+
+@implementation SXAudioSessionObject
+
+/// 创建单利
++ (SXAudioSessionObject *)shareManager{
+    static SXAudioSessionObject *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+    manager = [[SXAudioSessionObject alloc]init];
+});
+    return manager;
+}
+
+/// 创建音乐播放器
+- (void)creatAVAudioSessionObject{
+    //设置后台模式和锁屏模式下依然能够播放
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+    [[AVAudioSession sharedInstance] setActive: YES error: nil];
+    //初始化音频播放器
+    NSError *playerError;
+    NSURL *urlSound = [[NSURL alloc]initWithString:[[NSBundle mainBundle]pathForResource:@&quot;pomodoSound&quot; ofType:@&quot;m4a&quot;]];
+    _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:urlSound error:&amp;playerError];
+    _audioPlayer.numberOfLoops = -1;//无限播放
+    _audioPlayer.volume = 0;
+}
+
+/// 开始播放声音
+- (void)startPlayAudioSession{
+    [_audioPlayer play];
+}
+
+/// 停止播放声音
+- (void)stopPlayAudioSession{
+    [_audioPlayer stop];
+}
+
+@end
+</code></pre>
+<blockquote>
+<p>这里的音频需要放在本地 自己录一个1s无声音频就好了</p>
+</blockquote>
+<p>对这个封装完，我们就要使用了。后台保活，我们只需要在进入后台的时候播放音乐即可，进入前台我们停止音乐播放</p>
+<p>首先我们先要穿件音乐播放器</p>
+<pre class="line-numbers"><code class="language-objectivec">[[SXAudioSessionObject shareManager] creatAVAudioSessionObject];
+</code></pre>
+<p>接下来就是播放和停止</p>
+<p>//应用程序已经进入后台运行</p>
+<pre class="line-numbers"><code class="language-objectivec">- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    NSLog(@&quot;如果应用程序支持后台运行，则应用程序已经进入后台运行&quot;); //如果需要退出后台,则在这里加上:exit(0);
+    [[SXAudioSessionObject shareManager] startPlayAudioSession];    //创建一个背景任务去和系统请求后台运行的时间
+}
+//应用程序已经进入活动状态
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    NSLog(@&quot;应用程序已进入前台，处于活动状态&quot;);
+    [[SXAudioSessionObject shareManager] stopPlayAudioSession];
+}
+</code></pre>
+<p>同时我们还要创建一下UIBackgroundTaskIdentifier和NSTimer</p>
+<pre class="line-numbers"><code class="language-objectivec">@property (nonatomic, assign) UIBackgroundTaskIdentifier backgrounTask;
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(applyToSystemForMoreTime) userInfo:nil repeats:YES];
+    [self.timer setFireDate:[NSDate distantPast]];
+    return YES;
+}
+ 
+ 
+#pragma mark - 定时器设置判断后台保活时间，如果将要被后台杀死，重新唤醒
+- (void)applyToSystemForMoreTime {
+    if ([UIApplication sharedApplication].backgroundTimeRemaining &lt; 30.0) {//如果剩余时间小于30秒
+        [[UIApplication sharedApplication] endBackgroundTask:self.self.backgrounTask];
+        self.backgrounTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:self.self.backgrounTask];
+            self.backgrounTask = UIBackgroundTaskInvalid;
+        }];
+    }
+}
+</code></pre>
+<p>上面的代码最好写成，如果进入后台的时候再启用定时器，在前台定时器处于停止状态即可。</p>
+
+        </article>
+        <div class="comments-wrap">
+          <div class="share-comments">
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Apolla/gtalk"
+                    issue-term="title"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    id="github-comment"
+                    async>
+            </script>
+             
+            
+
+            
+
+            
+          </div>
+        </div><!-- end comments wrap -->
+      </div>
+      <div class="column">
+         <div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-notice">Notice</span> 
+    </p>
+  </header>
+  <div class="card-content site-notice">
+    <div class="content"> 
+        
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-categories">Categories</span> 
+    </p>
+  </header>
+  <div class="card-content site-categories">
+    <div class="content"> 
+      <ul>
+      
+        <li><a href="%E7%BB%84%E4%BB%B6%E5%8C%96.html">组件化</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F.html">碎片芝士收藏</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E7%9B%B4%E6%92%AD.html">直播</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="coreBluetooth.html">coreBluetooth</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB.html">一阅阅读</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="SwiftUI.html">SwiftUI</a>
+          
+          
+          
+        </li> 
+      
+        <li><a href="%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8.html">葵花宝典</a>
+          
+          
+          
+        </li> 
+      
+      </ul>
+    </div>
+  </div>                    
+</div>
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;&nbsp;
+      <span class="tran-site-tags">Tags</span> 
+    </p>
+  </header>
+  <div class="card-content site-tags">
+    <div class="content">
+      <div class="tags">
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div><!-- end columns -->
+  </div><!-- end container -->
+</section>
+
+
+
+    <footer class="footer">
+    <div id="plt"></div>
+    <div class="content has-text-centered">
+      <p>
+        Copyright &copy; 2019
+        <span id="tran-author" class="tran-author">Author: </span><a target="_blank" href="http://apolla.cc">宋明</a>,&nbsp; 
+        <span class="tran-theme">Theme: </span><a target="_blank" href="https://github.com/AlanAlbert/atheme">Atheme</a> (Based on BulmaCSS).
+      </p>
+    </div>
+  </footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+<script type="text/javascript">
+  var imgApi = "https://source.unsplash.com/random/1024x";
+  var imgContainers = document.getElementsByClassName('random-img');
+  for (var i = 0; i <= imgContainers.length - 1; i++) {
+    // https://picsum.photos/1024/
+    var img = document.createElement('img');
+    img.src = imgApi + (400 + i);
+    imgContainers[i].appendChild(img);
+  }
+</script>
+
+
+<script type="text/javascript">
+  
+    
+    var modelJson = 'asset/cat/black/hijiki.model.json';
+    var pluginRootPath = 'asset/cat/black';
+    var pluginModelPath = 'asset/cat/black';
+    
+  
+  
+
+  var config = {
+    pluginRootPath: pluginRootPath,
+    pluginJsPath: "lib/",
+    pluginModelPath: pluginModelPath,
+    tagMode:false,
+    debug:false,
+    model: {
+      jsonPath: modelJson,  // xxx.model.json 的路径
+    },
+    display: {
+      width: 325,           // canvas的宽度
+      height: 300,          // canvas的高度
+      position: 'right',    // 显示位置：左或右
+      hOffset: -75,         // canvas水平偏移
+      vOffset: 0,           // canvas垂直偏移
+    },
+    dialog:{
+      enable: true
+    },
+    mobile: {
+      show: false,         // 是否在移动设备上显示
+    },
+    react: {
+      opacity: 1,         // 透明度
+    },
+    log: false,
+  };
+  L2Dwidget.init(config);
+</script>
+
+
+  
+    
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,2284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[宋明的博客]]></title>
+  <link href="apolla.cc/atom.xml" rel="self"/>
+  <link href="apolla.cc/"/>
+  <updated>2023-03-18T14:56:07+08:00</updated>
+  <id>apolla.cc/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[SwitfUI-HStack、VStack、ZStack]]></title>
+    <link href="apolla.cc/16791176889303.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889303.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E4%BB%8B%E7%BB%8D" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>介绍</h2>
+<p>SwiftUI 提供了三種不同类型的堆叠，以在不同方向上结合视图。根据你如何去排列视图，而可以使用：</p>
+<ul>
+<li>HStack - 水平排列。</li>
+<li>VStack - 垂直排列。</li>
+<li>ZStack - 一个图层重叠在其他图层之上</li>
+</ul>
+<p><img src="media/16791176889303/16791179586082.jpg" alt="image.png" /></p>
+<h2><a id="vstack" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>VStack</h2>
+<p>垂直排列所有控件</p>
+<pre class="line-numbers"><code class="language-swift">
+// 自定义左对齐 间距20 
+// VStack(alignment: .leading, spacing: 20) {
+   VStack {
+            Text(&quot;SwiftUI&quot;)
+                .font(.system(size: 40 ,design: .rounded))
+                .fontWeight(.medium)
+                .foregroundColor(.black)
+                .frame(width: 200)
+            
+          Image(&quot;jr9Li_iNaE0&quot;)
+                .resizable()
+                .scaledToFit()
+            
+            Text(&quot;SwiftUI&quot;)
+                .font(.system(size: 40 ,design: .rounded))
+                .fontWeight(.medium)
+                .foregroundColor(.black)
+                .frame(width: 200)
+        }
+</code></pre>
+<p><img src="media/16791176889303/16791179586112.jpg" alt="image.png" /></p>
+<h2><a id="hstack" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>HStack</h2>
+<p>用法和VStack 类似</p>
+<pre class="line-numbers"><code class="language-swift">struct product:View {
+     var title: String
+     var price: String
+      
+    var body: some View {
+        VStack(alignment: .center, spacing: 20) {
+            Text(title)
+                .font(.system(size: 30 ,design: .rounded))
+                .fontWeight(.medium)
+                .foregroundColor(.white)
+            
+            
+            Text(price)
+                .font(.system(size: 50 ,design: .rounded))
+                .fontWeight(.medium)
+                .foregroundColor(.white)
+            
+            
+            Text(&quot;per month&quot;)
+                .font(.system(size: 20 ,design: .rounded))
+                .fontWeight(.medium)
+                .foregroundColor(.white)
+            
+        }
+        .padding(40)
+        .background(Color.purple)
+        .cornerRadius(10)
+        
+    }
+}
+
+
+
+struct ContentView: View {
+    
+    
+    
+    var body: some View {
+        HStack{
+            product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+            product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+        }
+        
+        
+    }
+}
+</code></pre>
+<p><img src="media/16791176889303/16791179586147.jpg" alt="image.png" /></p>
+<h2><a id="zstack" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>ZStack</h2>
+<p>Z轴排布视图</p>
+<pre class="line-numbers"><code class="language-swift">    HStack{
+            product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+            ZStack{
+                product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                Text(&quot;Best for designer&quot;)
+                        .font(.system(.caption, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(5)
+                        .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                        .offset(x:0,y:87)
+              
+            }
+          
+        }
+</code></pre>
+<p><img src="media/16791176889303/16791179586195.png" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-Text]]></title>
+    <link href="apolla.cc/16791176889262.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889262.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E6%96%87%E5%AD%97%E8%A7%86%E5%9B%BE%EF%BC%88text%EF%BC%89" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>文字视图（Text）</h2>
+<h3><a id="%E7%AE%80%E5%8D%95%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AA%E6%96%87%E5%AD%97%E8%A7%86%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>简单初始化一个文字视图</h3>
+<pre class="line-numbers"><code class="language-swift">Text(&quot;Hello World&quot;)
+</code></pre>
+<h3><a id="%E4%BF%AE%E6%94%B9%E6%96%87%E5%AD%97%E5%B1%9E%E6%80%A7" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>修改文字属性</h3>
+<pre class="line-numbers"><code class="language-swift">      Text(&quot;Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry. Stay Foolish.Stay Hungry.&quot;)
+            .fontWeight(.bold) //设置字重
+            .font(.title) //设置字体
+            .foregroundColor(.green)//字体颜色
+            .multilineTextAlignment(.center) //对齐方式
+//            .lineLimit(3) //最大行数
+//            .truncationMode(.head) //截断方式
+            .lineSpacing(10) //文字行间距
+//            .padding() //组件边距
+</code></pre>
+<h3><a id="%E4%BF%AE%E6%94%B9%E5%AD%97%E4%BD%93%E8%AE%BE%E8%AE%A1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>修改字体设计</h3>
+<pre class="line-numbers"><code class="language-swift">// 让字体圆润
+.font(.system(.largeTitle, design: .rounded))
+</code></pre>
+<h3><a id="2d%E6%97%8B%E8%BD%AC" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>2d旋转</h3>
+<pre class="line-numbers"><code class="language-swift">.rotationEffect(.degrees(20), anchor: UnitPoint(x: 0, y: 0))
+</code></pre>
+<h3><a id="image-png-media1679117688926216791179512395-jpg" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a><img src="media/16791176889262/16791179512395.jpg" alt="image.png" /></h3>
+<h3><a id="3d%E6%97%8B%E8%BD%AC" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>3d旋转</h3>
+<pre class="line-numbers"><code class="language-swift">.rotation3DEffect(.degrees(60), axis: (x: 1, y: 0, z: 0))
+</code></pre>
+<p><img src="media/16791176889262/16791179512424.jpg" alt="image.png" /></p>
+<h3><a id="%E9%98%B4%E5%BD%B1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>阴影</h3>
+<pre class="line-numbers"><code class="language-swift">.shadow(color: .gray, radius: 2, x: 0, y: 15)
+</code></pre>
+<h3><a id="image-png-media1679117688926216791179512472-jpg" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a><img src="media/16791176889262/16791179512472.jpg" alt="image.png" /></h3>
+<h3><a id="markdown%E6%94%AF%E6%8C%81" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>markdown 支持</h3>
+<p>SwiftUI text 视图已支持markdown</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-State和Binding]]></title>
+    <link href="apolla.cc/16791176889220.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889220.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="state" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>@State</h2>
+<p><code>@State private var isPlaying = false</code><br />
+在前面的文章我已用过@State属性,使用@State修饰某个属性后，SwiftUI将会把该属性存储到一个特殊的内存区域内，并且这个区域和View struct是隔离的；<br />
+当@State修饰的属性的值发生变化后，SwiftUI会根据该属性重新绘制视图；<br />
+举个例子：</p>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+   @State var buttonTaped = false
+    
+    var body: some View {
+        
+        VStack{
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+        }
+        //渲染颜色
+        .tint(.purple)
+        // 按钮样式 .bordered、.borderless 和 .plain
+        .buttonStyle(.bordered)
+        //按钮边框样式
+        .buttonBorderShape(.capsule)
+        //按钮预设大小
+        .controlSize(.large)
+        
+        
+    }
+}
+</code></pre>
+<p>实现效果 当我们点击时 按钮的文字会自动变化 不需要手动设置数据刷新UI<br />
+<img src="media/16791176889220/16791179446238.gif" alt="2023-03-03_13-28-59 (1).gif" /></p>
+<blockquote>
+</blockquote>
+<h2><a id="binding" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>@Binding</h2>
+<p>开发中，我们需要把一个View的属性，传递到一个子View中；<br />
+Swift中，值传递的形式是值传递，也就是说，传个子View的是值的拷贝；子视图对这个值进行了修改后，不会影响父视图；<br />
+使用@Binding修饰后，属性就变成了一个引用类型，这样子视图对值进行了修改后，父视图中的值也会发生变化</p>
+<pre class="line-numbers"><code class="language-swift">struct customButton:View {
+    @Binding var tapCount:Int
+    var body: some View {
+        Button {
+            self.tapCount += 1
+            
+        } label: {
+            Text(&quot;Hello World 第\(tapCount)次点击&quot;)
+        }    //渲染颜色
+        .tint(.purple)
+        // 按钮样式 .bordered、.borderless 和 .plain
+        .buttonStyle(.bordered)
+        //按钮边框样式
+        .buttonBorderShape(.capsule)
+        //按钮预设大小
+        .controlSize(.large)
+    }
+}
+
+
+struct ContentView: View {
+ 
+    @State private var tapCount = 0
+    
+    var body: some View {
+        
+        VStack{
+            customButton(tapCount: $tapCount)
+        }
+    
+        
+    }
+}
+</code></pre>
+<p>如果有多个按钮需要分别管理 还是推荐@State</p>
+<blockquote>
+<p>给每个按钮绑定自己的tapCount 属性</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">struct customButton:View {
+  @State var tapCount:Int = 0
+    var body: some View {
+        Button {
+            self.tapCount += 1
+            
+        } label: {
+            Text(&quot;Hello World 第\(tapCount)次点击&quot;)
+        }    //渲染颜色
+        .tint(.purple)
+        // 按钮样式 .bordered、.borderless 和 .plain
+        .buttonStyle(.bordered)
+        //按钮边框样式
+        .buttonBorderShape(.capsule)
+        //按钮预设大小
+        .controlSize(.large)
+    }
+}
+
+
+struct ContentView: View {
+ 
+  
+    var body: some View {
+        
+        VStack{
+            customButton()
+            customButton()
+            customButton()
+        }
+    
+        
+    }
+}
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-Spacer]]></title>
+    <link href="apolla.cc/16791176889181.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889181.html</id>
+    <content type="html"><![CDATA[
+<p>留白填充组件</p>
+<h2><a id="" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a></h2>
+<pre class="line-numbers"><code class="language-swift">     VStack{
+               // Spacer()
+            product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+               // Spacer()
+            ZStack{
+                product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                Text(&quot;Best for designer&quot;)
+                        .font(.system(.caption, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(5)
+                        .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                        .offset(x:0,y:87)
+              
+            }
+                // Spacer()
+        }
+</code></pre>
+<h2><a id="%E9%BB%98%E8%AE%A4%E6%83%85%E5%86%B5%E4%B8%8B" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>默认情况下</h2>
+<p><img src="media/16791176889181/16791179353535.png" alt="image.png" /></p>
+<h2><a id="%E5%8A%A0%E5%85%A5spacer%E5%A1%AB%E5%85%85%E7%A9%BA%E9%9A%99" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>加入Spacer 填充空隙</h2>
+<h3><a id="%E6%94%BE%E5%9C%A8%E4%B8%8A%E9%9D%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>放在上面</h3>
+<p><img src="media/16791176889181/16791179353565.png" alt="image.png" /></p>
+<h3><a id="%E6%94%BE%E5%9C%A8%E4%B8%AD%E9%97%B4" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>放在中间</h3>
+<p><img src="media/16791176889181/16791179353629.png" alt="image.png" /></p>
+<h3><a id="%E6%94%BE%E5%9C%A8%E4%B8%8B%E9%9D%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>放在下面</h3>
+<p><img src="media/16791176889181/16791179353708.png" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-overlay]]></title>
+    <link href="apolla.cc/16791176889139.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889139.html</id>
+    <content type="html"><![CDATA[
+<p>如果需要将另一个图片或文字分层放置在图片视图之上,SwiftUI提供了overlay修饰器可将一个组件与图片进行重叠</p>
+<h3><a id="%E5%9B%BE%E7%89%87%E9%87%8D%E5%8F%A0" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>图片重叠</h3>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+    .resizable()
+    .aspectRatio(contentMode: .fill)
+    .frame(width: 300)
+    .clipShape(Circle())
+    .overlay(
+        Image(systemName: &quot;heart.fill&quot;)
+            .font(.system(size: 50))
+            .foregroundColor(.black)
+            .opacity(0.5)
+)
+</code></pre>
+<p><img src="media/16791176889139/16791179279166.jpg" alt="image.png" /></p>
+<h3><a id="%E6%96%87%E5%AD%97%E6%8E%A7%E4%BB%B6%E5%92%8C%E5%9B%BE%E7%89%87%E9%87%8D%E5%90%88" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>文字控件和图片重合</h3>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+    .resizable()
+    .aspectRatio(contentMode: .fit)
+    .overlay(
+
+        Text(&quot;If you are lucky enough to have lived in Paris as a young man, then wherever you go for the rest of your life it stays with you, for Paris is a moveable feast.\n\n- Ernest Hemingway&quot;)
+            .fontWeight(.heavy)
+            .font(.system(.headline, design: .rounded))
+            .foregroundColor(.white)
+            .padding()
+            .background(Color.black)
+            .cornerRadius(10)
+            .opacity(0.8)
+            .padding(),
+
+        alignment: .top
+
+    )
+</code></pre>
+<p><img src="media/16791176889139/16791179279217.jpg" alt="image.png" /></p>
+<h3><a id="%E5%9B%BE%E7%89%87%E8%A6%86%E7%9B%96%E9%A2%9C%E8%89%B2%E5%9B%BE%E5%B1%82%EF%BC%88%E5%8F%98%E6%9A%97%EF%BC%89" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>图片覆盖颜色图层（变暗）</h3>
+<pre class="line-numbers"><code class="language-swift">    Image(&quot;jr9Li_iNaE0&quot;)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .overlay(
+                //矩形组件
+                //                Rectangle()
+                //                    .fill(.black.opacity(0.4))
+                //颜色组件
+                Color(.black)
+                    .opacity(0.4)
+                //叠加一层文字
+                    .overlay(
+                        Text(&quot;SwiftUI&quot;)
+                            .font(.system(size: 40 ,design: .rounded))
+                            .fontWeight(.medium)
+                            .foregroundColor(.white)
+                            .frame(width: 200)
+                            
+                    )
+                   
+            )
+</code></pre>
+<p><img src="media/16791176889139/16791179279261.jpg" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-NavigationView]]></title>
+    <link href="apolla.cc/16791176889097.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889097.html</id>
+    <content type="html"><![CDATA[
+<p>NavigationView 为我们提供了页面导航<br />
+NavigationLink 提供跳转功能</p>
+<h2><a id="%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>基本用法</h2>
+<pre class="line-numbers"><code class="language-swift">
+import SwiftUI
+
+struct cellModel:Identifiable {
+    var id =  UUID()
+    var name:String
+    var desc:String
+}
+
+
+struct cell: View {
+ 
+    var model:cellModel
+ 
+    var body: some View {
+        VStack (alignment: .leading) {
+            Text(model.name)
+                .fontWeight(.bold)
+                .padding(10)
+            
+            Text(model.desc)
+               
+        }
+    }
+}
+
+
+struct ContentView: View {
+ 
+    var cells = [cellModel(name: &quot;1&quot;, desc: &quot;111&quot;),
+                 cellModel(name: &quot;2&quot;, desc: &quot;22222222222222&quot;),
+                 cellModel(name: &quot;3&quot;, desc: &quot;33333333&quot;),
+                 cellModel(name: &quot;4&quot;, desc: &quot;4444&quot;)
+    ]
+    
+    var body: some View {
+        
+        NavigationView {
+            List(cells) { item in
+                NavigationLink {
+                    detailView(text: item.desc)
+                        .navigationBarTitle(&quot;Detail&quot;,displayMode: .inline)
+                } label: {
+                    cell(model: item)
+                }
+            }
+            .listStyle(.plain)
+            .navigationBarTitle(&quot;导航栏&quot;,displayMode: .inline)
+        }
+      
+       
+    }
+}
+
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+</code></pre>
+<h2><a id="%E8%AE%BE%E7%BD%AE%E5%AD%97%E4%BD%93%E9%A2%9C%E8%89%B2%E6%9B%B4%E6%8D%A2%E8%BF%94%E5%9B%9E%E6%8C%89%E9%92%AE%E5%9B%BE%E7%89%87" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>设置字体颜色 更换返回按钮图片</h2>
+<p>在ContentView 内实现init方法</p>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+ 
+    var cells = [cellModel(name: &quot;1&quot;, desc: &quot;111&quot;),
+                 cellModel(name: &quot;2&quot;, desc: &quot;22222222222222&quot;),
+                 cellModel(name: &quot;3&quot;, desc: &quot;33333333&quot;),
+                 cellModel(name: &quot;4&quot;, desc: &quot;4444&quot;)
+    ]
+    
+    var body: some View {
+        
+        NavigationView {
+            List(cells) { item in
+                NavigationLink {
+                    detailView(text: item.desc)
+                        .navigationBarTitle(&quot;Detail&quot;,displayMode: .inline)
+                } label: {
+                    cell(model: item)
+                }
+            }
+            .listStyle(.plain)
+            .navigationBarTitle(&quot;导航栏&quot;,displayMode: .inline)
+        }
+      
+       
+    }
+    init() {
+        //修改导航栏文字颜色
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.red, .font: UIFont(name: &quot;ArialRoundedMTBold&quot;, size: 35)!]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.red, .font: UIFont(name: &quot;ArialRoundedMTBold&quot;, size: 20)!]
+        //修改按钮图片
+        navBarAppearance.setBackIndicatorImage(UIImage(systemName: &quot;arrow.turn.up.left&quot;), transitionMaskImage: UIImage(systemName: &quot;arrow.turn.up.left&quot;))
+        //修改渲染颜色 Xcode14.2 未生效
+        UINavigationBar.appearance().tintColor = .black
+        
+        UINavigationBar.appearance().standardAppearance = navBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        UINavigationBar.appearance().compactAppearance = navBarAppearance
+        
+     
+    }
+}
+
+</code></pre>
+<h2><a id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%94%E5%9B%9E%E6%8C%89%E9%92%AE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>自定义返回按钮</h2>
+<p>1.navigationBarBackButtonHidden() 隐藏导航栏<br />
+2.navigationBarItems 自定义按钮</p>
+<pre class="line-numbers"><code class="language-swift">import SwiftUI
+
+struct detailView: View {
+    @Environment(\.dismiss) var dismiss
+  
+    var text:String = &quot;&quot;
+    
+    var body: some View {
+        
+        Text(text)
+            .navigationBarBackButtonHidden()
+            .navigationBarItems(leading: Button(action: {
+                dismiss()
+            }, label: {
+                
+                HStack{
+
+                    Text(&quot;\(Image(systemName: &quot;chevron.left&quot;)) \(text)&quot;)
+                        .foregroundColor(.black)
+                }
+                
+              
+            }))
+    }
+
+}
+
+struct detailView_Previews: PreviewProvider {
+    static var previews: some View {
+        detailView()
+    }
+}
+
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-List （table）]]></title>
+    <link href="apolla.cc/16791176889054.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889054.html</id>
+    <content type="html"><![CDATA[
+<pre class="line-numbers"><code class="language-swift">struct cellModel:Identifiable {
+    var id =  UUID()
+    var name:String
+    var desc:String
+}
+
+
+struct cell: View {
+ 
+    var model:cellModel
+ 
+    var body: some View {
+        VStack (alignment: .leading) {
+            Text(model.name)
+                .fontWeight(.bold)
+                .padding(10)
+            
+            Text(model.desc)
+               
+        }
+    }
+}
+
+
+struct ContentView: View {
+ 
+    var cells = [cellModel(name: &quot;1&quot;, desc: &quot;111&quot;),
+                 cellModel(name: &quot;2&quot;, desc: &quot;22222222222222&quot;),
+                 cellModel(name: &quot;3&quot;, desc: &quot;33333333&quot;),
+                 cellModel(name: &quot;4&quot;, desc: &quot;4444&quot;)
+    ]
+    
+    var body: some View {
+        List(cells) { item in
+           cell(model: item)
+           
+        }
+    }
+}
+
+</code></pre>
+<p><img src="media/16791176889054/16791179161576.png" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-Image]]></title>
+    <link href="apolla.cc/16791176889011.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176889011.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%9B%BE%E5%BA%93sf" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用系统图库 SF</h2>
+<pre class="line-numbers"><code class="language-swift">Image(systemName: &quot;cloud.heavyrain&quot;)
+</code></pre>
+<pre class="line-numbers"><code class="language-swift">Image(systemName: &quot;cloud.heavyrain&quot;)
+//系统图片实际上是个字形 所以修改大小需要使用font
+    .font(.system(size: 100)) //图片大小
+    .foregroundColor(.blue) //图片渲染颜色
+</code></pre>
+<h2><a id="%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E7%89%87" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>自定义图片</h2>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+</code></pre>
+<h3><a id="%E8%B0%83%E6%95%B4%E5%A4%A7%E5%B0%8F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>调整大小</h3>
+<pre class="line-numbers"><code class="language-swift">.resizable()
+</code></pre>
+<h3><a id="%E5%BF%BD%E7%95%A5%E5%AE%89%E5%85%A8%E5%8C%BA" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>忽略安全区</h3>
+<pre class="line-numbers"><code class="language-swift">.resizable()
+.ignoresSafeArea()
+</code></pre>
+<h3><a id="%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>填充模式</h3>
+<pre class="line-numbers"><code class="language-swift">.resizable()
+.scaledToFit()
+// .aspectRatio(contentMode: .fit)
+//   .aspectRatio(contentMode: .fill)
+</code></pre>
+<h3><a id="%E4%BF%AE%E6%94%B9%E5%A4%A7%E5%B0%8F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>修改大小</h3>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+    .resizable()
+    .aspectRatio(contentMode: .fill)
+    .frame(width: 300)
+//  .clipped() //裁剪超出的
+</code></pre>
+<h3><a id="%E5%9C%86%E5%BD%A2%E5%88%87%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>圆形切图</h3>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+    .resizable()
+    .aspectRatio(contentMode: .fill)
+    .frame(width: 300)
+	.clipShape(Circle())
+</code></pre>
+<h3><a id="%E9%80%8F%E6%98%8E%E5%BA%A6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>透明度</h3>
+<pre class="line-numbers"><code class="language-swift">Image(&quot;paris&quot;)
+    .resizable()
+    .aspectRatio(contentMode: .fill)
+    .frame(width: 300)
+	.clipShape(Circle())
+	.opacty(0.5)
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-Button]]></title>
+    <link href="apolla.cc/16791176888962.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888962.html</id>
+    <content type="html"><![CDATA[
+<h3><a id="%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>常见用法</h3>
+<p>使用方式和button类似 但是对现实内容进行了进一步扩充</p>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+    @State var buttonStr:String = &quot;Hello World&quot;
+    @State var buttonTaped = false
+    
+    var body: some View {
+        Button {
+            buttonTaped = !buttonTaped
+            buttonStr = buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;
+            
+        } label: {
+            //内嵌一个文本
+            Text(buttonStr)
+                .fontWeight(.bold)
+                .font(.title)
+                .padding()
+                .background(Color.purple)
+                .cornerRadius(40)
+                .foregroundColor(.white)
+                .padding(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 40)
+                        .stroke(Color.purple, lineWidth: 5)
+                )
+        }
+
+    }
+}
+</code></pre>
+<p><img src="media/16791176888962/16791179066626.gif" alt="2023-03-02_14-39-43 (1).gif" /></p>
+<h3><a id="%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>高级用法</h3>
+<p>内嵌组合视图</p>
+<pre class="line-numbers"><code class="language-swift">     Button {
+            buttonTaped = !buttonTaped
+            buttonStr = buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;
+            
+        } label: {
+            
+            HStack {
+                Image(&quot;jr9Li_iNaE0&quot;)
+                    .resizable()
+                    .frame(width: 100,height: 50)
+                
+                
+                Text(buttonStr)
+                    .fontWeight(.bold)
+                    .font(.title)
+                    .padding()
+                    .background(Color.purple)
+                    .cornerRadius(40)
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.purple, lineWidth: 5)
+                    )
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.red)
+
+            //渐变色背景
+            // .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .leading, endPoint: .trailing))
+         
+            .cornerRadius(40)
+            
+            
+            
+        }
+        
+    }
+</code></pre>
+<p><img src="media/16791176888962/16791179066646.gif" alt="2023-03-02_14-46-22 (1).gif" /></p>
+<h3><a id="buttonstyle%E5%8D%8F%E8%AE%AE%E6%8A%BD%E7%A6%BB%E5%A4%8D%E7%94%A8%E6%A0%B7%E5%BC%8F" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>ButtonStyle 协议 抽离复用样式</h3>
+<blockquote>
+<p>SwiftUI 提供了 ButtonStyle 协议，可以抽离可复用的按钮样式</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">
+struct GradientBackgroundStyle: ButtonStyle {
+
+    func makeBody(configuration: Self.Configuration) -&gt; some View {
+        configuration.label
+            .padding()
+            .foregroundColor(.white)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .leading, endPoint: .trailing))
+            .cornerRadius(40)
+            .padding(.horizontal, 20)
+    }
+}
+
+
+struct ContentView: View {
+    @State var buttonStr:String = &quot;Hello World&quot;
+    @State var buttonTaped = false
+    
+    var body: some View {
+        Button {
+            buttonTaped = !buttonTaped
+            buttonStr = buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;
+            
+        } label: {
+            
+            HStack {
+                Image(&quot;jr9Li_iNaE0&quot;)
+                    .resizable()
+                    .frame(width: 100,height: 50)
+                
+                
+                Text(buttonStr)
+                    .fontWeight(.bold)
+                    .font(.title)
+                    .padding()
+                    .background(Color.purple)
+                    .cornerRadius(40)
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.purple, lineWidth: 5)
+                    )
+            }
+          
+            
+        }
+        .buttonStyle(GradientBackgroundStyle())
+        
+        
+    }
+}
+
+
+</code></pre>
+<blockquote>
+<p>configuration.isPressed  判断当前按钮是否按下</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">struct GradientBackgroundStyle: ButtonStyle {
+
+    func makeBody(configuration: Self.Configuration) -&gt; some View {
+        configuration.label
+            .padding()
+            .foregroundColor(.white)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .leading, endPoint: .trailing))
+            .cornerRadius(40)
+            .padding(.horizontal, 20)
+            .rotationEffect(configuration.isPressed ? Angle(degrees: 90):Angle(radians: 0))
+    }
+}
+</code></pre>
+<p>效果如下：<br />
+<img src="media/16791176888962/16791179066689.gif" alt="2023-03-02_15-22-39 (1).gif" /></p>
+<h3><a id="%E5%B8%B8%E8%A7%81%E5%B1%9E%E6%80%A7" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>常见属性</h3>
+<pre class="line-numbers"><code class="language-swift">//渲染颜色
+.tint(.purple)
+// 按钮样式 系统样式 ：.bordered、.borderless 和 .plain
+.buttonStyle(.bordered)
+//按钮边框样式
+.buttonBorderShape(.capsule)
+//按钮预设大小
+.controlSize(.large)
+</code></pre>
+<h3><a id="" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a></h3>
+<h3><a id="%E6%B8%B2%E6%9F%93%E5%A4%9A%E4%B8%AA%E6%8C%89%E9%92%AE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>渲染多个按钮</h3>
+<pre class="line-numbers"><code class="language-swift">VStack{
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+            Button {
+                self.buttonTaped.toggle()
+                
+            } label: {
+                  Text(buttonTaped  ?  &quot;你好&quot; : &quot;Hello World&quot;)
+            }
+        }
+        //渲染颜色
+        .tint(.purple)
+        // 按钮样式 系统样式 ：.bordered、.borderless 和 .plain
+        .buttonStyle(.bordered)
+        //按钮边框样式
+        .buttonBorderShape(.capsule)
+        //按钮预设大小
+        .controlSize(.large)
+</code></pre>
+<p><img src="media/16791176888962/16791179066764.png" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-Animation]]></title>
+    <link href="apolla.cc/16791176888920.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888920.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E6%98%BE%E6%80%A7%E5%8A%A8%E7%94%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>显性动画</h2>
+<p>只需在需要变化的组件键入animation 我们就能拥有基础的动画</p>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+    
+    @State private var circleColorChanged = false
+    @State private var heartColorChanged = false
+    @State private var heartSizeChanged = false
+    var body: some View {
+        
+        ZStack {
+            Circle()
+                .frame(width: 200, height: 200)
+                .foregroundColor(circleColorChanged ? Color(.systemGray5) : .red)
+            
+            Image(systemName: &quot;heart.fill&quot;)
+                .foregroundColor(heartColorChanged ? .red : .white)
+                .font(.system(size: 100))
+                .scaleEffect(heartSizeChanged ? 1.0 : 0.5)
+        }
+        .animation(.default, value: circleColorChanged)
+        .onTapGesture {
+            self.circleColorChanged.toggle()
+            self.heartColorChanged.toggle()
+            self.heartSizeChanged.toggle()
+        }
+        
+    }
+}
+</code></pre>
+<p><img src="media/16791176888920/16791179008332.gif" alt="2023-03-06_09-35-14 (1).gif" /></p>
+<h3><a id="%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8A%A8%E7%94%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>自定义动画</h3>
+<blockquote>
+<p>SwiftUI 提供linear、easeIn、easeOut、easeInOut 与spring等动画方式<br />
+如果上面的动画效果我们成下面的动画 就会产生心跳的动画</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">     .animation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3), value: circleColorChanged)
+</code></pre>
+<p>效果如下<br />
+<img src="media/16791176888920/16791179008345.gif" alt="2023-03-06_09-42-44 (1).gif" /></p>
+<h2><a id="%E9%9A%90%E6%80%A7%E5%8A%A8%E7%94%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>隐性动画</h2>
+<p>只需将状态变化包裹在withAnimation 中 就可以做到相同的动画</p>
+<pre class="line-numbers"><code class="language-swift">
+struct ContentView: View {
+    
+    @State private var circleColorChanged = false
+    @State private var heartColorChanged = false
+    @State private var heartSizeChanged = false
+    var body: some View {
+        
+        ZStack {
+            Circle()
+                .frame(width: 200, height: 200)
+                .foregroundColor(circleColorChanged ? Color(.systemGray5) : .red)
+
+            Image(systemName: &quot;heart.fill&quot;)
+                .foregroundColor(heartColorChanged ? .red : .white)
+                .font(.system(size: 100))
+                .scaleEffect(heartSizeChanged ? 1.0 : 0.5)
+
+        }
+
+        .onTapGesture {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3)) {
+                self.circleColorChanged.toggle()
+                self.heartColorChanged.toggle()
+                self.heartSizeChanged.toggle()
+            }
+        }
+        
+    }
+}
+</code></pre>
+<blockquote>
+<p>注： 如果某一种动画不需要 可以直接移到withAnimation 外即可 例如：心形大小不要</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">     .onTapGesture {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3)) {
+                self.circleColorChanged.toggle()
+                self.heartColorChanged.toggle()
+            }
+            self.heartSizeChanged.toggle()
+        }
+</code></pre>
+<p><img src="media/16791176888920/16791179008363.gif" alt="2023-03-06_09-49-36 (1).gif" /></p>
+<h2><a id="rotationeffect%E5%AE%9E%E7%8E%B0%E4%B8%8B%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>RotationEffect 实现下载进度条</h2>
+<h3><a id="%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>基础用法</h3>
+<pre class="line-numbers"><code class="language-swift">     Circle()
+            .trim(from: 0, to: 0.9)
+            .stroke(Color.green, lineWidth: 5)
+            .frame(width: 100, height: 100)
+            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+            .animation(.default.repeatForever(autoreverses: false), value: isLoading)
+            //出现在画面上
+            .onAppear() {
+                self.isLoading = true
+            }
+</code></pre>
+<p><img src="media/16791176888920/16791179008384.gif" alt="2023-03-06_13-49-19 (1).gif" /></p>
+<h3><a id="%E5%B5%8C%E5%A5%97%E4%BD%BF%E7%94%A8%E5%9C%86%E5%BD%A2" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>嵌套使用圆形</h3>
+<pre class="line-numbers"><code class="language-swift">      ZStack{
+            
+            Circle()
+                .trim(from: 0, to: 1)
+                .stroke(Color(.systemGray5), lineWidth: 20)
+                .frame(width: 100, height: 100)
+            
+            
+            Circle()
+                .trim(from: 0, to: 0.3)
+                .stroke(Color.green, lineWidth: 10)
+                .frame(width: 100, height: 100)
+                .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: isLoading)
+            
+        }
+        
+        //出现在画面上
+        .onAppear() {
+            self.isLoading = true
+        }
+</code></pre>
+<p><img src="media/16791176888920/16791179008407.gif" alt="2023-03-06_13-57-11 (1).gif" /></p>
+<h3><a id="%E7%9B%B4%E7%BA%BF%E8%BF%9B%E5%BA%A6%E6%9D%A1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>直线进度条</h3>
+<p>RoundedRectangle 圆角矩形</p>
+<pre class="line-numbers"><code class="language-swift">      ZStack {
+            
+            Text(&quot;Loading&quot;)
+                .font(.system(.body, design: .rounded))
+                .bold()
+                .offset(x: 0, y: -25)
+            
+            RoundedRectangle(cornerRadius: 3)
+                .stroke(Color(.systemGray5), lineWidth: 10)
+                .frame(width: 250, height: 3)
+            
+            RoundedRectangle(cornerRadius: 3)
+                .stroke(Color.green, lineWidth: 10)
+                .frame(width: 30, height: 3)
+                .offset(x: isLoading ? 110 : -110, y: 0)
+                .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: isLoading)
+        }
+        .onAppear() {
+            self.isLoading = true
+        }
+</code></pre>
+<p><img src="media/16791176888920/16791179008431.gif" alt="2023-03-06_14-00-12 (1).gif" /></p>
+<h3><a id="%E4%BD%BF%E7%94%A8timer%E6%9B%B4%E6%96%B0%E4%B8%8B%E8%BD%BD%E8%BF%9B%E5%BA%A6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用Timer 更新下载进度</h3>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+    @State private var progress = 0.0
+    
+    var body: some View {
+        
+        ZStack{
+            
+           Text(&quot;\(Int(progress * 100))%&quot;)
+                            .font(.system(.title, design: .rounded))
+                            .bold()
+            Circle()
+                .trim(from: 0, to: 1)
+                .stroke(Color(.systemGray5), lineWidth: 20)
+                .frame(width: 200, height: 200)
+            
+            
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(Color.green, lineWidth: 20)
+                .frame(width: 200, height: 200)
+                .rotationEffect(Angle(degrees: -90))
+            
+        }
+        
+        //出现在画面上
+        .onTapGesture {
+          
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+                self.progress += 0.05
+                if self.progress &gt;= 1.0 {
+                    timer.invalidate()
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p><img src="media/16791176888920/16791179008458.gif" alt="2023-03-06_14-09-12 (1).gif" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI-转场]]></title>
+    <link href="apolla.cc/16791176888874.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888874.html</id>
+    <content type="html"><![CDATA[
+<ul>
+<li>transition 转场动画</li>
+<li>combined 组合方法</li>
+</ul>
+<h2><a id="%E5%AF%B9%E7%A7%B0%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>对称转场动画</h2>
+<pre class="line-numbers"><code class="language-swift">//
+//  ContentView.swift
+//  swiftUI_01
+//
+//  Created by 宋明 on 2023/3/1.
+//
+
+import SwiftUI
+
+
+
+
+struct ContentView: View {
+    @State private var show = true
+    
+    var body: some View {
+        
+        VStack {
+            
+            RoundedRectangle(cornerRadius: 10)
+                .frame(width: 300, height: 300)
+                .foregroundColor(.green)
+                .overlay(
+                    Text(&quot;Show details&quot;)
+                        .font(.system(.largeTitle, design: .rounded))
+                        .bold()
+                        .foregroundColor(.white)
+                    
+                )
+            
+            
+            
+            if show {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(width: 300, height: 300)
+                    .foregroundColor(.purple)
+                    .overlay(
+                        Text(&quot;Well, here is the details&quot;)
+                            .font(.system(.largeTitle, design: .rounded))
+                            .bold()
+                            .foregroundColor(.white)
+                    )
+                //加入转场动画
+                .transition(AnyTransition
+                            //位移
+                    .offset(x: -600, y: 0)
+                            //缩放
+                    .combined(with: .scale)
+                            //透明度
+                    .combined(with: .opacity))
+            }
+        }
+        
+        .onTapGesture {
+            withAnimation(.spring()) {
+                self.show.toggle()
+            }
+            
+        }
+    }
+}
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+</code></pre>
+<p><img src="media/16791176888874/16791178937358.gif" alt="2023-03-06_15-26-04 (1).gif" /></p>
+<blockquote>
+<p>注 如果动画需要反复使用 可以扩展AnyTransition</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">extension AnyTransition {
+    static var offsetScaleOpacity: AnyTransition {
+        AnyTransition.offset(x: -600, y: 0).combined(with: .scale).combined(with: .opacity)
+    }
+}
+
+//加入转场动画
+                // .transition(AnyTransition
+                            //位移
+                    // .offset(x: -600, y: 0)
+                            //缩放
+                    // .combined(with: .scale)
+                            //透明度
+                    // .combined(with: .opacity))
+
+.transition(.offsetScaleOpacity)
+</code></pre>
+<h2><a id="%E4%B8%8D%E5%AF%B9%E7%A7%B0%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>不对称转场动画</h2>
+<p>使用.assymetric 方法 分别设置入场出场动画</p>
+<blockquote>
+<p>注：Xcode Version 14.2 (14C18) 14promax 虚拟 不生效</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-swift">AnyTransition.asymmetric(
+            insertion: .scale(scale: 0, anchor: .bottom),
+            removal: .opacity
+        )
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI -Path 绘制线、圆弧、饼状图等]]></title>
+    <link href="apolla.cc/16791176888832.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888832.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E7%BB%98%E5%88%B6%E5%AE%9E%E5%BF%83%E5%BD%A2%E7%8A%B6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>绘制实心形状</h2>
+<p><img src="media/16791176888832/16791178864791.png" alt="image.png" /></p>
+<p>绘制如上矩形只要下面的代码</p>
+<pre class="line-numbers"><code class="language-swift">   Path(){  Path in
+            Path.move(to: CGPoint(x: 20, y: 20))
+            Path.addLine(to: CGPoint(x: 300, y: 20))
+            Path.addLine(to: CGPoint(x: 300, y: 200))
+            Path.addLine(to: CGPoint(x: 20, y: 200))
+        }
+        .fill(.green)
+</code></pre>
+<p><img src="media/16791176888832/16791178864819.png" alt="image.png" /></p>
+<h2><a id="%E7%BB%98%E5%88%B6%E8%BE%B9%E6%A1%86%E5%BD%A2%E7%8A%B6" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>绘制边框形状</h2>
+<pre class="line-numbers"><code class="language-swift">       Path(){  Path in
+            Path.move(to: CGPoint(x: 20, y: 20))
+            Path.addLine(to: CGPoint(x: 300, y: 20))
+            Path.addLine(to: CGPoint(x: 300, y: 200))
+            Path.addLine(to: CGPoint(x: 20, y: 200))
+            //封闭路径
+            Path.closeSubpath()
+        }
+        //设置线宽 颜色
+        .stroke(.green,lineWidth:5)
+</code></pre>
+<p><img src="media/16791176888832/16791178864863.png" alt="image.png" /></p>
+<h2><a id="%E7%94%BB%E6%9B%B2%E7%BA%BF" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>画曲线</h2>
+<p><img src="media/16791176888832/16791178864913.png" alt="image.png" /></p>
+<pre class="line-numbers"><code class="language-swift">     Path(){  Path in
+            Path.move(to: CGPoint(x: 20, y: 20))
+            Path.addLine(to: CGPoint(x: 40, y: 20))
+            Path.addQuadCurve(to: CGPoint(x: 260, y: 20), control: CGPoint(x: 150, y: 100))
+            Path.addLine(to: CGPoint(x: 300, y: 20))
+            Path.addLine(to: CGPoint(x: 300, y: 200))
+            Path.addLine(to: CGPoint(x: 20, y: 200))
+      
+        }
+        .fill(.green)
+</code></pre>
+<p><img src="media/16791176888832/16791178864964.png" alt="image.png" /></p>
+<h3><a id="fill%E4%B8%8E-stroke%E5%85%B1%E5%90%8C%E4%BD%BF%E7%94%A8" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>fill 与 stroke 共同使用</h3>
+<pre class="line-numbers"><code class="language-swift">       ZStack {
+            Path() { path in
+                path.move(to: CGPoint(x: 20, y: 60))
+                path.addLine(to: CGPoint(x: 40, y: 60))
+                path.addQuadCurve(to: CGPoint(x: 210, y: 60), control: CGPoint(x: 125, y: 0))
+                path.addLine(to: CGPoint(x: 230, y: 60))
+                path.addLine(to: CGPoint(x: 230, y: 100))
+                path.addLine(to: CGPoint(x: 20, y: 100))
+            }
+            .fill(Color.purple)
+
+            Path() { path in
+                path.move(to: CGPoint(x: 20, y: 60))
+                path.addLine(to: CGPoint(x: 40, y: 60))
+                path.addQuadCurve(to: CGPoint(x: 210, y: 60), control: CGPoint(x: 125, y: 0))
+                path.addLine(to: CGPoint(x: 230, y: 60))
+                path.addLine(to: CGPoint(x: 230, y: 100))
+                path.addLine(to: CGPoint(x: 20, y: 100))
+                path.closeSubpath()
+            }
+            .stroke(Color.black, lineWidth: 5)
+        }
+</code></pre>
+<p><img src="media/16791176888832/16791178865035.png" alt="image.png" /></p>
+<h2><a id="%E7%94%BB%E9%A5%BC%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>画饼图</h2>
+<p>center - 中心点<br />
+radius - 半径<br />
+startAngle - 起始角度<br />
+endAngle - 结束角度<br />
+cloclwise - 画圆弧的方向</p>
+<pre class="line-numbers"><code class="language-swift">/*
+center - 中心点
+radius - 半径
+startAngle - 起始角度
+endAngle - 结束角度
+cloclwise - 画圆弧的方向
+*/
+
+Path() { path in
+            path.move(to: CGPoint(x: 200, y: 200))
+            path.addArc(center: .init(x: 200, y: 200), radius: 100, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: true)
+            
+        }
+        .fill(Color.purple)
+</code></pre>
+<p><img src="media/16791176888832/16791178865139.png" alt="image.png" /></p>
+<h3><a id="%E9%80%9A%E8%BF%87zstack%E5%8F%A0%E5%8A%A0%E5%A4%9A%E4%B8%AA%E9%A5%BC%E7%8A%B6%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>通过ZStack 叠加多个饼状图</h3>
+<pre class="line-numbers"><code class="language-swift">ZStack {
+            Path { path in
+                path.move(to: CGPoint(x: 187, y: 187))
+                path.addArc(center: .init(x: 187, y: 187), radius: 150, startAngle: .degrees(0), endAngle: .degrees(190), clockwise: true)
+            }
+            .fill(.yellow)
+            
+            Path { path in
+                path.move(to: CGPoint(x: 187, y: 187))
+                path.addArc(center: .init(x: 187, y: 187), radius: 150, startAngle: .degrees(190), endAngle: .degrees(110), clockwise: true)
+            }
+            .fill(.teal)
+            
+            Path { path in
+                path.move(to: CGPoint(x: 187, y: 187))
+                path.addArc(center: .init(x: 187, y: 187), radius: 150, startAngle: .degrees(110), endAngle: .degrees(90), clockwise: true)
+            }
+            .fill(.blue)
+            
+            Path { path in
+                path.move(to: CGPoint(x: 187, y: 187))
+                path.addArc(center: .init(x: 187, y: 187), radius: 150, startAngle: .degrees(90), endAngle: .degrees(360), clockwise: true)
+            }
+            .fill(.purple)
+    		//偏移饼
+            .offset(x: 20, y: 20)
+            //画线
+            Path { path in
+                path.move(to: CGPoint(x: 187, y: 187))
+                path.addArc(center: .init(x: 187, y: 187), radius: 150, startAngle: .degrees(90), endAngle: .degrees(360), clockwise: true)
+                path.closeSubpath()
+            }
+            .stroke(.red,lineWidth: 8)
+            .offset(x: 20, y: 20)
+            .overlay(
+                Text(&quot;25%&quot;)
+                    .font(.system(.largeTitle, design: .rounded))
+                    .bold()
+                    .foregroundColor(.white)
+                    .offset(x: 55, y: -130)
+            )
+        }
+</code></pre>
+<p><img src="media/16791176888832/16791178865247.png" alt="image.png" /></p>
+<h2><a id="%E5%9C%86%E5%9C%88%E9%A5%BC%E5%9B%BE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>圆圈饼图</h2>
+<pre class="line-numbers"><code class="language-swift">        ZStack {
+            Circle()
+                .trim(from: 0, to: 0.4)
+                .stroke(Color(.systemBlue), lineWidth: 80)
+
+            Circle()
+                .trim(from: 0.4, to: 0.6)
+                .stroke(Color(.systemTeal), lineWidth: 80)
+
+            Circle()
+                .trim(from: 0.6, to: 0.75)
+                .stroke(Color(.systemPurple), lineWidth: 80)
+
+            Circle()
+                .trim(from: 0.75, to: 1)
+                .stroke(Color(.systemYellow), lineWidth: 90)
+                .overlay(
+                    Text(&quot;25%&quot;)
+                        .font(.system(.title, design: .rounded))
+                        .bold()
+                        .foregroundColor(.white)
+                        .offset(x: 80, y: -100)
+                )
+        }
+        .frame(width: 250, height: 250)
+</code></pre>
+<p><img src="media/16791176888832/16791178865381.png" alt="image.png" /></p>
+<h2><a id="" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a></h2>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI - Shape]]></title>
+    <link href="apolla.cc/16791176888776.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888776.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="shape%E5%8D%8F%E8%AE%AE" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shape 协议</h2>
+<p>遵守协议，你就可以使用它來建立各种 SwiftUI 控制元件</p>
+<pre class="line-numbers"><code class="language-swift">struct Dome: Shape {
+    func path(in rect: CGRect) -&gt; Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addQuadCurve(to: CGPoint(x: rect.size.width, y: 0), control: CGPoint(x: rect.size.width/2, y: -(rect.size.width * 0.1)))
+        path.addRect(CGRect(x: 0, y: 0, width: rect.size.width, height: rect.size.height))
+
+        return path
+    }
+}
+</code></pre>
+<p>例如：<br />
+如下代码遵守了上面的Demo 协议  所以是一个拱形的按钮</p>
+<pre class="line-numbers"><code class="language-swift">Button(action: {
+    // 執行動作
+}) {
+    Text(&quot;Test&quot;)
+        .font(.system(.title, design: .rounded))
+        .bold()
+        .foregroundColor(.white)
+        .frame(width: 250, height: 50)
+        .background(Dome().fill(Color.red))
+}
+</code></pre>
+<p><img src="media/16791176888776/16791178793465.png" alt="image.png" /></p>
+<h2><a id="%E4%BD%BF%E7%94%A8shape%E5%88%9B%E5%BB%BA%E8%BF%9B%E5%BA%A6%E6%9D%A1" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用Shape 创建进度条</h2>
+<pre class="line-numbers"><code class="language-swift">struct ContentView: View {
+    private var purpleGradient = LinearGradient(gradient: Gradient(colors: [ Color(red: 207/255, green: 150/255, blue: 207/255), Color(red: 107/255, green: 116/255, blue: 179/255) ]), startPoint: .trailing, endPoint: .leading)
+    
+    var body: some View {
+        
+        ZStack {
+            Circle()
+                .stroke(Color(.systemGray6), lineWidth: 20)
+                .frame(width: 300, height: 300)
+            Circle()
+                .trim(from: 0, to: 0.85)
+                .stroke(purpleGradient, lineWidth: 20)
+                .frame(width: 300, height: 300)
+                .overlay {
+                    VStack {
+                        Text(&quot;85%&quot;)
+                            .font(.system(size: 80, weight: .bold, design: .rounded))
+                            .foregroundColor(.gray)
+                        Text(&quot;Complete&quot;)
+                        .font(.system(.body, design: .rounded))
+                        .bold()
+                        .foregroundColor(.gray)
+                    }
+                }
+        }
+    }
+}
+</code></pre>
+<p><img src="media/16791176888776/16791178793498.png" alt="image.png" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI - ScrollView]]></title>
+    <link href="apolla.cc/16791176888715.html"/>
+    <updated>2023-03-18T13:34:48+08:00</updated>
+    <id>apolla.cc/16791176888715.html</id>
+    <content type="html"><![CDATA[
+<p>滚动组件 内嵌其他组件使用</p>
+<pre class="line-numbers"><code class="language-swift">     
+//滚动方向 是否显示滚动条      
+ScrollView(.vertical,showsIndicators: false){
+            VStack{
+                Spacer()
+                product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+                ZStack{
+                    product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                    Text(&quot;Best for designer&quot;)
+                            .font(.system(.caption, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(5)
+                            .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                            .offset(x:0,y:87)
+                  
+                }
+        
+            }
+            VStack{
+                Spacer()
+                product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+                ZStack{
+                    product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                    Text(&quot;Best for designer&quot;)
+                            .font(.system(.caption, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(5)
+                            .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                            .offset(x:0,y:87)
+                  
+                }
+        
+            }
+            VStack{
+                Spacer()
+                product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+                ZStack{
+                    product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                    Text(&quot;Best for designer&quot;)
+                            .font(.system(.caption, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(5)
+                            .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                            .offset(x:0,y:87)
+                  
+                }
+        
+            }
+            VStack{
+                Spacer()
+                product(title:&quot;Base&quot;,price:&quot;$25&quot;)
+                ZStack{
+                    product(title:&quot;SwiftUI&quot;,price:&quot;$50&quot;)
+                    Text(&quot;Best for designer&quot;)
+                            .font(.system(.caption, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(5)
+                            .background(Color(red: 255/255, green: 183/255, blue: 37/255))
+                            .offset(x:0,y:87)
+                  
+                }
+        
+            }
+        }
+ 
+</code></pre>
+<p><img src="media/16791176888715/16791178733168.gif" alt="2023-03-02_14-24-39 (1).gif" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SwiftUI初探]]></title>
+    <link href="apolla.cc/16791175804269.html"/>
+    <updated>2023-03-18T13:33:00+08:00</updated>
+    <id>apolla.cc/16791175804269.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="%E5%88%9D%E8%AF%86swiftui" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>初识 SwiftUI</h2>
+<p>首先我们先看下SwiftUI的强大</p>
+<pre class="line-numbers"><code class="language-swift">  Image(systemName: &quot;heart.fill&quot;)
+            .font(.system(size: 200))
+            .foregroundColor(clolorChange ? .red : .blue)
+            .scaleEffect(sizeChange ? 1.5 : 1)
+            .animation(.default)
+            .onTapGesture {
+                self.clolorChange.toggle()
+                
+            }
+            .onLongPressGesture {
+                self.sizeChange.toggle()
+            }
+          
+</code></pre>
+<p>以上代码实现了点击时从黄色变成红色的心,长按缩放大小，是不是很简单！！<br />
+<img src="media/16791175804269/16791179651895.gif" alt="swiftui-basic-2.gif" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS利用多线程进行网络请求]]></title>
+    <link href="apolla.cc/16791167680757.html"/>
+    <updated>2023-03-18T13:19:28+08:00</updated>
+    <id>apolla.cc/16791167680757.html</id>
+    <content type="html"><![CDATA[
+<h2><a id="1%E5%89%8D%E8%A8%80" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.前言</h2>
+<p>这两天忙着对付Other-Other的问题，今天才抽空给APP新增了一个离线缓存的功能，由于我的APP是对书源进行转码格式化阅读，所以缓存这里是个很头疼的问题，稍不慎就会503.目前的方案就是动态切换UA和利用多线程 一章一章下 收到失败就等待一会再继续，目前测试没什么问题。</p>
+<h2><a id="2%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%93%E5%AD%98" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.多线程缓存</h2>
+<pre class="line-numbers"><code class="language-objc">+ (void)downloadChaptersContentWithBookModel:(TJBookModel *)bookModel chapterIds:(NSArray *)chapterIds progress:(void (^)(NSInteger progress)) progress complete:(nullable void (^)(BOOL, NSString * _Nonnull, NSArray * _Nullable))complete {
+    if (TJIsEmptyObject(bookModel.bookId)) {
+        !complete ?: complete(NO, @&quot;未知书籍&quot;, nil);
+    }
+    if (chapterIds.count == 0) {
+        !complete ?: complete(NO, @&quot;未知章节&quot;, nil);
+    }
+    // 统计下载章节数量
+    __block NSInteger downloadCount = 0;
+    // 统计下载失败章节ID
+    __block NSMutableArray *failureArray = [[NSMutableArray alloc] init];
+    
+    
+    //创建串行队列
+    dispatch_queue_t customQuue = dispatch_queue_create(&quot;cpm.apolla.download&quot;, DISPATCH_QUEUE_SERIAL);
+     //创建信号量并初始化总量为1
+    dispatch_semaphore_t semaphoreLock = dispatch_semaphore_create(0);
+    //添加任务
+    dispatch_async(customQuue, ^{
+
+
+        for (NSString *chapterId in chapterIds) {
+            if (TJIsEmptyObject(chapterId)) {
+                downloadCount += 1;
+                if (downloadCount == chapterIds.count) {
+                    !complete ?: complete(YES, @&quot;下载完成&quot;, failureArray);
+                } else {
+                    !progress ?: progress(downloadCount);
+                }
+                continue;
+            }
+
+
+                [self chapterWithBookModel:bookModel chapterId:chapterId success:^(TJChapterModel * _Nonnull chapter) {
+                    downloadCount +=1;
+                    !progress ?: progress(downloadCount);
+                    //缓存成功就0.5s后继续缓存
+                    dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+
+                    dispatch_after(timer, dispatch_get_main_queue(), ^{
+
+  //相当于解锁                      dispatch_semaphore_signal(semaphoreLock);
+
+                    });
+
+
+                } failure:^(NSString * _Nonnull tip) {
+                    downloadCount+=1;
+                    // 保存失败章节ID
+                    [failureArray addObject:chapterId];
+                    !progress ?: progress(downloadCount);
+                    //缓存失败就5秒回再缓存
+                    dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+
+                    dispatch_after(timer, dispatch_get_main_queue(), ^{
+
+    //解锁                    dispatch_semaphore_signal(semaphoreLock);
+
+                    });
+                }];
+                //加锁
+//使用 DISPATCH_TIME_FOREVER 要注意线程问题 可能会造成APP卡死，我这里是因为作为网络请求 肯定会有结果返回，所以问题不大
+            dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
+
+        }
+
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+        complete(YES, @&quot;下载完成&quot;, failureArray);
+        });
+    });
+  
+}
+</code></pre>
+<h2><a id="3%E9%94%99%E8%AF%AF%E7%9A%84%E4%BD%BF%E7%94%A8" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.错误的使用</h2>
+<p>想抄代码的这段不用看，我最开始用GCDGroup作为管理的，但是不知道为啥会控制不住请求，有大神可以为小弟解读下不</p>
+<pre class="line-numbers"><code class="language-objc">+ (void)downloadChaptersContentWithBookModel:(TJBookModel *)bookModel chapterIds:(NSArray *)chapterIds progress:(void (^)(NSInteger progress)) progress complete:(nullable void (^)(BOOL, NSString * _Nonnull, NSArray * _Nullable))complete {
+    if (TJIsEmptyObject(bookModel.bookId)) {
+        !complete ?: complete(NO, @&quot;未知书籍&quot;, nil);
+    }
+    if (chapterIds.count == 0) {
+        !complete ?: complete(NO, @&quot;未知章节&quot;, nil);
+    }
+    // 统计下载章节数量
+    __block NSInteger downloadCount = 0;
+    // 统计下载失败章节ID
+    __block NSMutableArray *failureArray = [[NSMutableArray alloc] init];
+    
+    
+    dispatch_group_t group =  dispatch_group_create();
+    dispatch_queue_t queue = dispatch_queue_create(&quot;com.wumeng.network&quot;, DISPATCH_QUEUE_SERIAL);
+    for (NSString *chapterId in chapterIds) {
+        if (TJIsEmptyObject(chapterId)) {
+            downloadCount += 1;
+            if (downloadCount == chapterIds.count) {
+                !complete ?: complete(YES, @&quot;下载完成&quot;, failureArray);
+            } else {
+                !progress ?: progress(downloadCount);
+            }
+            continue;
+        }
+        dispatch_group_enter(group);
+        dispatch_group_async(group,queue, ^{
+            [self chapterWithBookModel:bookModel chapterId:chapterId success:^(TJChapterModel * _Nonnull chapter) {
+                downloadCount +=1;
+                dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+                dispatch_after(timer, queue, ^{
+                    !progress ?: progress(downloadCount);
+                    dispatch_group_leave(group);
+
+                });
+
+            } failure:^(NSString * _Nonnull tip) {
+                downloadCount+=1;
+                // 保存失败章节ID
+                [failureArray addObject:chapterId];
+                dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+                dispatch_after(timer, queue, ^{
+                    !progress ?: progress(downloadCount);
+                    dispatch_group_leave(group);
+
+                });
+            }];
+        });
+    }
+
+
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        complete(YES, @&quot;下载完成&quot;, failureArray);
+    });
+
+    
+}
+</code></pre>
+<p>##4.动态切换UA</p>
+<p>其实思路很简单，动态设置User-Agent</p>
+<pre class="line-numbers"><code class="language-objc">    NSArray *uas = @[
+        @&quot;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0; AOL 9.5; AOLBuild 4337.35; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)&quot;,
+        @&quot;Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)&quot;,
+        @&quot;Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)&quot;,
+        @&quot;Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.0.04506.30)&quot;,
+        @&quot;Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN) AppleWebKit/523.15 (KHTML, like Gecko, Safari/419.3) Arora/0.3 (Change: 287 c9dfb30)&quot;,
+        @&quot;Mozilla/5.0 (X11; U; Linux; en-US) AppleWebKit/527+ (KHTML, like Gecko, Safari/419.3) Arora/0.6&quot;,
+        @&quot;Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070215 K-Ninja/2.1.1&quot;,
+        @&quot;Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9) Gecko/20080705 Firefox/3.0 Kapiko/3.0&quot;,
+        @&quot;Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5&quot;,
+        @&quot;Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.8) Gecko Fedora/1.9.0.8-1.fc10 Kazehakase/0.5.6&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11&quot;,
+        @&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20&quot;,
+        @&quot;Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.11 TaoBrowser/2.0 Safari/536.11&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.71 Safari/537.1 LBBROWSER&quot;,
+        @&quot;Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; LBBROWSER)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; QQDownload 732; .NET4.0C; .NET4.0E; LBBROWSER)&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.84 Safari/535.11 LBBROWSER&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)&quot;,
+        @&quot;Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; QQBrowser/7.0.3698.400)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; QQDownload 732; .NET4.0C; .NET4.0E)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SV1; QQDownload 732; .NET4.0C; .NET4.0E; 360SE)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; QQDownload 732; .NET4.0C; .NET4.0E)&quot;,
+        @&quot;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1&quot;,
+        @&quot;Mozilla/5.0 (iPad; U; CPU OS 4_2_1 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148 Safari/6533.18.5&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:2.0b13pre) Gecko/20110307 Firefox/4.0b13pre&quot;,
+        @&quot;Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0&quot;,
+        @&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11&quot;,
+        @&quot;Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10&quot;
+    ];
+    [self.manager.requestSerializer setValue:uas[(arc4random() % [uas count])] forHTTPHeaderField:@&quot;User-Agent&quot;];
+</code></pre>
+<blockquote>
+<p>附上APP地址： <a href="https://apps.apple.com/cn/app/%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB/id1573880428">一阅阅读</a>有想看小说的小伙伴可以试下 支持换源 支持自定义书源</p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ios解析txt电子书]]></title>
+    <link href="apolla.cc/16791167680711.html"/>
+    <updated>2023-03-18T13:19:28+08:00</updated>
+    <id>apolla.cc/16791167680711.html</id>
+    <content type="html"><![CDATA[
+<p>昨天上线新版本因为Other-Other账号审核被拒了，估计要等待几天了，正好抽时间把最近写的东西整理一下。</p>
+<blockquote>
+<p>附上APP地址： <a href="https://apps.apple.com/cn/app/%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB/id1573880428">一阅阅读</a>有想看小说的小伙伴可以试下 支持换源 支持自定义书源</p>
+</blockquote>
+<p>言归正传，TXT电子书解析主要靠正则，筛选出文件内所有章节，并划分range，对于正则表达式的基础内容我不做过多描述，各位有兴趣可以去 <a href="https://www.runoob.com/regexp/regexp-syntax.html">菜鸟教程正则表达式</a>自己去看下一下。</p>
+<p>##正则</p>
+<pre class="line-numbers"><code class="language-plain_text">(\\s+?)([#☆、【0-9]{0,10})(第[0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟\\s]{1,10}[章节回集卷])(.*)
+</code></pre>
+<h2><a id="%E7%94%A8%E6%B3%95" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>用法</h2>
+<pre class="line-numbers"><code class="language-objc">
++ (void)parseLocalBookWithFilePath:(NSString *)filePath bookId:(NSString *)bookId success:(void (^)(NSArray&lt;TJChapterModel *&gt; * _Nonnull chapters))success failure:(TJFailureHandler)failure {
+    if (!filePath) {
+        !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @&quot;文件路径为空&quot;}]);
+        return;
+    }
+    
+    if (![filePath hasSuffix:@&quot;txt&quot;]) {
+        !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @&quot;文件格式不正确&quot;}]);
+        return;
+    }
+    
+    NSString *content = [self contentWithFilePath:filePath];
+    if (TJIsEmptyObject(content)) {
+        !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @&quot;书籍内容为空或者书籍格式错误&quot;}]);
+        return;
+    }
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:kParseLocalBookPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [expression matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
+    NSMutableArray *chapters = [[NSMutableArray alloc] init];
+    if (matches.count == 0) {
+        // 全书分为一章
+        TJChapterModel *chapter = [[TJChapterModel alloc] init];
+        chapter.chapterId = [bookId stringByAppendingFormat: @&quot;1000000&quot;];
+        chapter.chapterIndex = 1;
+        chapter.chapterName = @&quot;开始&quot;;
+        chapter.content = content;
+        [chapters addObject:chapter];
+    } else {
+        // 当前标题在全文中的位置
+        NSRange currentRange = NSMakeRange(0, 0);
+        // 当前章节编号
+        NSInteger chapterIndex = 1;
+        // 循环处理章节
+        for (NSInteger i = 0; i &lt; matches.count; i++) {
+            @autoreleasepool {  // 自动释放池保证瞬时内存不会过高
+                NSTextCheckingResult *result = matches[i];
+                // 下一个标题在全文中的位置
+                NSRange resultRange = result.range;
+                // 截取两个标题之间内容为当前章节内容
+                NSString *chapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, resultRange.location - currentRange.location - currentRange.length)];
+                if (!TJIsEmptyObject(chapterContent) &amp;&amp; resultRange.length &lt;= 70) {
+                    // 章节内容不为空并且章节标题长度不超过70
+                    TJChapterModel *chapterModel = [[TJChapterModel alloc] init];
+                    chapterModel.chapterIndex = chapterIndex;
+                    chapterModel.chapterId = [bookId stringByAppendingFormat: [NSString stringWithFormat:@&quot;%@&quot;, @(1000000 + chapterIndex)]];
+                    chapterModel.chapterName = (chapterIndex == 1) ? @&quot;开始&quot; : [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    chapterModel.content = [self resetContent:chapterContent];
+                    [chapters addObject:chapterModel];
+                    chapterIndex += 1;
+                    currentRange = resultRange;
+                }
+            };
+        }
+        NSString *endChapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, content.length - currentRange.location - currentRange.length)];
+        if (!TJIsEmptyObject(endChapterContent)) {
+            // 最后一章
+            TJChapterModel *endChapterModel = [[TJChapterModel alloc] init];
+            endChapterModel.chapterIndex = chapterIndex;
+            endChapterModel.chapterId = [bookId stringByAppendingFormat: [NSString stringWithFormat:@&quot;%@&quot;, @(1000000 + chapterIndex)]];
+            endChapterModel.chapterName = [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            endChapterModel.content = [self resetContent:endChapterContent];
+            [chapters addObject:endChapterModel];
+        }
+    }
+    if (chapters.count &gt; 0 &amp;&amp; success) {
+        success(chapters);
+    }
+}
+
+/// 处理章节内容
+/// @param content 内容
++ (NSString *)resetContent:(NSString *)content {
+    if (!content || content.length == 0) {
+        return @&quot;&quot;;
+    }
+    // 替换单换行
+    content = [content stringByReplacingOccurrencesOfString:@&quot;r&quot; withString:@&quot;&quot;];
+    
+    // 替换换行和多个换行（换行加空格）
+    NSRegularExpression *regularExpression = [[NSRegularExpression alloc] initWithPattern:@&quot;\\s*\\n+\\s*&quot; options:NSRegularExpressionCaseInsensitive error:nil];
+    content = [regularExpression stringByReplacingMatchesInString:content options:NSMatchingReportProgress range:NSMakeRange(0, content.length) withTemplate:@&quot;\n　　&quot;];
+    
+    // 去掉首尾空格和换行
+    content = [content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    // 章节开头添加空格
+    content = [@&quot;　　&quot; stringByAppendingString:content];
+    
+    return content;
+}
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS基于AVFoundation实现朗读文字]]></title>
+    <link href="apolla.cc/16791167680667.html"/>
+    <updated>2023-03-18T13:19:28+08:00</updated>
+    <id>apolla.cc/16791167680667.html</id>
+    <content type="html"><![CDATA[
+<p>##1.心理建设</p>
+<p>众所周知AVFoundation的朗读是个智障语气，所以想不花钱就只能忍着。</p>
+<p>##2.speechManager</p>
+<pre class="line-numbers"><code class="language-objc">@import AVFoundation;
+
+@protocol TJSpeechManagerDelegate &lt;NSObject&gt;
+@optional
+- (void)didStartSpeechUtterance:(AVSpeechUtterance*)utterance;
+- (void)didFinishSpeechUtterance:(AVSpeechUtterance*)utterance;
+- (void)didPauseSpeechUtterance:(AVSpeechUtterance*)utterance;
+- (void)didCancelSpeechUtterance:(AVSpeechUtterance*)utterance;
+- (void)willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance;
+
+- (void)needRepeatSpeech:(AVSpeechUtterance *)utterance;
+@end
+
+@interface TJSpeechManager : NSObject &lt;AVSpeechSynthesizerDelegate&gt;
+
+
+@property (nonatomic, strong) AVSpeechSynthesizer *avSpeech;
+@property (nonatomic, strong) AVSpeechUtterance *speechUtt;
+
+@property (nonatomic, assign) id &lt;TJSpeechManagerDelegate&gt; delegate;
+
+
+- (void)setSpeechContent:(NSString *)content;
+
+
+- (void)pauseSpeech;
+
+
+- (void)beginSpeech;
+
+- (void)continueSpeech;
+
+- (void)endSpeech;
+
+@end
+
+
+#import &quot;TJSpeechManager.h&quot;
+
+@implementation TJSpeechManager
+
+- (void)setSpeechContent:(NSString *)content {
+    AVSpeechUtterance *speechUtt = [AVSpeechUtterance speechUtteranceWithString:content];
+    speechUtt.rate = 0.5;
+    speechUtt.pitchMultiplier = 1;
+            
+    //设置音量,[0-1] 默认 = 1
+    speechUtt.volume = 1;
+
+    //读一段前的停顿时间
+    speechUtt.preUtteranceDelay = 1;
+    //读完一段后的停顿时间
+    speechUtt.postUtteranceDelay = 1;
+    AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithLanguage:@&quot;zh-CN&quot;];
+    speechUtt.voice = voice;
+    self.speechUtt = speechUtt;
+}
+
+- (void)beginSpeech {
+    //这里需要注意一下，一个avspeech对象只能播放一次，同一个对象中途不能重新播放。
+    AVSpeechSynthesizer *avSpeech = [[AVSpeechSynthesizer alloc] init];
+    avSpeech.delegate = self;
+    [avSpeech speakUtterance:self.speechUtt];
+    self.avSpeech = avSpeech;
+}
+
+- (void)pauseSpeech {
+    [self.avSpeech pauseSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+}
+
+- (void)continueSpeech {
+    if(self.avSpeech.isPaused) {
+        [self.avSpeech continueSpeaking];
+        [NSThread sleepForTimeInterval:0.25f];
+    }
+}
+
+- (void)endSpeech {
+    if(self.avSpeech.isSpeaking) {
+        [self.avSpeech stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+        [NSThread sleepForTimeInterval:0.25f];
+    }
+}
+
+//代理主要是返回给controller，用来和UI交互
+#pragma mark - AVSpeechSynthesizerDelegate;
+- (void)speechSynthesizer:(AVSpeechSynthesizer*)synthesizer didStartSpeechUtterance:(AVSpeechUtterance*)utterance{
+    NSLog(@&quot;---开始播放&quot;);
+    if(self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(didStartSpeechUtterance:)]) {
+        [self.delegate didStartSpeechUtterance:utterance];
+    }
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer*)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance*)utterance{
+    NSLog(@&quot;---完成播放&quot;);
+    if(self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(didFinishSpeechUtterance:)]) {
+        [self.delegate didFinishSpeechUtterance:utterance];
+    }
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer*)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance*)utterance{
+    NSLog(@&quot;---播放中止&quot;);
+    if(self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(didPauseSpeechUtterance:)]) {
+        [self.delegate didPauseSpeechUtterance:utterance];
+    }
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer*)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance*)utterance{
+    NSLog(@&quot;---恢复播放&quot;);
+    
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer*)synthesizer didCancelSpeechUtterance:(AVSpeechUtterance*)utterance{
+    NSLog(@&quot;---播放取消&quot;);
+    if(self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(didCancelSpeechUtterance:)]) {
+        [self.delegate didCancelSpeechUtterance:utterance];
+    }
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance {
+    if(self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(willSpeakRangeOfSpeechString:utterance:)]) {
+        [self.delegate willSpeakRangeOfSpeechString:characterRange utterance:utterance];
+    }
+}
+
+@end
+</code></pre>
+<p>##3.使用范例</p>
+<pre class="line-numbers"><code class="language-objc">//分页控制器获取到当前页内容
+-(void)pageReadViewControllerSpeechContent:(NSString *)content
+{
+//先停止语音 防止用户翻页造成声音重叠
+    [self.speechManager endSpeech];
+    //当期是否开启了朗读功能
+    if (self.isSpeechNextPage == YES ) {
+    //内容不为空 代表可以朗读下一页
+        if ( content &amp;&amp; content.length &gt; 0) {
+        //设置朗读内容
+            [self.speechManager setSpeechContent:content];
+            //开始朗读
+            [self.speechManager beginSpeech];
+        }else{
+            self.isSpeechNextPage = NO;
+            [self.speechManager endSpeech];
+        }
+    }
+}
+
+///朗读按钮开启
+-(void)readMenuDidOpenSpeechRead
+{
+    self.isSpeechNextPage = YES;
+    //用于刷新当前页内容 从而调用pageReadViewControllerSpeechContent
+    [self speechNextPage:self.book.page];
+}
+//用户关闭朗读
+-(void)readMenuDidCloseSpeechRead
+{
+    [self.speechManager pauseSpeech];
+    self.isSpeechNextPage = NO;
+}
+//当前页内容读完
+- (void)didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    //我这里的逻辑是用于控制翻页还是下一章
+        //下一章或者下一页都会重绘pageViewControl内容 从而继续响应 pageReadViewControllerSpeechContent 的回调代理
+    if ([TJReadRecordManager recordWithBookId:self.book.bookId].page + 2 &gt; [TJReadRecordManager recordWithBookId:self.book.bookId].chapter.pageModels.count) {
+
+        [self readMenuDidChangeChapter:YES];
+    }else{
+        [self speechNextPage:[TJReadRecordManager recordWithBookId:self.book.bookId].page + 1];
+    }
+}
+</code></pre>
+<p>##4.简单使用</p>
+<p>如果各位想简单应用一下</p>
+<p>初始化 manager</p>
+<pre class="line-numbers"><code class="language-objc">-(TJSpeechManager *)speechManager
+{
+    if (!_speechManager) {
+        _speechManager = [[TJSpeechManager alloc]init];
+        _speechManager.delegate = self;
+    }
+    return _speechManager;
+}
+</code></pre>
+<p>然后直接开始朗读就行了</p>
+<pre class="line-numbers"><code class="language-objc">
+      [self.speechManager setSpeechContent:@&quot;想说的话&quot;];
+            //开始朗读
+            [self.speechManager beginSpeech];
+</code></pre>
+<p>##5.退出</p>
+<p>退出页面记得停止播放</p>
+<pre class="line-numbers"><code class="language-objc">-(void)dealloc
+{
+    self.speechManager.delegate = nil;
+   
+    [self.speechManager endSpeech];
+}
+</code></pre>
+<blockquote>
+<p>附上APP地址： <a href="https://apps.apple.com/cn/app/%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB/id1573880428">一阅阅读</a>有想看小说的小伙伴可以试下 支持换源 支持自定义书源</p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS导入其他APP下载的文件（用其他应用打开）]]></title>
+    <link href="apolla.cc/16791167680623.html"/>
+    <updated>2023-03-18T13:19:28+08:00</updated>
+    <id>apolla.cc/16791167680623.html</id>
+    <content type="html"><![CDATA[
+<p>今天给自己的APP新增了一个小功能 可以打开iOS其他APPTXT 文件，一个很小的功能，做阅读APP的小伙伴不要错过。</p>
+<p>附上APP地址： <a href="https://apps.apple.com/cn/app/%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB/id1573880428">一阅阅读</a></p>
+<p>有想看小说的小伙伴可以试下 支持换源 支持自定义书源</p>
+<p>效果如下</p>
+<p><img src="media/16791167680623/16791169651353.jpg" alt="" /></p>
+<p>##1.编辑info.plst</p>
+<pre class="line-numbers"><code class="language-objc">&lt;key&gt;CFBundleDocumentTypes&lt;/key&gt;
+&lt;array&gt;
+    &lt;dict&gt;
+        &lt;key&gt;CFBundleTypeIconFiles&lt;/key&gt;
+        &lt;array&gt;
+            &lt;string&gt;icon.png&lt;/string&gt;
+            &lt;string&gt;icon@2x.png&lt;/string&gt;
+        &lt;/array&gt;
+        &lt;key&gt;CFBundleTypeName&lt;/key&gt;
+        &lt;string&gt;com.myapp.common-data&lt;/string&gt;
+        &lt;key&gt;LSItemContentTypes&lt;/key&gt;
+        &lt;array&gt;
+        //我只导入txt 所以只加了text
+            &lt;string&gt;public.text&lt;/string&gt;
+//以下区域是我查到的但是我没有加
+            &lt;string&gt;public.data&lt;/string&gt;
+        &lt;string&gt;com.microsoft.powerpoint.ppt&lt;/string&gt;
+            &lt;string&gt;public.item&lt;/string&gt;
+            &lt;string&gt;com.microsoft.word.doc&lt;/string&gt;
+            &lt;string&gt;com.adobe.pdf&lt;/string&gt;
+            &lt;string&gt;com.microsoft.excel.xls&lt;/string&gt;
+            &lt;string&gt;public.image&lt;/string&gt;
+            &lt;string&gt;public.content&lt;/string&gt;
+            &lt;string&gt;public.composite-content&lt;/string&gt;
+            &lt;string&gt;public.archive&lt;/string&gt;
+            &lt;string&gt;public.audio&lt;/string&gt;
+            &lt;string&gt;public.movie&lt;/string&gt;
+        &lt;/array&gt;
+    &lt;/dict&gt;
+&lt;/array&gt;
+</code></pre>
+<p>##2.在APPdelegate接收文件地址</p>
+<pre class="line-numbers"><code class="language-objc">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if (self.window) {
+        if (url) {
+            NSString *fileName = url.lastPathComponent; // 从路径中获得完整的文件名（带后缀）
+            // path 类似这种格式：file:///private/var/mobile/Containers/Data/Application/83643509-E90E-40A6-92EA-47A44B40CBBF/Documents/Inbox/jfkdfj123a.pdf
+            NSString *path = url.absoluteString; // 完整的url字符串
+            path = [self URLDecodedString:path]; // 解决url编码问题
+
+            NSMutableString *string = [[NSMutableString alloc] initWithString:path];
+
+            if ([path hasPrefix:@&quot;file://&quot;]) { // 通过前缀来判断是文件
+                // 去除前缀：/private/var/mobile/Containers/Data/Application/83643509-E90E-40A6-92EA-47A44B40CBBF/Documents/Inbox/jfkdfj123a.pdf
+                [string replaceOccurrencesOfString:@&quot;file://&quot; withString:@&quot;&quot; options:NSCaseInsensitiveSearch range:NSMakeRange(0, path.length)];
+
+                // 此时获取到文件存储在本地的路径，就可以在自己需要使用的页面使用了
+                NSDictionary *dict = @{@&quot;fileName&quot;:fileName,
+                                       @&quot;filePath&quot;:string};
+            [[NSNotificationCenter defaultCenter] postNotificationName:TJBookStackWillImportTXTNotification object:nil userInfo:dict];
+
+                return YES;
+            }
+        }
+    }
+    return YES;
+}
+
+// 当文件名为中文时，解决url编码问题
+- (NSString *)URLDecodedString:(NSString *)str {
+    NSString *decodedString=(__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (__bridge CFStringRef)str, CFSTR(&quot;&quot;), CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+    
+    return decodedString;
+}
+</code></pre>
+<p>##3.在主页面对接收到的数据进行处理</p>
+<blockquote>
+<p>不建议在APPdelegate进行处理 会拖慢进入APP速度</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-objc">    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addLoacalBookWithFilePath:) name:TJBookStackWillImportTXTNotification object:nil];
+
+
+-(void)addLoacalBookWithFilePath:(NSNotification *)notification{
+    
+    [SVProgressHUD showInfoWithStatus:@&quot;正在后台解析书籍&quot;];
+//启动线程进行处理
+    dispatch_queue_t conCurrentQueue = dispatch_queue_create(&quot;importBook&quot;, DISPATCH_QUEUE_CONCURRENT);
+        dispatch_async(conCurrentQueue, ^{
+            NSDictionary *dic = notification.userInfo;
+            NSString *filePath = dic[@&quot;filePath&quot;];
+            
+            NSString *bookId = [NSString stringWithFormat:@&quot;%@&quot;, @([[NSDate date] timeIntervalSince1970] * 1000)];
+            
+            [TJReadParser parseLocalBookWithFilePath:filePath bookId :bookId success:^(NSArray&lt;TJChapterModel *&gt; * _Nonnull chapters) {
+                    // 创建书籍模型
+                    TJBookModel *bookModel = [[TJBookModel alloc] init];
+                    bookModel.bookType = TJBookTypeLocal;
+                    bookModel.bookName = filePath.lastPathComponent;
+                    // 本地书随机生成ID
+                    bookModel.bookId = bookId;
+                    bookModel.chapterCount = chapters.count;
+                    for (TJChapterModel *chapter in chapters) {
+                        chapter.bookId = bookModel.bookId;
+                    }
+                    [TJReadHelper addToBookStackWithBook:bookModel complete:^{
+                        [TJChapterDataManager insertChaptersWithModels:chapters];
+                        [SVProgressHUD showSuccessWithStatus:@&quot;书籍已经成功加入书架&quot;];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:TJBookStackDidChangeNotification object:nil userInfo:nil];
+                        
+                    }];
+                } failure:^(NSError *error) {
+                    [SVProgressHUD showErrorWithStatus:error.userInfo[NSUnderlyingErrorKey]];
+                }];
+            
+            
+        });
+       
+   
+   
+}
+</code></pre>
+<p>##4.更新页面UI</p>
+<blockquote>
+<p>记得回归线程</p>
+</blockquote>
+<pre class="line-numbers"><code class="language-objc"> dispatch_async(dispatch_get_main_queue(), ^{
+        self.dataSource = [[TJReadRecordManager allBooksInStack] copy];
+        [self.booksTableView reloadData];
+    });
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 针对txt文档进行解码]]></title>
+    <link href="apolla.cc/16791167680581.html"/>
+    <updated>2023-03-18T13:19:28+08:00</updated>
+    <id>apolla.cc/16791167680581.html</id>
+    <content type="html"><![CDATA[
+<p>如我上一篇文章记录，我加了打开其他APPtxt文件的小功能，紧接着碰到新问题了，我在测试过程中发现用户上传的TXT编码格式很多不单单是utf-8和gb2312,针对TXT文档进行解码，我一共经历过两个阶段，如下</p>
+<p>##1.通过循环 解码不为空就返回字符串</p>
+<pre class="line-numbers"><code class="language-objc">  NSArray *encodings = @[
+        @(NSUTF8StringEncoding),
+        @(0x80000632),
+        @(0x80000631),
+        @(kCFStringEncodingGB_2312_80),
+        @(kCFStringEncodingHZ_GB_2312),
+        @(kCFStringEncodingMacChineseSimp),
+        @(kCFStringEncodingDOSChineseSimplif),
+        @(kCFStringEncodingGB_18030_2000),
+        @(NSUTF16StringEncoding),
+        @(NSUTF16LittleEndianStringEncoding),
+        @(NSUTF16BigEndianStringEncoding),
+        @(NSUTF32StringEncoding),
+        @(NSUTF32LittleEndianStringEncoding),
+        @(NSUTF32BigEndianStringEncoding)
+    ];
+
+    NSString *result = nil;
+    for (NSInteger i = 0; i &lt; encodings.count; i++) {
+        unsigned int encoding = [encodings[i] unsignedIntValue];
+        NSError *error = nil;
+        NSString *content = [NSString stringWithContentsOfFile:filePath encoding:CFStringConvertEncodingToNSStringEncoding(encoding) error:&amp;error];
+        if (!error &amp;&amp; !TJIsEmptyObject(content)) {
+            result = content;
+            break;
+        }
+    }
+    return result;
+</code></pre>
+<blockquote>
+<p>此版本对于代码会碰到 编码成功 但是会是乱码的情况。</p>
+</blockquote>
+<p>##2.第二阶段 通过encodingOptions 进行处理</p>
+<p><code>stringEncodingForData: encodingOptions: convertedString: usedLossyConversion</code> 会自动挑选编码数组内合适的编码对字符串进行处理，目前尚未发现问题</p>
+<pre class="line-numbers"><code class="language-objc">    NSArray *encodings = @[
+        @(NSUTF8StringEncoding),
+        @(0x80000632),
+        @(0x80000631),
+        @(CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_2312_80)),
+        @(CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingHZ_GB_2312)),
+        @(CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacChineseSimp)),
+        @(CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingDOSChineseSimplif)),
+        @(CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)),
+        @(NSUTF16StringEncoding),
+        @(NSUTF16LittleEndianStringEncoding),
+        @(NSUTF16BigEndianStringEncoding),
+        @(NSUTF32StringEncoding),
+        @(NSUTF32LittleEndianStringEncoding),
+        @(NSUTF32BigEndianStringEncoding)
+    ];
+   
+         NSData * data = [NSData dataWithContentsOfFile:filePath];
+         NSString * chapterContent = @&quot;&quot;;
+         BOOL lossy = NO;
+          [NSString stringEncodingForData:data
+         encodingOptions:@{NSStringEncodingDetectionSuggestedEncodingsKey:encodings}
+         convertedString:&amp;chapterContent  usedLossyConversion:&amp;lossy];
+ 
+    return chapterContent;
+</code></pre>
+<blockquote>
+<p>附上APP地址： <a href="https://apps.apple.com/cn/app/%E4%B8%80%E9%98%85%E9%98%85%E8%AF%BB/id1573880428">一阅阅读</a></p>
+</blockquote>
+<p>有想看小说的小伙伴可以试下 支持换源 支持自定义书源</p>
+
+]]></content>
+  </entry>
+  
+</feed>
