@@ -8,6 +8,10 @@ themes/
 # 管理后台删除的内容会先移到 .trash/（带时间戳，可手工找回），不入库
 /.trash/
 
+# 本地管理后台：纯本地工具，不进版本库、不推 GitHub、不参与站点构建
+/tools/
+/管理后台.command
+
 # 迁移前的语雀导出原始素材（已转换进 content/ 与 static/images/）
 # 注意：必须用前导 / 锚定到仓库根目录，否则会把 content/posts/swift/ 等
 # 同名内容目录一起忽略，导致其中的 _index.md 提交不上去、文章 URL 丢失分类段
