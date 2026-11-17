@@ -24,15 +24,11 @@ jobs:
       - name: Fetch FixIt theme
         run: |
           set -e
-          THEME_SHA=48384b8
           rm -rf themes/FixIt
-          mkdir -p themes/FixIt
+          git clone -q --depth 1 --branch main https://github.com/hugo-fixit/FixIt.git themes/FixIt
           cd themes/FixIt
-          git init -q
-          git remote add origin https://github.com/hugo-fixit/FixIt.git
-          git fetch -q --depth 1 origin ${THEME_SHA}
-          git checkout -q FETCH_HEAD
-          ls layouts >/dev/null
+          echo "theme commit: $(git rev-parse --short HEAD)"
+          test -d layouts
           cd ../..
 
       - name: Install Hugo 0.170.0
