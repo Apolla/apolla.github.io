@@ -6,13 +6,15 @@ themes/
 .DS_Store
 
 # 迁移前的语雀导出原始素材（已转换进 content/ 与 static/images/）
-images/
-SwiftUI-eul/
-swift/
-蓝牙/
-碎片芝士收藏/
-音视频/
-葵花宝典/
-直播/
-一阅阅读/
-组件化/
+# 注意：必须用前导 / 锚定到仓库根目录，否则会把 content/posts/swift/ 等
+# 同名内容目录一起忽略，导致其中的 _index.md 提交不上去、文章 URL 丢失分类段
+/images/
+/SwiftUI-eul/
+/swift/
+/蓝牙/
+/碎片芝士收藏/
+/音视频/
+/葵花宝典/
+/直播/
+/一阅阅读/
+/组件化/
