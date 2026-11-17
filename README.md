@@ -31,3 +31,23 @@ git add -A && git commit -m "post: xxx" && git push
 - `static/images/`：图片，正文用 `/images/xxx.png` 引用
 - `hugo.toml`：站点配置（覆盖主题默认值）
 - `static/CNAME`：自定义域名 `apolla.cc`
+- `static/project/<项目>/`：各 App 的独立页面（技术支持、隐私政策等纯静态 HTML），线上地址即 `/project/<项目>/xxx.html`
+
+## 新增一个项目的支持页 / 隐私政策
+
+以「仓鼠管家」为例，页面位于 `static/project/cangshuguanjia/`，线上地址为：
+
+- <https://apolla.cc/project/cangshuguanjia/support.html>
+- <https://apolla.cc/project/cangshuguanjia/privacy.html>
+
+新项目（如 plotzy）按以下步骤添加：
+
+```bash
+mkdir -p static/project/plotzy
+cp static/project/cangshuguanjia/support.html static/project/cangshuguanjia/privacy.html static/project/plotzy/
+# 改写标题、正文、联系邮箱等项目相关文案，然后正常提交推送即可
+```
+
+约定：目录名用项目的小写英文名，页面文件名固定为 `support.html` 与 `privacy.html`，这样每个项目都有一对稳定可预期的 URL，方便填进 App Store Connect。
+
+> `/support.html` 和 `/privacy.html` 根路径保留为跳转页（meta refresh + canonical），指向仓鼠管家的新地址，因此 App Store 中已提交的旧链接仍可正常打开。以后若某个项目长期停用，可直接删除对应目录。
