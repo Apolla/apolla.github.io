@@ -34,7 +34,9 @@ git add -A && git commit -m "post: xxx" && git push
 - `static/images/`：图片，正文用 `/images/xxx.png` 引用
 - `hugo.toml`：站点配置（覆盖主题默认值）
 - `static/CNAME`：自定义域名 `apolla.cc`
-- `static/project/<项目>/`：各 App 的独立页面（技术支持、隐私政策等纯静态 HTML），线上地址即 `/project/<项目>/xxx.html`
+- `static/project/<项目>/`：各 App 的独立页面（技术支持、隐私政策等纯静态 HTML），线上地址即 `/project/<项目>/...`
+  页面既可以是扁平文件（`privacy.html` → `/project/<项目>/privacy.html`），
+  也可以是目录式（`privacy/index.html` → `/project/<项目>/privacy/`），按打包产物的结构原样放即可
 
 ## 新增一个项目的支持页 / 隐私政策
 
@@ -51,6 +53,21 @@ cp static/project/cangshuguanjia/support.html static/project/cangshuguanjia/priv
 # 改写标题、正文、联系邮箱等项目相关文案，然后正常提交推送即可
 ```
 
-约定：目录名用项目的小写英文名，页面文件名固定为 `support.html` 与 `privacy.html`，这样每个项目都有一对稳定可预期的 URL，方便填进 App Store Connect。
+约定：目录名用项目名（小写英文名，或项目自带的写法），页面文件名固定为 `support.html` 与 `privacy.html`，这样每个项目都有一对稳定可预期的 URL，方便填进 App Store Connect。
+
+若拿到的是已打包好的站点（目录式页面），直接解压进去即可，例如「Plotzy」：
+
+```text
+static/project/Plotzy/
+├── PlLegal.css
+├── PlLogo.png
+├── privacy/index.html
+└── terms/index.html
+```
+
+线上地址：
+
+- <https://apolla.cc/project/Plotzy/privacy/>
+- <https://apolla.cc/project/Plotzy/terms/>
 
 > `/support.html` 和 `/privacy.html` 根路径保留为跳转页（meta refresh + canonical），指向仓鼠管家的新地址，因此 App Store 中已提交的旧链接仍可正常打开。以后若某个项目长期停用，可直接删除对应目录。
