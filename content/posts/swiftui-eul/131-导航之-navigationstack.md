@@ -1,0 +1,235 @@
+---
+title: "1.3.1 导航之 NavigationStack"
+date: 2022-09-05T08:00:00+08:00
+lastmod: 2022-09-05T08:00:00+08:00
+draft: false
+categories: ["SwiftUI"]
+tags: ["Xcode 14", "iOS 16", "macOS 13"]
+weight: 1
+---
+
+<br>
+
+
+<br>
+
+iOS 16 废弃了 NavigationView，使用更加灵活的 [NavigationStack](https://developer.apple.com/documentation/swiftui/navigationstack)、[NavigationSplitView](https://developer.apple.com/documentation/swiftui/navigationsplitview) 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。
+
+# 系统自动管理导航状态
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+NavigationStack 和 NavigationView 一样，依然可以使用 [NavigationLink](https://developer.apple.com/documentation/swiftui/navigationlink) 指定目标视图进行跳转：
+
+```swift
+NavigationStack {
+  NavigationLink {
+    Text("Hello") // destination
+  } label: {
+    Text("Hello")
+  }
+}
+```
+
+NavigationStack 还支持将目标视图和 NavigationLink 分离开来，在声明 NavigationLink 时无需指定 destination，只需传入一个实现 Hashable 协议的 value 参数，然后使用 NavigationStack 的实例方法 [navigationDestination(for:destination:)](https://developer.apple.com/documentation/swiftui/view/navigationdestination(for:destination:)) 实现跳转，该方法中的 for 参数需要和 NavigationLink 中的 value 参数类型一致。
+
+NavigationLink 中 value 参数是可选的，如果传入 nil，该导航链接将被禁用，外观样式也有所不同。
+
+NavigationView 没有充分体现出声明式编程的数据驱动状态更新的优势，使用上的割裂感和对状态管理的局限性，在 NavigationStack 都不复存在了。导航链接和目标视图的分离，有利于集中管理导航事件，导航行为因此变得更加灵活和可控，
+
+```swift
+@State private var imgName = "swift"
+@State private var numbers = [0, 1]
+
+NavigationStack {
+  List {
+    Section {
+      NavigationLink(value: imgName) {
+        Image(systemName: imgName)
+      }
+      
+      ForEach(numbers, id: \.self) {
+        // value 为 nil 时，禁用跳转，样式也有所差异
+        NavigationLink("\($0)", value: $0 == 1 ? nil : $0)
+      }
+    } header: {
+      Text("点击触发导航跳转")
+    }
+  }
+  .navigationDestination(for: String.self) {
+    Image(systemName: $0)
+  }
+  .navigationDestination(for: Int.self) {
+    Text("\($0)")
+  }
+}
+```
+
+以上导航事件皆由用户主动点击导航链接时触发，NavigationStack 还支持程序触发导航。如下代码表示当打开开关时触发导航行为：
+
+```swift
+@State private var isPresented = false
+
+NavigationStack {
+  List {
+    Section {
+      Toggle("跳转", isOn: $isPresented)
+    } header: {
+      Text("程序触发导航跳转")
+    }
+  }
+  .navigationDestination(isPresented: $isPresented) {
+    Text("Hello")
+  }
+}
+```
+
+# 手动管理导航状态
+
+上面的示例中，导航状态由系统自动管理。如果需要手动管理，NavigationStack 提供了两个初始化方法，本质上都是将导航状态与 path 参数进行显式地绑定，当 path 发生改变时，导航行为也会随之变化。
+
+先来看看第一个方法：
+
+```swift
+init(
+    path: Binding<Data>,
+    root: () -> Root
+) where Data : MutableCollection, Data : RandomAccessCollection, Data : RangeReplaceableCollection, Data.Element : Hashable
+```
+
+path 参数是集合类型，集合中的元素需要实现 Hashable 协议。path 保存的就是与 NavigationStack 实例绑定的导航状态，当导航行为发生改变时，比如 push 或者 pop，系统会自动对 path 进行入栈和出栈操作。反之，手动改变 path 时，也会触发相应的导航行为。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+这里的示例演示的就是使用整形数组保存 NavigationPath。然而集合类型的限制在于要求元素的数据类型保持一致，如果一个页面有多个类型不一致的数据，该如何解决呢？我们很容易想到使用枚举绑定不同类型的变量，然后使用枚举作为集合的子元素。当然了，根据上面的分析，枚举也需要实现 Hashable 协议。
+
+使用枚举进行优化的另一个好处在于，当使用 `navigationDestination` 处理跳转时，代码更利于集中管理、抽取和复用。在示例中可以查看源码，这里就不再贴出具体代码了。
+
+由于导航行为在 app 中频繁发生，为了省去环境变量的注入和获取步骤，同时避免路由的重复声明，可以采用单例模式来进行优化，如此一来就可以在全局范围内方便地管理导航状态了。以下思路供参考：
+
+```swift
+final class Router: ObservableObject {
+  @Published var path: [Route] = []
+  
+  static let shared = Router()
+  
+  static func push(_ route: Route) {
+    self.shared.path.append(route)
+  }
+  
+  static func pop() {
+    _ = self.shared.path.popLast()
+  }
+  
+  private init() {}
+}
+```
+
+# 导航状态的保存与恢复
+
+除了上面提到的使用数组形式保存导航栈的状态之外，NavigationStack 还支持使用 NavigationPath 类型的数据管理导航状态，其初始化方法如下：
+
+```swift
+init(path: Binding<NavigationPath>, root: () -> Root)
+```
+
+[NavigationPath](https://developer.apple.com/documentation/swiftui/navigationpath) 是一个擦除类型信息的集合类型，它已经具备集合该有的一些特性，比如 count、append、removeLast 等。其中 append 有两个不同的方法：
+
+```swift
+mutating func append<V>(_ value: V) where V : Hashable
+
+mutating func append<V>(_ value: V) where V : Decodable, V : Encodable, V : Hashable
+```
+
+第一个方法要求 value 遵循 Hashable 协议，第二个是第一个方法的加强版，要求 value 遵循 Codable（Encodable & Decodable）协议。
+
+要实现导航状态的保存与恢复，需要使用第二个方法，只有实现 Codable 协议的数据才能被序列化存储，然后反序列化恢复导航栈的状态。具体实现效果可以查看示例，当发生跳转行为后，将 app 进程杀掉，然后重新回到示例，会直接唤起 app 被强杀之前导航所处的界面。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+示例代码中已经为需要保存的导航状态实现 Codable 协议：
+
+```swift
+enum Route: Codable, Hashable {
+  case string(String)
+  case weather(SampleNavigationStackRestore.Weather)
+}
+
+struct Weather: Codable, Hashable {
+  var name: String
+  var degree: Double
+  
+  var degreeCelsius: String {
+    degree.celsiusFormat
+  }
+}
+```
+
+Swift 中的基础数据类型默认实现了 Codable 协议，所以这里的 Weather 直接遵循 Codable 即可。
+
+导航状态的管理和之前是一样的，只需要维护好 path 就能控制导航行为。我们重点来看如何保存和恢复：
+
+```swift
+final class SampleRestoreRouter: ObservableObject {
+  
+  // 1
+  var path = NavigationPath() {
+    willSet {
+      objectWillChange.send()
+    }
+    didSet {
+      save()
+    }
+  }
+  
+  // 2
+  @AppStorage("naviPathStore") private var naviPathStore: Data?
+  
+  private func readSerializedData() -> Data? {
+    naviPathStore
+  }
+  
+  private func writeSerializedData(_ data: Data) {
+    naviPathStore = data
+  }
+  
+  // 3
+  init() {
+    if let data = self.readSerializedData() {
+      printLog(String(decoding: data, as: UTF8.self))
+      do {
+        let representation = try JSONDecoder().decode(
+          NavigationPath.CodableRepresentation.self,
+          from: data)
+        self.path = NavigationPath(representation)
+      } catch {
+        self.path = NavigationPath()
+      }
+    } else {
+      self.path = NavigationPath()
+    }
+  }
+  
+  // 4
+  func save() {
+    guard let representation = path.codable else { return }
+    do {
+      let encoder = JSONEncoder()
+      let data = try encoder.encode(representation)
+      self.writeSerializedData(data)
+      printLog(String(decoding: data, as: UTF8.self))
+    } catch {
+      printLog(error)
+    }
+  }
+}
+```
+
+1. 这里将 @Published 改为手动发送订阅通知，目的是在 path 改变时保存当前的导航状态。
+2. 使用 @AppStorage 保存数据，用于恢复导航状态。
+3. SampleRestoreRouter 实例初始化时，从 @AppStorage 变量中读取保存的数据，然后将反序列化的数据传递给 path，path 的改变触发界面的更新。
+4. 从 NavigationPath 实例变量 `codable` 中读取数据，将其序列化后保存至 @AppStorage 变量。
+
+整个过程大致就是这样，核心就在于数据的序列化和反序列化，NavigationPath 已经通过协议的约束指明了方向，我们只需要按照要求读写数据即可。
+
+

@@ -1,0 +1,51 @@
+// Archives page styles (section, taxonomy, term)
+@use "sass:meta";
+@use "core/functions" as *;
+@use "author";
+@use "../shared/contribution";
+
+.archive {
+  .archive-header,
+  .archive-meta {
+    text-align: end;
+  }
+
+  .archive-title {
+    padding: 1rem 0 0.5rem;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 140%;
+    text-align: end;
+  }
+
+  .archive-subtitle {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: normal;
+    line-height: 100%;
+
+    &.total-word-count {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  .rss-link {
+    font-size: 0.75rem;
+    color: fi-var(global-font-secondary-color);
+
+    &:hover {
+      color: fi-var(global-link-hover-color);
+    }
+  }
+
+  .group-title {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @include meta.load-css('terms');
+  @include meta.load-css('tags');
+}

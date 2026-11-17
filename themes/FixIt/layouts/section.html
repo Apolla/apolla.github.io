@@ -1,0 +1,26 @@
+{{- define "title" -}}
+  {{- title (.Params.Title | default ((T .Section) | default .Section | dict "Some" | T "allSome")) -}}
+  {{- if .Site.Params.with_site_title }} {{ .Site.Params.title_delimiter }} {{ .Site.Title }}{{- end -}}
+{{- end -}}
+
+{{- define "content" -}}
+  {{- $titleIcon := "fa-solid fa-feather" -}}
+  {{- with .Params.titleIcon -}}
+    {{- $titleIcon = . -}}
+  {{- end -}}
+  {{- $pages := .Pages -}}
+  <div class="page archive">
+    {{- partial "section/archive-header.html" (dict
+      "Pages" $pages
+      "Title" (title (.Params.Title | default ((T .Section) | default .Section | dict "Some" | T "allSome")))
+      "Icon" $titleIcon
+    ) -}}
+    {{- partial "section/archive-meta.html" (dict "Page" . "Pages" $pages) -}}
+    {{- partial "section/archive-list.html" (dict
+      "Page" .
+      "Pages" $pages
+      "Paginate" (.Site.Params.section.paginate | default .Site.Params.paginate)
+      "DateFormat" (.Site.Params.section.date_format | default "01-02")
+    ) -}}
+  </div>
+{{- end -}}

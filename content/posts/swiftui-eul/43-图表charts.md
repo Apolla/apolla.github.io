@@ -1,0 +1,301 @@
+---
+title: "4.3 图表（Charts）"
+date: 2023-10-10T08:00:00+08:00
+lastmod: 2023-10-10T08:00:00+08:00
+draft: false
+categories: ["SwiftUI"]
+tags: ["Xcode 15", "iOS 17", "macOS 14"]
+weight: 1
+---
+
+<br>
+
+
+# 基础
+
+[Charts](https://developer.apple.com/documentation/charts) 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+Charts 是一个独立的标准库，使用之前需要导入它：
+
+```swift
+import Charts
+```
+
+[Chart](https://developer.apple.com/documentation/charts/chart) 构建方法和 List 类似，支持直接从数据源构建，也可以嵌套 ForEach 使用。
+
+以柱状图为例，先定义如下数据源：
+
+```swift
+private let data: [Storage] = [
+  .init(category: "Apps", sizes: 22.3),
+  .init(category: "Photos", sizes: 35.8),
+  .init(category: "System", sizes: 19.8),
+  .init(category: "Others", sizes: 39.1),
+]
+
+private struct Storage: Identifiable {
+  let id = UUID()
+  var category: String
+  var sizes: Double
+}
+```
+
+然后使用 Chart 构建：
+
+```swift
+Chart(data, id: \.id) { v in
+  BarMark(
+    x: .value("Category", v.category),
+    y: .value("Sizes", v.sizes)
+  )
+}
+```
+
+图表的尺寸由系统自动适配，也可以使用 `.frame` 设置。
+
+假设现在需要将 Apple 多个设备的存储进行可视化展现，可以将数据源作如下修改：
+
+```swift
+private let data: [Storage] = [
+  .init(category: "Apps", sizes: 22.3, device: "iPhone"),
+  .init(category: "Photos", sizes: 35.8, device: "iPhone"),
+  .init(category: "System", sizes: 19.8, device: "iPhone"),
+  .init(category: "Others", sizes: 39.1, device: "iPhone"),
+  .init(category: "Apps", sizes: 18.3, device: "iPad"),
+  .init(category: "Photos", sizes: 5.8, device: "iPad"),
+  .init(category: "System", sizes: 22.8, device: "iPad"),
+  .init(category: "Others", sizes: 12.3, device: "iPad"),
+  .init(category: "Apps", sizes: 80.8, device: "Mac"),
+  .init(category: "Photos", sizes: 25.6, device: "Mac"),
+  .init(category: "System", sizes: 39.5, device: "Mac"),
+  .init(category: "Others", sizes: 100.2, device: "Mac"),
+]
+private struct Storage: Identifiable {
+  let id = UUID()
+  var category: String
+  var sizes: Double
+  var device: String
+}
+```
+
+构建图表时作一些自定义设置：
+
+```swift
+Chart(data, id: \.id) { v in
+  BarMark(
+    x: .value("Sizes", v.sizes),
+    y: .value("Category", v.category)
+  )
+  .foregroundStyle(by: .value("Device", v.device))
+}
+.chartForegroundStyleScale([
+  "iPhone" : .blue,
+  "iPad" : .yellow,
+  "Mac" : .purple
+])
+```
+
+`foregroundStyle(by:)` 可以设置指定数据类型的样式，默认由系统自动分配样式。
+
+使用 `chartForegroundStyleScale(_:)` 之后，表示不使用系统自动分配的样式，而是为 `foregroundStyle(by:)` 指定的数据类型自定义样式。
+
+Chart 内可以叠加使用不同样式的图表，比如示例中的步数图（StepsChart），就同时使用了 LineMark、AreaMark、PointMark、RuleMark。
+
+Charts 支持高度的自定义，比如：
+
+- `.foregroundStyle`：设置前景样式。
+- `.interpolationMethod`：设置插值样式，适用于 LineMarks、AreaMarks。
+- `.lineStyle`：设置线条样式，适用于 LineMarks、RuleMarks。
+- `.annotation`：设置注释。
+- `.chartLegend`：设置图例。
+- ......
+
+StepsChart 支持手势交互，这里说一下思路，核心代码如下：
+
+```swift
+@State private var selectedStep: (String, Int)? = ("1/15", 10876)
+
+Chart {
+	...
+  
+  if let selectedStep {
+    RuleMark(x: .value("Selected Date", selectedStep.0))
+      .foregroundStyle(.blue)
+      .lineStyle(.init(lineWidth: 2, dash: [5, 5]))
+    
+    PointMark(
+      x: .value("Selected Date", selectedStep.0),
+      y: .value("Selected Count", selectedStep.1)
+    )
+    .foregroundStyle(.blue)
+    .annotation {
+      Text(selectedStep.1.formatted())
+        .font(.footnote)
+        .foregroundColor(.white)
+        .padding(3)
+        .background(.blue)
+        .cornerRadius(5)
+    }
+  }
+}
+.chartOverlay { chartProxy in
+  GeometryReader { geometryProxy in
+    Rectangle()
+      .fill(.clear)
+      .contentShape(Rectangle())
+      .gesture(
+        DragGesture()
+          .onChanged { value in
+            findSelectedStep(
+              at: value.location,
+              chartProxy: chartProxy,
+              geometryProxy: geometryProxy
+            )
+          }
+      )
+      .onTapGesture { location in
+        findSelectedStep(
+          at: location,
+          chartProxy: chartProxy,
+          geometryProxy: geometryProxy
+        )
+      }
+  }
+}
+
+private func findSelectedStep(
+  at location: CGPoint,
+  chartProxy: ChartProxy,
+  geometryProxy: GeometryProxy
+) {
+  let origin = geometryProxy[chartProxy.plotAreaFrame].origin
+  // 当前位置
+  let location = CGPoint(
+    x: location.x - origin.x,
+    y: location.y - origin.y
+  )
+  // 获取当前位置对应的数据
+  if var step: (String, Int) = chartProxy.value(at: location) {
+    step.1 = data.first { $0.date == step.0 }?.count ?? 0
+    selectedStep = step
+  }
+  printLog(selectedStep)
+}
+```
+
+`.chartOverlay` 可以为图表添加一个浮层，这里使用了 GeometryReader 用于获取手势的位置，并且添加了一个透明的矩形区域承载点击和拖拽手势。
+
+闭包内返回的是一个 [ChartProxy](https://developer.apple.com/documentation/charts/chartproxy) 类型的实例，通过它可以获取到图表的尺寸、位置等信息。这里使用如下方法获取到手势当前位置对应的数据：
+
+```swift
+if var step: (String, Int) = chartProxy.value(at: location) {
+  ...
+}
+```
+
+需要注意的是，这里获取的数据类型需要和图表的 x、y 轴的数据类型保持一致，否则是获取不到数据的。
+
+现在我们已经知道手势的具体位置和对应的数据了，剩下的工作就是将其展示出来，这里使用的是现成的RuleMark 和 PointMark 。当然，方法不止这一种，比如还可以使用 `.chartOverlay` 或者 `.chartBackground` 来实现。
+
+示例中只演示了 Charts 的部分功能，更多特性望读者自行探索。Github 上有个仓库提供了关于 Charts 的丰富样例，可供参考：[Swift-Charts-Example](https://github.com/jordibruin/Swift-Charts-Examples) 。
+
+# 饼图与交互
+
+这里并非有意将饼图单独介绍，而是因为它只支持 iOS 17/macOS 14，下文的滑动列表亦是如此。
+
+饼图的实现和上文的图表并无二致，唯一的区别是使用 `SectorMark`，它表示的是一个扇形区域。下面的代码是从示例中截取的部分代码，它表示的是将一个圆分成四个扇形，每个扇形的角度由 `Storage` 实例属性 `sizes` 决定。
+
+这里面有些需要注意的细节：
+
+- `chartAngleSelection` 是新增的 API，用于获取手指所处区域的扇形**累计角度**，也就是说，手指落在某个扇形上时，获取的不是对应扇形的 `sizes`，而是所有 sizes 总和乘以手指所在点对应的扇形角度。比如下面的代码，圆形被分为四份（22.3，35.8，19.8，39.1），其总和为 117，那么 Apps 对应的扇形所占的圆形区域为 22.3/117，它也是第一个扇形，默认从 12 点方向开始沿顺时针方向延展。假设手指正好落在第一个扇形的中心区域，那么 `selection` 的值就是 22.3 * 0.5，如果正好落在第三个扇形的中心区域，则获取的值为 22.3 + 35.8 + 19.8 * 0.5。
+- `chartAngleSelection` 获取的值是跟随手指实时变化的，如果手指离开了屏幕，则变为 nil。因此这里声明了一个属性 `selectedStorage` 来保存当前获取的扇形区域，根据上面提到的“累计角度”，可以计算出当前手指落在了那个扇形区域，这也是 `findSelectedStorage` 方法的内在逻辑。
+
+```swift
+private let data: [Storage] = [
+  .init(category: "Apps", sizes: 22.3),
+  .init(category: "Photos", sizes: 35.8),
+  .init(category: "System", sizes: 19.8),
+  .init(category: "Others", sizes: 39.1),
+]
+
+private struct Storage: Identifiable, Equatable {
+  let id = UUID()
+  var category: String
+  var sizes: Double
+}
+
+@State private var selection: Double?
+@State private var selectedStorage: Storage?
+
+Chart(data, id: \.category) { element in
+  SectorMark(
+    angle: .value("Sizes", element.sizes)
+  )
+}
+.chartAngleSelection(value: $selection)
+.onChange(of: selection) { oldValue, newValue in
+  if let newValue {
+    let newSelectedStorage = findSelectedStorage(value: newValue)
+    if selectedStorage == newSelectedStorage {
+      selectedStorage = nil
+    } else {
+      selectedStorage = newSelectedStorage
+    }
+  }
+}
+
+private func findSelectedStorage(value: Double) -> Storage? {
+  var total = 0.0
+  let ans = data.first { v in
+    total += v.sizes
+    return value <= total
+  }
+  return ans
+}
+```
+
+iOS 17/macOS 14 简化了 Charts 的交互，除了上面提到的 `chartAngleSelection`，还有针对具有 X/Y 轴图表获取点或者范围的方法：`chartXSelection` 和 `chartYSelection`，详见[文档](https://developer.apple.com/documentation/swiftui/view-chart-view#selection)。
+
+除此以外，`SectorMark` 还支持自定义扇形的半径、内径、外径等，具体效果见示例。
+
+# 可滑动图表
+
+iOS 17/macOS 14 对 Charts 的另一大更新就是支持滑动，在此之前，要基于 Charts 实现一个滑动图表非常繁琐，而且容易导致性能问题。
+
+现在只需要在原有的图表基础上添加一个方法 [chartScrollableAxes(_:)](https://developer.apple.com/documentation/swiftui/view/chartscrollableaxes(_:)) 就能使其滑动，以下是示例代码：
+```swift
+Chart {
+  ForEach(data, id: \.date) { v in
+    BarMark(
+      x: .value("Date", v.date, unit: .day),
+      y: .value("Steps", v.count)
+    )
+    .foregroundStyle(.pink)
+    .annotation {
+      Text(selectedStep(v))
+    }
+  }
+}
+.frame(height: 160)
+.chartScrollableAxes(.horizontal)
+.chartXVisibleDomain(length: Self.secondsPerDay * 7)
+.chartScrollPosition(initialX: initialPosition)
+.chartScrollPosition(x: $scrollPosition)
+.chartScrollTargetBehavior(.paging)
+.chartXSelection(value: $selection)
+.onChange(of: selection) { oldValue, newValue in
+  selection = newValue
+}
+```
+
+以下是对新增的一些 API 的说明：
+
+- chartScrollableAxes：设置滑动的方向。
+- chartXVisibleDomain：设置可见区域，`Self.secondsPerDay * 7` 表示可以展示 7 天的数据。
+- chartScrollPosition(initialX:)：设置图表的初始位置。
+- chartScrollPosition(x:)：获取图表滚动的位置，更改绑定的值也能触发图表滚动至指定位置。
+- chartScrollTargetBehavior：设置图表的滚动方式，和 ScrollView 是一样的。
+- chartXSelection：图表的选择，与上文提到的 `chartAngleSelection` 是类似的。
+

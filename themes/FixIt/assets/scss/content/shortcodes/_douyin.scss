@@ -1,0 +1,32 @@
+@use "core/mixins" as *;
+@use "core/functions" as *;
+
+.single .douyin {
+  margin: 1rem auto;
+  text-align: center;
+
+  iframe {
+    width: 100%;
+  }
+
+  @include media('sm', 'up') {
+    width: 100%;
+    aspect-ratio: fi-var(douyin-ratio, calc(9 / 16));
+
+    iframe {
+      // Add 35 pixels for the iframe controls
+      height: calc(100% + 35px);
+    }
+  }
+
+  @include media('xs') {
+    width: 324px;
+    height: 672px;
+    overflow: hidden;
+
+    iframe {
+      // Add 48 pixels for douyin footer
+      height: calc(100% + 48px);
+    }
+  }
+}

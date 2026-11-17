@@ -1,0 +1,92 @@
+{{- /*
+  Homepage profile section partial.
+
+  Renders the homepage hero area with avatar, title, subtitle (with optional TypeIt animation),
+  social links, and disclaimer text.
+
+  Called from: layouts/index.html.
+*/ -}}
+
+{{- $profile := .Site.Params.home.profile -}}
+{{- $author := partial "function/get-author-map.html" .Params.author -}}
+{{- $posts := .Site.Params.home.posts | default dict -}}
+{{- $avatarPx := cond (ne $posts.enable false) 96 128 -}}
+
+<div class="home-profile"{{ if $profile.fullscreen }} data-fullscreen{{ end }}>
+  {{- $avatar := dict "Email" $profile.gravatar_email "Size" "96" | partial "function/get-gravatar.html" | default $profile.avatar_url | default $author.avatar -}}
+  {{- if $avatar -}}
+    <div class="home-avatar">
+      {{- $menus := $.Site.Menus.main | default slice -}}
+      {{- $optim := slice
+        (dict "Process" "fill center 96x96 webp" "descriptor" "96w")
+        (dict "Process" "fill center 144x144 webp" "descriptor" "144w")
+        (dict "Process" "fill center 192x192 webp" "descriptor" "192w")
+      -}}
+      {{- $avatarMenuIndex := 0 -}}
+      {{- if $profile.avatar_menu -}}
+        {{- range $index, $menu := $menus -}}
+          {{- if eq $menu.Identifier $profile.avatar_menu -}}
+            {{- $avatarMenuIndex = $index -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- with index $menus $avatarMenuIndex -}}
+        {{- $url := .URL | relLangURL -}}
+        {{- with .Page -}}
+          {{- $url = .RelPermalink -}}
+        {{- end -}}
+        <a href="{{ $url }}"{{ with .Title | default .Name }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreferrer" target="_blank"{{ end }}>
+          {{- dict "Src" $avatar "Alt" "Home avatar" "Width" $avatarPx "Height" $avatarPx "OptimConfig" $optim "Watermark" false | partial "plugin/image.html" -}}
+        </a>
+      {{- else -}}
+        {{- dict "Src" $avatar "Alt" "Home avatar" "Width" $avatarPx "Height" $avatarPx "OptimConfig" $optim "Watermark" false | partial "plugin/image.html" -}}
+      {{- end -}}
+    </div>
+  {{- end -}}
+
+  <h1 class="home-title">
+    {{- with $profile.title -}}
+      {{- . | safeHTML -}}
+    {{- end -}}
+  </h1>
+
+  {{- with $profile.subtitle -}}
+    <p class="home-subtitle">
+      {{- if $profile.typeit -}}
+        <span class="hidden">{{ . }}</span>
+        {{- $.Store.Set "hasTypeIt" true -}}
+        <span class="typeit"><template>{{ . | safeHTML }}</template></span>
+      {{- else -}}
+        {{- . | safeHTML -}}
+      {{- end -}}
+    </p>
+  {{- end -}}
+
+  {{- if $profile.social -}}
+    <div class="links">
+      {{- $socialArr := slice -}}
+      {{- range $key, $value := .Site.Params.social -}}
+        {{- with partial "function/get-social-entry.html" $key -}}
+          {{- $socialArr = $socialArr | append . -}}
+        {{- end -}}
+      {{- end -}}
+      {{- range sort $socialArr "Weight" -}}
+        {{- partial "plugin/social.html" . -}}
+      {{- end -}}
+    </div>
+  {{- end -}}
+
+  {{- with $profile.disclaimer -}}
+    <h3 class="home-disclaimer">
+      {{- . | safeHTML -}}
+    </h3>
+  {{- end -}}
+
+  {{- /* Contribution graph */ -}}
+  {{- if ne $profile.contribution false -}}
+    {{- partial "section/contribution-graph.html" (dict "Page" . "Pages" (.Site.Store.Get "mainSectionPages")) -}}
+  {{- end -}}
+
+  {{- /* Custom Profile */ -}}
+  {{- block "custom-profile" . }}{{ end -}}
+</div>

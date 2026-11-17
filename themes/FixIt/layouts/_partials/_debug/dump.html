@@ -1,0 +1,10 @@
+{{- /*  
+  This is a debug partial that dumps the current context.
+  @example
+  {{- partial "_debug/dump.html" . -}}
+*/ -}}
+{{- if not (eq hugo.Environment "debug" | and hugo.IsServer) -}}
+  {{- return -}}
+{{- end -}}
+
+<pre>{{ debug.Dump . }}</pre>

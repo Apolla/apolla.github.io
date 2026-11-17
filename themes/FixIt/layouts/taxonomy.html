@@ -1,0 +1,29 @@
+{{- define "title" -}}
+  {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" -}}
+  {{- if .Site.Params.with_site_title }} {{ .Site.Params.title_delimiter }} {{ .Site.Title }}{{- end -}}
+{{- end -}}
+
+{{- define "content" -}}
+  {{- $taxonomies := .Data.Plural -}}
+  {{- $icon := .Params.titleIcon | default (dict "Taxonomy" .Data.Singular "Slot" "title" | partial "function/get-taxonomy-icon.html") -}}
+
+  {{- /* Author terms come from get-authors, not .Data.Terms (legacy `author` / site-default). */ -}}
+  {{- $count := len .Data.Terms.ByCount -}}
+  {{- if eq $taxonomies "authors" -}}
+    {{- $count = len (partial "function/author-terms.html" .) -}}
+  {{- end -}}
+  <div class="page archive">
+    {{- /* Title */ -}}
+    <h1 class="archive-title animate__animated animate__pulse animate__faster">
+      {{- dict "Class" $icon | partial "plugin/icon.html" -}}
+      <sup class="me-1">{{ $count }}</sup>
+      {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
+    </h1>
+    {{- /* Render taxonomy cards: prefer a layout named after the plural (e.g. tags.html, authors.html), else the generic cards. */ -}}
+    {{- $template := $taxonomies -}}
+    {{- if not (templates.Exists (printf "%s.html" $template)) -}}
+      {{- $template = "taxonomies" -}}
+    {{- end -}}
+    {{- .Render $template -}}
+  </div>
+{{- end -}}

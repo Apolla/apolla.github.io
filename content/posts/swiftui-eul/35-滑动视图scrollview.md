@@ -1,0 +1,171 @@
+---
+title: "3.5 滑动视图（ScrollView）"
+date: 2023-07-25T08:00:00+08:00
+lastmod: 2023-07-25T08:00:00+08:00
+draft: false
+categories: ["SwiftUI"]
+tags: ["Xcode 15b3", "iOS 17", "macOS 14"]
+weight: 1
+---
+
+<br>
+
+
+# 基础
+
+ScrollView 初始化方法如下：
+
+```swift
+init(
+    _ axes: Axis.Set = .vertical,
+    showsIndicators: Bool = true,
+    content: () -> Content
+)
+```
+
+`axes` 用于指定滑动的方向，默认是垂直方向。
+
+`showsIndicators` 表示是否显示滑动指示条，默认显示。另一个修饰器方法 [scrollIndicators(_:axes:)](https://developer.apple.com/documentation/swiftui/view/scrollindicators(_:axes:)) 也能实现同样的效果，而且不仅仅局限于 ScrollView，还能用于其它滑动视图，比如 List、TextEditor 等，都可以用这个方法来控制滑动指示条的显隐。
+
+要禁用滑动特性，可以使用方法 [scrollDisabled(_:)](https://developer.apple.com/documentation/swiftui/view/scrolldisabled(_:)) 。
+
+ScrollViewReader 支持跳转至指定 id 的视图，在 《SwiftUI 视图管理机制》 已经介绍过了，效果可以 <span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span> 。
+
+修饰器方法 [scrollDismissesKeyboard(_:)](https://developer.apple.com/documentation/swiftui/view/scrolldismisseskeyboard(_:)) 用于处理滑动视图的键盘显隐，其具体使用可以参考 《文本-输入》 中关于键盘处理的章节内容，
+
+iOS 16/macOS 13 新增了一个方法 [scrollContentBackground(_:)](https://developer.apple.com/documentation/swiftui/view/scrollcontentbackground(_:)) 用于改变系统内置的滑动视图的背景样式，比如 Form、List 等。示例中的代码使用该方法隐藏系统内置的背景后，才能使自定义的蓝色渐变背景生效：
+
+```swift
+Form {
+  Group {
+    Text("Hello")
+    Text("World")
+  }
+  // 设置 item 背景
+  .listRowBackground(Color.purple.opacity(0.3))
+}
+.formStyle(.grouped)
+// 设置滑动视图背景
+.background(.blue.gradient)
+// 隐藏系统内置的背景
+.scrollContentBackground(.hidden)
+```
+
+iOS 16.4 新增了一个方法 [scrollBounceBehavior](https://developer.apple.com/documentation/swiftui/view/scrollbouncebehavior(_:axes:)) ，通过指定 ScrollBounceBehavior 类型的参数来控制滑动视图的弹性行为，该参数有如下可选：
+
+```swift
+// 系统自适应
+static var automatic： ScrollBounceBehavior
+
+// 总是可以滑动
+static var always： ScrollBounceBehavior
+
+// 取决于视图尺寸，内容超出显示区域时，可以滑动
+static var basedOnSize： ScrollBounceBehavior
+```
+
+和上面的方法类似，该方法同样适用于 Form、List 等滑动视图。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+iOS 17、macOS 14 为 ScrollView 添加了一系列新特性，以下内容主要是关于这些新特性的介绍。
+
+# 滑动容器的布局与行为
+
+[containerRelativeFrame(_:alignment:_:)](https://developer.apple.com/documentation/swiftui/view/containerrelativeframe(_:alignment:_:)) 是布局利器，如示例所示，它可以非常方便地根据容器尺寸调整设置 item 的尺寸。在此之前，可能需要通过 GeometryReader 进行复杂的计算才能实现。
+
+```swift
+.containerRelativeFrame(.horizontal) { length, _ in factor * length }
+```
+
+上面的代码表示每个 item 的宽度为 factor * length ，试着调整 slider，当 factor 为 1.0 时，item 正好和容器等宽。
+
+另一个命名比较相似的方法 containerRelativeFrame(_:count:span:spacing:alignment:) 则提供了更多的灵活性，读者可以将代码 copy 后在工程打开以下注释来查看效果。
+```swift
+// .containerRelativeFrame(.horizontal, count: 5, span: 2, spacing: 10)
+```
+
+上面的代码表示将容器宽度分成 5 份，每个 item 占比 2 份，不过 item  的实际宽度和 spacing 也有关。具体的计算公式可以参考[文档](https://developer.apple.com/documentation/swiftui/view/containerrelativeframe(_:count:span:spacing:alignment:))。
+
+[scrollTargetBehavior(_:)](https://developer.apple.com/documentation/swiftui/view/scrolltargetbehavior(_:)) 可以指定滑动时的行为，其参数遵循 ScrollTargetBehavior 协议。系统内置了 `paging` 和 `viewAligned` 两种常用类型，也支持自定义。
+
+ScrollView 增加了滑动至指定 item 的新方法，需要像下面这样：`.scrollTargetLayout()` 和 `.scrollPosition(id: $scrollID)` 搭配使用，当更新 `scrollID` 时，就会滑动至指定 ID 的视图。
+
+```swift
+@State private var scrollID: Int?
+
+ScrollView(.horizontal, showsIndicators: false) {
+  LazyHStack(spacing: 15) {
+    ForEach(0..<6, id: \.self) { i in
+      RoundedRectangle(cornerRadius: 10)
+        .onTapGesture {
+          if i == 5 {
+            scrollID = 0
+          }
+        }
+    }
+  }
+  .scrollTargetLayout()
+}
+.scrollPosition(id: $scrollID)
+```
+
+[defaultScrollAnchor(_:)](https://developer.apple.com/documentation/swiftui/view/defaultscrollanchor(_:)) 还能设置滑动视图的初始位置，比如一个竖向列表需要在界面呈现时展示最底部的数据时，可以这样设置：`.defaultScrollAnchor(.bottom)`。
+
+# 滑动转场动画
+
+iOS 17/macOS 14 为 ScrollView 新增了酷炫的转场动画，有两个方法可以实现：
+```swift
+func scrollTransition(
+    _ configuration: ScrollTransitionConfiguration = .interactive,
+    axis: Axis? = nil,
+    transition: @escaping (EmptyVisualEffect, ScrollTransitionPhase) -> some VisualEffect
+) -> some View
+
+func scrollTransition(
+    topLeading: ScrollTransitionConfiguration,
+    bottomTrailing: ScrollTransitionConfiguration,
+    axis: Axis? = nil,
+    transition: @escaping (EmptyVisualEffect, ScrollTransitionPhase) -> some VisualEffect
+) -> some View
+```
+
+以示例中的代码为例，先来看看第一个方法的使用：
+```swift
+.scrollTransition { content, phase in
+  content
+    .scaleEffect(phase.isIdentity ? 1.0 : 0.95)
+    .opacity(phase.isIdentity ? 1.0 : 0.7)
+    .rotationEffect(
+      .radians(phase.value * 0.3),
+      anchor: phase == .bottomTrailing ? .topLeading : .bottomLeading
+    )
+}
+```
+
+前两个参数使用默认值，闭包内 content 表示即将出现或消失的 item 视图，phase 是枚举类型：ScrollTransitionPhase，它有以下枚举值：
+
+- identity：没有进行任何转场。
+- topLeading：滑动容器内子视图即将向上或向左移出可见区域时进行转场。
+- bottomTrailing：滑动容器内子视图即将向下或向右移出可见区域时进行转场。
+
+另外，该枚举可以通过属性 `value` 获取转场进度添加转场效果，比如上面代码中的 `.radians(phase.value * 0.3)` 表示 item 会根据当前转场进度实时更新旋转角度。
+
+第二个方法的使用如下，它表示对于滑动容器顶部的子视图不进行转场，底部的子视图进行交互式转场。上面的第一个方法的默认 `configuration` 参数值就是 `.interactive` ，表示视图在滑动时，转场会随之进行。如果将该参数指定为 `.animated`，就没有交互式效果，只是一个简单的出现或者消失的动画，读者可以直接拷贝源码就行调试对比观察不同的效果。
+
+```swift
+.scrollTransition(
+  topLeading: .identity,
+  bottomTrailing: .interactive
+) { content, phase in
+  content
+    .scaleEffect(phase.isIdentity ? 1.0 : 0.95)
+    .opacity(phase.isIdentity ? 1.0 : 0.7)
+    .offset(y: phase.isIdentity ? 0.0 : 10)
+}
+```
+
+# 其它
+
+以上只是对滑动容器一些主要功能以及新特性的介绍，对于一些比较细节的 API 并没有涉及到，有兴趣进一步探究的读者请移步官方文档：[Scroll Views](https://developer.apple.com/documentation/swiftui/scroll-views)。
+
