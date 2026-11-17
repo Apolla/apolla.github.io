@@ -42,42 +42,27 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           "$HOME/.local/bin/hugo" version
 
-      - name: Install Dart Sass
+      - name: Install Dart Sass (standalone)
         run: |
-          sudo npm install -g sass@1.93.2
-          sass --version
+          set -e
+          SV=1.93.2
+          url="https://github.com/sass/dart-sass/releases/download/${SV}/dart-sass-${SV}-linux-x64.tar.gz"
+          curl -fsSL -o sass.tgz "$url"
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf sass.tgz
+          cp dart-sass/sass "$HOME/.local/bin/sass"
+          chmod +x "$HOME/.local/bin/sass"
+          ls -l "$HOME/.local/bin/sass"
+          "$HOME/.local/bin/sass" --version
 
       - name: Build site
         id: build
-        continue-on-error: true
         run: |
           set -o pipefail
-          mkdir -p "$RUNNER_TEMP/diag"
-          {
-            hugo version || true
-            sass --version || true
-            node --version || true
-            du -sh themes/FixIt static/images content || true
-          } > "$RUNNER_TEMP/diag/env.txt" 2>&1
-          hugo --gc --minify --logLevel warn > "$RUNNER_TEMP/diag/build.log" 2>&1 || echo "build failed"
-          tail -60 "$RUNNER_TEMP/diag/build.log" || true
-          test -f public/index.html && test -f public/CNAME && echo "BUILD OK"
-
-      - name: Publish diagnostics
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ runner.temp }}/diag
-          publish_branch: ci-log
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
-          commit_message: "diag: ${{ github.sha }}"
-          force_orphan: true
-
-      - name: Fail on build error
-        if: steps.build.outcome != 'success'
-        run: exit 1
+          hugo --gc --minify --logLevel warn
+          test -f public/index.html
+          test -f public/CNAME
+          echo "BUILD OK"
 
       - name: Deploy to main
         uses: peaceiris/actions-gh-pages@v4
