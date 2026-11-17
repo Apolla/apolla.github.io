@@ -1,2 +1,0 @@
-<pre><code>{{ strings.TrimSpace .Inner }}</code></pre>
-{{- /* EOF */ -}}

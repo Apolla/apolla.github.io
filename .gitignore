@@ -1,4 +1,18 @@
 .tools/
 public/
 resources/
+themes/
+.hugo_build.lock
 .DS_Store
+
+# 迁移前的语雀导出原始素材（已转换进 content/ 与 static/images/）
+images/
+SwiftUI-eul/
+swift/
+蓝牙/
+碎片芝士收藏/
+音视频/
+葵花宝典/
+直播/
+一阅阅读/
+组件化/

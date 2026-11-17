@@ -1,31 +1,25 @@
 # 宋明的博客
 
-Hugo + [FixIt](https://github.com/hugo-fixit/FixIt) 主题，GitHub Pages 部署。
+Hugo + [FixIt](https://github.com/hugo-fixit/FixIt) 主题，GitHub Pages 自动部署。
 
-- 站点域名：https://apolla.cc
-- 源码分支：`source`（Hugo 源码 + Actions 工作流）
-- 发布分支：`main`（由 Actions 构建产物自动推送，请勿手工编辑）
-- 历史站点备份：`legacy-site`（旧 memE 主题产物）、`master`（更早的 Gridea 站点）
+- 站点：https://apolla.cc
+- 源码分支：`source`（Hugo 源码 + GitHub Actions 工作流）
+- 发布分支：`main`（Actions 构建产物，请勿手工编辑）
+- 历史备份：`legacy-site`（旧 memE 主题产物）、`master`（更早的 Gridea 站点）
+- 主题：不在仓库内，CI 按固定 commit 拉取 FixIt
 
-## 本地开发
-
-```bash
-# Hugo 0.170+ (标准版即可) 与 Dart Sass
-export PATH="$PWD/.tools/dart-sass:$PATH"
-.tools/hugo server -D
-```
-
-## 构建
+## 本地预览
 
 ```bash
-export PATH="$PWD/.tools/dart-sass:$PATH"
-.tools/hugo --gc --minify
+git clone --depth 1 https://github.com/hugo-fixit/FixIt.git themes/FixIt   # 首次
+sudo npm install -g sass            # Dart Sass，Hugo 编译 SCSS 需要
+hugo server -D
 ```
 
 ## 发布
 
-推送到 `source` 分支即触发 Actions，构建结果自动发布到 `main`。
+```bash
+git add -A && git commit -m "post: xxx" && git push
+```
 
-## 文章
-
-文章位于 `content/posts/<分类英文名>/<slug>.md`，图片位于 `static/images/`。
+推送到 `source` 即触发构建，产物自动发布到 `main`。

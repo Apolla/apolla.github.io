@@ -2078,3 +2078,6 @@ c4u = false
   name = "关于"
   pageRef = "/about"
   weight = 5
+
+[minify]
+  disableHTML = true

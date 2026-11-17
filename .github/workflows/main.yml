@@ -21,6 +21,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch FixIt theme
+        run: |
+          set -e
+          THEME_SHA=48384b8
+          rm -rf themes/FixIt
+          mkdir -p themes/FixIt
+          cd themes/FixIt
+          git init -q
+          git remote add origin https://github.com/hugo-fixit/FixIt.git
+          git fetch -q --depth 1 origin ${THEME_SHA}
+          git checkout -q FETCH_HEAD
+          ls layouts >/dev/null
+          cd ../..
+
       - name: Install Hugo 0.170.0
         run: |
           set -e
@@ -44,6 +58,7 @@ jobs:
         run: |
           hugo --gc --minify --logLevel warn
           test -f public/index.html
+          test -f public/CNAME
 
       - name: Deploy to main
         uses: peaceiris/actions-gh-pages@v4
