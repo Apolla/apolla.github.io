@@ -28,52 +28,42 @@ jobs:
           git clone -q --depth 1 --branch main https://github.com/hugo-fixit/FixIt.git themes/FixIt
           cd themes/FixIt && echo "theme commit: $(git rev-parse --short HEAD)" && cd ../..
 
-      - name: Install Hugo and Dart Sass
+      - name: Install Hugo 0.170.0
         run: |
-          set -x
-          mkdir -p "$HOME/.local/bin" "$RUNNER_TEMP/diag"
+          set -e
           V=0.170.0
+          mkdir -p "$HOME/.local/bin"
           for name in "hugo_extended_${V}_linux-amd64.tar.gz" "hugo_${V}_linux-amd64.tar.gz"; do
             if curl -fsSL --retry 3 -o hugo.tgz "https://github.com/gohugoio/hugo/releases/download/v${V}/${name}"; then
-              echo "hugo asset: $name"
-              break
+              echo "hugo asset: $name"; break
             fi
           done
           tar -xzf hugo.tgz -C "$HOME/.local/bin" hugo
-          SV=1.93.2
-          curl -fsSL --retry 3 -o sass.tgz "https://github.com/sass/dart-sass/releases/download/${SV}/dart-sass-${SV}-linux-x64.tar.gz"
-          tar -xzf sass.tgz
-          ls -l dart-sass | head -5
-          cp dart-sass/sass "$HOME/.local/bin/sass"
-          chmod +x "$HOME/.local/bin/sass"
-          "$HOME/.local/bin/hugo" version | tee "$RUNNER_TEMP/diag/versions.txt"
-          "$HOME/.local/bin/sass" --version | tee -a "$RUNNER_TEMP/diag/versions.txt"
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+          "$HOME/.local/bin/hugo" version
+
+      - name: Install Dart Sass
+        run: |
+          set -e
+          SV=1.93.2
+          mkdir -p "$HOME/.local/lib" "$HOME/.local/bin"
+          curl -fsSL --retry 3 -o sass.tgz "https://github.com/sass/dart-sass/releases/download/${SV}/dart-sass-${SV}-linux-x64.tar.gz"
+          tar -xzf sass.tgz -C "$HOME/.local/lib"
+          # dart-sass 的 sass 是 shell 脚本，依赖同目录 src/，必须整体保留
+          ln -sf "$HOME/.local/lib/dart-sass/sass" "$HOME/.local/bin/sass"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          sass --version
 
       - name: Build site
-        id: build
         run: |
           set -o pipefail
-          hugo --gc --minify --logLevel warn 2>&1 | tee "$RUNNER_TEMP/diag/build.log"
+          hugo --gc --minify --logLevel warn
           test -f public/index.html
           test -f public/CNAME
-          echo "BUILD OK" | tee -a "$RUNNER_TEMP/diag/build.log"
-
-      - name: Publish diagnostics
-        if: always() && github.ref == 'refs/heads/source'
-        continue-on-error: true
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ runner.temp }}/diag
-          publish_branch: ci-log
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
-          commit_message: "diag: ${{ github.sha }}"
-          force_orphan: true
+          echo "BUILD OK"
 
       - name: Deploy to main
-        if: steps.build.outcome == 'success'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
