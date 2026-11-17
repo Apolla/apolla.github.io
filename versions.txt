@@ -1,0 +1,1 @@
+hugo v0.170.0-f7aa05f0f521611aa960b2da56e1870ea04f57b2 linux/amd64 BuildDate=2026-11-13T14:17:19Z VendorInfo=gohugoio
