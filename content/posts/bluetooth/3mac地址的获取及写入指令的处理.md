@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["蓝牙"]
+aliases:
+  - "/posts/3mac地址的获取及写入指令的处理/"
 ---
 
 ## Mac地址的获取

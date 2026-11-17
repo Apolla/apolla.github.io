@@ -5,6 +5,8 @@ lastmod: 2024-04-15T09:22:49+08:00
 draft: false
 categories: ["Swift"]
 weight: 16
+aliases:
+  - "/posts/error/"
 ---
 
 ## 自定义错误

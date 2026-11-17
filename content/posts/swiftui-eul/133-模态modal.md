@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 15", "iOS 17", "macOS 14"]
 weight: 1
+aliases:
+  - "/posts/1.3.3-模态modal/"
 ---
 
 <br>

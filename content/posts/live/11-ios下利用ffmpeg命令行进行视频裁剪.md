@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/11-ios下利用ffmpeg命令行进行视频裁剪/"
 ---
 
 1. 安装[yasm](http://linux.softpedia.com/get/Programming/Assembler-Tools/Yasm-621.shtml)

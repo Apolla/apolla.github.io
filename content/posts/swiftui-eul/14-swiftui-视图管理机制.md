@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 15b5", "iOS 17", "macOS 14"]
 weight: 1
+aliases:
+  - "/posts/1.4-swiftui-视图管理机制/"
 ---
 
 <br>

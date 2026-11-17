@@ -6,6 +6,8 @@ draft: false
 categories: ["碎片芝士收藏"]
 tags: ["移动客户端架构设计", "XCFramework"]
 weight: 5
+aliases:
+  - "/posts/ios架构设计ios开发包二进制化.a静态库.framework静态库动态库.dyld动态库xcfameworks等-掘金/"
 ---
 
 ## 前言

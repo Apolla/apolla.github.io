@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14.3", "iOS 16.4", "macOS 13.3"]
 weight: 1
+aliases:
+  - "/posts/3.6-列表list/"
 ---
 
 <br>

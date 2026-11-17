@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/6推荐的直播文章和rtmp直播地址/"
 ---
 
 - 解读：[X264和H264 是什么？](http://blog.sina.com.cn/s/blog_4ad042e50100ijcq.html)

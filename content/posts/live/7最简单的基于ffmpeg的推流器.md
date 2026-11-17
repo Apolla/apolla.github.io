@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/7最简单的基于ffmpeg的推流器/"
 ---
 
 本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。

@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/3.2-内建-subscriber-的使用/"
 ---
 
 Combine 内建了两个 Subscriber：sink、assign，SwiftUI 框架中有一个内建的 Subscriber：onReceive。

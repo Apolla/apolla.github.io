@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["蓝牙"]
+aliases:
+  - "/posts/4readvaluesetnotifyvaluewritevalue的含义和使用/"
 ---
 
 我们使用nRF Connect(一个调试蓝牙的第三方工具)先连接一个设备，可以看到设备相关信息，如下：

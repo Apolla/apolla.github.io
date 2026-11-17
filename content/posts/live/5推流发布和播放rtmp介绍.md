@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/5推流发布和播放rtmp介绍/"
 ---
 
 准备工作（~表示安装目录）：

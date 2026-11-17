@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/apple-configurator-2-之-web-clips-简书/"
 ---
 
 ## 一、Apple Configurator 2

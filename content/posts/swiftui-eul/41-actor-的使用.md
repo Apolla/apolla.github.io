@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 2
+aliases:
+  - "/posts/4.1-actor-的使用/"
 ---
 
 # Actor 并发模型

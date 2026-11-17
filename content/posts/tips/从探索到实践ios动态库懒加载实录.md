@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/从探索到实践ios动态库懒加载实录/"
 ---
 
 ## 导读

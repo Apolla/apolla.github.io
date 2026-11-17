@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14b3", "Swift 5.7"]
 weight: 4
+aliases:
+  - "/posts/1-swift-5.7-新特性/"
 ---
 
 <br>

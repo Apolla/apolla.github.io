@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/4如何做一款inke版的app/"
 ---
 
 # 一、直播现状简介

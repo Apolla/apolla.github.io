@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14", "iOS 16", "macOS 13"]
 weight: 1
+aliases:
+  - "/posts/1.3.1-导航之-navigationstack/"
 ---
 
 <br>

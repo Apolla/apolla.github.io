@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14.3", "Swift 5.8"]
 weight: 4
+aliases:
+  - "/posts/4-swift-5.8-新特性/"
 ---
 
 <br>

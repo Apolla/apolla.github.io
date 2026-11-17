@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/8ffmpeg在ios上完美编译/"
 ---
 
 最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（[https://github.com/kewlbear/FFmpeg-iOS-build-script](https://github.com/kewlbear/FFmpeg-iOS-build-script)），就可完美编译

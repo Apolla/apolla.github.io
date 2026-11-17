@@ -5,6 +5,8 @@ lastmod: 2024-04-15T15:11:37+08:00
 draft: false
 categories: ["Swift"]
 weight: 14
+aliases:
+  - "/posts/协议-protocol/"
 ---
 
 * * *

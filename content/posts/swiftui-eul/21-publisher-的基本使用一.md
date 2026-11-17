@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/2.1-publisher-的基本使用一/"
 ---
 
 在前面的章节中，实际上我们已经多次使用过 Publisher，只是我们不曾察觉。比如我们之前使用的 ObservedObject，它的定义如下：

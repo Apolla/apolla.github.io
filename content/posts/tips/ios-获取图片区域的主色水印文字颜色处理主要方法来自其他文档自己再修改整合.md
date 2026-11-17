@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/ios-获取图片区域的主色水印文字颜色处理主要方法来自其他文档自己再修改整合/"
 ---
 
 ```objectivec

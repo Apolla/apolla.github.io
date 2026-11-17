@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 15", "iOS 17", "macOS 14"]
 weight: 1
+aliases:
+  - "/posts/4.3-图表charts/"
 ---
 
 <br>

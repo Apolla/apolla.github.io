@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["@globaActor", "final", "GlobaActor", "Actor", "static"]
 weight: 2
+aliases:
+  - "/posts/4.2-@globalactor@mainactor-的使用/"
 ---
 
 # GlobalActor

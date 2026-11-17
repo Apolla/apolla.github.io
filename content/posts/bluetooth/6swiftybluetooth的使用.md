@@ -5,6 +5,8 @@ lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["蓝牙"]
 tags: ["SwiftyBluetooth", "Swift", "CoreBluetooth"]
+aliases:
+  - "/posts/6swiftybluetooth的使用/"
 ---
 
 # 简介

@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/ios开发之uicollectionviewcompositionallayout/"
 ---
 
 > 横向滚动+竖向滚动的collectionView iOS13.0开始支持

@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14b3", "Swift 5.7"]
 weight: 4
+aliases:
+  - "/posts/2-swift-中的不透明类型和存在类型/"
 ---
 
 <br>

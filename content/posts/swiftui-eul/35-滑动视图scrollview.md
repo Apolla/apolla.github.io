@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 15b3", "iOS 17", "macOS 14"]
 weight: 1
+aliases:
+  - "/posts/3.5-滑动视图scrollview/"
 ---
 
 <br>

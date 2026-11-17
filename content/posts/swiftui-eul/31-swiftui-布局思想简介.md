@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14", "iOS 16", "macOS 13"]
 weight: 1
+aliases:
+  - "/posts/3.1-swiftui-布局思想简介/"
 ---
 
 <br>

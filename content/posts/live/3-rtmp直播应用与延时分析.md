@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/3-rtmp直播应用与延时分析/"
 ---
 
 直播应用中，RTMP和HLS基本上可以覆盖所有客户端观看

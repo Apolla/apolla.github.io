@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/4.1-operators-使用手册一/"
 ---
 
 我们可以在数据流的管道中，使用 Operators 对上游的数据进行各种操作，然后再发送给下游的订阅者，这就是 Operators 的作用。

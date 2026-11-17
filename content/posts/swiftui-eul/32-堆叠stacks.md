@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14", "iOS 16", "macOS 13"]
 weight: 1
+aliases:
+  - "/posts/3.2-堆叠stacks/"
 ---
 
 <br>

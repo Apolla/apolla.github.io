@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/4.2-operators-使用手册二/"
 ---
 
 # Mathematic

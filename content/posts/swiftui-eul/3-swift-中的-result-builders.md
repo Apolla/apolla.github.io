@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14", "iOS 16", "macOS 13"]
 weight: 4
+aliases:
+  - "/posts/3-swift-中的-result-builders/"
 ---
 
 <br>

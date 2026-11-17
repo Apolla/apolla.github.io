@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/9编译ffmpeg和集成第三方实现直播监控类/"
 ---
 
 最近由于项目需要，接触了一下ffmpeg的编译和使用。

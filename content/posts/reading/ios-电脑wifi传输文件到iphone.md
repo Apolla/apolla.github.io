@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["一阅阅读"]
+aliases:
+  - "/posts/ios-电脑wifi传输文件到iphone/"
 ---
 
 ##1.前言

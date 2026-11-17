@@ -5,6 +5,8 @@ lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["蓝牙"]
 tags: ["swift\n//先导入"]
+aliases:
+  - "/posts/2蓝牙常用api/"
 ---
 
 上篇讲了蓝牙相关的基本概念，现在结合代码讲讲具体实现。首先需要创建一个CBCentralManager对象，检查蓝牙的状态，只有蓝牙为poweredOn状态，才可进行下一步连接动作。

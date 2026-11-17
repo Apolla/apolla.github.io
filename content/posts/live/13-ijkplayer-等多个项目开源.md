@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/13-ijkplayer-等多个项目开源/"
 ---
 
 SegmentFault 兄弟 + 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。

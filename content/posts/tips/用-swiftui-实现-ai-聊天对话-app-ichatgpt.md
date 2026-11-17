@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/用-swiftui-实现-ai-聊天对话-app-ichatgpt/"
 ---
 
 原文链接：[https://juejin.cn/post/7175051294808211512?](https://juejin.cn/post/7175051294808211512?)

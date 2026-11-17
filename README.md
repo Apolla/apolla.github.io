@@ -28,6 +28,9 @@ git add -A && git commit -m "post: xxx" && git push
 ## 目录约定
 
 - `content/posts/<分类>/<文章>.md`：正文（front matter: title/date/categories/tags）
+- 每个分类目录里有一个 `_index.md`，它让该目录成为独立分区，文章 URL 因此带上目录名：
+  `/posts/<目录名>/<标题 slug>/`（例如 `/posts/swiftui-eul/1.4-swiftui-视图管理机制/`）。
+  新增分类时记得同步创建 `_index.md`，否则该目录的文章会退回到 `/posts/<slug>/`。
 - `static/images/`：图片，正文用 `/images/xxx.png` 引用
 - `hugo.toml`：站点配置（覆盖主题默认值）
 - `static/CNAME`：自定义域名 `apolla.cc`

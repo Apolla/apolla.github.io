@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/swift-开发者常犯的十大错误/"
 ---
 
 ![](/images/ecd61e61e9a4fe641373f1fcb12c8153.webp)

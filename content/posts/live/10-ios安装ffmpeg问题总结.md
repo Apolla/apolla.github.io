@@ -4,6 +4,8 @@ date: 2024-03-10T09:54:01+08:00
 lastmod: 2024-03-10T09:54:01+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/10-ios安装ffmpeg问题总结/"
 ---
 
 **说一下我自己的情况。还有（ios下的ffmpegh可以下载，代码由我改，基本没啥问题）**

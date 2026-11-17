@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/16ios视频播放器代码和界面分离/"
 ---
 
 最近业余时间整理的一个ios播放器，界面采用storyboard,以前几乎都是用代码布局，但是用过一个项目storyboard后，就感觉storyboard很靠谱，团队合作版本控制的问题解决其实很简单，每个人一个storyboard就可以了。播放代码使用的是avplayer，最大的优化就是播放界面和播放代码完全分离。

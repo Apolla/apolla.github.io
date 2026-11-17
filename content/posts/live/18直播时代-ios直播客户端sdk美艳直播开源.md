@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/18直播时代--ios直播客户端sdk美艳直播开源/"
 ---
 
 # [直播时代--IOS直播客户端SDK，美艳直播【开源】](https://www.cnblogs.com/Hakim/p/5242304.html)

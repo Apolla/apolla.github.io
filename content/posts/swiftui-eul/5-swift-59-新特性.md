@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 15.0 beta", "Swift 5.9"]
 weight: 4
+aliases:
+  - "/posts/5-swift-5.9-新特性/"
 ---
 
 <br>

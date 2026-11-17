@@ -4,6 +4,8 @@ date: 2024-03-09T23:21:58+08:00
 lastmod: 2024-03-09T23:21:58+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/17-mpmovieplayerviewcontroller/"
 ---
 
 MPMoviePlayerViewController 解释：视频播放器

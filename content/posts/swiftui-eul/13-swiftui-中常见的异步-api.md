@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: [".onAppear", ".onDisAppear", ".onChange", ".task"]
 weight: 2
+aliases:
+  - "/posts/1.3-swiftui-中常见的异步-api/"
 ---
 
 # .task

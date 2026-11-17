@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["组件化"]
+aliases:
+  - "/posts/ios-cocoapods组件平滑二进制化解决方案及详细教程二之subspecs篇/"
 ---
 
 ### 这篇文章主要想介绍以下几个部分：

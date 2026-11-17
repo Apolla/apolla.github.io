@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["音视频"]
+aliases:
+  - "/posts/rgbyuv/"
 ---
 
 # 一、RGB编码格式

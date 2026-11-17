@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["直播"]
+aliases:
+  - "/posts/15-ios使用ijkplayer/"
 ---
 
 最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：

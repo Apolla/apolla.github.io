@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/3.1-subscriber-的详细介绍/"
 ---
 
 # 订阅行为的详细过程

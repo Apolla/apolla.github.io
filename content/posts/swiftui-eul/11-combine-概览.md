@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/1.1-combine-概览/"
 ---
 
 WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。

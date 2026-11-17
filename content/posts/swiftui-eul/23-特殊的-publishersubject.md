@@ -5,6 +5,8 @@ lastmod: 2024-04-19T15:20:05+08:00
 draft: false
 categories: ["SwiftUI"]
 weight: 3
+aliases:
+  - "/posts/2.3-特殊的-publishersubject/"
 ---
 
 Subject 协议继承自 Publisher 协议，遵循 Subject 协议的 Publisher 是一种特定类型的 Publisher，它有如下方法：

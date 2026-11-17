@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/ios后台保活/"
 ---
 
 项目内嵌了H5导出的包 但是APP进入后台会导致未加载页面无法响应，故此想到后台保活策略 参考网上教程[https://blog.csdn.net/WangQingLei0307/article/details/112002904](https://blog.csdn.net/WangQingLei0307/article/details/112002904)

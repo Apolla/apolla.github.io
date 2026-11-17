@@ -6,6 +6,8 @@ draft: false
 categories: ["SwiftUI"]
 tags: ["Xcode 14.2", "iOS 16.3", "macOS 13.2"]
 weight: 1
+aliases:
+  - "/posts/2.8-使用-uikitappkit/"
 ---
 
 <br>

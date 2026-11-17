@@ -4,6 +4,8 @@ date: 2024-03-10T09:47:41+08:00
 lastmod: 2024-03-10T09:47:41+08:00
 draft: false
 categories: ["碎片芝士收藏"]
+aliases:
+  - "/posts/如何实现-ios-16-带来的-depth-effect-图片效果/"
 ---
 
 原文链接：[https://juejin.cn/post/7197608023430283319?](https://juejin.cn/post/7197608023430283319?)

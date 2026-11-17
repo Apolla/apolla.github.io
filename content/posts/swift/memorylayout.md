@@ -5,6 +5,8 @@ lastmod: 2024-04-09T14:44:05+08:00
 draft: false
 categories: ["Swift"]
 weight: 5
+aliases:
+  - "/posts/memorylayout/"
 ---
 
 > 可以使用MemoryLayout获取数据类型占用的内存大小
