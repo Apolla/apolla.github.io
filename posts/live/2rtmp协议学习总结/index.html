@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>2：RTMP协议学习总结 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="RTMP协议是一个互联网TCP/IP五层体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。 1 消息 消息是RTMP协议中基本的数据单元。不同种类的消息包含不同的Message Type ID，代表不同的功能。RTMP协议中一共规定了十多种消息类型，分别发挥着不同的作用。例如，Message Type ID在1-7的消息用于协议控制，这些消息一般是RTMP协议自身管理要使用的消息，用户一般情况下无需操作其中的数据。Message Type ID为8，9的消息分别用于传输音频和视频数据。Message Type ID为15-20的消息用于发送AMF编码的命令，负责用户与服务器之间的交互，比如播放，暂停等等。消息首部（Message Header）有四部分组成：标志消息类型的Message Type ID，标志消息长度的Payload Length，标识时间戳的Timestamp，标识消息所属媒体流的Stream ID。消息的报文结构如下图所示。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="2：RTMP协议学习总结">
+	<meta itemprop="description" content="RTMP协议是一个互联网TCP/IP五层体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。 1 消息 消息是RTMP协议中基本的数据单元。不同种类的消息包含不同的Message Type ID，代表不同的功能。RTMP协议中一共规定了十多种消息类型，分别发挥着不同的作用。例如，Message Type ID在1-7的消息用于协议控制，这些消息一般是RTMP协议自身管理要使用的消息，用户一般情况下无需操作其中的数据。Message Type ID为8，9的消息分别用于传输音频和视频数据。Message Type ID为15-20的消息用于发送AMF编码的命令，负责用户与服务器之间的交互，比如播放，暂停等等。消息首部（Message Header）有四部分组成：标志消息类型的Message Type ID，标志消息长度的Payload Length，标识时间戳的Timestamp，标识消息所属媒体流的Stream ID。消息的报文结构如下图所示。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="2076">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="2：RTMP协议学习总结">
+	<meta property="og:description" content="RTMP协议是一个互联网TCP/IP五层体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。 1 消息 消息是RTMP协议中基本的数据单元。不同种类的消息包含不同的Message Type ID，代表不同的功能。RTMP协议中一共规定了十多种消息类型，分别发挥着不同的作用。例如，Message Type ID在1-7的消息用于协议控制，这些消息一般是RTMP协议自身管理要使用的消息，用户一般情况下无需操作其中的数据。Message Type ID为8，9的消息分别用于传输音频和视频数据。Message Type ID为15-20的消息用于发送AMF编码的命令，负责用户与服务器之间的交互，比如播放，暂停等等。消息首部（Message Header）有四部分组成：标志消息类型的Message Type ID，标志消息长度的Payload Length，标识时间戳的Timestamp，标识消息所属媒体流的Stream ID。消息的报文结构如下图所示。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2：RTMP协议学习总结">
+  <meta name="twitter:description" content="RTMP协议是一个互联网TCP/IP五层体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。 1 消息 消息是RTMP协议中基本的数据单元。不同种类的消息包含不同的Message Type ID，代表不同的功能。RTMP协议中一共规定了十多种消息类型，分别发挥着不同的作用。例如，Message Type ID在1-7的消息用于协议控制，这些消息一般是RTMP协议自身管理要使用的消息，用户一般情况下无需操作其中的数据。Message Type ID为8，9的消息分别用于传输音频和视频数据。Message Type ID为15-20的消息用于发送AMF编码的命令，负责用户与服务器之间的交互，比如播放，暂停等等。消息首部（Message Header）有四部分组成：标志消息类型的Message Type ID，标志消息长度的Payload Length，标识时间戳的Timestamp，标识消息所属媒体流的Stream ID。消息的报文结构如下图所示。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" title="2：RTMP协议学习总结 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/bluetooth/4readvaluesetnotifyvaluewritevalue%E7%9A%84%E5%90%AB%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8/" title="4：readValue、setNotifyValue、writeValue的含义和使用" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/" title="18：直播时代--IOS直播客户端SDK，美艳直播【开源】" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "2：RTMP协议学习总结",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93\/"
+    },"genre": "posts","wordcount":  2076 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>2：RTMP协议学习总结</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="2076 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>RTMP协议是一个互联网TCP/IP五层体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。
+1 消息
+消息是RTMP协议中基本的数据单元。不同种类的消息包含不同的Message Type ID，代表不同的功能。RTMP协议中一共规定了十多种消息类型，分别发挥着不同的作用。例如，Message Type ID在1-7的消息用于协议控制，这些消息一般是RTMP协议自身管理要使用的消息，用户一般情况下无需操作其中的数据。Message Type ID为8，9的消息分别用于传输音频和视频数据。Message Type ID为15-20的消息用于发送AMF编码的命令，负责用户与服务器之间的交互，比如播放，暂停等等。消息首部（Message Header）有四部分组成：标志消息类型的Message Type ID，标志消息长度的Payload Length，标识时间戳的Timestamp，标识消息所属媒体流的Stream ID。消息的报文结构如下图所示。</p>
+<p><img loading="lazy" src='/images/c254ccdb487ea7465f04ecff40be4803.png' alt="image.png"></p>
+<p>2 消息块
+在网络上传输数据时，消息需要被拆分成较小的数据块，才适合在相应的网络环境上传输。RTMP协议中规定，消息在网络上传输时被拆分成消息块（Chunk）。消息块首部（Chunk Header）有三部分组成：用于标识本块的<strong>Chunk Basic Header</strong>，用于标识本块负载所属消息的<strong>Chunk Message Header</strong>，以及当时间戳溢出时才出现的Extended Timestamp。消息块的报文结构如下图所示。</p>
+<p><img loading="lazy" src='/images/7efc40a09ef32051dc43738b27ffb9fd.png' alt="image.png"></p>
+<p>3 消息分块
+在消息被分割成几个消息块的过程中，消息负载部分（Message Body）被分割成大小固定的数据块（默认是128字节，最后一个数据块可以小于该固定长度），并在其首部加上消息块首部（Chunk Header），就组成了相应的消息块。消息分块过程如下图所示，一个大小为307字节的消息被分割成128字节的消息块（除了最后一个）。
+<img loading="lazy" src='/images/614a5afcc472319e34b584aa14b1fe2e.png' alt="image.png"></p>
+<p>RTMP传输媒体数据的过程中，发送端首先把媒体数据封装成消息，然后把消息分割成消息块，最后<strong>将分割后的消息块通过TCP协议发送出去</strong>。接收端在通过TCP协议收到数据后，首先把消息块重新组合成消息，然后通过对消息进行解封装处理就可以恢复出媒体数据。</p>
+<p>2.1 Chunk Basic Header [1-3字节]
+HeaderType+ChannelID组成，其中ChannelID的大小决定了整个Chunk Basic Header的大小</p>
+<p>2.1.1  这个字段编码了消息块流的 ID 和消息块的类型，消息块类型决定了消息包头的编码格式，长度完全 取决于可变长的消息块流 HeaderType(fmt):决定了Chunk Message Header的编码方式和大小,在第一个字节的高两位
+Bits Chunk Message Header Length
+00   12 bytes
+01   8 bytes
+10   4 bytes
+11   1 byte</p>
+<p>2.1.2 ChannelID：
+ChannelID 用途
+02              Ping 和ByteRead通道
+03              Invoke通道 我们的connect() publish()和自字写的NetConnection.Call() 数据都是在这个通道的
+04              Audio和Vidio通道
+05 06 07     服务器保留,经观察FMS2用这些Channel也用来发送音频或视频数据</p>
+<p>2.2 Chunk Message Header
+以最大fmt =00 length(Chunk Message Header) == 12 为例
+Chunk Message Header的结构是:timestamp,message_length,message_type,msg_stream_id
+其中message_type是一个枚举变量：
+type为1,2,3,5,6的时候是协议控制消息
+type为4的时候表示 User Control Messages [Event_type + Event_Data] Event_type有Stream Begin，Stream End&hellip;
+type为8，音频数据
+type为9，视频数据
+type为18 元数据消息[AMF0]
+type为20 命令消息 Command Message(RPC Message)
+These messages are sent to perform some operations like connect, createStream, publish, play, pause on the peer.
+命令消息主要分成两种NetConnection和NetStream。
+connect，call，close，createStream命令可以在NetConnection中发送。
+coonect(name，TranscationID,Command Object pair)
+play，publish,seek,pause等命令可以在NetStream中发送。</p>
+<p>2.3 Ext Time Stamp</p>
+<p>2.4数据</p>
+<p>3 <a href="http://blog.csdn.net/leixiaohua1020/article/details/11704355" target="_blank" rel="external nofollow noopener noreferrer">RTMP流媒体播放过程<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+RTMP协议规定，播放一个流媒体有两个前提步骤：第一步，建立一个网络连接（NetConnection）；第二步，建立一个网络流（NetStream）。其中，网络连接代表服务器端应用程序和客户端之间基础的连通关系。网络流代表了发送多媒体数据的通道。服务器和客户端之间只能建立一个网络连接，但是基于该连接可以创建很多网络流。
+播放一个RTMP协议的流媒体需要经过以下几个步骤：握手，建立连接，建立流，播放。RTMP连接都是以握手作为开始的。建立连接阶段用于建立客户端与服务器之间的“网络连接”；建立流阶段用于建立客户端与服务器之间的“网络流”；播放阶段用于传输视音频数据。
+参考:<a href="http://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank" rel="external nofollow noopener noreferrer">http://blog.csdn.net/leixiaohua1020/article/category/1362941<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="http://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank" rel="external nofollow noopener noreferrer">RTMP协议中文版<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="http://wenku.baidu.com/link?url=Lc4gR-FLeCkHCMM1NL-FcAUtKFTRaFn0tcdoqcid6Dtvu_Q2wlSQ-GMY711Ptc_TdeG2KU0E9e-aHddFVZJSMwt2CujY2p7AdHg8Vr15HuG" target="_blank" rel="external nofollow noopener noreferrer">http://wenku.baidu.com/link?url=Lc4gR-FLeCkHCMM1NL-FcAUtKFTRaFn0tcdoqcid6Dtvu_Q2wlSQ-GMY711Ptc_TdeG2KU0E9e-aHddFVZJSMwt2CujY2p7AdHg8Vr15HuG<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="http://blog.csdn.net/leixiaohua1020/article/category/1362941" target="_blank" rel="external nofollow noopener noreferrer">RTMP协议<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>英文版
+<a href="http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/rtmp/pdf/rtmp_specification_1.0.pdf" target="_blank" rel="external nofollow noopener noreferrer">http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/rtmp/pdf/rtmp_specification_1.0.pdf<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+开源项目 RTMP Dump
+<a href="http://rtmpdump.mplayerhq.hu/" target="_blank" rel="external nofollow noopener noreferrer">http://rtmpdump.mplayerhq.hu/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" data-title="2：RTMP协议学习总结"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" data-title="2：RTMP协议学习总结"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/" class="post-nav-item" rel="prev" title="18：直播时代--IOS直播客户端SDK，美艳直播【开源】"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>18：直播时代--IOS直播客户端SDK，美艳直播【开源】</a><a href="/posts/live/4%E5%A6%82%E4%BD%95%E5%81%9A%E4%B8%80%E6%AC%BEinke%E7%89%88%E7%9A%84app/" class="post-nav-item" rel="next" title="4：如何做一款inke版的APP">4：如何做一款inke版的APP<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/1936bee662c88951570e74faf9e2f433.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

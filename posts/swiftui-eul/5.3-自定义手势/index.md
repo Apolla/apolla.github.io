@@ -1,0 +1,122 @@
+# 5.3 自定义手势
+
+
+<br>
+
+
+<br>
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+SwiftUI 内置了一些常用手势，它们都实现了 [Gesture](https://developer.apple.com/documentation/swiftui/gesture) 协议。
+
+如果需要自定义手势，也需要实现该协议，其声明如下：
+
+```swift
+public protocol Gesture {
+
+    /// The type representing the gesture's value.
+    associatedtype Value
+
+    /// The type of gesture representing the body of `Self`.
+    associatedtype Body : Gesture
+
+    /// The content and behavior of the gesture.
+    var body: Self.Body { get }
+}
+```
+
+和 View 协议类似，body 属性是必须实现的，它的类型由关联类型 Body 定义。另一个关联类型 Value 用于保存手势的状态，在 `.onChange` 、 `.udpating` 等监听方法中返回该状态。
+
+假设需要自定义轻扫手势，要求能够通过参数控制激活手势的最低速率，而且能够监听到手势的方向和速率。
+
+根据需求，先定义数据结构：
+
+```swift
+fileprivate struct SwipeGesture: Gesture {
+ 
+  enum Direction: String {
+    case left
+    case right
+    case up
+    case down
+  }
+  
+  struct Value {
+    var direction: Direction
+    var velocity: CGFloat
+  }
+  
+  var body: AnyGesture<Value> {
+    
+  }
+}
+```
+
+AnyGesture 可以基于已有的手势构建新的自定义手势，我们可以使用它基于内置的拖拽手势来实现轻扫功能：
+
+```swift
+var body: AnyGesture<Value> {
+  AnyGesture(
+    DragGesture(
+      minimumDistance: minimumDistance,
+      coordinateSpace: coordinateSpace
+    )
+    .map { v in
+      var direction: Direction
+      var velocity: CGFloat
+      
+      let offsetX = v.translation.width
+      let offsetY = v.translation.height
+      if abs(offsetX) > abs(offsetY) {
+        direction = offsetX > 0 ? .right : .left
+        velocity = abs(v.predictedEndTranslation.width)
+      } else {
+        direction = offsetY > 0 ? .down : .up
+        velocity = abs(v.predictedEndTranslation.height)
+      }
+      return .init(direction: direction, velocity: velocity)
+    }
+  )
+}
+```
+
+map 方法用于将手势的 Value 类型转换成我们所需要的数据类型，比如这里将 DragGesture.Value 转换成了 SwipeGesture.Value。
+
+关于手势速率的判定，这里使用了 DragGesture.Value 中的属性 predictedEndTranslation，它是一个预测值，表示拖动手势停止时，基于当前拖动速率视图可能的偏移量。
+
+接下来为 View 添加一个扩展便于调用：
+
+```swift
+fileprivate extension View {
+  
+  func onSwipe(
+    minimumVelocity: CGFloat = 150,
+    minimumDistance: CGFloat = 10,
+    coordinateSpace: CoordinateSpace = .local,
+    perform: @escaping (SwipeGesture.Value) -> Void
+  ) -> some View {
+    gesture(
+      SwipeGesture(
+        minimumDistance: minimumDistance,
+        coordinateSpace: coordinateSpace
+      )
+      .onEnded {
+        if $0.velocity >= minimumVelocity {
+          perform($0)
+        }
+      }
+    )
+  }
+}
+```
+
+minimumVelocity 参数可以设定触发轻扫手势的最低速率，另外两个参数和 DragGesture 一样。在手势结束返回执行事件时，需要判定当前速率是否符合预期。
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/5.3-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%89%8B%E5%8A%BF/  
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>13： Ijkplayer 等多个项目开源 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="SegmentFault 兄弟 &#43; 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="13： ijkplayer 等多个项目开源">
+	<meta itemprop="description" content="SegmentFault 兄弟 &#43; 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="902">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="13： ijkplayer 等多个项目开源">
+	<meta property="og:description" content="SegmentFault 兄弟 &#43; 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="13： ijkplayer 等多个项目开源">
+  <meta name="twitter:description" content="SegmentFault 兄弟 &#43; 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/" title="13： ijkplayer 等多个项目开源 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/" title="15： IOS使用ijkPlayer" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/12%E5%9F%BA%E4%BA%8Eijkplayer-%E8%A7%86%E9%A2%91%E6%B5%81-%E6%92%AD%E6%94%BE/" title="12：基于ijkplayer 视频流 播放" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "13： ijkplayer 等多个项目开源",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90\/"
+    },"genre": "posts","wordcount":  902 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>13： Ijkplayer 等多个项目开源</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="902 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>SegmentFault 兄弟 + 基友单位弹幕视频网 Bilibili（B 站）近日在 GitHub 网站上建立了开源工作组（BOSTF）（此处 1024 赞），用以分享与维护自己的开源项目，其中包括 DanmakuFlameMaster（燃烧吧！烈焰弹幕使）与 ijkplayer。前者是免费提供 Android 平台下应用弹幕集成的解决方案，而后者则提供 Android 和 iOS 双平台视频播放器的解决方案。</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th><img loading="lazy" src='/images/4d8946751f0f4a23590399c9713e58c7.png' alt="image.png"></th>
+            <th><img loading="lazy" src='/images/392f0b22ca3fa912f8574e9d1d0aea86.png' alt="image.png"></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div><p>开始项目介绍之前，悄悄地放张照片，从左到右以次是 B 站站长 bishi、IDG 资本女神 Linda、SF.GG CEO Sunny</p>
+<p>DanmakuFlameMaster
+项目地址：<a href="https://github.com/Bilibili/DanmakuFlameMaster" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/Bilibili/DanmakuFlameMaster<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<img loading="lazy" src='/images/a5bc64ff84fecc877810212c0016dc3e.png' alt="image.png"></p>
+<p>DanmakuFlameMaster，android 上开源弹幕解析绘制引擎项目，实现的特性有：</p>
+<ul>
+<li>使用多种方式 ( View / SurfaceView / TextureView ) 实现高效绘制</li>
+<li>B 站 xml 弹幕格式解析</li>
+<li>基础弹幕精确还原绘制</li>
+<li>支持 mode7 特殊弹幕</li>
+<li>多核机型优化，高效的预缓存机制</li>
+<li>支持多种显示效果选项实时切换</li>
+<li>实时弹幕显示支持</li>
+<li>换行弹幕支持/运动弹幕支持</li>
+<li>支持自定义字体</li>
+<li>支持多种弹幕参数设置</li>
+<li>支持多种方式的弹幕屏蔽</li>
+</ul>
+<p>ijkplayer
+项目地址：<a href="https://github.com/Bilibili/ijkplayer" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/Bilibili/ijkplayer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<img loading="lazy" src='/images/984a7b85c1702f66bdc2f1f5d7e3aec9.png' alt="image.png"></p>
+<p>ijkplayer，基于 ffplay 的跨平台播放器，实现的特性有：</p>
+<ul>
+<li>移除 FFmpeg 中不常用的特性以减小体积。</li>
+<li>对一些在线视频播放的 BUG 修复</li>
+<li>支持安卓 API 9-22 和 iOS 5.1.1-8.3.X</li>
+<li>使用各种平台原生的渲染方式进行优化</li>
+</ul>
+<p>作为国内首屈一指的弹幕视频网站，B 站的两个开源项目已经被多个 App 使用。其中美拍和斗鱼使用了 ijkplayer 项目，DanmakuFlameMaster 项目则被包括优酷土豆、开迅视频、MissEvan、echo 回声、斗鱼 TV、天天动听、被窝声次元、ACFUN 等 App 使用。
+技术上，ijkplayer 实现了跨平台功能，支持 Android 和 iOS 双平台；API 易于集成；编译配置可裁剪，方便控制安装包大小；支持 硬件加速解码，更加省电。而DanmakuFlameMaster 架构清晰，简单易用，支持多种高效率绘制方式选择，支持多种自定义功能设置。
+Bilibili，也被称为哔哩哔哩、B 站，是中国大陆一个动画、游戏相关的弹幕视频分享网站，因为其深厚的宅文化和实时评论功能，已经在 90 后中收到广泛的欢迎。据悉，B 站的程序员也多为 90 后。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/" data-title="13： Ijkplayer 等多个项目开源"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/" data-title="13： Ijkplayer 等多个项目开源"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/12%E5%9F%BA%E4%BA%8Eijkplayer-%E8%A7%86%E9%A2%91%E6%B5%81-%E6%92%AD%E6%94%BE/" class="post-nav-item" rel="prev" title="12：基于ijkplayer 视频流 播放"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>12：基于ijkplayer 视频流 播放</a><a href="/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/" class="post-nav-item" rel="next" title="15： IOS使用ijkPlayer">15： IOS使用ijkPlayer<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/d7baff66af0b1683d9ea415ba387db9d.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>1.2 Async、await 的使用 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="async/await 上一节我们已经简单介绍了 async/await 的使用，接下来我们通过一个例子来加深对 async/await 的理解。如下是一个下载图片并展示在界面上的示例代码：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="1.2 async、await 的使用">
+	<meta itemprop="description" content="async/await 上一节我们已经简单介绍了 async/await 的使用，接下来我们通过一个例子来加深对 async/await 的理解。如下是一个下载图片并展示在界面上的示例代码：">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="1867">
+	<meta itemprop="keywords" content="SwiftUI"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="1.2 async、await 的使用">
+	<meta property="og:description" content="async/await 上一节我们已经简单介绍了 async/await 的使用，接下来我们通过一个例子来加深对 async/await 的理解。如下是一个下载图片并展示在界面上的示例代码：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="1.2 async、await 的使用">
+  <meta name="twitter:description" content="async/await 上一节我们已经简单介绍了 async/await 的使用，接下来我们通过一个例子来加深对 async/await 的理解。如下是一个下载图片并展示在界面上的示例代码："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/" title="1.2 async、await 的使用 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.3-swiftui-%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%82%E6%AD%A5-api/" title="1.3 SwiftUI 中常见的异步 API" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.1-swift-%E5%B9%B6%E5%8F%91%E6%96%B0%E4%BD%93%E9%AA%8C/" title="1.1 Swift 并发新体验" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "1.2 async、await 的使用",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","wordcount":  1867 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>1.2 Async、await 的使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1867 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><h1 class="heading-element" id="asyncawait"><span>async/await</span>
+  <a href="#asyncawait" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>上一节我们已经简单介绍了 async/await 的使用，接下来我们通过一个例子来加深对 async/await 的理解。如下是一个下载图片并展示在界面上的示例代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">asyncawaitView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">img</span> <span class="p">=</span> <span class="n">UIImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">List</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Section</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">Image</span><span class="p">(</span><span class="n">uiImage</span><span class="p">:</span> <span class="n">img</span><span class="p">)</span> <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="n">resizable</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="n">aspectRatio</span><span class="p">(</span><span class="n">contentMode</span><span class="p">:</span> <span class="p">.</span><span class="n">fit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="n">header</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">SectionHeaderView</span><span class="p">(</span><span class="n">chapter</span><span class="p">:</span> <span class="s">&#34;async/await&#34;</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">listStyle</span><span class="p">(.</span><span class="n">insetGrouped</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">img</span> <span class="p">=</span> <span class="n">await</span> <span class="n">fetchImage</span><span class="p">()</span> <span class="c1">// 2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">fetchImage</span><span class="p">()</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">UIImage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">str</span> <span class="p">=</span> <span class="s">&#34;https://images.pexels.com/photos/1056251/pexels-photo-1056251.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">url</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="n">str</span><span class="p">)</span><span class="o">!</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">request</span> <span class="p">=</span> <span class="n">URLRequest</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">res</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">URLSession</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="n">request</span><span class="p">)</span> <span class="c1">// 3</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">res</span><span class="p">?.</span><span class="mi">0</span><span class="p">,</span> <span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">image</span> <span class="c1">// 4</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">UIImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>我们在 1、2、3、4 处打上断点，代码执行步骤如下图：</p>
+<p><img loading="lazy" src='/images/async_await.png' alt="/images/async_await.png"></p>
+<ol>
+<li>
+<p>主线程将空图 img 覆值给 Image；</p>
+</li>
+<li>
+<p>主线程继续运行，<code>.task</code> 在视图出现时，系统立即开启一个异步任务执行，这里是在子线程 Thread 7；</p>
+</li>
+<li>
+<p>子线程 7 开启的异步环境中，继续运行至调用 fetchImage 异步方法。</p>
+<blockquote>
+<p>注意：当程序运行至第 50 行代码时，<code>await</code> 会阻塞后续代码的运行。但线程 7 不会被阻塞，它会继续执行由系统分配的其它任务，这样才能最大程度低提高并发效率。而下载图片的工作会在另一个线程执行，直到图片的下载操作完成后，被阻塞的代码才会继续执行。</p>
+</blockquote>
+</li>
+<li>
+<p>图片下载完成后，当前线程在 Thread 13，这就是 <code>URLSession.shared.data</code> 工作的线程；</p>
+</li>
+<li>
+<p>异步任务完成了，<code>await</code> 阻塞处的代码继续执行；</p>
+</li>
+<li>
+<p>断点在这里第二次被捕获，这一步是将图片赋值给 img 实例，这里已切回至主线程。</p>
+<p>关于 @State，苹果的<a href="https://developer.apple.com/documentation/swiftui/state" target="_blank" rel="external nofollow noopener noreferrer">文档<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>有如下描述：</p>
+<blockquote>
+<p>You should only access a state property from inside the view’s body, or from methods called by it. For this reason, declare your state properties as private, to prevent clients of your view from accessing them. It is safe to mutate state properties from any thread.</p>
+</blockquote>
+<p>根据描述，我们应该只在 view 的 <code>body</code> 内访问 @State 修饰的属性。因为 <code>body</code> 是在主线程中运行的，无论是 @State 或其它属性包装起修饰的属性，只要是在 <code>body</code> 内修改，SwiftUI 都会确保相关的视图更新工作在主线程中进行。</p>
+</li>
+<li>
+<p>img 的值发生了改变，视图在主线程刷新。</p>
+</li>
+</ol>
+<p>关于 async/await 的内容就介绍就到这里，通过这两节的内容，相信你对 async/await 有了更详细的了解，剩下的就是多加运用和实践了。</p>
+<h1 class="heading-element" id="async-let"><span>async let</span>
+  <a href="#async-let" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>async/await 让我们可以简单方便地处理并发问题，但它有一定的局限性。因为 await 会阻塞当前任务，遇到多个任务需要并行执行时，它就无能为力了。后面介绍的 Task、TaskGroup 很强大，但使用起来不够不太方便，因此， Swift 提供了 <code>async let</code> 给我们使用。</p>
+<p>如下是一个下载三张图片后并刷新 UI 的示例代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">CatsView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">isParallel</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">imgs</span> <span class="p">=</span> <span class="nb">Array</span><span class="p">(</span><span class="n">repeating</span><span class="p">:</span> <span class="n">UIImage</span><span class="p">(),</span> <span class="bp">count</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">let</span> <span class="nv">imgUrlStrings</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;https://images.pexels.com/photos/1056251/pexels-photo-1056251.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;https://images.pexels.com/photos/1629061/pexels-photo-1629061.jpeg?auto=compress&amp;cs=tinysrgb&amp;h=750&amp;w=1260&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;https://images.pexels.com/photos/1404825/pexels-photo-1404825.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HStack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ForEach</span><span class="p">(</span><span class="mf">0.</span><span class="p">.&lt;</span><span class="n">imgs</span><span class="p">.</span><span class="bp">count</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Image</span><span class="p">(</span><span class="n">uiImage</span><span class="p">:</span> <span class="n">imgs</span><span class="p">[</span><span class="nv">$0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="n">resizable</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="n">aspectRatio</span><span class="p">(</span><span class="n">contentMode</span><span class="p">:</span> <span class="p">.</span><span class="n">fit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="n">isParallel</span> <span class="p">{</span> <span class="c1">// 异步并行</span>
+</span></span><span class="line"><span class="cl">        <span class="n">async</span> <span class="kd">let</span> <span class="nv">img0</span> <span class="p">=</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">async</span> <span class="kd">let</span> <span class="nv">img1</span> <span class="p">=</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">async</span> <span class="kd">let</span> <span class="nv">img2</span> <span class="p">=</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imgs</span> <span class="p">=</span> <span class="n">await</span> <span class="p">[</span><span class="n">img0</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">img2</span><span class="p">]</span> <span class="c1">// 2</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// 异步串行</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="n">await</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imgs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="n">await</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imgs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="n">await</span> <span class="n">fetchImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">imgUrlStrings</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">fetchImage</span><span class="p">(</span><span class="n">from</span> <span class="n">urlString</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">UIImage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">url</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="n">urlString</span><span class="p">)</span><span class="o">!</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">request</span> <span class="p">=</span> <span class="n">URLRequest</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">res</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">URLSession</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="n">request</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">res</span><span class="p">?.</span><span class="mi">0</span><span class="p">,</span> <span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">image</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">UIImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><ol>
+<li>每一行 async let 都会开启一个子任务并立即执行，并且会隐式地 <code>await</code></li>
+<li>异步任务会在这里暂停，直到所有并行的任务都完成了，才继续执行后面的代码</li>
+</ol>
+<p>你可以使用断点或者控制台打印的方式来调试上面的程序，可以清晰地看到整个程序的执行顺序。或者通过使用 Network Link Conditioner 控制网速来直观地观察界面的刷新（macOS 工具：<a href="https://developer.apple.com/download/all/?q=Hardware%20IO%20Tools" target="_blank" rel="external nofollow noopener noreferrer">下载<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，iPhone 可以在 设置 - 开发者 - Network Link Conditioner 中进行设置），你会发现使用 <code>async let</code> 并行下载图片时，它能更快将图片展示在界面上。</p>
+<p>两种执行方式的差异，在下面这张图也有直观的对比：</p>
+<p><img loading="lazy" src='/images/async_let.png' alt="/images/async_let.png"></p>
+<p>关于 await 和 async let 的使用并不是很难，至于如何选择，得考虑具体的需求场景。</p>
+<p>并发可以提高程序执行的效率，但这并不是一条定理，我们不能据此盲目地使用并发。比如视频处理这种需要占用大量系统资源的场景，如果使用多线程并行处理，未必是最佳选择。因为系统的性能是有峰值的，把系统所有的资源都用来单独处理一条视频就够它喝一壶的了，同时并行处理多个视频可能还会增加额外的性能开销，效率还不如集中力量办好一件事后，再继续依次处理后面的视频。熟悉影视剪辑或者 3D 建模的同学可能对此有所体会，一个工程完成后导出一个高清视频时，电脑都会疯狂运转，少则几分钟多则几小时，才能看到导出的成品。</p>
+<p>或许有读者会问为什么时 <code>async let</code> 而不是 async var？其实很简单，var 定义的是变量，变量意味着可以修改，如果一个变量在等待异步返回的结果时，而同时又能去修改该变量的值，那就再次陷入了数据竞争的陷阱，我们辛辛苦苦建立起来的线程安全的世界，瞬间又崩塌了。</p>
+<h1 class="heading-element" id="async-properties"><span>async properties</span>
+  <a href="#async-properties" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Swift 5.5 对<strong>只读属性</strong>加入了 <code>async</code> 和 <code>throws</code> 关键词的支持，可以单独使用 async 或 throws 关键词修饰，也可以同时使用。</p>
+<p>比如我们可以将上面示例中的 img 属性改成：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">asyncImg</span><span class="p">:</span> <span class="n">UIImage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">get</span> <span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">await</span> <span class="n">fetchImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果 fetchImage 支持 throw error，也可以写成：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">asyncImg</span><span class="p">:</span> <span class="n">UIImage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">get</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="n">await</span> <span class="n">fetchImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>此外，协议中定义的属性也支持以上关键词：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">protocol</span> <span class="nc">P</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">name</span><span class="p">:</span> <span class="nb">String</span> <span class="p">{</span> <span class="kr">get</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>显然，我们在实现协议时，也要和协议中声明的属性保持一致。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="1.2 Async、await 的使用"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/1.2-asyncawait-%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="1.2 Async、await 的使用"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/1.1-swift-%E5%B9%B6%E5%8F%91%E6%96%B0%E4%BD%93%E9%AA%8C/" class="post-nav-item" rel="prev" title="1.1 Swift 并发新体验"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>1.1 Swift 并发新体验</a><a href="/posts/swiftui-eul/1.3-swiftui-%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%82%E6%AD%A5-api/" class="post-nav-item" rel="next" title="1.3 SwiftUI 中常见的异步 API">1.3 SwiftUI 中常见的异步 API<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/dceccaf8cb7de80068714ca4595d7611.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

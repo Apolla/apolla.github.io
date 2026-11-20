@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>IOS CocoaPods组件平滑二进制化解决方案及详细教程 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="iOS CocoaPods组件平滑二进制化方案及详细教程 感谢&quot;fly2never_宝贝别哭&quot;。可以使用cocoapods-packager这个插件来方便生成library（静态库，动态库都可以）。 强烈建议生成framework。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程">
+	<meta itemprop="description" content="iOS CocoaPods组件平滑二进制化方案及详细教程 感谢&#34;fly2never_宝贝别哭&#34;。可以使用cocoapods-packager这个插件来方便生成library（静态库，动态库都可以）。 强烈建议生成framework。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="8177">
+	<meta itemprop="keywords" content="组件化"><meta property="og:url" content="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程">
+	<meta property="og:description" content="iOS CocoaPods组件平滑二进制化方案及详细教程 感谢&#34;fly2never_宝贝别哭&#34;。可以使用cocoapods-packager这个插件来方便生成library（静态库，动态库都可以）。 强烈建议生成framework。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程">
+  <meta name="twitter:description" content="iOS CocoaPods组件平滑二进制化方案及详细教程 感谢&#34;fly2never_宝贝别哭&#34;。可以使用cocoapods-packager这个插件来方便生成library（静态库，动态库都可以）。 强烈建议生成framework。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" title="iOS CocoaPods组件平滑二进制化解决方案及详细教程 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/" title="iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇" /><link rel="next" type="text/html" href="https://apolla.cc/posts/tips/cocoapods-%E5%AE%89%E8%A3%85/" title="cocoapods 安装" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "iOS CocoaPods组件平滑二进制化解决方案及详细教程",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/modularization\/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B\/"
+    },"genre": "posts","wordcount":  8177 ,
+    "url": "https:\/\/apolla.cc\/posts\/modularization\/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>IOS CocoaPods组件平滑二进制化解决方案及详细教程</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BB%84%E4%BB%B6%E5%8C%96/" class="post-category" title="分类 - 组件化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 组件化</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="8177 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 8200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 17 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#什么是组件二进制化">什么是组件二进制化？</a></li>
+        <li><a href="#为什么我们需要二进制化呢">为什么我们需要二进制化呢？</a></li>
+        <li><a href="#这带来一个新问题一步就位还是平滑过度">这带来一个新问题？一步就位还是平滑过度。</a></li>
+        <li><a href="#平滑二进制方案需求点">平滑二进制方案需求点</a></li>
+        <li><a href="#以下这个解决方案的教程满足了以上所有需求点">以下这个解决方案的教程满足了以上所有需求点</a></li>
+        <li><a href="#第一步源码生成静态库">第一步：源码生成静态库</a></li>
+        <li><a href="#为什么要删除i386">为什么要删除i386</a></li>
+        <li><a href="#第二步测试生成的静态库">第二步：测试生成的静态库。</a></li>
+        <li><a href="#至此我们构建出一个静态库只包含ytxchart的内容不包含依赖afnetwork和ytxserverid的内容">至此我们构建出一个静态库，只包含YTXChart的内容，不包含依赖AFNetwork和YTXServerId的内容</a></li>
+        <li><a href="#发布到自己的pod-repo-spec">发布到自己的pod repo spec</a></li>
+        <li><a href="#检查从spec-repo的source中安装">检查从spec repo的source中安装</a></li>
+        <li><a href="#尝试切回源码">尝试切回源码</a></li>
+        <li><a href="#特别注意is_source应当作为一个所有非二进制化pod库的统一标识并且通知你们的项目组里所有成员pod-install可能会有某几个已经二进制化的库使用二进制的内容is_source1-pod-install时所有的库都将会是源码的内容">特别注意IS_SOURCE应当作为一个所有非二进制化Pod库的统一标识，并且通知你们的项目组里所有成员。<code>pod install</code>可能会有某几个已经二进制化的库使用二进制的内容。<code>IS_SOURCE=1 pod install</code>时，所有的库都将会是源码的内容。</a></li>
+        <li><a href="#版本管理">版本管理</a>
+          <ul>
+            <li><a href="#完整分析">完整分析</a></li>
+            <li><a href="#再进一步">再进一步</a></li>
+          </ul>
+        </li>
+        <li><a href="#总结">总结：</a></li>
+        <li><a href="#下一步目标">下一步目标</a></li>
+        <li><a href="#关于资源文件资源文件在二进制化中的配置是一样的">关于资源文件，资源文件在二进制化中的配置是一样的</a></li>
+        <li><a href="#另外使用二进制化的cocoapods库不会增加ipa的大小所以我们应当优先用二进制化的东西这可以加快archive速度">另外，使用二进制化的CocoaPods库不会增加ipa的大小。所以我们应当优先用二进制化的东西，这可以加快Archive速度。</a></li>
+        <li><a href="#关于有sub-spec的cocoapods组件">关于有sub spec的CocoaPods组件</a></li>
+        <li><a href="#走过的弯路">走过的弯路！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！</a>
+          <ul>
+            <li><a href="#创建另一个ytxchartbinarypodspec">创建另一个YTXChartBinary.podspec</a></li>
+            <li><a href="#创建另一个专门放二进制化的spec-repo通过不同的source来区分">创建另一个专门放二进制化的Spec Repo，通过不同的Source来区分</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#后记加强篇">后记加强篇</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><p>iOS CocoaPods组件平滑二进制化方案及详细教程
+感谢&quot;fly2never_宝贝别哭&quot;。可以使用<a href="https://link.jianshu.com?t=https://github.com/CocoaPods/cocoapods-packager" target="_blank" rel="external nofollow noopener noreferrer">cocoapods-packager<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这个插件来方便生成library（静态库，动态库都可以）。
+强烈建议生成framework。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">IS_SOURCE</span><span class="p">=</span><span class="mi">1</span><span class="w"> </span><span class="nx">pod</span><span class="w"> </span><span class="kn">package</span><span class="w"> </span><span class="nx">YTXChart</span><span class="p">.</span><span class="nx">podspec</span><span class="w"> </span><span class="o">--</span><span class="nx">library</span><span class="w"> </span><span class="o">--</span><span class="nx">exclude</span><span class="o">-</span><span class="nx">deps</span><span class="w"> </span><span class="o">--</span><span class="nx">spec</span><span class="o">-</span><span class="nx">sources</span><span class="p">=</span><span class="nx">http</span><span class="p">:</span><span class="cp">//gitlab.baidao.com/ios/ytx-pod-specs.git,https://github.com/CocoaPods/Specs.git</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>虽然有了这个方便的工具，但是了解一下打包的过程也是好的。
+后记，有人问我为什么不改用<a href="https://link.jianshu.com?t=https://github.com/Carthage/Carthage" target="_blank" rel="external nofollow noopener noreferrer">Carthage<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。
+可以看看我写的这一篇<a href="https://www.jianshu.com/p/27e9302e56b5" target="_blank" rel="external nofollow noopener noreferrer">Carthage和iOS组件二进制化<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+CocoaPods和Carthage设计目的不一样。
+我们的现在组织架构有多个iOS team，多个App。</p>
+<ul>
+<li>已经使用了CocoaPods，如果要再集成Carthage比较麻烦。我们自己team还好说，还有其他team怎么办。</li>
+<li>其他team已经用的是CocoaPods。对他们来说只需要升级版本号，要用源码时加上一个IS_SOURCE=1 pod install就可以了。够平滑。</li>
+<li>Carthage我要如何方便的切回源码调试。</li>
+<li>Carthage并不能解决版本更新要编译的问题。除非track那些framework，共享给Team中的其他人。那样的话你的git库就会很大。</li>
+</ul>
+<p>说到底Carthage并不能解决实际应用的问提。</p>
+<h3 class="heading-element" id="什么是组件二进制化"><span>什么是组件二进制化？</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e7%bb%84%e4%bb%b6%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在iOS开发中，事实标准是我们使用CocoaPods生成、管理和使用library。这里的library就是一个模块、组件或库。二进制化指的是通过编译把组件的源码转换成静态库或动态库，以提高该组件在App项目中的编译速度。
+我们的方案是转换成静态库，也就是.a格式的文件加上暴露出来的头文件。</p>
+<h3 class="heading-element" id="为什么我们需要二进制化呢"><span>为什么我们需要二进制化呢？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%88%91%e4%bb%ac%e9%9c%80%e8%a6%81%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%91%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在我们App开发中，我们逐渐的抽象了很多模块、业务、UI等把他转换成私有CocoaPod库。其中有一个是用C++和Objective-C混写的，源码格式为.mm。在app项目编译时.mm部分代码编译非常慢。这作为一个契机让我们去考虑如何加快编译速度。
+这个混写的CocoaPod库叫做YTXChart，之后会以此库为例反复提到。
+另外随着业务的扩展，私有CocoaPod库和第三方CocoaPod库越来越多，App项目中的文件也越来越多。每次<code>pod install</code>安装新库或<code>pod update</code>更新库的时候，重新编译的过程需要等待很长时间。这也向我们提出了加快编译速度的需求。
+另外如果想要做组件化的话，一定要做二进制化。
+所以我们想到了二进制化的方案来解决这个问题，并且很多大公司也是这么做的。</p>
+<h3 class="heading-element" id="这带来一个新问题一步就位还是平滑过度"><span>这带来一个新问题？一步就位还是平滑过度。</span>
+  <a href="#%e8%bf%99%e5%b8%a6%e6%9d%a5%e4%b8%80%e4%b8%aa%e6%96%b0%e9%97%ae%e9%a2%98%e4%b8%80%e6%ad%a5%e5%b0%b1%e4%bd%8d%e8%bf%98%e6%98%af%e5%b9%b3%e6%bb%91%e8%bf%87%e5%ba%a6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>对我们来说，这是一个尝试，不可能开始就决定把所有的私有CocoaPod库二进制化，也不可能决定把所有第三方CocoaPod库二进制化。当务之急的情况是加快YTXChart库编译速度。所以必须找到一个方案平滑过度。
+我们的App中的podflie是这样的</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;jryMobile&#39; do
+</span></span><span class="line"><span class="cl">    pod &#39;AFNetworking&#39;, &#39;~&gt; 2.6.3&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;Mantle&#39;, &#39;~&gt; 1.5.7&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;DateTools&#39;, &#39;~&gt; 1.7.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;ReactiveCocoa&#39;, &#39;~&gt; 2.3.1&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;CocoaAsyncSocket&#39;, &#39;~&gt; 7.4.1&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;FMDB&#39;, &#39;~&gt; 2.5&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;MWPhotoBrowser&#39;, &#39;~&gt; 1.4.1&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;MZFormSheetController&#39;, &#39;~&gt; 2.3.6&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;HMSegmentedControl&#39;, &#39;~&gt; 1.5.1&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;UMengAnalytics&#39;, &#39;~&gt; 3.5.8&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;UMengFeedback&#39;, &#39;~&gt; 2.3.4&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;TSMessagesNW&#39;, &#39;~&gt; 0.9.15&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;TPKeyboardAvoiding&#39;, &#39;~&gt; 1.2.9&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;SDWebImage&#39;, &#39;~&gt; 3.7&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;JHChainableAnimations&#39;, &#39;~&gt; 1.3.0&#39; 
+</span></span><span class="line"><span class="cl">    pod &#39;BarrageRenderer&#39;, &#39;~&gt; 1.7.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;MJRefresh&#39;, &#39;~&gt; 3.1.7&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXAnimations&#39;, &#39;~&gt; 1.2.4&#39;, :subspecs =&gt; [&#34;AnimateCSS&#34;, &#34;Transformer&#34;]
+</span></span><span class="line"><span class="cl">    pod &#39;YTXMediaIJKPlayer&#39;, &#39;~&gt; 0.2.1&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;YTXTradeBusinessType&#39;, &#39;~&gt; 1.1.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXServerId&#39;, &#39;~&gt; 0.1.4&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXUtilCategory&#39;,&#39;~&gt; 1.2.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXScreenShotManager&#39;, &#39;~&gt; 0.1.7&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXRequest&#39;, &#39;~&gt; 1.0.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXCommonSocket&#39;, &#39;~&gt; 0.1.9&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXChartSocket&#39;, &#39;~&gt; 0.5.1&#39;
+</span></span><span class="line"><span class="cl"># 希望是二进制化的
+</span></span><span class="line"><span class="cl">    pod &#39;YTXChart&#39;, &#39;~&gt; 0.17.0&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;YTXRestfulModel&#39;, &#39;~&gt; 1.2.2&#39;, :subspecs =&gt; [&#34;RACSupport&#34;, &#34;YTXRequestRemoteSync&#34;, &#34;FMDBSync&#34;, &#34;UserDefaultStorageSync&#34;]
+</span></span><span class="line"><span class="cl">    pod &#39;YTXWebViewJavaScriptBridge&#39;, &#39;~&gt; 0.1.2&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXCheckForAppUpdates&#39;, &#39;~&gt; 1.0.0&#39;
+</span></span><span class="line"><span class="cl">    #    pod &#39;YTXVideoAVPlayer&#39;, &#39;~&gt; 0.5.0&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;YTXChatUI&#39;, &#39;~&gt; 0.3.2&#39;
+</span></span><span class="line"><span class="cl">    pod &#39;PNChart&#39;, &#39;~&gt;0.8.9&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    #pod &#39;EaseMobSDKFull&#39;, :git =&gt; &#39;https://github.com/easemob/sdk-ios-cocoapods-integration.git&#39;, :tag =&gt; &#39;2.2.0&#39;
+</span></span><span class="line"><span class="cl">    # EaseMobSDKFull 更新地址&#39;https://github.com/easemob/sdk-ios-cocoapods-integration.git&#39;
+</span></span><span class="line"><span class="cl">    #pod &#39;AFgzipRequestSerializer&#39;, &#39;~&gt; 0.0.2&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;AdhocSDK&#39;, &#39;~&gt; 2.2.1&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;FLEX&#39;, &#39;~&gt; 2.0&#39;, :configurations =&gt; [&#39;Debug&#39;]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;React&#39;, :path =&gt; &#39;./ReactComponent/node_modules/react-native&#39;, :subspecs =&gt; [
+</span></span><span class="line"><span class="cl">    &#39;Core&#39;,
+</span></span><span class="line"><span class="cl">    &#39;RCTImage&#39;,
+</span></span><span class="line"><span class="cl">    &#39;RCTNetwork&#39;,
+</span></span><span class="line"><span class="cl">    &#39;RCTText&#39;,
+</span></span><span class="line"><span class="cl">    &#39;RCTWebSocket&#39;,
+</span></span><span class="line"><span class="cl">    # 添加其他你想在工程中使用的依赖。
+</span></span><span class="line"><span class="cl">    ]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    pod &#39;CodePush&#39;, :path =&gt; &#39;./ReactComponent/node_modules/react-native-code-push&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="平滑二进制方案需求点"><span>平滑二进制方案需求点</span>
+  <a href="#%e5%b9%b3%e6%bb%91%e4%ba%8c%e8%bf%9b%e5%88%b6%e6%96%b9%e6%a1%88%e9%9c%80%e6%b1%82%e7%82%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li>其他的CocoaPod库都还是源码。YTXChart为二进制化。</li>
+<li>以后能够逐步迭代把更多的以YTX开头的CocoaPod库进行二进制化，而不影响主App。</li>
+<li>能够提供一种方式把二进制化CocoaPod库切换回源码CocoaPod库以便调试。尽量做的方便。</li>
+<li>解决YTXChart引用依赖的问题。（YTXChart还依赖了第三方AFNetworking和私有YTXServerId。保证生成的静态库中不会含有AFNetworking的内容和YTXServerId的内容并且能够编译通过）</li>
+<li>利用原来的YTXChart.git，不创建新项目，不创建新的git库。因为我们的二进制化库的生成还是来自于源码，当源码更新时，我们需要一种非常快捷的方式去生成二进制的东西，不希望copy源码到某处，或者增加一个git submodule。</li>
+<li>希望App源码和YTXChart中的源码尽量少或者没有改动。</li>
+<li>希望App中的Podfile尽量少或者没有改动。</li>
+<li>希望Podfile中的版本号保持风格一致，不会出现<code>'~&gt; 2.2.1.binary'</code>这种情况。</li>
+<li>用原来的那一个CocoaPods Repo Spec。</li>
+</ul>
+<h3 class="heading-element" id="以下这个解决方案的教程满足了以上所有需求点"><span>以下这个解决方案的教程满足了以上所有需求点</span>
+  <a href="#%e4%bb%a5%e4%b8%8b%e8%bf%99%e4%b8%aa%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e7%9a%84%e6%95%99%e7%a8%8b%e6%bb%a1%e8%b6%b3%e4%ba%86%e4%bb%a5%e4%b8%8a%e6%89%80%e6%9c%89%e9%9c%80%e6%b1%82%e7%82%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>注意，以下的例子基于Cocoapods@1.0.1，而且目前只能是1.0.1</p>
+<h3 class="heading-element" id="第一步源码生成静态库"><span>第一步：源码生成静态库</span>
+  <a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e6%ba%90%e7%a0%81%e7%94%9f%e6%88%90%e9%9d%99%e6%80%81%e5%ba%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>如果你是通过命令<code>pod lipo create</code>创建的CocoaPod库并且<code>pod install</code>的话，它的目录结构应该像这样子（只列出重要的）：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">YTXChart
+</span></span><span class="line"><span class="cl">  |-Example
+</span></span><span class="line"><span class="cl">    |-YTXChart
+</span></span><span class="line"><span class="cl">    |-Pods
+</span></span><span class="line"><span class="cl">    |-YTXChart.xcodeproj
+</span></span><span class="line"><span class="cl">    |-YTXChart.xcworkspace
+</span></span><span class="line"><span class="cl">    |-Podfile
+</span></span><span class="line"><span class="cl">    \-Podfile.lock
+</span></span><span class="line"><span class="cl">  |-Pod
+</span></span><span class="line"><span class="cl">    |-Assets
+</span></span><span class="line"><span class="cl">    \-Classes
+</span></span><span class="line"><span class="cl">  \-YTXChart.podspec</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><em>在xcode中创建新Target YTXChartBinary</em><code>_File-&gt;New-&gt;Target-&gt;Framework &amp; Library-&gt;Cocoa Touch Static Library_</code>
+如果你们的项目最低支持到iOS8可以创建Dynamic Framework
+注意在Podfile中加入以下这段</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;YTXChartBinary&#39; do
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><em>然后</em><code>_pod install_</code>
+<em>解释：Cocoapods@1.0.1会在Header Search Path自动加入内容。如果你用CocoaPods@0.39.0则需要自己加Header Search Path保证依赖库YTXServerId和AFNetwork能够被找到。如图：</em>
+<img loading="lazy" src='/images/fb7f036dd1abc44844fcaf0d1dd31ba9.png' alt="image.png">
+<em>然后把Pod/Classes中的源码拖入到YTXChartBinary中，这样选择（这样会link源码而不是复制）：</em>
+<img loading="lazy" src='/images/27fab4f55efb38a5a0b0bc637282a1ad.png' alt="image.png">
+然后变成这样子：
+<img loading="lazy" src='/images/d23d0389ae82be3675ed3f804b31b7cd.png' alt="image.png">
+<em>Headers需要自己加，里面是你需要暴露的头文件</em>
+<em>在YTXChartBinary Target中的Build Settings下找到iOS Deployment Target选择和YTXChart.podspec中的s.platform保持一致。这里是7.0</em><code>_YTXChartBinary Target-&gt;Build Settings-&gt;iOS Deployment Target_</code>
+<em>在根目录创建shell脚本buildbinary.sh</em>
+<em>你也可以创建一个Aggregate Target用来执行shell脚本</em>
+代码如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#获得当前目录的名字，一般是YTXChartSocket这种
+</span></span><span class="line"><span class="cl">PROJECT_NAME=${PWD##*/}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 编译工程
+</span></span><span class="line"><span class="cl">BINARY_NAME=&#34;${PROJECT_NAME}Binary&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cd Example
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">INSTALL_DIR=$PWD/../Pod/Products
+</span></span><span class="line"><span class="cl">rm -fr &#34;${INSTALL_DIR}&#34;
+</span></span><span class="line"><span class="cl">mkdir $INSTALL_DIR
+</span></span><span class="line"><span class="cl">WRK_DIR=build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">BUILD_PATH=${WRK_DIR}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">DEVICE_INCLUDE_DIR=${BUILD_PATH}/Release-iphoneos/usr/local/include
+</span></span><span class="line"><span class="cl">DEVICE_DIR=${BUILD_PATH}/Release-iphoneos/lib${BINARY_NAME}.a
+</span></span><span class="line"><span class="cl">SIMULATOR_DIR=${BUILD_PATH}/Release-iphonesimulator/lib${BINARY_NAME}.a
+</span></span><span class="line"><span class="cl">RE_OS=&#34;Release-iphoneos&#34;
+</span></span><span class="line"><span class="cl">RE_SIMULATOR=&#34;Release-iphonesimulator&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">xcodebuild -configuration &#34;Release&#34; -workspace &#34;${PROJECT_NAME}.xcworkspace&#34; -scheme &#34;${BINARY_NAME}&#34; -sdk iphoneos clean build CONFIGURATION_BUILD_DIR=&#34;${WRK_DIR}/${RE_OS}&#34; LIBRARY_SEARCH_PATHS=&#34;./Pods/build/${RE_OS}&#34;
+</span></span><span class="line"><span class="cl">xcodebuild ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration &#34;Release&#34; -workspace &#34;${PROJECT_NAME}.xcworkspace&#34; -scheme &#34;${BINARY_NAME}&#34; -sdk iphonesimulator clean build CONFIGURATION_BUILD_DIR=&#34;${WRK_DIR}/${RE_SIMULATOR}&#34; LIBRARY_SEARCH_PATHS=&#34;./Pods/build/${RE_SIMULATOR}&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">if [ -d &#34;${INSTALL_DIR}&#34; ]
+</span></span><span class="line"><span class="cl">then
+</span></span><span class="line"><span class="cl">rm -rf &#34;${INSTALL_DIR}&#34;
+</span></span><span class="line"><span class="cl">fi
+</span></span><span class="line"><span class="cl">mkdir -p &#34;${INSTALL_DIR}&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cp -rp &#34;${DEVICE_INCLUDE_DIR}&#34; &#34;${INSTALL_DIR}/&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">INSTALL_LIB_DIR=${INSTALL_DIR}/lib
+</span></span><span class="line"><span class="cl">mkdir -p &#34;${INSTALL_LIB_DIR}&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">lipo -create &#34;${DEVICE_DIR}&#34; &#34;${SIMULATOR_DIR}&#34; -output &#34;${INSTALL_LIB_DIR}/lib${PROJECT_NAME}.a&#34;
+</span></span><span class="line"><span class="cl">rm -r &#34;${WRK_DIR}&#34;</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>这个脚本写的并不是很好。说说主要做了什么。
+<em>Release不同的静态库，真机和模拟器的。只构建x86_64，不构建i386加快速度</em></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">xcodebuild -configuration &#34;Release&#34; -workspace &#34;${PROJECT_NAME}.xcworkspace&#34; -scheme &#34;${BINARY_NAME}&#34; -sdk iphoneos clean build CONFIGURATION_BUILD_DIR=&#34;${WRK_DIR}/${RE_OS}&#34; LIBRARY_SEARCH_PATHS=&#34;./Pods/build/${RE_OS}&#34;
+</span></span><span class="line"><span class="cl">xcodebuild ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration &#34;Release&#34; -workspace &#34;${PROJECT_NAME}.xcworkspace&#34; -scheme &#34;${BINARY_NAME}&#34; -sdk iphonesimulator clean build CONFIGURATION_BUILD_DIR=&#34;${WRK_DIR}/${RE_SIMULATOR}&#34; LIBRARY_SEARCH_PATHS=&#34;./Pods/build/${RE_SIMULATOR}&#34;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>*通过lipo命令合并。新.a使用project name是因为要和App项目的OTHER_LDFLAGS兼容<code>-l&quot;YTXChart&quot;</code></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lipo -create &#34;${DEVICE_DIR}&#34; &#34;${SIMULATOR_DIR}&#34; -output &#34;${INSTALL_LIB_DIR}/lib${PROJECT_NAME}.a&#34;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>结果：
+<img loading="lazy" src='/images/a087c004f46a42fc4780aa34d80e3921.png' alt="image.png"></p>
+<h3 class="heading-element" id="为什么要删除i386"><span>为什么要删除i386</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%88%a0%e9%99%a4i386" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>实际上，二进制化方案就是以空间换时间。我们这个YTXChart库生成的.a去除i386之后大小有166.3M。上传到git仓库后，git会压缩。增加了33M左右。而作为二进制文件，git是没法做增量的。所以每次上传.a都会大大增加git库大小，增加硬盘使用量。考虑到我们的服务器硬盘只有60个G能用，以后还会二进制化很多组件。
+所以得出：尽量压缩二进制文件大小；尽量不上传.a，直到发布某个版本时才上传。
+当然，如果你的服务器硬盘是1T的话，我觉得你也可以随便搞。
+<em>现在文件目录是这样子的：</em></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">YTXChart
+</span></span><span class="line"><span class="cl">  |-Example
+</span></span><span class="line"><span class="cl">    |-YTXChart
+</span></span><span class="line"><span class="cl">    |-Pods
+</span></span><span class="line"><span class="cl">    |-YTXChart.xcodeproj
+</span></span><span class="line"><span class="cl">    |-YTXChart.xcworkspace
+</span></span><span class="line"><span class="cl">    |-YTXChartBinary //空的
+</span></span><span class="line"><span class="cl">    |-Podfile
+</span></span><span class="line"><span class="cl">    \-Podfile.lock
+</span></span><span class="line"><span class="cl">  |-Pod
+</span></span><span class="line"><span class="cl">    |-Assets
+</span></span><span class="line"><span class="cl">    |-Classes //里面是源码
+</span></span><span class="line"><span class="cl">    \-Products
+</span></span><span class="line"><span class="cl">      |-include
+</span></span><span class="line"><span class="cl">         |-xxx.h
+</span></span><span class="line"><span class="cl">         |-...
+</span></span><span class="line"><span class="cl">         \-xxx.h
+</span></span><span class="line"><span class="cl">      \-lib
+</span></span><span class="line"><span class="cl">         \- libYTXChart.a
+</span></span><span class="line"><span class="cl">  \-YTXChart.podspec</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="第二步测试生成的静态库"><span>第二步：测试生成的静态库。</span>
+  <a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e6%b5%8b%e8%af%95%e7%94%9f%e6%88%90%e7%9a%84%e9%9d%99%e6%80%81%e5%ba%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>修改YTXChart.podspec如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Pod::Spec.new do |s|
+</span></span><span class="line"><span class="cl">  s.name             = &#34;YTXChart&#34;
+</span></span><span class="line"><span class="cl">  s.version          = &#34;0.17.7&#34;
+</span></span><span class="line"><span class="cl">  s.summary          = &#34;YTXChart for pod&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># This description is used to generate tags and improve search results.
+</span></span><span class="line"><span class="cl">#   * Think: What does it do? Why did you write it? What is the focus?
+</span></span><span class="line"><span class="cl">#   * Try to keep it short, snappy and to the point.
+</span></span><span class="line"><span class="cl">#   * Write the description between the DESC delimiters below.
+</span></span><span class="line"><span class="cl">#   * Finally, don&#39;t worry about the indent, CocoaPods strips it!
+</span></span><span class="line"><span class="cl">  s.description      = &#34;银天下Chart, 依赖AFNetworking&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.homepage         = &#34;http://gitlab.baidao.com/ios/YTXChart.git&#34;
+</span></span><span class="line"><span class="cl">  # s.screenshots     = &#34;www.example.com/screenshots_1&#34;, &#34;www.example.com/screenshots_2&#34;
+</span></span><span class="line"><span class="cl">  s.license          = &#39;MIT&#39;
+</span></span><span class="line"><span class="cl">  s.author           = { &#34;caojun-mac&#34; =&gt; &#34;78612846@qq.com&#34; }
+</span></span><span class="line"><span class="cl">  s.source           = { :git =&gt; &#34;http://gitlab.baidao.com/ios/YTXChart.git&#34;, :tag =&gt; s.version }
+</span></span><span class="line"><span class="cl">  # s.social_media_url = &#39;https://twitter.com/&lt;TWITTER_USERNAME&gt;&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.platform     = :ios, &#39;7.0&#39;
+</span></span><span class="line"><span class="cl">  s.requires_arc = true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.source_files = &#39;Pod/Products/include/**&#39;
+</span></span><span class="line"><span class="cl">  s.public_header_files = &#39;Pod/Products/include/*.h&#39;
+</span></span><span class="line"><span class="cl">  s.ios.vendored_libraries = &#39;Pod/Products/lib/libYTXChart.a&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.libraries = &#39;sqlite3&#39;, &#39;c++&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.dependency &#39;YTXServerId&#39;
+</span></span><span class="line"><span class="cl">  s.dependency &#39;AFNetworking&#39;, &#39;~&gt; 2.0&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>注意s.source_files和s.public_header_files和s.ios.vendored_libraries的路径
+<em>Exampl/Podfile是长这样子的：</em></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">source &#39;http://gitlab.baidao.com/ios/ytx-pod-specs.git&#39;
+</span></span><span class="line"><span class="cl">source &#39;https://github.com/CocoaPods/Specs.git&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">target &#39;YTXChart_Example&#39; do
+</span></span><span class="line"><span class="cl">  pod &#34;YTXChart&#34;, :path =&gt; &#34;../&#34;
+</span></span><span class="line"><span class="cl">  pod &#39;ReactiveCocoa&#39;, &#39;~&gt; 2.5&#39;
+</span></span><span class="line"><span class="cl">  pod &#39;YTXChartSocket&#39;
+</span></span><span class="line"><span class="cl">  pod &#39;AFNetworking&#39;, &#39;~&gt; 2.0&#39;
+</span></span><span class="line"><span class="cl">end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">target &#39;YTXChartBinary&#39; do
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">target &#39;YTXChart_Tests&#39; do
+</span></span><span class="line"><span class="cl">  pod &#34;YTXChart&#34;, :path =&gt; &#34;../&#34;
+</span></span><span class="line"><span class="cl">  pod &#39;Kiwi&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>执行<code>pod install</code>后应该是这样子的，然后跑起来没问题
+[站外图片上传中&hellip;(image-c4e3e-1512559943469)]
+执行<code>pod lib lint --sources='http://gitlab.baidao.com/ios/ytx-pod-specs.git,master'--verbose --use-libraries --fail-fast</code>也是好的</p>
+<h3 class="heading-element" id="至此我们构建出一个静态库只包含ytxchart的内容不包含依赖afnetwork和ytxserverid的内容"><span>至此我们构建出一个静态库，只包含YTXChart的内容，不包含依赖AFNetwork和YTXServerId的内容</span>
+  <a href="#%e8%87%b3%e6%ad%a4%e6%88%91%e4%bb%ac%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e9%9d%99%e6%80%81%e5%ba%93%e5%8f%aa%e5%8c%85%e5%90%abytxchart%e7%9a%84%e5%86%85%e5%ae%b9%e4%b8%8d%e5%8c%85%e5%90%ab%e4%be%9d%e8%b5%96afnetwork%e5%92%8cytxserverid%e7%9a%84%e5%86%85%e5%ae%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>证明：把</em><code>_s.dependency 'AFNetworking', '~&gt; 2.0'_</code><em>去除再执行</em><code>_pod lib lint 'http://gitlab.baidao.com/ios/ytx-pod-specs.git,master' --verbose --use-libraries --fail-fast_</code><em>会报出找不到AFNetwork相关文件。</em>
+题外话：因为CocoaPods1.0.1不支持C++项目的lint（这是一个<a href="https://link.jianshu.com?t=https://github.com/CocoaPods/CocoaPods/issues/5152" target="_blank" rel="external nofollow noopener noreferrer">defect<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>），所以这个时候我会切回CocoaPods@0.39.0来lint和publish。而前面pod instal增加Search Path是依靠CocoaPods@1.0.1。如果你不是.mm混写的，是不会有这个问题的。尽管使用CocoaPods@1.0.1。强行当作没看到这个题外话。
+<em>下一步解决如何在源码和二进制中切换</em>
+<em>修改YTXChart.podspec为以下内容：</em></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#
+</span></span><span class="line"><span class="cl"># Be sure to run `pod lib lint YTXChart.podspec&#39; to ensure this is a
+</span></span><span class="line"><span class="cl"># valid spec before submitting.
+</span></span><span class="line"><span class="cl">#
+</span></span><span class="line"><span class="cl"># Any lines starting with a # are optional, but their use is encouraged
+</span></span><span class="line"><span class="cl"># To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
+</span></span><span class="line"><span class="cl">#
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Pod::Spec.new do |s|
+</span></span><span class="line"><span class="cl">  s.name             = &#34;YTXChart&#34;
+</span></span><span class="line"><span class="cl">  s.version          = &#34;0.17.7&#34;
+</span></span><span class="line"><span class="cl">  s.summary          = &#34;YTXChart for pod&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># This description is used to generate tags and improve search results.
+</span></span><span class="line"><span class="cl">#   * Think: What does it do? Why did you write it? What is the focus?
+</span></span><span class="line"><span class="cl">#   * Try to keep it short, snappy and to the point.
+</span></span><span class="line"><span class="cl">#   * Write the description between the DESC delimiters below.
+</span></span><span class="line"><span class="cl">#   * Finally, don&#39;t worry about the indent, CocoaPods strips it!
+</span></span><span class="line"><span class="cl">  s.description      = &#34;银天下Chart, 依赖AFNetworking&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.homepage         = &#34;http://gitlab.baidao.com/ios/YTXChart.git&#34;
+</span></span><span class="line"><span class="cl">  # s.screenshots     = &#34;www.example.com/screenshots_1&#34;, &#34;www.example.com/screenshots_2&#34;
+</span></span><span class="line"><span class="cl">  s.license          = &#39;MIT&#39;
+</span></span><span class="line"><span class="cl">  s.author           = { &#34;caojun-mac&#34; =&gt; &#34;78612846@qq.com&#34; }
+</span></span><span class="line"><span class="cl">  s.source           = { :git =&gt; &#34;http://gitlab.baidao.com/ios/YTXChart.git&#34;, :tag =&gt; s.version }
+</span></span><span class="line"><span class="cl">  # s.social_media_url = &#39;https://twitter.com/&lt;TWITTER_USERNAME&gt;&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.platform     = :ios, &#39;7.0&#39;
+</span></span><span class="line"><span class="cl">  s.requires_arc = true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> if ENV[&#39;IS_SOURCE&#39;]
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">    puts &#39;Notice:YTXChart is source now&#39;
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">      s.source_files  = &#34;Pod/Classes/painter/*.{h,m,mm}&#34;, &#34;Pod/Classes/painterview/*.{h,m,mm}&#34;, &#34;Pod/Classes/chart/*.{h,m,mm}&#34;, &#34;Pod/Classes/core/*.{h,mm}&#34;, &#34;Pod/Classes/core/**/*.{h,m,mm,inl}&#34;  
+</span></span><span class="line"><span class="cl">  else
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">    puts &#39;Notice:YTXChart is binary now&#39;
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">    s.source_files = &#39;Pod/Products/include/**&#39;
+</span></span><span class="line"><span class="cl">    s.public_header_files = &#39;Pod/Products/include/*.h&#39;
+</span></span><span class="line"><span class="cl">    s.ios.vendored_libraries = &#39;Pod/Products/lib/libYTXChart.a&#39;
+</span></span><span class="line"><span class="cl">  end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.libraries = &#39;sqlite3&#39;, &#39;c++&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.dependency &#39;YTXServerId&#39;
+</span></span><span class="line"><span class="cl">  s.dependency &#39;AFNetworking&#39;, &#39;~&gt; 2.0&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><em>注意这段</em><code>_if ENV['IS_SOURCE']_</code><em>。我们的需求是优先使用二进制，偶尔才会切回源码。</em>
+删除Example/Pods目录。
+<em>执行</em><code>_IS_SOURCE=1 pod install_</code><em>。你会看到Example/Pods/YTXChart/里面都是源码</em>
+_输出_Notice:YTXChart Now is source
+<em>进一步跑起模拟器，因为是源码编译用了很长时间，模拟器起来，一切也是好的</em>
+<em>再试下</em><code>_pod cache clean --all &amp;&amp; IS_SOURCE=1 pod lib lint_</code><em>也是好的</em>
+<em>再试下</em><code>_pod cache clean --all &amp;&amp; pod lib lint_</code><em>也是好的</em>
+<em>现在我们通过</em><code>_if else_</code><em>简单地实现了本地Example App项目切换源码和二进制。</em></p>
+<h3 class="heading-element" id="发布到自己的pod-repo-spec"><span>发布到自己的pod repo spec</span>
+  <a href="#%e5%8f%91%e5%b8%83%e5%88%b0%e8%87%aa%e5%b7%b1%e7%9a%84pod-repo-spec" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>发布就和正常发布没有任何区别。</em></p>
+<h3 class="heading-element" id="检查从spec-repo的source中安装"><span>检查从spec repo的source中安装</span>
+  <a href="#%e6%a3%80%e6%9f%a5%e4%bb%8espec-repo%e7%9a%84source%e4%b8%ad%e5%ae%89%e8%a3%85" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>Podfile修改为</em><code>_pod 'YTXChart', '~&gt; 0.17.7'_</code>
+以下两步很重要
+<code>pod cache clean --all</code>
+删除Example/Pods
+<em>然后</em><code>_pod install_</code>
+<em>检查Example/Pods/YTXServerId/和Example/Pods/AFNetwork/发现都是.h .m源码。</em>
+<em>检查Example/Pods/YTXChart/里的是二进制.a和头文件。跑起App并没有问题。</em></p>
+<h3 class="heading-element" id="尝试切回源码"><span>尝试切回源码</span>
+  <a href="#%e5%b0%9d%e8%af%95%e5%88%87%e5%9b%9e%e6%ba%90%e7%a0%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>如果你直接</em><code>_IS_SOURCE=1 pod install_</code><em>你会发现Example/Pods/YTXChart/里的内容都变成了空</em>
+<em>这是为什么呢，因为pod cache了一个podspec.json。可以通过</em><code>_pod cache list_</code><em>查看。他cache了一个描述如何从s.source中找到相关文件。现在的描述还是从Pod/Products/下去找，自然为空。</em>
+<em>为了避免这个问题，所以必须执行上面两步。这个是唯一的问题，目前我还找不到更好的解决方案。切换的行为只是偶尔发生，这是可以接受的。</em>
+<em>执行2步。再次</em><code>_IS_SOURCE=1 pod install_</code><em>你就发现Example/Pods/YTXChart/里的内容都变成了.h .mm源码。跑起App也是好的。</em>
+为什么lint之前要cache clean。原理是一样的。如果YTXChart依赖的YTXServerId也被做成了二进制化就需要cache clean。不过你也可以这样<code>pod cache clean YTXServerId</code></p>
+<h3 class="heading-element" id="特别注意is_source应当作为一个所有非二进制化pod库的统一标识并且通知你们的项目组里所有成员pod-install可能会有某几个已经二进制化的库使用二进制的内容is_source1-pod-install时所有的库都将会是源码的内容"><span>特别注意IS_SOURCE应当作为一个所有非二进制化Pod库的统一标识，并且通知你们的项目组里所有成员。<code>pod install</code>可能会有某几个已经二进制化的库使用二进制的内容。<code>IS_SOURCE=1 pod install</code>时，所有的库都将会是源码的内容。</span>
+  <a href="#%e7%89%b9%e5%88%ab%e6%b3%a8%e6%84%8fis_source%e5%ba%94%e5%bd%93%e4%bd%9c%e4%b8%ba%e4%b8%80%e4%b8%aa%e6%89%80%e6%9c%89%e9%9d%9e%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96pod%e5%ba%93%e7%9a%84%e7%bb%9f%e4%b8%80%e6%a0%87%e8%af%86%e5%b9%b6%e4%b8%94%e9%80%9a%e7%9f%a5%e4%bd%a0%e4%bb%ac%e7%9a%84%e9%a1%b9%e7%9b%ae%e7%bb%84%e9%87%8c%e6%89%80%e6%9c%89%e6%88%90%e5%91%98pod-install%e5%8f%af%e8%83%bd%e4%bc%9a%e6%9c%89%e6%9f%90%e5%87%a0%e4%b8%aa%e5%b7%b2%e7%bb%8f%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e7%9a%84%e5%ba%93%e4%bd%bf%e7%94%a8%e4%ba%8c%e8%bf%9b%e5%88%b6%e7%9a%84%e5%86%85%e5%ae%b9is_source1-pod-install%e6%97%b6%e6%89%80%e6%9c%89%e7%9a%84%e5%ba%93%e9%83%bd%e5%b0%86%e4%bc%9a%e6%98%af%e6%ba%90%e7%a0%81%e7%9a%84%e5%86%85%e5%ae%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><h3 class="heading-element" id="版本管理"><span>版本管理</span>
+  <a href="#%e7%89%88%e6%9c%ac%e7%ae%a1%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>请参考这篇我的文章<a href="https://link.jianshu.com?t=http://www.yiqixiabigao.com/yin-tian-xia-cocoapodshi-yong-gui-fan/" target="_blank" rel="external nofollow noopener noreferrer">CocoaPod版本规范<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<h4 class="heading-element" id="完整分析"><span>完整分析</span>
+  <a href="#%e5%ae%8c%e6%95%b4%e5%88%86%e6%9e%90" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p><em>当你发布完成之后，查看。我们发现在Spec Repo中对应版本的podspec就是我们的YTXChart/podspec。</em>
+<em>CocoaPod从</em><code>_s.source_</code><em>git地址和tag下载对应的代码，Pod/Products和Pod/Classes里的内容都存在</em>
+<em>当你使用</em><code>_IS_SOURCE=1_</code><em>时</em><code>_ENV['IS_SOURCE']_</code><em>会为true。</em><code>_CocoaPods通过_</code><em>s.source_files</em><code>_从下载代码的路径找到源码构建Example/Pods和YTXChart.xcworkspace_</code>
+<img loading="lazy" src='/images/bc4b8cf0afec5a90823773fab6e6a5e2.png' alt="image.png">
+<em>明白了上面的过程，来再分析下为什么要在切换源码和二进制化时删除cache和Pods目录。放几张图就明白了</em>
+<img loading="lazy" src='/images/17e862a0b53c66221e10491cc2721cd0.webp' alt="/images/17e862a0b53c66221e10491cc2721cd0.webp">
+podcachelist</p>
+<p><img loading="lazy" src='/images/b4cb6001d0ee24117e077feee9be059d.webp' alt="/images/b4cb6001d0ee24117e077feee9be059d.webp">
+cachejson
+<em>删除cache和Pods目录。</em><code>_IS_SOURCE=1 pod install_</code><em>观察json。</em>
+<img loading="lazy" src='/images/35b406eb1a21bb2206de6539c447364c.png' alt="image.png"></p>
+<h4 class="heading-element" id="再进一步"><span>再进一步</span>
+  <a href="#%e5%86%8d%e8%bf%9b%e4%b8%80%e6%ad%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>当你删除了所有cache之后再<code>pod install</code>会比较慢，有时候我们只是想要查看某个库的源码，怎么办。</p>
+<ul>
+<li>podspec中变成这样子<code>if ENV['IS_SOURCE'] || ENV[&quot;YTXChart_SOURCE&quot;]</code></li>
+<li>删除Pods/Pods.xcodeproj</li>
+<li>删除Pods/YTXChart</li>
+<li>删除YTXChart的cache<code>pod cache clean YTXChart</code></li>
+<li>最后<code>YTXChart_SOURCE=1 pod install</code></li>
+</ul>
+<h3 class="heading-element" id="总结"><span>总结：</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li>没有使用submodule或新的git仓库来构建出一个不包含依赖内容的静态库。一份原来的git仓库。</li>
+<li>没有因为构建二进制库而需要增加冗余的源代码。所以当你修改Pod/Classes中的源码，可以方便简单地执行buildbinary.sh脚本来构建出静态库。一份源码。</li>
+<li>共用了一份YTXChart.podspec</li>
+<li>没有大量修改YTXChart.podspec</li>
+<li>使用<code>pod lib lint</code>和<code>IS_SOURCE=1 pod lib lint</code>检查通过。</li>
+<li>没有修改Podfile。这个Example的Podflie只是测试需要才改的。�主App项目中的Podfile可以一行都不改。不会出现<code>'~&gt; 2.2.1.binary'</code>。</li>
+<li>App中的源码不会因为使用了二进制CocoaPods组件而做任何修改。</li>
+<li>没有手动配置Search Path，这样更容易。</li>
+<li>在Example App中可以通过<code>IS_SOURCE</code>灵活地切换源码和二进制静态库。唯一一个问题每次切换要删除Pods目录和<code>pod cache clean --all</code></li>
+<li>跑起Example App总是好的。</li>
+<li>没有影响到其他库，我可以逐步平滑地把YTXXXX一个一个做成二进制。</li>
+</ul>
+<h3 class="heading-element" id="下一步目标"><span>下一步目标</span>
+  <a href="#%e4%b8%8b%e4%b8%80%e6%ad%a5%e7%9b%ae%e6%a0%87" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>逐步平滑地把YTXXXX一个一个做成二进制</em>
+<em>进一步的把第三方如AFNetwork在私有spec repo中做份镜像也提供二进制化</em>
+<em>把Podfile中绝大部分组件都做成二进制（RN这种本地安装模式和有sub spec的库目前不打算二进制化）</em></p>
+<h3 class="heading-element" id="关于资源文件资源文件在二进制化中的配置是一样的"><span>关于资源文件，资源文件在二进制化中的配置是一样的</span>
+  <a href="#%e5%85%b3%e4%ba%8e%e8%b5%84%e6%ba%90%e6%96%87%e4%bb%b6%e8%b5%84%e6%ba%90%e6%96%87%e4%bb%b6%e5%9c%a8%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e4%b8%ad%e7%9a%84%e9%85%8d%e7%bd%ae%e6%98%af%e4%b8%80%e6%a0%b7%e7%9a%84" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><h3 class="heading-element" id="另外使用二进制化的cocoapods库不会增加ipa的大小所以我们应当优先用二进制化的东西这可以加快archive速度"><span>另外，使用二进制化的CocoaPods库不会增加ipa的大小。所以我们应当优先用二进制化的东西，这可以加快Archive速度。</span>
+  <a href="#%e5%8f%a6%e5%a4%96%e4%bd%bf%e7%94%a8%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e7%9a%84cocoapods%e5%ba%93%e4%b8%8d%e4%bc%9a%e5%a2%9e%e5%8a%a0ipa%e7%9a%84%e5%a4%a7%e5%b0%8f%e6%89%80%e4%bb%a5%e6%88%91%e4%bb%ac%e5%ba%94%e5%bd%93%e4%bc%98%e5%85%88%e7%94%a8%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e7%9a%84%e4%b8%9c%e8%a5%bf%e8%bf%99%e5%8f%af%e4%bb%a5%e5%8a%a0%e5%bf%abarchive%e9%80%9f%e5%ba%a6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><h3 class="heading-element" id="关于有sub-spec的cocoapods组件"><span>关于有sub spec的CocoaPods组件</span>
+  <a href="#%e5%85%b3%e4%ba%8e%e6%9c%89sub-spec%e7%9a%84cocoapods%e7%bb%84%e4%bb%b6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>两个方案：</p>
+<ul>
+<li>提供一个全集</li>
+<li>对每一个sub spec都做份二进制并保持它们之间依赖的相互关系</li>
+</ul>
+<h3 class="heading-element" id="走过的弯路"><span>走过的弯路！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！</span>
+  <a href="#%e8%b5%b0%e8%bf%87%e7%9a%84%e5%bc%af%e8%b7%af" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><em>现在这个解决方案看起来简单，但在当初的探索过程中并不是那么顺利。以下是不成功的尝试！</em></p>
+<h4 class="heading-element" id="创建另一个ytxchartbinarypodspec"><span>创建另一个YTXChartBinary.podspec</span>
+  <a href="#%e5%88%9b%e5%bb%ba%e5%8f%a6%e4%b8%80%e4%b8%aaytxchartbinarypodspec" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><ul>
+<li>把生成的Products目录放到YTXChartBinary下</li>
+<li>把YTXChartBinary.podspec目录放到YTXChartBinary下</li>
+<li>Podfile中通过增加Binary字段安装二进制化如<code>pod 'YTXChartBinary', '~&gt; 0.17.7'</code></li>
+</ul>
+<p><em>问题</em></p>
+<ul>
+<li>要维护2个podspec。版本号很可能不统一。</li>
+<li>当<code>pod spec lint</code>报错：找不到相关文件。</li>
+<li>Podfile中通过增加Binary字段来切换，非常不方便。</li>
+<li>要改App源码。当安装二进制的时候<code>&lt;YTXChart/YTXChart.h&gt;</code>需要改成<code>&lt;YTXChartBinary/YTXChart.h&gt;</code>。来回切换都需要改，极不方便。</li>
+<li>要改App源码。这次一劳永逸。直接这样使用<code>&quot;YTXChart.h&quot;</code>。但这样也不好。</li>
+</ul>
+<h4 class="heading-element" id="创建另一个专门放二进制化的spec-repo通过不同的source来区分"><span>创建另一个专门放二进制化的Spec Repo，通过不同的Source来区分</span>
+  <a href="#%e5%88%9b%e5%bb%ba%e5%8f%a6%e4%b8%80%e4%b8%aa%e4%b8%93%e9%97%a8%e6%94%be%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e7%9a%84spec-repo%e9%80%9a%e8%bf%87%e4%b8%8d%e5%90%8c%e7%9a%84source%e6%9d%a5%e5%8c%ba%e5%88%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p><em>解决了要改App源码的问题。只需要在Podfile中加个source。</em>
+不同的source例子</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">source &#39;http://gitlab.baidao.com/ios/ytx-binary-pod-specs.git&#39;
+</span></span><span class="line"><span class="cl">source &#39;http://gitlab.baidao.com/ios/ytx-pod-specs.git&#39;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><em>问题</em></p>
+<ul>
+<li>发布两次，lint两次。</li>
+<li>创建了2个Spec Repo。</li>
+</ul>
+<h2 class="heading-element" id="后记加强篇"><span>后记加强篇</span>
+  <a href="#%e5%90%8e%e8%ae%b0%e5%8a%a0%e5%bc%ba%e7%af%87" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p><em>解决每次切换要删除Pods目录和需要</em><code>_pod cache clean --all_</code>
+唯一额外要付出的是需要一个静态资源服务器。
+其实这部分内容我在《<a href="https://www.jianshu.com/p/48fbcbb36c75" target="_blank" rel="external nofollow noopener noreferrer">iOS App组件化开发实践<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>》提过一下，没有展开说。可能有些小伙伴只看了这篇文章从而没有了解到。
+如果小伙伴们耐心看到了最后，现在这些算是惊喜吧。
+请看这个模板<a href="https://link.jianshu.com?t=https://github.com/mdsb100/ytx-pod-template/blob/master/NAME.podspec" target="_blank" rel="external nofollow noopener noreferrer">NAME.podspec<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># ...省去不相关内容</span>
+</span></span><span class="line"><span class="cl"><span class="n">ytx_zipURL</span><span class="o">=</span><span class="s1">&#39;http://ios-pod.baidao.com/binaryfiles/${POD_NAME}.zip&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">ENV</span><span class="p">[</span><span class="s1">&#39;IS_SOURCE&#39;</span><span class="p">]</span> <span class="o">||</span> <span class="n">ENV</span><span class="p">[</span><span class="s2">&#34;#{s.name}_SOURCE&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># 如果是源码，则使用git地址</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">source</span>           <span class="o">=</span> <span class="p">{</span> <span class="p">:</span><span class="n">git</span> <span class="o">=&gt;</span> <span class="s2">&#34;http://gitlab.baidao.com/ios/#{s.name}.git&#34;</span><span class="p">,</span> <span class="p">:</span><span class="n">tag</span> <span class="o">=&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">to_s</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span>
+</span></span><span class="line"><span class="cl">     <span class="c1"># 如果是二进制，则是用zip地址</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">source</span>           <span class="o">=</span> <span class="p">{</span> <span class="p">:</span><span class="n">http</span> <span class="o">=&gt;</span> <span class="n">ytx_zipURL</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">end</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">ENV</span><span class="p">[</span><span class="s1">&#39;IS_SOURCE&#39;</span><span class="p">]</span> <span class="o">||</span> <span class="n">ENV</span><span class="p">[</span><span class="s2">&#34;#{s.name}_SOURCE&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># 因为源码使用的是git，所以执行downlolad_zip去把zip下载下来</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># prepare_command这一段是pod install时会执行的脚本</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">prepare_command</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="s1">&#39;END&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">test</span> <span class="o">-</span><span class="n">f</span> <span class="n">download_zip</span><span class="o">.</span><span class="n">sh</span> <span class="o">&amp;&amp;</span> <span class="n">sh</span> <span class="n">download_zip</span><span class="o">.</span><span class="n">sh</span> <span class="o">$</span><span class="p">{</span><span class="n">POD_NAME</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="n">END</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s1">&#39;-------------------------------------------------------------------&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s2">&#34;Notice:#{s.name} is source now&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s1">&#39;-------------------------------------------------------------------&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;${POD_NAME}/Classes/**/*&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span>
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s1">&#39;-------------------------------------------------------------------&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s2">&#34;Notice:#{s.name} is binary now&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">puts</span> <span class="s1">&#39;-------------------------------------------------------------------&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;${POD_NAME}/Classes/*.h&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># 如果是framework，public_header_files就不需要了</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">public_header_files</span> <span class="o">=</span> <span class="s1">&#39;${POD_NAME}/Classes/*.h&#39;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">s</span><span class="o">.</span><span class="n">ios</span><span class="o">.</span><span class="n">vendored_libraries</span> <span class="o">=</span> <span class="s2">&#34;${POD_NAME}/lib/lib#{s.name}.a&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">end</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># preserve_paths是受保护的路径也就是会一起安装到目录下/进入cache(哪怕可能根本不参与编译)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">s</span><span class="o">.</span><span class="n">preserve_paths</span> <span class="o">=</span> <span class="s2">&#34;#{s.name}/lib/lib#{s.name}.a&#34;</span><span class="p">,</span><span class="s2">&#34;#{s.name}/Classes/**/*&#34;</span><span class="p">,</span> <span class="s2">&#34;download_zip.sh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ...省去不相关内容</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>附上<a href="https://link.jianshu.com?t=https://github.com/mdsb100/ytx-pod-template" target="_blank" rel="external nofollow noopener noreferrer">ytx-pod-template<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>里面有download_zip.sh和zip.sh给大家参考。download_zip.sh值得一说的是，它会判断相关目录下有没有文件，有文件的话则不会每次下载。
+思路是保证无论是<code>IS_SOURCE</code>还是非<code>IS_SOURCE</code>都要保证你的pod/cache目录下既有.h,.m,.a/.framework，但又不会冲突。
+.a/.framework不要进git，否则会造成git越来越大，但是放在静态服务器就没事。
+当你发版时CI也会自动zip文件.h, .m .a，传上静态服务器。
+当你<code>pod install</code>的时候，cache/pods里面的内容是cocoapods直接用的zip地址，所有文件都有。没问题。
+当你<code>IS_SOURCE pod install</code>的时候，不会有.a(.a没进git)，所以执行<code>prepare_command</code>去下载zip的地址，解压，把.a解压到相关目录。
+因为<code>preserve_paths</code>，你的Pods/XX的目录下或者cache目录下都是这个样子的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">XX
+</span></span><span class="line"><span class="cl">|- Classes
+</span></span><span class="line"><span class="cl">   |- XX.h
+</span></span><span class="line"><span class="cl">   |- XX.m
+</span></span><span class="line"><span class="cl">   |- AA.h
+</span></span><span class="line"><span class="cl">   \- AA.m
+</span></span><span class="line"><span class="cl">\- lib
+</span></span><span class="line"><span class="cl">   \- libXX.a</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>最后无论你进了if还是else，你podspec中描述的文件总能找到。
+完美。
+<code>pod cache list</code></p>
+<p><img loading="lazy" src='/images/8e51c07b01b33e16fc6ef49194108aa7.webp' alt="/images/8e51c07b01b33e16fc6ef49194108aa7.webp">
+1513045548954.jpg
+<img loading="lazy" src='/images/e9a9e0f2970a4afff1a97df8a80c1c9d.webp' alt="/images/e9a9e0f2970a4afff1a97df8a80c1c9d.webp">
+1513045760188.jpg
+<img loading="lazy" src='/images/7ff6fdbe56a258192f2d1808ae78a333.webp' alt="/images/7ff6fdbe56a258192f2d1808ae78a333.webp">
+1513045953521.jpg</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" data-title="IOS CocoaPods组件平滑二进制化解决方案及详细教程"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" data-title="IOS CocoaPods组件平滑二进制化解决方案及详细教程"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/" class="post-nav-item" rel="prev" title="模块化与解耦（网络摘要）"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>模块化与解耦（网络摘要）</a><a href="/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/" class="post-nav-item" rel="next" title="IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇">IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/7eae2aa67fae45fc6a3fc443a65f3dec.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

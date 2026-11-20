@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>5 Swift 5.9 新特性 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+注：Swift 5.9 目前并未正式发布，本文会在正式发布后再次更新。
+if 和 switch 表达式（SE-0380） 1 2 3 4 5 6 let s1 = if Bool.random() { &#34;YES&#34; } else { &#34;NO&#34; } let s2 = switch Bool.random() { case true: &#34;YES&#34; case false: &#34;NO&#34; } 值和类型参数包（SE-0393） 值和类型参数，实现了对不同类型的值和类型的抽象化，这是在 Swift 中实现可变泛型的第一步。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 15.0 beta, Swift 5.9'>
+	<meta itemprop="name" content="5 Swift 5.9 新特性">
+	<meta itemprop="description" content="注：Swift 5.9 目前并未正式发布，本文会在正式发布后再次更新。
+if 和 switch 表达式（SE-0380） 1 2 3 4 5 6 let s1 = if Bool.random() { &#34;YES&#34; } else { &#34;NO&#34; } let s2 = switch Bool.random() { case true: &#34;YES&#34; case false: &#34;NO&#34; } 值和类型参数包（SE-0393） 值和类型参数，实现了对不同类型的值和类型的抽象化，这是在 Swift 中实现可变泛型的第一步。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:06+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:06+08:00">
+	<meta itemprop="wordCount" content="1277">
+	<meta itemprop="keywords" content="Xcode 15.0 beta,Swift 5.9"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="5 Swift 5.9 新特性">
+	<meta property="og:description" content="注：Swift 5.9 目前并未正式发布，本文会在正式发布后再次更新。
+if 和 switch 表达式（SE-0380） 1 2 3 4 5 6 let s1 = if Bool.random() { &#34;YES&#34; } else { &#34;NO&#34; } let s2 = switch Bool.random() { case true: &#34;YES&#34; case false: &#34;NO&#34; } 值和类型参数包（SE-0393） 值和类型参数，实现了对不同类型的值和类型的抽象化，这是在 Swift 中实现可变泛型的第一步。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:06+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:06+08:00">
+		<meta property="article:tag" content="Xcode 15.0 beta">
+		<meta property="article:tag" content="Swift 5.9">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="5 Swift 5.9 新特性">
+  <meta name="twitter:description" content="注：Swift 5.9 目前并未正式发布，本文会在正式发布后再次更新。
+if 和 switch 表达式（SE-0380） 1 2 3 4 5 6 let s1 = if Bool.random() { &#34;YES&#34; } else { &#34;NO&#34; } let s2 = switch Bool.random() { case true: &#34;YES&#34; case false: &#34;NO&#34; } 值和类型参数包（SE-0393） 值和类型参数，实现了对不同类型的值和类型的抽象化，这是在 Swift 中实现可变泛型的第一步。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/" title="5 Swift 5.9 新特性 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swift/%E6%9E%9A%E4%B8%BE/" title="枚举" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swift/%E5%87%BD%E6%95%B0/" title="函数" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "5 Swift 5.9 新特性",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7\/"
+    },"genre": "posts","keywords": "Xcode 15.0 beta, Swift 5.9","wordcount":  1277 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7\/","datePublished": "2024-04-19T15:20:06+08:00","dateModified": "2024-04-19T15:20:06+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>5 Swift 5.9 新特性</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:06"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1277 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<blockquote>
+<p>注：Swift 5.9 目前并未正式发布，本文会在正式发布后再次更新。</p>
+</blockquote>
+<h1 class="heading-element" id="if-和-switch-表达式se-0380"><span>if 和 switch 表达式（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0380-if-switch-expressions.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0380<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#if-%e5%92%8c-switch-%e8%a1%a8%e8%be%be%e5%bc%8fse-0380" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">s1</span> <span class="p">=</span> <span class="k">if</span> <span class="nb">Bool</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="p">{</span> <span class="s">&#34;YES&#34;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s">&#34;NO&#34;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">s2</span> <span class="p">=</span> <span class="k">switch</span> <span class="nb">Bool</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="kc">true</span><span class="p">:</span> <span class="s">&#34;YES&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="kc">false</span><span class="p">:</span> <span class="s">&#34;NO&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="值和类型参数包se-0393"><span>值和类型参数包（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0393-parameter-packs.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0393<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e5%80%bc%e5%92%8c%e7%b1%bb%e5%9e%8b%e5%8f%82%e6%95%b0%e5%8c%85se-0393" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>值和类型参数，实现了对不同类型的值和类型的抽象化，这是在 Swift 中实现可变泛型的第一步。</p>
+<p>此前，泛型函数需要固定数量的类型参数。对于有多个参数的情况，通常使用函数重载来实现。这不仅在声明上很繁琐，在调用时也受到了参数数量的限制。</p>
+<p>而有了参数包支持任意数量的不同类型参数，而且写法更加简洁。</p>
+<p>比如下面的示例代码演示了将不同类型的可变参数组合成元组：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">Pair</span><span class="p">&lt;</span><span class="n">First</span><span class="p">,</span> <span class="n">Second</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">first</span><span class="p">:</span> <span class="n">First</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">second</span><span class="p">:</span> <span class="n">Second</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// each First, each Second 是两个类型的参数包</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">makePairs</span><span class="p">&lt;</span><span class="n">each</span> <span class="n">First</span><span class="p">,</span> <span class="n">each</span> <span class="n">Second</span><span class="p">&gt;(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">firsts</span> <span class="bp">first</span><span class="p">:</span> <span class="k">repeat</span> <span class="n">each</span> <span class="n">First</span><span class="p">,</span> <span class="c1">// 参数包扩展，可以传入可变参数</span>
+</span></span><span class="line"><span class="cl">  <span class="n">seconds</span> <span class="n">second</span><span class="p">:</span> <span class="k">repeat</span> <span class="n">each</span> <span class="n">Second</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="p">(</span><span class="k">repeat</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">each</span> <span class="n">First</span><span class="p">,</span> <span class="n">each</span> <span class="n">Second</span><span class="p">&gt;)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 从参数包扩展 first 和 second 中各取一个值构建 Pair</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 所有的 Pair 实例构成一个元组并返回</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="k">repeat</span> <span class="n">Pair</span><span class="p">(</span><span class="bp">first</span><span class="p">:</span> <span class="n">each</span> <span class="bp">first</span><span class="p">,</span> <span class="n">second</span><span class="p">:</span> <span class="n">each</span> <span class="n">second</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">pairs</span> <span class="p">=</span> <span class="n">makePairs</span><span class="p">(</span><span class="n">firsts</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="s">&#34;world&#34;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &#39;pairs&#39; is &#39;(Pair(1, true), Pair(&#34;hello&#34;, 2.0), Pair(&#34;world&#34;, false))&#39;</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="可丢弃的任务组se-0381"><span>可丢弃的任务组（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0381-task-group-discard-results.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0381<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e5%8f%af%e4%b8%a2%e5%bc%83%e7%9a%84%e4%bb%bb%e5%8a%a1%e7%bb%84se-0381" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><code>withTaskGroup</code> 和 <code>withThrowingTaskGroup</code> 用于创建任务组，任务组会保留整个子任务对象及其产生的数据，直到我们使用异步迭代或者调用 <code>next()</code> 方法消费掉某个子任务，任务组才会丢弃子任务及其产生的数据。而且 <code>next()</code> 方法还有个副作用，它会暂停任务的执行。</p>
+<p>以上缺陷导致任务组不适用于需要长时间运行的子任务，比如在服务端运行的监听任务。因此 Swift 5.9 引入了 <code>withDiscardingTaskGroup</code> 和 <code>withThrowingDiscardingTaskGroup</code> 来解决这个问题，它们内部创建的子任务一旦完成就会被自动丢弃和销毁。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">try</span> <span class="n">await</span> <span class="n">withThrowingDiscardingTaskGroup</span><span class="p">()</span> <span class="p">{</span> <span class="n">group</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="kd">let</span> <span class="nv">newConnection</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">listeningSocket</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">handleConnection</span><span class="p">(</span><span class="n">newConnection</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="宏macros"><span>宏（Macros）</span>
+  <a href="#%e5%ae%8fmacros" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Swift 5.9 引入了一个新的宏系统，用于减少样板代码和在编译期排除潜在的错误。</p>
+<p>宏有两种表现形式：独立的宏和附属宏。独立的宏总是以 <code>#</code> 开头，比如下面要提到的 <code>#email</code>，附属宏总是以 <code>@</code> 开头，比如 <code>@Observable</code>。如果一段代码中没有这两个标志性的符号，那么可以确定没有宏。</p>
+<p>自定义宏必须在 Package 中实现，最新的 Xcode 15 支持创建 <em>Swift Macro</em>：*File &gt; New &gt; Package…。*Package 的目录结构如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">Package</span><span class="p">.</span><span class="n">swift</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">Sources</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">WWDC23</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">WWDC23</span><span class="p">.</span><span class="n">swift</span> <span class="c1">// 向外公开 API</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">WWDC23Client</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">main</span><span class="p">.</span><span class="n">swift</span> <span class="c1">// 运行和测试</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">WWDC23Macros</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">└──</span> <span class="n">WWDC23Macro</span><span class="p">.</span><span class="n">swift</span> <span class="c1">// 宏的实现</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">Tests</span>
+</span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">WWDC23Tests</span>
+</span></span><span class="line"><span class="cl">        <span class="err">└──</span> <span class="n">WWDC23Tests</span><span class="p">.</span><span class="n">swift</span> <span class="c1">// 测试</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>新建的 Package 已经实现了一个名为 <code>#stringify</code> 的独立宏，并且附有完整的测试和运行代码。 我们可以仿照它写一个名为 <code>#email</code> 的宏来检测一个字符串是否为有效的 email 地址，具体实现见<a href="https://github.com/zzzwco/resources/tree/main/Swift-language/Swift5.9/WWDC23" target="_blank" rel="external nofollow noopener noreferrer">源码<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p>根据宏的作用，它可以分为以下几类，其中前两个是独立宏，其它则为附属宏：</p>
+<p><img loading="lazy" src='/images/macro-roles.png' alt="swift macro roles"></p>
+<p>在 SwiftUI 开发中，我们将会大量的使用新框架 Observation 中的 <a href="https://developer.apple.com/documentation/observation/observable-swift.macro" target="_blank" rel="external nofollow noopener noreferrer">@Observable<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，它是附属宏的典型运用之一。另一个新框架 SwiftData 中的 <a href="https://developer.apple.com/documentation/swiftdata/model" target="_blank" rel="external nofollow noopener noreferrer">@Model<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，也展现出了宏的强大和简洁。</p>
+<p>宏非常易于使用，但实现上比较复杂。值得庆幸的是，我们可以在 Xcode 查看宏的注释，而且可以展开宏来查看宏的具体实现和进行断点调试。</p>
+<p>关于宏的使用，有待进一步探究。</p>
+<h1 class="heading-element" id="所有权ownership"><span>所有权（Ownership）</span>
+  <a href="#%e6%89%80%e6%9c%89%e6%9d%83ownership" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><strong><em>待更新</em></strong></p>
+<h1 class="heading-element" id="其它"><span>其它</span>
+  <a href="#%e5%85%b6%e5%ae%83" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Result builders 可以更快更准确地给出错误提示，这有利于提高 SwiftUI 代码的编写效率。</p>
+<p>Swift Foundation 提高了关于日期、日历计算的效率，并且极大地提高了 JSON 编码的处理速度。</p>
+<p>更多关于 Swift 5.9 的更新内容，请移步官方 <a href="https://github.com/apple/swift/blob/main/CHANGELOG.md" target="_blank" rel="external nofollow noopener noreferrer">CHANGELOG<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:06">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/" data-title="5 Swift 5.9 新特性" data-hashtags="Xcode 15.0 beta,Swift 5.9"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/" data-hashtag="Xcode 15.0 beta"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/5-swift-5.9-%E6%96%B0%E7%89%B9%E6%80%A7/" data-title="5 Swift 5.9 新特性"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-15.0-beta/" class="post-tag" title="标签 - Xcode 15.0 beta">Xcode 15.0 beta</a><a href="/tags/swift-5.9/" class="post-tag" title="标签 - Swift 5.9">Swift 5.9</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/4.3-operators-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E4%B8%89/" class="post-nav-item" rel="prev" title="4.3 Operators 使用手册（三）"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>4.3 Operators 使用手册（三）</a><a href="/posts/interview/%E9%9D%A2%E8%AF%95-1-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="post-nav-item" rel="next" title="面试 1 基础篇">面试 1 基础篇<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/cdb4c4ad5a4e57788f5d5ce669b783cc.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

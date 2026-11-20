@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>2.3 小结 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="前面的章节中，我们学习了 async let、Task 以及 TaskGroup 的使用。它们都可以帮助我们写出高质量的并发代码，也各有千秋。
+借助于 async let 这个语法糖，我们能够在不直接接触 Task 或 TaskGroup 的层面上开启异步任务，获取异步返回结果，因此 async let 又叫“并发绑定”，顾名思义，为某个变量绑定了并发任务的异步返回结果。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='async let, Task, TaskGroup'>
+	<meta itemprop="name" content="2.3 小结">
+	<meta itemprop="description" content="前面的章节中，我们学习了 async let、Task 以及 TaskGroup 的使用。它们都可以帮助我们写出高质量的并发代码，也各有千秋。
+借助于 async let 这个语法糖，我们能够在不直接接触 Task 或 TaskGroup 的层面上开启异步任务，获取异步返回结果，因此 async let 又叫“并发绑定”，顾名思义，为某个变量绑定了并发任务的异步返回结果。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="1601">
+	<meta itemprop="keywords" content="async let,Task,TaskGroup"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="2.3 小结">
+	<meta property="og:description" content="前面的章节中，我们学习了 async let、Task 以及 TaskGroup 的使用。它们都可以帮助我们写出高质量的并发代码，也各有千秋。
+借助于 async let 这个语法糖，我们能够在不直接接触 Task 或 TaskGroup 的层面上开启异步任务，获取异步返回结果，因此 async let 又叫“并发绑定”，顾名思义，为某个变量绑定了并发任务的异步返回结果。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:tag" content="async let">
+		<meta property="article:tag" content="Task">
+		<meta property="article:tag" content="TaskGroup">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2.3 小结">
+  <meta name="twitter:description" content="前面的章节中，我们学习了 async let、Task 以及 TaskGroup 的使用。它们都可以帮助我们写出高质量的并发代码，也各有千秋。
+借助于 async let 这个语法糖，我们能够在不直接接触 Task 或 TaskGroup 的层面上开启异步任务，获取异步返回结果，因此 async let 又叫“并发绑定”，顾名思义，为某个变量绑定了并发任务的异步返回结果。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" title="2.3 小结 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" title="3.1 异步序列" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" title="2.2 任务组" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "2.3 小结",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.3-%E5%B0%8F%E7%BB%93\/"
+    },"genre": "posts","keywords": "async let, Task, TaskGroup","wordcount":  1601 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.3-%E5%B0%8F%E7%BB%93\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>2.3 小结</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1601 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>前面的章节中，我们学习了 <code>async let</code>、<code>Task</code> 以及 <code>TaskGroup</code> 的使用。它们都可以帮助我们写出高质量的并发代码，也各有千秋。</p>
+<p>借助于 <code>async let</code> 这个语法糖，我们能够在不直接接触 <code>Task</code> 或 <code>TaskGroup</code> 的层面上开启异步任务，获取异步返回结果，因此 <code>async let</code> 又叫“并发绑定”，顾名思义，为某个变量绑定了并发任务的异步返回结果。</p>
+<p><code>async let</code>  的局限性在于，它必须在异步环境中开启任务。异步任务的中间处理过程就像个黑盒，我们无法控制。但 <code>Task</code> 的显式创建，为我们提供了更多的可操作空间。我们可以指定 <code>Task</code> 实例的优先级，在 task 定义的范围之外引用该实例，在合适的时机手动取消它。即使在非异步环境中，我们也可以使用 <code>Task</code> 开启异步任务。它的灵活性很强，这意味著我们需要在使用它时更加谨慎。</p>
+<p>对于并发量不大的多数场景，<code>async let</code> 和 <code>Task</code> 足以应付，但总有黔驴技穷的时候。比如我们有多个异步并行操作，优先取第一个返回的结果，使用 <code>TaskGroup</code> 的 <code>next()</code> 就很好实现。又比如 N 个文件需要并行上/下载，这里的 N 是未知数，它可能依赖于前一个网络请求返回的结果。类似这种没有严格的顺序限制的多并发场景，<code>TaskGroup</code> 尤其合适。当然了，有时为了保证并发结果的有序，我们还要多做点工作，比如使用占位数组等。</p>
+<p>在实际开发中，如何选择，可参考如下顺序：</p>
+<ul>
+<li>优先选择 <code>async let</code></li>
+<li><code>async let</code> 难以解决，使用 <code>Task</code></li>
+<li><code>async let</code> 和 <code>Task</code> 都难以应付，使用 <code>TaskGroup</code></li>
+</ul>
+<p>在前面的章节中，大部分内容都属于结构化并发的范畴。如果你对结构化并发的概念仍然感到困惑，可以试着作如下想象：现在有一根从主管道（主线程）分出来的父管道（父任务），父管道又从不同的节点分出子管道（子任务），子管道最终会在不同的时间点流回父管道，父管道在收集到所有子管道的水流后，最终回到了主管道。</p>
+<p>结构化并发的世界，比较类似于我们想象出来的管道。子任务的作用域（或者叫生命周期）不会超出父任务，父任务总是会等待所有子任务的结果，无论该结果是具体的值还是抛出的错误。每个任务的入口和出口就像管道一样，都是明确而且唯一的。无论异步任务的内部执行多么地纷繁复杂，我们只要守住该任务（管道）唯一的出口就可以得到我们想要的结果，就不至于手忙脚乱，如此甚好。</p>
+<p>你可以结合此前的章节内容，丰富一下上面想象的场景：加入任务的优先级、取消行为之后，整个管道的水流情况将会是怎样的情形？</p>
+<p>得益于结构化并发，我们可以使用 <code>async let</code> 或 <code>TaskGroup</code> 将复杂的并发代码写的像同步代码一样简洁易读。然而，结构化并发的限定作用域，在某些情况下会对我们造成一定的束缚，我们需要更加灵活的非结构化并发来摆脱这个限制。</p>
+<p>其实我们已经接触过非结构化并发了，此前介绍的在 <code>viewDidLoad</code> 中使用 <code>Task</code> 开启异步任务，就是非结构化并发的运用。<code>viewDidLoad</code> 在主线程中运行，花括号 <code>{}</code> 内就是它的作用域，<code>Task</code> 可以在超出这个作用域后继续执行。同理，如果是在 Task 内嵌套 Task，嵌套的 Task 的生命周期是可以超越外层的 Task 的。我们再用管道来做一次想象，非结构化并发的世界，从“父管道”分出去的“子管道”，摆脱了“父管道”的限制，它是放飞自我的，它的水流不会再回到“父管道”，出口也是不确定的。如果有多个“子管道”，我们需要在不同的出口进行看守，这其实又回到了我们以前的“面条式”结构。注意这里的“父”和“子”，我都使用引号进行了标注，是因为它们已经不是“父子”关系了，而是相互独立的任务。</p>
+<p>除了使用 <a href="https://developer.apple.com/documentation/swift/task/3856790-init" target="_blank" rel="external nofollow noopener noreferrer">Task.init(priority:operation:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 来创建非结构化并发任务，我们还可以使用 <a href="https://developer.apple.com/documentation/swift/task/3856786-detached" target="_blank" rel="external nofollow noopener noreferrer">Task.detached(priority:operation:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 来创建分离式任务实现非结构化并发。顾名思义，分离式任务是独立于创建它的上下文环境的，故而无法继承上下文的任何信息。而 <code>Task.init</code> 可以继承优先级、TaskLocal 值以及 actor 的上下文环境。<a href="https://developer.apple.com/documentation/swift/tasklocal" target="_blank" rel="external nofollow noopener noreferrer">TaskLocal<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 在实际开发中使用概率很低，这里不做过多介绍，有兴趣的朋友可以自行了解。关于 actor，后面会有专门的章节介绍，此处不展开来讲。</p>
+<p>自由是相对的，非结构化并发为我们带来了更多的灵活性，同时也需要我们更加谨慎地管理它的返回结果、取消行为以及生命周期。</p>
+<p>下图源自 WWDC，形象地总结了各种并发工具的差异，供参考：</p>
+<p><img loading="lazy" src='/images/concurrency_diff.png' alt="/images/concurrency_diff.png"></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" data-title="2.3 小结" data-hashtags="async let,Task,TaskGroup"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" data-hashtag="async let"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" data-title="2.3 小结"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/async-let/" class="post-tag" title="标签 - async let">async let</a><a href="/tags/task/" class="post-tag" title="标签 - Task">Task</a><a href="/tags/taskgroup/" class="post-tag" title="标签 - TaskGroup">TaskGroup</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" class="post-nav-item" rel="prev" title="2.2 任务组"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.2 任务组</a><a href="/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" class="post-nav-item" rel="next" title="3.1 异步序列">3.1 异步序列<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/4618b95fdba578ff4fe85b4ce13e545b.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

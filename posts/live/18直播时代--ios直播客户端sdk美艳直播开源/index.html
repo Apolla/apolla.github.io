@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>18：直播时代--IOS直播客户端SDK，美艳直播【开源】 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="直播时代&ndash;IOS直播客户端SDK，美艳直播【开源】 看到该文章我非常喜欢，为了方便自己查看和参考所以将其复制过来，源文地址：http://www.cnblogs.com/runner42/p/5241407.html 请支持原作者。原作者如看到请原谅复制您的，纯属为了方便查阅。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="18：直播时代--IOS直播客户端SDK，美艳直播【开源】">
+	<meta itemprop="description" content="直播时代–IOS直播客户端SDK，美艳直播【开源】 看到该文章我非常喜欢，为了方便自己查看和参考所以将其复制过来，源文地址：http://www.cnblogs.com/runner42/p/5241407.html 请支持原作者。原作者如看到请原谅复制您的，纯属为了方便查阅。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="1344">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="18：直播时代--IOS直播客户端SDK，美艳直播【开源】">
+	<meta property="og:description" content="直播时代–IOS直播客户端SDK，美艳直播【开源】 看到该文章我非常喜欢，为了方便自己查看和参考所以将其复制过来，源文地址：http://www.cnblogs.com/runner42/p/5241407.html 请支持原作者。原作者如看到请原谅复制您的，纯属为了方便查阅。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="18：直播时代--IOS直播客户端SDK，美艳直播【开源】">
+  <meta name="twitter:description" content="直播时代–IOS直播客户端SDK，美艳直播【开源】 看到该文章我非常喜欢，为了方便自己查看和参考所以将其复制过来，源文地址：http://www.cnblogs.com/runner42/p/5241407.html 请支持原作者。原作者如看到请原谅复制您的，纯属为了方便查阅。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/" title="18：直播时代--IOS直播客户端SDK，美艳直播【开源】 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" title="2：RTMP协议学习总结" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/16ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8%E4%BB%A3%E7%A0%81%E5%92%8C%E7%95%8C%E9%9D%A2%E5%88%86%E7%A6%BB/" title="16：ios视频播放器，代码和界面分离" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "18：直播时代--IOS直播客户端SDK，美艳直播【开源】",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90\/"
+    },"genre": "posts","wordcount":  1344 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>18：直播时代--IOS直播客户端SDK，美艳直播【开源】</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="1344 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1-提供ios苹果手机的rtmp推流">1, 提供IOS苹果手机的RTMP推流；</a></li>
+            <li><a href="#2美颜直播">2，美颜直播</a></li>
+            <li><a href="#3前后摄像头随时切换">3，前后摄像头随时切换</a></li>
+            <li><a href="#4提供rtmp连接状态的回调">4，提供RTMP连接状态的回调</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></template><div class="content" id="content"><h1 class="heading-element" id="直播时代ios直播客户端sdk美艳直播开源"><span><a href="https://www.cnblogs.com/Hakim/p/5242304.html" target="_blank" rel="external nofollow noopener noreferrer">直播时代&ndash;IOS直播客户端SDK，美艳直播【开源】<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></span>
+  <a href="#%e7%9b%b4%e6%92%ad%e6%97%b6%e4%bb%a3ios%e7%9b%b4%e6%92%ad%e5%ae%a2%e6%88%b7%e7%ab%afsdk%e7%be%8e%e8%89%b3%e7%9b%b4%e6%92%ad%e5%bc%80%e6%ba%90" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>看到该文章我非常喜欢，为了方便自己查看和参考所以将其复制过来，源文地址：http://www.cnblogs.com/runner42/p/5241407.html
+请支持原作者。原作者如看到请原谅复制您的，纯属为了方便查阅。</p>
+<p>当前视频直播非常火爆，手机端的视频直播也非常火爆，PGC、UGC的视频直播门槛都降低了很多。
+本文介绍一个：IOS 客户端直播的SDK，代码完全开源。
+<strong>直播时代：让IOS普通开发者一天内做出一个RTMP直播客户端，并且带有美艳直播功能。(文章最下面有github源码地址)</strong>
+包含一下功能:</p>
+<h4 class="heading-element" id="1-提供ios苹果手机的rtmp推流"><span>1, 提供IOS苹果手机的RTMP推流；</span>
+  <a href="#1-%e6%8f%90%e4%be%9bios%e8%8b%b9%e6%9e%9c%e6%89%8b%e6%9c%ba%e7%9a%84rtmp%e6%8e%a8%e6%b5%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>填写RTMP服务地址，直接就可以进行推流。</p>
+<h4 class="heading-element" id="2美颜直播"><span>2，美颜直播</span>
+  <a href="#2%e7%be%8e%e9%a2%9c%e7%9b%b4%e6%92%ad" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>美不美都能装的直播，IOS OPENGL美艳加速，手机完全不发烫。</p>
+<h4 class="heading-element" id="3前后摄像头随时切换"><span>3，前后摄像头随时切换</span>
+  <a href="#3%e5%89%8d%e5%90%8e%e6%91%84%e5%83%8f%e5%a4%b4%e9%9a%8f%e6%97%b6%e5%88%87%e6%8d%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><h4 class="heading-element" id="4提供rtmp连接状态的回调"><span>4，提供RTMP连接状态的回调</span>
+  <a href="#4%e6%8f%90%e4%be%9brtmp%e8%bf%9e%e6%8e%a5%e7%8a%b6%e6%80%81%e7%9a%84%e5%9b%9e%e8%b0%83" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>一，首先简单扫盲
+当前直播都是用RTMP协议，推流到RTMP服务器。
+然后RTMP服务器提供RTMP视频服务；
+当然通常RTMP服务器也提供HLS，把视音频流切片成ts流，然后用户可以直接播放xxx.m3u8的流媒体。</p>
+<p>二，SDK使用简介
+1，初始化
+[LiveVideoCoreSDK sharedinstance]：全局独立的SDK实例，你不用管理对象的申请和释放；
+初始化RTMP连接和视频参数，非常简单：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">[[</span><span class="n">LiveVideoCoreSDK</span> <span class="n">sharedinstance</span><span class="p">]</span> <span class="nl">LiveInit</span><span class="p">:</span><span class="n">RtmpUrl</span> <span class="nl">Preview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">VideSize</span><span class="p">:</span><span class="n">LIVE_VIEDO_SIZE_CIF</span> <span class="nl">BitRate</span><span class="p">:</span><span class="n">LIVE_BITRATE_500Kbps</span> <span class="nl">FrameRate</span><span class="p">:</span><span class="n">LIVE_FRAMERATE_20</span><span class="p">];</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>参数：
+RtmpUrl: rtmp服务器地址参数，如rtmp://192.168.30.191/live/123456
+Preview: IOS本地预览显示的UIVIEW对象，现在都喜欢全屏直播模式，这里直接用self.view
+VideSize: 视频分辨率。这里提供了几种视频分辨率，CIF(320<em>640)，D1(540</em>960)，720P(720*1280)
+BitRate: 视频码率。有500kbps对应CIF，800kbps对应D1, 2Mbps对应720p，怎么配置就看你手机当前的带宽情况了。
+FrameRate: 视频帧率。这个决定视频流畅程度，帧率越高越流畅。这里提供：15帧/s，20帧/s，25帧/s，20帧/s
+2，连接RTMP视频服务器</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">[[</span><span class="n">LiveVideoCoreSDK</span> <span class="n">sharedinstance</span><span class="p">]</span> <span class="n">connect</span><span class="p">];</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>调用这个接口后，开始打开iphone本地手机预览，并且开始连接RTMP服务器。
+如果网络没有问题，RTMP服务器没有问题，直播就开始了，简单吧！
+<img loading="lazy" src='/images/75442cac4d6b0d912958d8ed5fe247a4.jpeg' alt="/images/75442cac4d6b0d912958d8ed5fe247a4.jpeg">
+3，设置滤镜：提供美艳效果</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setFilter:</span><span class="p">(</span><span class="n">LIVE_FILTER_TYPE</span><span class="p">)</span> <span class="nv">type</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>当前提供了美白效果，设置一个LIVE_FILTER_BEAUTY这个参数，看看你有多美白。
+<img loading="lazy" src='/images/efdac28a1435b34c1633a33a1db0d207.jpeg' alt="/images/efdac28a1435b34c1633a33a1db0d207.jpeg">
+4，设置前后摄像头</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setCameraFront:</span><span class="p">(</span><span class="kt">Boolean</span><span class="p">)</span><span class="nv">bCameraFrontFlag</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>前后摄像头随时动态切换，想怎么拍就怎么拍。
+5，设置RTMP连接状态回调</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">[</span><span class="n">LiveVideoCoreSDK</span> <span class="n">sharedinstance</span><span class="p">].</span><span class="n">delete</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在你的viewcontroller中实现协议：LIVEVCSessionDelegate，如下，这样你可以随时知道RTMP连接的状态了。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="c1">//rtmp status delegate:
+</span></span></span><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">LiveConnectionStatusChanged:</span> <span class="p">(</span><span class="n">LIVE_VCSessionState</span><span class="p">)</span> <span class="nv">sessionState</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">switch</span> <span class="p">(</span><span class="n">sessionState</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nl">LIVE_VCSessionStatePreviewStarted</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">_RtmpStatusLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&#34;RTMP状态: 预览未连接&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nl">LIVE_VCSessionStateStarting</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">_RtmpStatusLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&#34;RTMP状态: 连接中...&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nl">LIVE_VCSessionStateStarted</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">_RtmpStatusLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&#34;RTMP状态: 已连接&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nl">LIVE_VCSessionStateEnded</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">_RtmpStatusLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&#34;RTMP状态: 未连接&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nl">LIVE_VCSessionStateError</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">_RtmpStatusLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&#34;RTMP状态: 错误&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>6，直播结束，断开rtmp连接</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="p">[[</span><span class="n">LiveVideoCoreSDK</span> <span class="n">sharedinstance</span><span class="p">]</span> <span class="n">disconnect</span><span class="p">]</span><span class="err">；</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>简单吧，不解释了。</p>
+<p><strong>GitHub地址: <a href="https://github.com/runner365/LiveVideoCoreSDK" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/runner365/LiveVideoCoreSDK<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></strong></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/" data-title="18：直播时代--IOS直播客户端SDK，美艳直播【开源】"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/18%E7%9B%B4%E6%92%AD%E6%97%B6%E4%BB%A3--ios%E7%9B%B4%E6%92%AD%E5%AE%A2%E6%88%B7%E7%AB%AFsdk%E7%BE%8E%E8%89%B3%E7%9B%B4%E6%92%AD%E5%BC%80%E6%BA%90/" data-title="18：直播时代--IOS直播客户端SDK，美艳直播【开源】"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/16ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8%E4%BB%A3%E7%A0%81%E5%92%8C%E7%95%8C%E9%9D%A2%E5%88%86%E7%A6%BB/" class="post-nav-item" rel="prev" title="16：ios视频播放器，代码和界面分离"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>16：ios视频播放器，代码和界面分离</a><a href="/posts/live/2rtmp%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="post-nav-item" rel="next" title="2：RTMP协议学习总结">2：RTMP协议学习总结<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/04f551578989e43d90373715ebb15dc8.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

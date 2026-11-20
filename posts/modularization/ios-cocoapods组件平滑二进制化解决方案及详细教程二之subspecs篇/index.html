@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="这篇文章主要想介绍以下几个部分： subspecs基本概念 实际应用的好处 如何对含有subspecs的CocoaPods库进行二进制化 什么是CocoaPods的subspecs 来一个直观点的。顺便为自己的YTXAnimations做个广告。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇">
+	<meta itemprop="description" content="这篇文章主要想介绍以下几个部分： subspecs基本概念 实际应用的好处 如何对含有subspecs的CocoaPods库进行二进制化 什么是CocoaPods的subspecs 来一个直观点的。顺便为自己的YTXAnimations做个广告。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="3561">
+	<meta itemprop="keywords" content="组件化"><meta property="og:url" content="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇">
+	<meta property="og:description" content="这篇文章主要想介绍以下几个部分： subspecs基本概念 实际应用的好处 如何对含有subspecs的CocoaPods库进行二进制化 什么是CocoaPods的subspecs 来一个直观点的。顺便为自己的YTXAnimations做个广告。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇">
+  <meta name="twitter:description" content="这篇文章主要想介绍以下几个部分： subspecs基本概念 实际应用的好处 如何对含有subspecs的CocoaPods库进行二进制化 什么是CocoaPods的subspecs 来一个直观点的。顺便为自己的YTXAnimations做个广告。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/" title="iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/tips/ios%E5%90%8E%E5%8F%B0%E4%BF%9D%E6%B4%BB/" title="iOS后台保活" /><link rel="next" type="text/html" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" title="iOS CocoaPods组件平滑二进制化解决方案及详细教程" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "iOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/modularization\/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87\/"
+    },"genre": "posts","wordcount":  3561 ,
+    "url": "https:\/\/apolla.cc\/posts\/modularization\/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BB%84%E4%BB%B6%E5%8C%96/" class="post-category" title="分类 - 组件化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 组件化</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="3561 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#这篇文章主要想介绍以下几个部分">这篇文章主要想介绍以下几个部分：</a>
+          <ul>
+            <li><a href="#什么是cocoapods的subspecs">什么是CocoaPods的subspecs</a></li>
+          </ul>
+        </li>
+        <li><a href="#谈谈作用subspecs这种模式特别适合组件化开发">谈谈作用：subspecs这种模式特别适合组件化开发。</a></li>
+        <li><a href="#下面开始说说subspec如何二进制化如何在podspec中定义">下面开始说说subspec如何二进制化，如何在podspec中定义</a></li>
+        <li><a href="#后记在做subspec二进制化遇到的问题">后记，在做subspec二进制化遇到的问题</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></template><div class="content" id="content"><h3 class="heading-element" id="这篇文章主要想介绍以下几个部分"><span>这篇文章主要想介绍以下几个部分：</span>
+  <a href="#%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0%e4%b8%bb%e8%a6%81%e6%83%b3%e4%bb%8b%e7%bb%8d%e4%bb%a5%e4%b8%8b%e5%87%a0%e4%b8%aa%e9%83%a8%e5%88%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li>subspecs基本概念</li>
+<li>实际应用的好处</li>
+<li>如何对含有subspecs的CocoaPods库进行二进制化</li>
+</ul>
+<h4 class="heading-element" id="什么是cocoapods的subspecs"><span>什么是CocoaPods的subspecs</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%afcocoapods%e7%9a%84subspecs" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>来一个直观点的。顺便为自己的<a href="https://link.jianshu.com?t=https://github.com/baidao/YTXAnimations" target="_blank" rel="external nofollow noopener noreferrer">YTXAnimations<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>做个广告。</p>
+<p>在Podfile中，它是这样的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pod &#39;YTXAnimations&#39;, &#39;~&gt; 1.2.4&#39;, :subspecs =&gt; [&#34;AnimateCSS&#34;, &#34;Transformer&#34;]</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在App中Pods/YTXAnimations文件目录下它是这样的：</p>
+<p><img loading="lazy" src='/images/2fd9462bcb65d0e35a855b463e2b694a.png' alt="image.png"></p>
+<p>在CocoaPods项目开发时是这样的：</p>
+<p>=<img loading="lazy" src='/images/b73682b66e639f81554333e88848ba50.png' alt="image.png"></p>
+<p>在podspec里是这样的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">    YTXAnimateCSS   = { :spec_name =&gt; &#34;AnimateCSS&#34; }
+</span></span><span class="line"><span class="cl">    YTXCSShake   = { :spec_name =&gt; &#34;CSShake&#34; }
+</span></span><span class="line"><span class="cl">    YTXMagicCSS   = { :spec_name =&gt; &#34;MagicCSS&#34; }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    $animations = [YTXAnimateCSS, YTXCSShake, YTXMagicCSS]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    $animations.each do |sync_spec|
+</span></span><span class="line"><span class="cl">        s.subspec sync_spec[:spec_name] do |ss|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            specname = sync_spec[:spec_name]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            sources = [&#34;Pod/Classes/UIView+YTX#{specname}.*&#34;, &#34;Pod/Classes/YTXAnimationsUtil.{h,m}&#34;]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            ss.source_files = sources
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            if sync_spec[:dependency]
+</span></span><span class="line"><span class="cl">                sync_spec[:dependency].each do |dep|
+</span></span><span class="line"><span class="cl">                    ss.dependency dep[:name], dep[:version]
+</span></span><span class="line"><span class="cl">                end
+</span></span><span class="line"><span class="cl">            end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        end
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    s.subspec &#34;Transformer&#34; do |ss|
+</span></span><span class="line"><span class="cl">      ss.source_files = [&#34;Pod/Classes/YTXGooeyCircleLayer.{h,m}&#34;, &#34;Pod/Classes/YTXCountDownShowLayer.{h,m}&#34;]
+</span></span><span class="line"><span class="cl">    end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>在一个podspec里我可以定义它的subspecs，给使用方提供了一种灵活的方式去获取相关源码，而不是全部源码。subspec之间也可以有依赖关系，依赖其他第三方库等。</p>
+<p>如果是这样的用的话，就是全量。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pod &#39;YTXAnimations&#39;, &#39;~&gt; 1.2.4&#39;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也有不少在github第三方库用了subspecs。比如：<a href="https://link.jianshu.com?t=https://github.com/orta/ARAnalytics" target="_blank" rel="external nofollow noopener noreferrer">ARAnalytics<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h3 class="heading-element" id="谈谈作用subspecs这种模式特别适合组件化开发"><span>谈谈作用：subspecs这种模式特别适合组件化开发。</span>
+  <a href="#%e8%b0%88%e8%b0%88%e4%bd%9c%e7%94%a8subspecs%e8%bf%99%e7%a7%8d%e6%a8%a1%e5%bc%8f%e7%89%b9%e5%88%ab%e9%80%82%e5%90%88%e7%bb%84%e4%bb%b6%e5%8c%96%e5%bc%80%e5%8f%91" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>比如有两个业务team A和B。他们各自维护一个业务组件A和业务组件B。原则上业务组件A和业务组件B之间不能相互依赖。但是很多时候组件A需要调用组件B的功能，接受组件B的回调。架构的时候我们会使用依赖协议或者依赖下沉等等方式去除他们之间的耦合。</p>
+<p>但问题是我们还是需要集成在一起调试的。</p>
+<p>一般做法就是在业务组件A的Example项目的Podfile中，加上依赖业务组件B：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;TestBusinessAExampleApp&#39; do
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessA&#39;, :path =&gt; &#34;../&#34;
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessB&#39;, &#39;~&gt;1.2.1&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>然后在Example App中串联起A和B，以达到调试的目的。</p>
+<p>组件B作为一个业务肯定是很庞大的，所以编译慢。二进制化可以解决这个问题。作为Team A的人，我不需要关注组件B是否太大编译慢，依赖等问题。</p>
+<p>举个例子，比如外卖和电影，外卖会送电影票。</p>
+<p>很容易想到！业务组件A只依赖业务组件B的部分。组件B应该把这部分其实对外的内容尽量做成一个subspec或者正常结构划分，划分成依赖其中几个subspec。这样业务组件A需要关心的事就更少了。当发生问题，Team A不得已想要查看业务组件B的源代码以查看是否问题出在了业务组件B的时候，Team A的人员面对的不是整个业务组件B的业务源代码，而是部分其实对外的源代码。缩小依赖的二进制文件大小或源代码数量也是有显而易见的好处的。</p>
+<p>嗯，调试源代码，我们应该：</p>
+<ul>
+<li>删除Pods目录</li>
+<li>pod cache clean &ndash;all</li>
+<li>IS_SOURCE=1 pod install</li>
+</ul>
+<p>嗯，这已经在公司内部达成了一致，使用IS_SOURCE。</p>
+<p>现在的业务组件A的Example项目的Podfile中应该变成了这样：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;TestBusinessAExampleApp&#39; do
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessA&#39;, :path =&gt; &#34;../&#34;
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessB&#39;, &#39;~&gt;1.2.1&#39; , :subspecs =&gt; [&#34;SomeBusinessXXX&#34;]
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>进一步的如果有个业务组件C要和业务组件B打交道，它的Example项目的Podfile应该这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;TestBusinessCExampleApp&#39; do
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessC&#39;, :path =&gt; &#34;../&#34;
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessB&#39;, &#39;~&gt;1.2.1&#39; , :subspecs =&gt; [&#34;SomeBusinessTTT&#34;]
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在主项目App中的Podfile是这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;DaMeiTuanApp&#39; do
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessA&#39;, &#39;~&gt;3.0.5&#39;
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessB&#39;, &#39;~&gt;1.2.1&#39;
+</span></span><span class="line"><span class="cl">  pod &#39;BusinessC&#39;, &#39;~&gt;2.2.0&#39;
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="下面开始说说subspec如何二进制化如何在podspec中定义"><span>下面开始说说subspec如何二进制化，如何在podspec中定义</span>
+  <a href="#%e4%b8%8b%e9%9d%a2%e5%bc%80%e5%a7%8b%e8%af%b4%e8%af%b4subspec%e5%a6%82%e4%bd%95%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%a6%82%e4%bd%95%e5%9c%a8podspec%e4%b8%ad%e5%ae%9a%e4%b9%89" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>如果没有特别说明，没有讲到细节的内容或方式都应该在教程一里</p>
+<p>在教程一里面提到有subspecs的CocoaPods的组件二进制化方案，说了两个方案。最后选择的方案：是对每一个subspec都做份二进制并保持它们之间依赖的相互关系。</p>
+<p><strong>为什么不使用全集？也就是把所有源码都变成.a呢？</strong></p>
+<ul>
+<li>使用方的Podfile就需要改写了。</li>
+<li>使用方本来希望只用AnimateCSS和Transformer，现在不得不把CSShake和MagicCSS也包含进来了。</li>
+</ul>
+<p><strong>接下来以实际项目YTXUtilCategory作为例子来讲解。</strong></p>
+<p><strong>方案就是：是对每一个subspec都做份二进制并保持它们之间依赖的相互关系。</strong></p>
+<p>YTXUtilCategory是我们的一个提供公共通用方法和Category的类。在二进制化之前它大概是长这个样子的：</p>
+<p><img loading="lazy" src='/images/60aa376b55c77a48f1f288ecfed5c564.png' alt="image.png"></p>
+<p>二进制化之前它的podspec是这样的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Pod::Spec.new do |s|
+</span></span><span class="line"><span class="cl">  .......
+</span></span><span class="line"><span class="cl">  _all_names = []
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _GTMBase64         = { :spec_name =&gt; &#34;GTMBase64&#34;,        :source_files =&gt; [&#39;Pod/Classes/GTMBase64/GTM*.{h,m}&#39;              ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _UIColor           = { :spec_name =&gt; &#34;UIColor&#34;,          :source_files =&gt; [&#39;Pod/Classes/UIColor/UIColor+*.{h,m}&#39;          ] }
+</span></span><span class="line"><span class="cl">  _UIView            = { :spec_name =&gt; &#34;UIView&#34;,           :source_files =&gt; [&#39;Pod/Classes/UIView/UIView+*.{h,m}&#39;           ] }
+</span></span><span class="line"><span class="cl">  _UIImage           = { :spec_name =&gt; &#34;UIImage&#34;,          :source_files =&gt; [&#39;Pod/Classes/UIImage/UIImage+*.{h,m}&#39;          ] }
+</span></span><span class="line"><span class="cl">  _UIDevice          = { :spec_name =&gt; &#34;UIDevice&#34;,         :source_files =&gt; [&#39;Pod/Classes/UIDevice/UIDevice+*.{h,m}&#39;         ] }
+</span></span><span class="line"><span class="cl">  _UITableView       = { :spec_name =&gt; &#34;UITableView&#34;,      :source_files =&gt; [&#39;Pod/Classes/UITableView/UITableView+*.{h,m}&#39;      ] }
+</span></span><span class="line"><span class="cl">  _UIViewController  = { :spec_name =&gt; &#34;UIViewController&#34;, :source_files =&gt; [&#39;Pod/Classes/UIViewController/UIViewController+*.{h,m}&#39; ] }
+</span></span><span class="line"><span class="cl">  _UIButton          = { :spec_name =&gt; &#34;UIButton&#34;,         :source_files =&gt; [&#39;Pod/Classes/UIButton/UIButton+*.{h,m}&#39;           ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _NSURL             = { :spec_name =&gt; &#34;NSURL&#34;,            :source_files =&gt; [&#39;Pod/Classes/NSUR/NSURL+*.{h,m}&#39;            ] }
+</span></span><span class="line"><span class="cl">  _NSArray           = { :spec_name =&gt; &#34;NSArray&#34;,          :source_files =&gt; [&#39;Pod/Classes/NSArray/NSArray+*.{h,m}&#39;          ] }
+</span></span><span class="line"><span class="cl">  _NSDictionary      = { :spec_name =&gt; &#34;NSDictionary&#34;,     :source_files =&gt; [&#39;Pod/Classes/NSDictionary/NSDictionary+*.{h,m}&#39;     ] }
+</span></span><span class="line"><span class="cl">  _NSDate            = { :spec_name =&gt; &#34;NSDate&#34;,           :source_files =&gt; [&#39;Pod/Classes/NSDate/NSDate+*.{h,m}&#39;           ] ,     :dependency =&gt; [{:name =&gt; &#34;DateTools&#34;,    :version =&gt; &#34;~&gt; 1.0&#34;    }] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _NSString          = { :spec_name =&gt; &#34;NSString&#34;,         :source_files =&gt; [&#39;Pod/Classes/NSString/NSString+*.{h,m}&#39;         ],
+</span></span><span class="line"><span class="cl">    :sub_dependency =&gt; [_GTMBase64] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _Util              = { :spec_name =&gt; &#34;Util&#34;,             :source_files =&gt; [&#39;Pod/Classes/Util/*.{h,m}&#39;         ]}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _FoundationAll     = { :spec_name =&gt; &#34;FoundationAll&#34;,    :sub_dependency =&gt; [_NSString, _NSURL, _NSDate, _NSArray, _NSDictionary    ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _UIAll             = { :spec_name =&gt; &#34;UIAll&#34;,            :sub_dependency =&gt; [_UIColor, _UIView, _UIImage, _UIButton, _UIDevice, _UITableView, _UIViewController        ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _all_subspec = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSDate, _NSArray, _NSString, _NSDictionary, _Util, _FoundationAll, _UIAll]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _all_subspec.each do |spec|
+</span></span><span class="line"><span class="cl">      s.subspec spec[:spec_name] do |ss|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          specname = spec[:spec_name]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          _all_names &lt;&lt; specname
+</span></span><span class="line"><span class="cl">          if spec[:source_files]
+</span></span><span class="line"><span class="cl">              ss.source_files = spec[:source_files]
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:sub_dependency]
+</span></span><span class="line"><span class="cl">              spec[:sub_dependency].each do |dep|
+</span></span><span class="line"><span class="cl">                  ss.dependency &#34;YTXUtilCategory/#{dep[:spec_name]}&#34;
+</span></span><span class="line"><span class="cl">              end
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:dependency]
+</span></span><span class="line"><span class="cl">              spec[:dependency].each do |dep|
+</span></span><span class="line"><span class="cl">                  ss.dependency dep[:name], dep[:version]
+</span></span><span class="line"><span class="cl">              end
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      end
+</span></span><span class="line"><span class="cl">  end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  spec_names = _all_names[0...-1].join(&#34;, &#34;) + &#34; 和 &#34; + _all_names[-1]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.description = &#34;拆分了这些subspec:#{spec_names}&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>通过分析代码可以知道：</p>
+<ul>
+<li>有这些subspecs：GTMBase64, UIColor, UIView, UIImage, UIDevice, UITableView, UIViewController, UIButton, NSURL, NSDate, NSArray, NSString, NSDictionary, Util, FoundationAll, UIAll</li>
+<li>NSDate依赖第三方DateTools。</li>
+<li>NSString依赖兄弟GTMBase64。</li>
+<li>FoundationAll依赖兄弟subspecs，自己没什么内容，或者说提供一个灵活的方式一口气纳入所有相关Foundation内容。</li>
+<li>UIAll依赖兄弟subspecs，和FoundationAll想要做的是一样的。</li>
+</ul>
+<p>相信各位读者看了这个podspec也就知道怎么创建自己的subspec了。或者看看<a href="https://link.jianshu.com?t=https://github.com/orta/ARAnalytics" target="_blank" rel="external nofollow noopener noreferrer">ARAnalytics<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的podspec。</p>
+<p>在App中的Podflie是这样用的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pod &#39;YTXUtilCategory&#39;,&#39;~&gt; 1.2.0&#39;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>或</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pod &#39;YTXUtilCategory&#39;,&#39;~&gt; 1.2.0&#39;, :subspecs =&gt; [&#34;UIColor&#34;, &#34;FoundationALL&#34;]</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>从分析的结果来看我应该创建这些target：</p>
+<p><img loading="lazy" src='/images/107257225cf84e76ed6e30a11944ff93.png' alt="image.png"></p>
+<p>在Example/Podfile中根据target的名字增加以下内容并pod install：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">target &#39;YTXUtilCategoryGTMBase64Binary&#39; do
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.........省略
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">target &#39;YTXUtilCategoryNSDateBinary&#39; do
+</span></span><span class="line"><span class="cl">  pod &#39;DateTools&#39;, &#39;~&gt; 1.0&#39;
+</span></span><span class="line"><span class="cl">end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">target &#39;YTXUtilCategoryUtilBinary&#39; do
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>注意YTXUtilCategoryNSDateBinary，把它的第三方依赖加上。版本和podspec里描写的一致。</p>
+<p>在根目录增加两个shell脚本。</p>
+<p>buildbinary.sh和教程一的基本一致，只是改了第一行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#获得第一个参数
+</span></span><span class="line"><span class="cl">PROJECT_NAME=$1
+</span></span><span class="line"><span class="cl"># 编译工程
+</span></span><span class="line"><span class="cl">BINARY_NAME=&#34;${PROJECT_NAME}Binary&#34;</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>buildallbinary.sh</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pushd &#34;$(dirname &#34;$0&#34;)&#34; &gt; /dev/null
+</span></span><span class="line"><span class="cl">SCRIPT_DIR=$(pwd -L)
+</span></span><span class="line"><span class="cl">popd &gt; /dev/null
+</span></span><span class="line"><span class="cl">#也可以写个for循环
+</span></span><span class="line"><span class="cl">./buildbinary.sh YTXUtilCategoryGTMBase64
+</span></span><span class="line"><span class="cl">......省略
+</span></span><span class="line"><span class="cl">./buildbinary.sh YTXUtilCategoryUtil</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>执行</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./buildallbinary.sh</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>得到结果：
+<img loading="lazy" src='/images/52ec2798e675aa0e8a11d2eba731eda4.png' alt="image.png"></p>
+<p>更改podspec内容为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Pod::Spec.new do |s|
+</span></span><span class="line"><span class="cl">  ......省略
+</span></span><span class="line"><span class="cl">  _all_names = []
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _GTMBase64         = { :spec_name =&gt; &#34;GTMBase64&#34;}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _UIColor           = { :spec_name =&gt; &#34;UIColor&#34;}
+</span></span><span class="line"><span class="cl">  _UIView            = { :spec_name =&gt; &#34;UIView&#34;}
+</span></span><span class="line"><span class="cl">  _UIImage           = { :spec_name =&gt; &#34;UIImage&#34;}
+</span></span><span class="line"><span class="cl">  _UIDevice          = { :spec_name =&gt; &#34;UIDevice&#34;}
+</span></span><span class="line"><span class="cl">  _UITableView       = { :spec_name =&gt; &#34;UITableView&#34;}
+</span></span><span class="line"><span class="cl">  _UIViewController  = { :spec_name =&gt; &#34;UIViewController&#34;}
+</span></span><span class="line"><span class="cl">  _UIButton          = { :spec_name =&gt; &#34;UIButton&#34;}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _NSURL             = { :spec_name =&gt; &#34;NSURL&#34;}
+</span></span><span class="line"><span class="cl">  _NSArray           = { :spec_name =&gt; &#34;NSArray&#34;}
+</span></span><span class="line"><span class="cl">  _NSDictionary      = { :spec_name =&gt; &#34;NSDictionary&#34;}
+</span></span><span class="line"><span class="cl">  _NSDate            = { :spec_name =&gt; &#34;NSDate&#34;, :dependency =&gt; [{:name =&gt; &#34;DateTools&#34;,    :version =&gt; &#34;~&gt; 1.0&#34;    }] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _NSString          = { :spec_name =&gt; &#34;NSString&#34;, :sub_dependency =&gt; [_GTMBase64] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _Util              = { :spec_name =&gt; &#34;Util&#34;}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _temp = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSArray, _NSDictionary, _NSDate, _NSString, _Util]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">  if ENV[&#39;IS_SOURCE&#39;]
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">    puts &#34;Notice:#{s.name} is source now&#34;
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    _temp.each do |spec|
+</span></span><span class="line"><span class="cl">      spec[:source_files]=[&#34;Pod/Classes/#{spec[:spec_name]}/*.{h,m}&#34;]
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  else
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">    puts &#34;Notice:#{s.name} is binary now&#34;
+</span></span><span class="line"><span class="cl">    puts &#39;-------------------------------------------------------------------&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    _temp.each do |spec|
+</span></span><span class="line"><span class="cl">        spec[:source_files]=[&#34;Pod/Products/#{s.name}#{spec[:spec_name]}/include/**&#34;]
+</span></span><span class="line"><span class="cl">        spec[:public_header_files]=[&#34;Pod/Products/#{s.name}#{spec[:spec_name]}/include/*.h&#34;]
+</span></span><span class="line"><span class="cl">        spec[:vendored_libraries]=[&#34;Pod/Products/#{s.name}#{spec[:spec_name]}/lib/*.a&#34;]
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">  end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _FoundationAll     = { :spec_name =&gt; &#34;FoundationAll&#34;,    :sub_dependency =&gt; [_NSString, _NSURL, _NSDate, _NSArray, _NSDictionary    ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _UIAll             = { :spec_name =&gt; &#34;UIAll&#34;,            :sub_dependency =&gt; [_UIColor, _UIView, _UIImage, _UIButton, _UIDevice, _UITableView, _UIViewController        ] }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _all_subspec = [_GTMBase64, _UIColor, _UIView, _UIImage, _UIDevice, _UITableView, _UIViewController, _UIButton, _NSURL, _NSDate, _NSArray, _NSString, _NSDictionary, _Util, _FoundationAll, _UIAll]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  _all_subspec.each do |spec|
+</span></span><span class="line"><span class="cl">      s.subspec spec[:spec_name] do |ss|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          specname = spec[:spec_name]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          _all_names &lt;&lt; specname
+</span></span><span class="line"><span class="cl">          if spec[:source_files]
+</span></span><span class="line"><span class="cl">              ss.source_files = spec[:source_files]
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:public_header_files]
+</span></span><span class="line"><span class="cl">              ss.public_header_files = spec[:public_header_files]
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:vendored_libraries]
+</span></span><span class="line"><span class="cl">              ss.ios.vendored_libraries = spec[:vendored_libraries]
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:sub_dependency]
+</span></span><span class="line"><span class="cl">              spec[:sub_dependency].each do |dep|
+</span></span><span class="line"><span class="cl">                  ss.dependency &#34;YTXUtilCategory/#{dep[:spec_name]}&#34;
+</span></span><span class="line"><span class="cl">              end
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          if spec[:dependency]
+</span></span><span class="line"><span class="cl">              spec[:dependency].each do |dep|
+</span></span><span class="line"><span class="cl">                  ss.dependency dep[:name], dep[:version]
+</span></span><span class="line"><span class="cl">              end
+</span></span><span class="line"><span class="cl">          end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      end
+</span></span><span class="line"><span class="cl">  end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  spec_names = _all_names[0...-1].join(&#34;, &#34;) + &#34; 和 &#34; + _all_names[-1]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  s.description = &#34;拆分了这些subspec:#{spec_names}&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>难点其实在于podspec如何写，如何描述subspec之间的关系，如何拆分subspec。</p>
+<p>假如a.h和b.h都用到了c.h，而a.h隶属于subspec A，而b.h隶属于subspec B。那你应该做一个subspec C其中包含c.h。而A和B都依赖C。</p>
+<p>要避免a.h依赖b.h，b.h依赖a.h这种循环依赖的问题。</p>
+<p><strong>到此为止，含有subspec的CocoaPods库就这么简单的完成了。</strong></p>
+<h3 class="heading-element" id="后记在做subspec二进制化遇到的问题"><span>后记，在做subspec二进制化遇到的问题</span>
+  <a href="#%e5%90%8e%e8%ae%b0%e5%9c%a8%e5%81%9asubspec%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">_all_sync.each do |sync_spec|
+</span></span><span class="line"><span class="cl">  ...
+</span></span><span class="line"><span class="cl">  ss.prefix_header_contents = &#34;#define YTX_#{specname.upcase}_EXISTS 1&#34;
+</span></span><span class="line"><span class="cl">  ... 
+</span></span><span class="line"><span class="cl">end</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>注意ss. ss.prefix_header_contents这段。加了一个宏。然后在这里会用到:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#import &#34;YTXRestfulModel.h&#34;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef YTX_USERDEFAULTSTORAGESYNC_EXISTS
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &#34;YTXRestfulModelUserDefaultStorageSync.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef YTX_AFNETWORKINGREMOTESYNC_EXISTS
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &#34;AFNetworkingRemoteSync.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef YTX_YTXREQUESTREMOTESYNC_EXISTS
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &#34;YTXRestfulModelYTXRequestRemoteSync.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef YTX_FMDBSYNC_EXISTS
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &#34;YTXRestfulModelFMDBSync.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &#34;NSValue+YTXRestfulModelFMDBSync.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>在源码的情况下，如果我想要用YTXRequestRemote这个subspec，那么引入YTXRequestRemote时会自带宏YTX_YTXREQUESTREMOTESYNC_EXISTS，YTXRestfulModel在编译时会根据宏引入相关头文件。</p>
+<p>问题来了，宏都是预编译的。当我编译出二进制时，内容已经决定了。这样就丧失了subspec的动态性了。所以关键的问题在于当初设计的时候没有考虑好。</p>
+<p>希望大家看到这个例子后，避免将来遇到相思的问题。目前没有想到好的解决方案，所以这个库并没有二进制化。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/" data-title="IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B%E4%BA%8C%E4%B9%8Bsubspecs%E7%AF%87/" data-title="IOS CocoaPods组件平滑二进制化解决方案及详细教程二之subspecs篇"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="IOS CocoaPods组件平滑二进制化解决方案及详细教程"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>IOS CocoaPods组件平滑二进制化解决方案及详细教程</a><a href="/posts/modularization/%E7%81%AB%E6%8E%8C%E6%9F%9Cios%E7%AB%AF%E5%9F%BA%E4%BA%8Ecocoapods%E7%9A%84%E7%BB%84%E4%BB%B6%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E5%AE%9E%E8%B7%B5/" class="post-nav-item" rel="next" title="火掌柜iOS端基于CocoaPods的组件二进制化实践">火掌柜iOS端基于CocoaPods的组件二进制化实践<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/7ecb8debd169ab2a1303daaeb24955c2.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

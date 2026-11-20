@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>云音乐 Swift 混编 Module 化实践 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content=" title: 云音乐 Swift 混编 Module 化实践 date: 2024-03-10 00:16:26 copyright: false author: 网易云音乐技术团队 home: https://juejin.cn/user/4265760847567016/posts origin: juejin url: https://juejin.cn/post/7207269389474037817 tag:
+iOS categories: description: 图片来自：unsplash.com 本文作者：冰川 背景 云音乐 iOS App 经历多年的迭代，&hellip; 图片来自：unsplash.com
+本文作者：冰川
+背景 云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="云音乐 Swift 混编 Module 化实践">
+	<meta itemprop="description" content="title: 云音乐 Swift 混编 Module 化实践 date: 2024-03-10 00:16:26 copyright: false author: 网易云音乐技术团队 home: https://juejin.cn/user/4265760847567016/posts origin: juejin url: https://juejin.cn/post/7207269389474037817 tag:
+iOS categories: description: 图片来自：unsplash.com 本文作者：冰川 背景 云音乐 iOS App 经历多年的迭代，… 图片来自：unsplash.com
+本文作者：冰川
+背景 云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下：">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="4208">
+	<meta itemprop="keywords" content="碎片芝士收藏"><meta property="og:url" content="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="云音乐 Swift 混编 Module 化实践">
+	<meta property="og:description" content="title: 云音乐 Swift 混编 Module 化实践 date: 2024-03-10 00:16:26 copyright: false author: 网易云音乐技术团队 home: https://juejin.cn/user/4265760847567016/posts origin: juejin url: https://juejin.cn/post/7207269389474037817 tag:
+iOS categories: description: 图片来自：unsplash.com 本文作者：冰川 背景 云音乐 iOS App 经历多年的迭代，… 图片来自：unsplash.com
+本文作者：冰川
+背景 云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="云音乐 Swift 混编 Module 化实践">
+  <meta name="twitter:description" content="title: 云音乐 Swift 混编 Module 化实践 date: 2024-03-10 00:16:26 copyright: false author: 网易云音乐技术团队 home: https://juejin.cn/user/4265760847567016/posts origin: juejin url: https://juejin.cn/post/7207269389474037817 tag:
+iOS categories: description: 图片来自：unsplash.com 本文作者：冰川 背景 云音乐 iOS App 经历多年的迭代，… 图片来自：unsplash.com
+本文作者：冰川
+背景 云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/" title="云音乐 Swift 混编 Module 化实践 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/bluetooth/1-%E8%93%9D%E7%89%99%E8%BF%9E%E6%8E%A5%E6%B5%81%E7%A8%8B/" title="1 ：蓝牙连接流程" /><link rel="next" type="text/html" href="https://apolla.cc/posts/tips/%E7%94%A8-swiftui-%E5%AE%9E%E7%8E%B0-ai-%E8%81%8A%E5%A4%A9%E5%AF%B9%E8%AF%9D-app-ichatgpt/" title="用 SwiftUI 实现 AI 聊天对话 app - iChatGPT" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "云音乐 Swift 混编 Module 化实践",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/tips\/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5\/"
+    },"genre": "posts","wordcount":  4208 ,
+    "url": "https:\/\/apolla.cc\/posts\/tips\/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>云音乐 Swift 混编 Module 化实践</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F/" class="post-category" title="分类 - 碎片芝士收藏"><i class="fa-regular fa-folder" aria-hidden="true"></i> 碎片芝士收藏</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="4208 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 4300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#什么是-modules">什么是 Modules</a></li>
+    <li><a href="#如何开启-modules">如何开启 Modules</a></li>
+    <li><a href="#module-化现状分析">Module 化现状分析</a></li>
+    <li><a href="#module-化方案">Module 化方案</a></li>
+    <li><a href="#module-化问题">Module 化问题</a>
+      <ul>
+        <li><a href="#宏定义找不到">宏定义找不到</a></li>
+        <li><a href="#头文件缺失">头文件缺失</a></li>
+        <li><a href="#a-静态库">.a 静态库</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#规划展望">规划展望</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><hr>
+<p>title: 云音乐 Swift 混编 Module 化实践
+date: 2024-03-10 00:16:26
+copyright: false
+author: 网易云音乐技术团队
+home: <a href="https://juejin.cn/user/4265760847567016/posts" target="_blank" rel="external nofollow noopener noreferrer">https://juejin.cn/user/4265760847567016/posts<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+origin: juejin
+url: <a href="https://juejin.cn/post/7207269389474037817" target="_blank" rel="external nofollow noopener noreferrer">https://juejin.cn/post/7207269389474037817<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+tag:</p>
+<ul>
+<li>iOS
+categories:
+description: 图片来自：unsplash.com 本文作者：冰川  背景 云音乐 iOS App 经历多年的迭代，&hellip;</li>
+</ul>
+<hr>
+<blockquote>
+<p>图片来自：<a href="https://unsplash.com" target="_blank" rel="external nofollow noopener noreferrer">unsplash.com<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a><br>
+本文作者：冰川</p>
+</blockquote>
+<h2 class="heading-element" id="背景"><span>背景</span>
+  <a href="#%e8%83%8c%e6%99%af" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>云音乐 iOS App 经历多年的迭代，积累了大量的 Objective-C（以下简称 OC） 代码，目前已经完成主工程壳化，各层组件关系如下：</p>
+<p><img loading="lazy" src='/images/e8697b07f8aa200e105315c8d4cb20cc.png' alt="/images/e8697b07f8aa200e105315c8d4cb20cc.png"></p>
+<p>组件化后混编的场景主要集中在 Framework 内混编和 Framework 之间混编，Framework 内的混编成本较低，重头主要在 Framework 间的混编。</p>
+<p>在云音乐中集成的创新业务，因为依赖的历史基础库较少，已经投入使用 Swift。主站业务迟迟没有投入，主要原因是涉及到大量的 OC 业务基础库和公共基础库不支持 Swift 混编，OC 组件库参与混编的前提是要完成 Module 化。</p>
+<p><img loading="lazy" src='/images/e1ca1aa78e0032cebaa6260f749055b1.png' alt="/images/e1ca1aa78e0032cebaa6260f749055b1.png"></p>
+<p>以上是我们实现混编计划的几个阶段，本文主要介绍在支持云音乐 Swift 混编过程中，Module 化阶段的分析与实践。</p>
+<h2 class="heading-element" id="什么是-modules"><span>什么是 Modules</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%af-modules" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>早在 2012 苹果就提出了 Modules 的概念（比 Swift 发布还要早），Module 是组件的抽象描述，包含组件接口以及实现。它的核心目的是为了解决 C 系语言的扩展性和稳定性问题。</p>
+<p>Cocoa 框架很早就支持了 Module，并且前向兼容，正因为它的兼容性，纯 Objective-C 开发对它的感知可能不强。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">arduino复制代码AFramework</span><span class="p">.</span><span class="n">framework</span>
+</span></span><span class="line"><span class="cl"><span class="err">├─</span> <span class="n">Headers</span>
+</span></span><span class="line"><span class="cl"><span class="err">├─</span> <span class="n">Info</span><span class="p">.</span><span class="n">plist</span>
+</span></span><span class="line"><span class="cl"><span class="err">├─</span> <span class="n">Modules</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>    <span class="err">└─</span> <span class="n">module</span><span class="p">.</span><span class="n">modulemap</span>
+</span></span><span class="line"><span class="cl"><span class="err">└─</span> <span class="n">AFramework</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Module 化的 OC 二进制 Framework 组件，在 Modules 目录下存在一个 <code>.modulemap</code> 格式的文件，它描述了组件对外暴露的能力。当引用的组件包含 modulemap，Clang 编译器会从中查找头文件，进行 Module 编译，并将编译结果缓存。</p>
+<p><img loading="lazy" src='/images/a6954fcd932f70aa490f7e7c1a765d0c.png' alt="/images/a6954fcd932f70aa490f7e7c1a765d0c.png"></p>
+<p>Clang 编译器要求 Swift 引用的 Objective-C 组件必须支持 Module 特性。我们把 OC 组件支持 Module 的过程，称为 Module 化。</p>
+<h2 class="heading-element" id="如何开启-modules"><span>如何开启 Modules</span>
+  <a href="#%e5%a6%82%e4%bd%95%e5%bc%80%e5%90%af-modules" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Xcode Project Target 支持在 「Building Settings -&gt; Defines Module」设置 Module 开关。</p>
+<p>如果使用 CocoaPods 组件集成，支持如下几种方式进行 Module 化：</p>
+<ol>
+<li>在 Podfile 添加 <code>use_modular_headers!</code> 为所有 pod 开启 Module；</li>
+<li>在 Podfile 为每个 pod 单独设置 <code>:modular_headers =&gt; true</code>；</li>
+<li>在 pod 的 podspec 文件中设置 <code>s.pod_target_xcconfig = { 'DEFINES_MODULE' =&gt; 'YES' }</code>；</li>
+<li>在 Podfile 使用 <code>use_frameworks! :linkage =&gt; :static</code>。</li>
+</ol>
+<p>前三种方式在编译产物是 <code>.a</code> 静态库时生效，如果使用了 <code>use_framework!</code>，源码编译产物是 Framework，默认就会包含 modulemap。</p>
+<h2 class="heading-element" id="module-化现状分析"><span>Module 化现状分析</span>
+  <a href="#module-%e5%8c%96%e7%8e%b0%e7%8a%b6%e5%88%86%e6%9e%90" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>云音乐工程使用 CocoaPods 集成依赖库，几乎所有库已经完成 Framework 静态化，而大部分静态库都是在未打开 Module 下的编译产物。</p>
+<p>那么要让 OC 静态库支持 Module，直观的方案是，直接打开 Module 化开关，重新构建 Framework 静态库，让产物包含 modulemap。</p>
+<p>然而直接打开开关，组件大概率会编译失败。原因主要有两点：</p>
+<ol>
+<li>组件的 Module 具有依赖传递性，当前组件打开 Module 编译，要求它所有的依赖库，都已经完成 Module 化。在云音乐庞大的组件体系里面，即使理清其中的依赖关系，用自动化的方式自下而上构建，成功的可能性也极低。</li>
+<li>历史代码存在不少引用方式不规范，宏定义「奇淫技巧」，以及 PCH 隐式依赖等问题，这些问题导致组件库本身无法正常 Module 编译。</li>
+</ol>
+<h2 class="heading-element" id="module-化方案"><span>Module 化方案</span>
+  <a href="#module-%e5%8c%96%e6%96%b9%e6%a1%88" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>目前云音乐的二进制组件主要分为三种类型：</p>
+<ul>
+<li>Module Framework</li>
+<li>非 Module Framework</li>
+<li><code>.a</code> 静态库</li>
+</ul>
+<p>Module Framework 是在 Defines Module 打开时的编译产物，这种类型没有改造成本，只需要在 CI 阶段，将不同架构的 Framework 封装成 XCFramework 压缩并上传到服务器。</p>
+<p>对于非 Module Framework 我们尝试了一种成本比较低的方案，在组件库 Module 关闭的条件下，先将其编译成静态库，再用脚本自动化生成对应的 modulemap 文件，放到 Famework/Modules 目录。</p>
+<p><img loading="lazy" src='/images/0a5a559796ef73583d74626d4ca13a04.png' alt="/images/0a5a559796ef73583d74626d4ca13a04.png"></p>
+<p>主动塞 modulemap 的方案之所以可行和 Clang Module 的编译原理有关。当使用 <code>#import &lt;NMSetting/NMAppSetting.h&gt;</code> 引用依赖时, Clang 首先会去 NMSetting.framework 的 Header 目录下查找对应的头文件是否存在，然后在 Modules 目录下查找 modulemap 文件。</p>
+<p>modulemap 中包含的 umbrella header 对应的是组件公开头文件的集合。如果引用的头文件能找到，Clang 就会使用 Module 编译。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">arduino复制代码</span><span class="c1">// NMSetting.framework/Modules/NMSetting.modulemap
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">framework</span> <span class="n">module</span> <span class="n">NMSetting</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">umbrella</span> <span class="n">header</span> <span class="s">&#34;NMSetting-umbrella.h&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">export</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">  <span class="n">module</span> <span class="o">*</span> <span class="p">{</span> <span class="k">export</span> <span class="o">*</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Clang 并不关心 modulemap 来源，只会按照固定的路径去查找它是否存在。所以采用主动添加 modulemap 的方式，能达到「欺骗」编译器的目的。</p>
+<p>这种方式的好处是，只要当前组件被引用时能正常 Module 编译即可，不需要考虑它依赖组件的 Module 编译是否有问题。缺点是不彻底，假设静态库组件公开头文件，存在不符合 Module 规范的情况，即使有 modulemap，编译时依然会抛出错误：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">arduino复制代码Could</span> <span class="k">not</span> <span class="n">build</span> <span class="n">moudle</span> <span class="err">&#39;</span><span class="n">xxx</span><span class="err">&#39;</span><span class="p">.</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>对于未知的 Module 编译问题，只能拉对应的源码针对性的解决。</p>
+<p>以下是我们遇到的一些比较典型的 Module 问题，以及对应的解决思路。</p>
+<h2 class="heading-element" id="module-化问题"><span>Module 化问题</span>
+  <a href="#module-%e5%8c%96%e9%97%ae%e9%a2%98" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="宏定义找不到"><span>宏定义找不到</span>
+  <a href="#%e5%ae%8f%e5%ae%9a%e4%b9%89%e6%89%be%e4%b8%8d%e5%88%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在使用 OC 开发时，习惯于在 <code>.h</code> 文件定义一些宏，方便外部访问，然而 Swift 不支持定义宏，在引用 OC 的宏定义时，会将其转为全局常量。不过转换能力比较有限，仅支持基本的字面量值，以及基本运算符表达式。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ObjC" data-lang="ObjC"><span class="line"><span class="cl"><span class="cp">#define MAX_RESOLUTION 1268
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define HALF_RESOLUTION (MAX_RESOLUTION / 2)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>转换为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Swift" data-lang="Swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">MAX_RESOLUTION</span> <span class="p">=</span> <span class="mi">1268</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">IS_HIGH_RES</span> <span class="p">=</span> <span class="mi">634</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>宏定义的内容如果包含 OC 的语法实现，那么这个宏对 Swift 是不可见的。如果要支持 Swift 访问，需要对宏进行包装。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ObjC" data-lang="ObjC"><span class="line"><span class="cl"><span class="c1">// Constant.h
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define PIC_SIZE CGSizeMake(60, 60)
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="n">CGSize</span><span class="p">)</span><span class="nf">picSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Constant.m
+</span></span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="n">CGSize</span><span class="p">)</span><span class="nf">picSize</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">PIC_SIZE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>以上的宏问题还算比较直观，在云音乐组件中，还存在一些使用 <code>#include</code> 预处理指令，来使用宏的场景。</p>
+<p>C 系语言传统的 <code>#include</code> 引用是基于文本替换的方式实现的，利用这个特性能够屏蔽宏的实现细节。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// A.h
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define NM_DEFINES_KEY(key, des) FOUNDATION_EXTERN NSString *const key;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;ItemList.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#undef C
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ItemList.h
+</span></span></span><span class="line"><span class="cl"><span class="nf">NM_DEFINES_KEY</span><span class="p">(</span><span class="n">AKey</span><span class="p">,</span> <span class="err">@</span><span class="s">&#34;a key&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">NM_DEFINES_KEY</span><span class="p">(</span><span class="n">BKey</span><span class="p">,</span> <span class="err">@</span><span class="s">&#34;b key&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在非 Clang Module 下编译，上述代码能够正常工作，然而在打开 Module 之后，宏定义 <code>NM_DEFINES_KEY</code> 就找不到了。</p>
+<p>这是因为 Module 编译时，<code>#include</code> 不再是简单的文本替换模式，而是与 module 建立链接关系。</p>
+<p>下面是一个开启 Module 编译的例子，main.m 文件的预处理结果，共只有几行代码。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="c1">// main.m preprocess result.
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#pragma clang module import UIKit </span><span class="cm">/* clang -E: implicit import for #import &lt;UIKit/UIKit.h&gt; */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp"># 10 &#34;/Users/jxf/Documents/Workspace/Demo/ModuleDemo/ModuleDemo/main.m&#34; 2
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSString</span> <span class="o">*</span> <span class="n">appDelegateClassName</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果未开启 Module，UIKit 的所有头文件都会被复制进来，代码量将达到数万行。</p>
+<p>正因为这种差异，Module 编译时 <code>#include &quot;ItemList.h&quot;</code> 不会将内容复制到 A.h 文件，就会导致无法访问到它的宏定义。</p>
+<p>Module 提供了相应的解决方案，就是自定义 modulemap。前面已经介绍，默认情况下 modulemap 的格式为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">framework</span> <span class="n">module</span> <span class="n">FrameworkName</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">umbrella</span> <span class="n">header</span> <span class="s">&#34;FrameworkName-umbrella.h&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">export</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">  <span class="n">module</span> <span class="o">*</span> <span class="p">{</span> <span class="k">export</span> <span class="o">*</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>FrameworkName-umbrella.h 包含当前组件对外暴露的所有头文件，该文件会在使用 CocoaPods 集成时同步生成。我们可以使用 <code>textual header</code> 关键声明头文件，这样该头文件在被导入时，会降级为文本替换的形式。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">framework</span> <span class="n">module</span> <span class="n">FrameworkName</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">umbrella</span> <span class="n">header</span> <span class="s">&#34;FrameworkName-umbrella.h&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">textual</span> <span class="n">header</span> <span class="s">&#34;ItemList.h&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">export</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">  <span class="n">module</span> <span class="o">*</span> <span class="p">{</span> <span class="k">export</span> <span class="o">*</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>自定义 modulemap 还有一些额外的配置，需要自己生成组件公开的头文件集合 umbrella.h，并在 podspec 指定该 modulemap，。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-ini"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">s.module_map</span> <span class="o">=</span> <span class="s">&#34;#{s.name}.modulemap&#34;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在我们 CI 打包流程中，如果检测到组件自定义了 modulemap 就会使用自定义的文件，不再自动塞入模版化的 modulemap。</p>
+<p>如果 ItemList.h 不需要对外暴露，还有一种更简单的方案，直接在 podspec 将其声明为私有，这样在静态库 Headers 目录下就不会导出，也就不会出现 Module 编译问题。</p>
+<h3 class="heading-element" id="头文件缺失"><span>头文件缺失</span>
+  <a href="#%e5%a4%b4%e6%96%87%e4%bb%b6%e7%bc%ba%e5%a4%b1" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>云音乐业务基础库默认会使用 PCH（Precompiled Headers） 文件，它的好处主要有两点，一是能一定程度上提高编译效率，二是为当前组件库提供统一外部依赖，这种依赖关系是隐式的，PCH 已经添加的依赖，组件内使用时不需要再手动 import。</p>
+<p>这种方式确实能提供便利性，随着业务的快速迭代，大家也都适应了不引头文件的习惯，然而依靠隐式依赖关系，为 Module 编译留下了隐患。</p>
+<p>看个具体的例子：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ObjC" data-lang="ObjC"><span class="line"><span class="cl"><span class="c1">// &lt;B/NMEventModel.h&gt;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#import &lt;UIKit/UIKit.h&gt;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@interface</span> <span class="nc">NMEventModel</span> : <span class="nc">NSObject</span>
+</span></span><span class="line"><span class="cl"><span class="k">@property</span> <span class="p">(</span><span class="n">nullable</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="n">NMEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">@end</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>B 组件中的 <code>NMEventModel</code> 引用了 <code>NMEvent</code>，它来自另一个组件库 A，A 已经在 B.pch 中 import，所以在 B 组件源码编译时能通过隐式依赖找到 <code>NMEvent</code>。</p>
+<p>当 C 组件同时引用 A 组件和 B 组件的静态库时，因为 B 组件静态化后已经没有 PCH，正常来说访问 NMEventModel.h 应该编译报找不到 <code>NMEvent</code> 才对，而实际上在非 Module 编译时是不会有问题的。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-arduino"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-arduino" data-lang="arduino"><span class="line"><span class="cl"><span class="n">arduino复制代码</span><span class="c1">// C/Header.h
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#import &lt;A/NMEvent.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#import &lt;B/NMEventModel.h&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这是因为在非 Module 环境下 <code>#import &lt;A/NMEvent.h&gt;</code> 会把 <code>NMEvent</code> 的定义复制到当前文件，为 <code>NMEventModel.h</code> 编译提供了上下文环境。</p>
+<p>然而当开启 Module 编译时，会报 B 组件是非 Module 的错误（Module 依赖传递性），错误原因是 NMEventModel.h 头文件找不到<code>NMEvent</code>类。</p>
+<p>其实还是前面介绍的 Clang Module import 机制改变的原因，开启 Module 后，会使用独立的上下文编译 B 组件的 NMEventModel.h，缺少了<code>NMEvent</code>上下文。</p>
+<p>要解决该场景下的问题，比较粗暴的方式是，在 Module 编译上下文中注入它的 PCH 依赖。但是对于二进制组件来说，它已经没有 PCH 了，如果显式地暴露 PCH，仅仅是为了头文件的 Module 编译，会导致依赖关系进一步恶化。</p>
+<p>我们对这种情况做了针对性的治理，补充缺失的头文件依赖，历史库解决完一波后，默认都开启 Module 编译，如果开发过程中，使用不当编译器会及时反馈。对于新组件库增加 PCH 卡口限制。</p>
+<h3 class="heading-element" id="a-静态库"><span>.a 静态库</span>
+  <a href="#a-%e9%9d%99%e6%80%81%e5%ba%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>Module 化的关键是需要有 modulemap 文件，而历史的二方、三方库，有些是<code>.a</code>的静态库。</p>
+<p><code>.a</code> 文件只是可执行文件的集合，不包含资源文件，针对这种情况需要使用 Framework 进行二次封装。</p>
+<p>主要有两种方案：</p>
+<p>第一种，在 <code>.a</code> 文件目录注入一个空的 <code>.swift</code> 文件，并在 podspec 指定 <code>source_files</code> 和 <code>swift_version</code>，pod install 时 Cocopods 会自动生成对应的 modulemap 文件。</p>
+<p>第二种，采用 CocoaPods 插件，在 <code>pre_install</code> 阶段，设置<code>pod_target.should_build</code>，让 CocoPods 自动生成 modulemap。</p>
+<p>方案二的成本相对较低，最终我们采用了方案二。</p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Objective-C 组件库 Module 化是支持 Swift 混编的基础，Module 化的核心是提供 modulemap 文件，要生成 modulemap，组件需打开 Module 编译，这个过程中可能会遇到各种未知问题。</p>
+<p>云音乐在治理过程中遇到的问题相对比较收敛，主要集中在 Module 编译方式的变化，导致一些上下文信息丢失，一部分问题能够通过自动化的方案解决，而有些问题仍然需要进行人工验证。</p>
+<h2 class="heading-element" id="规划展望"><span>规划展望</span>
+  <a href="#%e8%a7%84%e5%88%92%e5%b1%95%e6%9c%9b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p><strong>Module 组件防劣化。</strong> 在 Module 化完成后，需防止再次劣化，我们在本地源码开发阶段开启 Module，尽可能早的暴露问题。针对 PCH 禁止公开的头文件对它隐式依赖，并限制新组件使用 PCH。</p>
+<p><strong>Objective-C 接口兼容性改造。</strong> OC 接口转成 Swift 可能会存在一些安全性和易用性问题，甚至有些 API 无法实现自动桥接，都需要进行改造。</p>
+<p><strong>规范化头文件引用。</strong> 头文件不规范问题，导致 Module 编译失效，也是比较常见的例子。通过在 CI 阶段对新增代码的头文件引用方式进行校验，避免不规范的代码合入。</p>
+<p><em>参考资料：</em></p>
+<p><a href="https://clang.llvm.org/docs/Modules.html#id12" target="_blank" rel="external nofollow noopener noreferrer">clang.llvm.org/docs/Module…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://llvm.org/devmtg/2012-11/Gregor-Modules.pdf" target="_blank" rel="external nofollow noopener noreferrer">llvm.org/devmtg/2012…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://developer.apple.com/documentation/swift/using-imported-c-macros-in-swift" target="_blank" rel="external nofollow noopener noreferrer">developer.apple.com/documentati…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://developer.apple.com/documentation/swift/importing-objective-c-into-swift" target="_blank" rel="external nofollow noopener noreferrer">developer.apple.com/documentati…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://tech.meituan.com/2021/02/25/swift-objective-c.html" target="_blank" rel="external nofollow noopener noreferrer">tech.meituan.com/2021/02/25/…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<blockquote>
+<p>本文发布自网易云音乐技术团队，文章未经授权禁止任何形式的转载。我们常年招收各类技术岗位，如果你准备换工作，又恰好喜欢云音乐，那就加入我们 grp.music-fe(at)corp.netease.com！</p>
+</blockquote>
+<blockquote>
+<p>当前文档由 <a href="https://github.com/kscript/markdown-download" target="_blank" rel="external nofollow noopener noreferrer">markdown文档下载插件<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 下载, 原文链接: <a href="https://juejin.cn/post/7207269389474037817" target="_blank" rel="external nofollow noopener noreferrer">云音乐 Swift 混编 Module 化实践<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/" data-title="云音乐 Swift 混编 Module 化实践"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/tips/%E4%BA%91%E9%9F%B3%E4%B9%90-swift-%E6%B7%B7%E7%BC%96-module-%E5%8C%96%E5%AE%9E%E8%B7%B5/" data-title="云音乐 Swift 混编 Module 化实践"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/tips/%E7%94%A8-swiftui-%E5%AE%9E%E7%8E%B0-ai-%E8%81%8A%E5%A4%A9%E5%AF%B9%E8%AF%9D-app-ichatgpt/" class="post-nav-item" rel="prev" title="用 SwiftUI 实现 AI 聊天对话 App - IChatGPT"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>用 SwiftUI 实现 AI 聊天对话 App - IChatGPT</a><a href="/posts/reading/ios-%E7%94%B5%E8%84%91wifi%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E5%88%B0iphone/" class="post-nav-item" rel="next" title="IOS 电脑WiFi传输文件到iphone">IOS 电脑WiFi传输文件到iphone<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/d9c4e3b592d9a678af151d74ddc9cdf1.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

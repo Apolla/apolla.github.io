@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>3.1 Subscriber 的详细介绍 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="订阅行为的详细过程 前面我们介绍过了，Subscriber 是一个协议，和 Publisher 遥相呼应，前者接收数据（Input、Failure），后者发送数据（Output、Failure)，数据类型必须保持一致。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="3.1 Subscriber 的详细介绍">
+	<meta itemprop="description" content="订阅行为的详细过程 前面我们介绍过了，Subscriber 是一个协议，和 Publisher 遥相呼应，前者接收数据（Input、Failure），后者发送数据（Output、Failure)，数据类型必须保持一致。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="1306">
+	<meta itemprop="keywords" content="SwiftUI"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="3.1 Subscriber 的详细介绍">
+	<meta property="og:description" content="订阅行为的详细过程 前面我们介绍过了，Subscriber 是一个协议，和 Publisher 遥相呼应，前者接收数据（Input、Failure），后者发送数据（Output、Failure)，数据类型必须保持一致。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="3.1 Subscriber 的详细介绍">
+  <meta name="twitter:description" content="订阅行为的详细过程 前面我们介绍过了，Subscriber 是一个协议，和 Publisher 遥相呼应，前者接收数据（Input、Failure），后者发送数据（Output、Failure)，数据类型必须保持一致。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/" title="3.1 Subscriber 的详细介绍 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%86%85%E5%BB%BA-subscriber-%E7%9A%84%E4%BD%BF%E7%94%A8/" title="3.2 内建 Subscriber 的使用" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.3-%E7%89%B9%E6%AE%8A%E7%9A%84-publishersubject/" title="2.3 特殊的 Publisher：Subject" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "3.1 Subscriber 的详细介绍",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D\/"
+    },"genre": "posts","wordcount":  1306 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>3.1 Subscriber 的详细介绍</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1306 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><h1 class="heading-element" id="订阅行为的详细过程"><span>订阅行为的详细过程</span>
+  <a href="#%e8%ae%a2%e9%98%85%e8%a1%8c%e4%b8%ba%e7%9a%84%e8%af%a6%e7%bb%86%e8%bf%87%e7%a8%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>前面我们介绍过了，<strong>Subscriber</strong> 是一个协议，和 Publisher 遥相呼应，前者接收数据（Input、Failure），后者发送数据（Output、Failure)，数据类型必须保持一致。</p>
+<p>在前文的基础上，笔者重新绘制了一张更为详细的说明图，下面的内容将围绕这此图展开。</p>
+<p><img loading="lazy" src='/images/subscribe.png' alt="/images/subscribe.png"></p>
+<p>Subscriber 在请求订阅时，Publisher 会调用 <code>subscriber(:_)</code> 方法，绑定订阅者，为后续的数据发送做准备。<code>subscriber(:)</code> 的方法签名如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">subscribe</span><span class="p">&lt;</span><span class="n">S</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">subscriber</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="k">where</span> <span class="n">S</span> <span class="p">:</span> <span class="n">Subscriber</span><span class="p">,</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Failure</span> <span class="p">==</span> <span class="n">S</span><span class="p">.</span><span class="n">Failure</span><span class="p">,</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Output</span> <span class="p">==</span> <span class="n">S</span><span class="p">.</span><span class="n">Input</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>我们可以看到，在这一步，就已经对 &lt;Input, Failure&gt; 和 &lt;Output, Failure&gt; 的类型一致做了强制要求。</p>
+<p>在成功绑定订阅者后，Publisher 会告知 Subscriber 已成功订阅，并唤起 Subscriber 的方法 <code>receive(subscription:)</code>，同时会发送一个 Subscription 实例给 Subscriber。</p>
+<p><strong>Subscription</strong> 是非常重要的一个协议，正是它将 Publisher 和 Subscriber 连接起来，同时它让 Subscriber 拥有了控制数据流大小以及释放资源的能力。</p>
+<p>然后，Subscription 调用方法 <code>request(_: Demand)</code> 向发布者请求数据，发布者会根据要求发送数据，中间可能会经过一个或多个 Operator 处理，Subscriber 在接收到数据时会调用 <code>receive(_: Input)</code> 方法。数据的发送和接收过程可能是同步的，也可能是异步的。在整个过程结束后，Subscriber 会调用 <code>receive(completion:)</code> 方法。</p>
+<h1 class="heading-element" id="cancellableanycancellable"><span>Cancellable、AnyCancellable</span>
+  <a href="#cancellableanycancellable" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>上面提到的 <strong>Subscription</strong> 协议，是继承自 <strong>Cancellable</strong> 协议的，该协议提供了一个方法 <code>cancel()</code>，让我们可以在合适的时机手动释放相关资源，系统回收资源后，所有和订阅相关的实例以及行为都将不复存在。</p>
+<p>对于 <strong>AnyCancellable</strong>，有了前面的基础，读者应该可以见名知意了。它同样用于类型擦除，还能在实例销毁时自动调用 <code>cancel()</code> 方法释放资源。因此，在实际开发中，通常我们会在某个对象内用一个集合（Set）去保存 AnyCancellable 实例，当这个对象销毁时，集合里的 AnyCancellable 实例也会随之释放。在后面的内容中，你会见到这样的用法。</p>
+<h1 class="heading-element" id="back-pressure"><span>Back Pressure</span>
+  <a href="#back-pressure" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>关于 Back Pressure 这个词，笔者查阅了相关的资料，似乎没有很好的翻译，也许直译成“背压”是比较受认可的。在这里，背压可以理解为 Subscriber 对管道中的数据流的承受压力。</p>
+<p>上面我们提到，Publisher 在接收订阅后，会发送一个 Subscription 实例给 Subscriber，Subscription 因为继承自 Cancellable 协议，它拥有了释放资源的能力。而 Subscription 协议本身提供了方法 <code>request(_: Demand)</code> 让我们可以向发布者索要数据，而且可以控制发布者发送的数据量。我们可以把数据的接收方 Subscriber 当成甲方，而发布者是乙方，甲方有权要求（Demand）乙方按需供给数据，管道中的数据流大小完全是由 Subscriber 控制的。</p>
+<p>为什么 Combine 会提供这样一个机制呢？因为 Publisher 端无法控制数据流的大小，而系统内建的 Subscriber，比如后面会讲到的 sink 和 assign，默认都是要求无限大（unlimited）的数据流。这样会引发一个问题，<strong>Publisher 发送数据的速度大于 Subscriber 处理数据的速度时，就会造成数据的丢失</strong>。所以，Combine 赋予了 Subscription 协议控制数据流大小的能力，让 Subscriber 能够承受合适的数据流压力。</p>
+<p>当然，系统提供的内建的 Subscriber，一般情况下也无需承受巨大的数据流压力，足以在日常开发中使用。只是当我们自定义 Subscriber 时，如果遇到频繁发送数据的情况，我们就需要设计合理的背压，防止数据丢失。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/" data-title="3.1 Subscriber 的详细介绍"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/3.1-subscriber-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D/" data-title="3.1 Subscriber 的详细介绍"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.3-%E7%89%B9%E6%AE%8A%E7%9A%84-publishersubject/" class="post-nav-item" rel="prev" title="2.3 特殊的 Publisher：Subject"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.3 特殊的 Publisher：Subject</a><a href="/posts/swiftui-eul/3.2-%E5%86%85%E5%BB%BA-subscriber-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="3.2 内建 Subscriber 的使用">3.2 内建 Subscriber 的使用<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/efbd07e9244261363cd491dc3338a27e.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

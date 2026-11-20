@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>一阅阅读 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="「一阅阅读」App 开发过程中的问题与解决方案记录"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="一阅阅读">
+	<meta itemprop="description" content="「一阅阅读」App 开发过程中的问题与解决方案记录">
+	<meta itemprop="dateModified" content="2026-11-17T11:49:34+08:00"><meta property="og:url" content="https://apolla.cc/posts/reading/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="一阅阅读">
+	<meta property="og:description" content="「一阅阅读」App 开发过程中的问题与解决方案记录">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="一阅阅读">
+  <meta name="twitter:description" content="「一阅阅读」App 开发过程中的问题与解决方案记录"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/reading/" title="一阅阅读 - 宋明的博客" /><link rel="alternate" type="application/rss&#43;xml" href="https://apolla.cc/posts/reading/index.xml"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/archives.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><div class="page archive"><div class="archive-header">
+  <h1 class="archive-title animate__animated animate__pulse animate__faster"><i class="fa-solid fa-feather" aria-hidden="true"></i><sup class="me-1">7</sup>一阅阅读
+  </h1>
+</div>
+<div class="archive-meta"><p class="archive-subtitle total-word-count" title="总计约 7123 字"><i class="fa-regular fa-keyboard" aria-hidden="true"></i> 总计约 7.12K 字</p><a href="https://apolla.cc/posts/reading/index.xml" target="_blank" class="rss-link"><i class="fa-solid fa-rss me-1" aria-hidden="true"></i>订阅 RSS 源</a></div>
+<h2 class="group-title"><i class="fa-regular fa-calendar me-1" aria-hidden="true"></i>2024</h2><article class="archive-item">
+        <a href="/posts/reading/%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96/" class="archive-item-link" title="隐私政策">隐私政策</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios%E5%88%A9%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" class="archive-item-link" title="iOS利用多线程进行网络请求">IOS利用多线程进行网络请求</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios%E8%A7%A3%E6%9E%90txt%E7%94%B5%E5%AD%90%E4%B9%A6/" class="archive-item-link" title="ios解析txt电子书">Ios解析txt电子书</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios%E5%9F%BA%E4%BA%8Eavfoundation%E5%AE%9E%E7%8E%B0%E6%9C%97%E8%AF%BB%E6%96%87%E5%AD%97/" class="archive-item-link" title="iOS基于AVFoundation实现朗读文字">IOS基于AVFoundation实现朗读文字</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios-%E9%92%88%E5%AF%B9txt%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E8%A7%A3%E7%A0%81/" class="archive-item-link" title="iOS 针对txt文档进行解码">IOS 针对txt文档进行解码</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios-%E8%B7%B3%E8%BD%ACapp-store%E8%BF%9B%E8%A1%8C%E8%AF%84%E5%88%86/" class="archive-item-link" title="iOS 跳转App Store进行评分">IOS 跳转App Store进行评分</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article><article class="archive-item">
+        <a href="/posts/reading/ios-%E7%94%B5%E8%84%91wifi%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E5%88%B0iphone/" class="archive-item-link" title="iOS 电脑WiFi传输文件到iphone">IOS 电脑WiFi传输文件到iphone</a>
+        <span class="archive-item-date" title='2024-03-09 23:21:58'>03-09</span>
+      </article></div></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/eeb2b61e00ce0a8a8bc36647d44f4f77.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

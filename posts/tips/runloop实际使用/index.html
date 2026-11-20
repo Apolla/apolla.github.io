@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>Runloop实际使用 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="前言 Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="Runloop实际使用">
+	<meta itemprop="description" content="前言 Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="4198">
+	<meta itemprop="keywords" content="碎片芝士收藏"><meta property="og:url" content="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="Runloop实际使用">
+	<meta property="og:description" content="前言 Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Runloop实际使用">
+  <meta name="twitter:description" content="前言 Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" title="Runloop实际使用 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/media/sdl-openal/" title="SDL OpenAL" /><link rel="next" type="text/html" href="https://apolla.cc/posts/reading/ios%E5%88%A9%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" title="iOS利用多线程进行网络请求" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Runloop实际使用",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/tips\/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","wordcount":  4198 ,
+    "url": "https:\/\/apolla.cc\/posts\/tips\/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Runloop实际使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F/" class="post-category" title="分类 - 碎片芝士收藏"><i class="fa-regular fa-folder" aria-hidden="true"></i> 碎片芝士收藏</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="4198 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 4200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#线程保活">线程保活</a></li>
+    <li><a href="#停止runloop">停止Runloop</a>
+      <ul>
+        <li><a href="#设置超时时间">设置超时时间</a></li>
+        <li><a href="#直接停止">直接停止</a></li>
+      </ul>
+    </li>
+    <li><a href="#延迟加载图片">延迟加载图片</a></li>
+    <li><a href="#卡顿监测">卡顿监测</a>
+      <ul>
+        <li><a href="#cadisplaylinkfps">CADisplayLink(FPS)</a></li>
+        <li><a href="#子线程ping">子线程Ping</a></li>
+        <li><a href="#实时监控">实时监控</a></li>
+      </ul>
+    </li>
+    <li><a href="#crash防护">Crash防护</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Runloop在iOS中是一个很重要的组成部分，对于任何单线程的UI模型都必须使用EvenLoop才可以连续处理不同的事件，而RunLoop就是EvenLoop模型在iOS中的实现。在前面的几篇文章中，我已经介绍了Runloop的底层原理等，这篇文章主要是从实际开发的角度，探讨一下实际上在哪些场景下，我们可以去使用RunLoop</p>
+<h2 class="heading-element" id="线程保活"><span>线程保活</span>
+  <a href="#%e7%ba%bf%e7%a8%8b%e4%bf%9d%e6%b4%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在实际开发中，我们通常会遇到常驻线程的创建，比如说发送心跳包，这就可以在一个常驻线程来发送心跳包，而不干扰主线程的行为，再比如音频处理，这也可以在一个常驻线程中来处理。以前在Objective-C中使用的AFNetworking 1.0就使用了RunLoop来进行线程的保活。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">thread</span> <span class="p">=</span> <span class="n">Thread</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">createLiveThread</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">thread</span> <span class="p">=</span> <span class="n">Thread</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">block</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">let</span> <span class="nv">port</span> <span class="p">=</span> <span class="n">NSMachPort</span> <span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="n">RunLoop</span> <span class="p">.</span><span class="n">current</span> <span class="p">.</span><span class="n">add</span> <span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">forMode</span> <span class="p">:</span> <span class="p">.</span><span class="k">default</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">.</span> <span class="n">run</span> <span class="p">(</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">thread</span><span class="p">.</span><span class="n">start</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>值得注意的是RunLoop的mode中至少需要一个port/timer/observer，否则RunLoop只会执行一次就退出了</p>
+<h2 class="heading-element" id="停止runloop"><span>停止Runloop</span>
+  <a href="#%e5%81%9c%e6%ad%a2runloop" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>离开RunLoop一共有两种方法：其一是给RunLoop配置一个超时的时间，其二是主动通知RunLoop离开。Apple在文档中是推荐第一种方式的，如果能直接定量的管理，这种方式当然是最好的</p>
+<h3 class="heading-element" id="设置超时时间"><span>设置超时时间</span>
+  <a href="#%e8%ae%be%e7%bd%ae%e8%b6%85%e6%97%b6%e6%97%b6%e9%97%b4" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>然而实际中我们无法准确的去设置超时的时刻，比如在线程保活的例子中，我们需要保证线程的RunLoop一直保持运行中，所以结束的时间是一个变量，而不是常量，要达到这个目标我们可以结合一下RunLoop提供的API，在开始的时候，设置RunLoop超时时间为无限，但是在结束时，设置RunLoop超时时间为当前，这样变相通过控制timeout的时间停止了RunLoop，具体代码如下</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">thread</span><span class="p">:</span> <span class="n">Thread</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">isStopped</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">createLiveThread</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">thread</span> <span class="p">=</span> <span class="n">Thread</span> <span class="p">(</span><span class="n">block</span><span class="p">:</span> <span class="p">{</span> <span class="p">[</span><span class="kr">weak</span> <span class="kc">self</span><span class="p">]</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">	<span class="k">guard</span> <span class="kd">let</span> <span class="nv">self</span> <span class="p">=</span> <span class="kc">self</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">let</span> <span class="nv">port</span> <span class="p">=</span> <span class="n">NSMachPort</span> <span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="n">RunLoop</span><span class="p">.</span> <span class="n">current</span><span class="p">.</span> <span class="n">add</span> <span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">forMode</span><span class="p">:</span> <span class="err">•</span><span class="k">default</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span> <span class="o">!</span><span class="n">isStopped</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">RunLoop</span><span class="p">.</span> <span class="n">current</span><span class="p">.</span> <span class="n">run</span> <span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="err">•</span><span class="k">default</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">Date</span><span class="p">.</span><span class="n">distantFuture</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">})</span>
+</span></span><span class="line"><span class="cl">	<span class="n">thread</span><span class="p">?.</span><span class="n">start</span> <span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">stop</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kc">self</span><span class="p">.</span><span class="n">perform</span><span class="p">(</span><span class="k">#selector</span> <span class="p">(</span><span class="n">stopThread</span><span class="p">),</span> <span class="n">on</span><span class="p">:</span> <span class="n">thread</span><span class="p">!,</span> <span class="n">with</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">waitUntilDone</span><span class="p">:</span><span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">stopThread</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">isStopped</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">	<span class="n">RunLoop</span><span class="p">.</span> <span class="n">current</span><span class="p">.</span> <span class="n">run</span> <span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="err">•</span><span class="k">default</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">Date</span> <span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="kc">self</span><span class="p">.</span><span class="n">thread</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>   </span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="直接停止"><span>直接停止</span>
+  <a href="#%e7%9b%b4%e6%8e%a5%e5%81%9c%e6%ad%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>CoreFoundation提供了API：<strong>CFRunLoopStop()</strong> 但是这个方法只会停止当前这次循环的RunLoop，并不会完全停止RunLoop。那么有没有其它的策略呢？我们知道RunLoop的Mode中必须要至少有一个port/timer/observer才会工作，否则就会退出，而CF提供的API中正好有：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">CF_EXPORT</span> <span class="n">void</span> <span class="n">CFRunLoopRemoveSource</span><span class="p">(</span><span class="n">CFRunLoopRef</span> <span class="n">rl</span><span class="p">,</span> <span class="n">CFRunLoopSourceRef</span> <span class="n">source</span><span class="p">,</span> <span class="n">CFRunLoopMode</span> <span class="n">mode</span><span class="p">);</span><span class="n">CF_EXPORT</span> <span class="n">void</span> <span class="n">CFRunLoopRemoveObserver</span><span class="p">(</span><span class="n">CFRunLoopRef</span> <span class="n">rl</span><span class="p">,</span> <span class="n">CFRunLoopObserverRef</span> <span class="n">observer</span><span class="p">,</span> <span class="n">CFRunLoopMode</span> <span class="n">mode</span><span class="p">);</span><span class="n">CF_EXPORT</span> <span class="n">void</span> <span class="n">CFRunLoopRemoveTimer</span><span class="p">(</span><span class="n">CFRunLoopRef</span> <span class="n">rl</span><span class="p">,</span> <span class="n">CFRunLoopTimerRef</span> <span class="n">timer</span><span class="p">,</span> <span class="n">CFRunLoopMode</span> <span class="n">mode</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>所以很自然的联想到如果移除source/timer/observer, <strong>那么这个方案可不可以停止RunLoop呢?</strong>
+** 答案是否定的，这一点在Apple的官方文档中有比较详细的描述：**</p>
+<blockquote>
+<p>❝Although removing a run loop’s input sources and timers may also cause the run loop to exit, this is not a reliable way to stop a run loop. Some system routines and input sources to a run loop to handle needed events. Because your code might not be aware of these input sources, it would be unable to remove them, which would prevent the run loop from exiting.</p>
+</blockquote>
+<h2 class="heading-element" id="延迟加载图片"><span>延迟加载图片</span>
+  <a href="#%e5%bb%b6%e8%bf%9f%e5%8a%a0%e8%bd%bd%e5%9b%be%e7%89%87" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>这是一个很常见的使用方式，因为我们在滑动scrollView/tableView/collectionView的过程，总会给cell设置图片，但是直接给cell的imageView设置图片的过程中，会涉及到图片的解码操作，这个就会占用CPU的计算资源，可能导致主线程发生卡顿，所以这里可以将这个操作，不放在trackingMode，而是放在defaultMode中，通过一种取巧的方式来解决可能的性能问题</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">setupImageView</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">performSelector</span> <span class="p">(</span><span class="n">onMainThread</span><span class="p">:</span> <span class="k">#selector</span> <span class="p">(</span><span class="n">setupImage</span><span class="p">),</span><span class="n">with</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">waitUntilDone</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span><span class="n">modes</span><span class="p">:</span> <span class="p">[</span><span class="n">RunLoop</span><span class="p">.</span> <span class="n">Mode</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">rawValue</span> <span class="p">])</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">setupImage</span> <span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">imageView</span><span class="p">.</span><span class="n">setImage</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="卡顿监测"><span>卡顿监测</span>
+  <a href="#%e5%8d%a1%e9%a1%bf%e7%9b%91%e6%b5%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>目前来说，一共有三种卡顿监测的方案，然而基本上每一种卡顿监测的方案都和RunLoop是有关联的</p>
+<h3 class="heading-element" id="cadisplaylinkfps"><span>CADisplayLink(FPS)</span>
+  <a href="#cadisplaylinkfps" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>YYFPSLabel采用的就是这个方案，FPS（Frames Per Second）代表每秒渲染的帧数，一般来说，如果App的FPS保持50～60之间，用户的体验就是比较流畅的，但是Apple自从iPhone支持120HZ的高刷之后，它发明了一种ProMotion的动态屏幕刷新率的技术，这种方式基本就不能使用了，但是这里依旧提供已作参考。
+这里值得注意的技术细节是使用了NSObject来做方法的转发，在OC中可以使用NSProxy来做消息的转发，效率更高。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// 抽象的超类，用来充当其它对象的一个替身</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Timer/CADisplayLink可以使用NSProxy做消息转发，可以避免循环引用</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// swift中我们是没发使用NSInvocation的，所以我们直接使用NSobject来做消息转发</span>
+</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">WeakProxy</span><span class="p">:</span> <span class="n">NSObject</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kr">weak</span> <span class="kd">var</span> <span class="nv">target</span><span class="p">:</span> <span class="nb">NSObjectProtocol</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">init</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">NSObjectProtocol</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">self</span><span class="p">.</span><span class="n">target</span> <span class="p">=</span> <span class="n">target</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">responds</span><span class="p">(</span><span class="n">to</span> <span class="n">aSelector</span><span class="p">:</span> <span class="nb">Selector</span><span class="p">!)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">target</span><span class="p">?.</span><span class="n">responds</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">aSelector</span><span class="p">)</span> <span class="p">??</span> <span class="kc">false</span><span class="p">)</span> <span class="o">||</span> <span class="kc">super</span><span class="p">.</span><span class="n">responds</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">aSelector</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">forwardingTarget</span><span class="p">(</span><span class="k">for</span> <span class="n">aSelector</span><span class="p">:</span> <span class="nb">Selector</span><span class="p">!)</span> <span class="p">-&gt;</span> <span class="nb">Any</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">target</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">FPSLabel</span><span class="p">:</span> <span class="n">UILabel</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">link</span><span class="p">:</span> <span class="n">CADisplayLink</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">count</span><span class="p">:</span> <span class="nb">Int</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">lastTime</span><span class="p">:</span> <span class="n">TimeInterval</span> <span class="p">=</span> <span class="mf">0.0</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">fileprivate</span> <span class="kd">let</span> <span class="nv">defaultSize</span> <span class="p">=</span> <span class="n">CGSize</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">override</span> <span class="kd">init</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">frame</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="p">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="p">==</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kc">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span> <span class="p">=</span> <span class="n">defaultSize</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">layer</span><span class="p">.</span><span class="n">cornerRadius</span> <span class="p">=</span> <span class="mf">5.0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">clipsToBounds</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">        <span class="n">textAlignment</span> <span class="p">=</span> <span class="p">.</span><span class="n">center</span>
+</span></span><span class="line"><span class="cl">        <span class="n">isUserInteractionEnabled</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">        <span class="n">backgroundColor</span> <span class="p">=</span> <span class="n">UIColor</span><span class="p">.</span><span class="n">white</span><span class="p">.</span><span class="n">withAlphaComponent</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">link</span> <span class="p">=</span> <span class="n">CADisplayLink</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">WeakProxy</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="kc">self</span><span class="p">),</span> <span class="n">selector</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">FPSLabel</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="n">link</span><span class="p">:)))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">link</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">RunLoop</span><span class="p">.</span><span class="n">main</span><span class="p">,</span> <span class="n">forMode</span><span class="p">:</span> <span class="p">.</span><span class="n">common</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">required</span> <span class="kd">init</span><span class="p">?(</span><span class="n">coder</span><span class="p">:</span> <span class="n">NSCoder</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">fatalError</span><span class="p">(</span><span class="s">&#34;init(coder:) has not been implemented&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">deinit</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">link</span><span class="p">.</span><span class="n">invalidate</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">tick</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="n">CADisplayLink</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">guard</span> <span class="n">lastTime</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">lastTime</span> <span class="p">=</span> <span class="n">link</span><span class="p">.</span><span class="n">timestamp</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="bp">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">timeDuration</span> <span class="p">=</span> <span class="n">link</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">-</span> <span class="n">lastTime</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1、设置刷新的时间: 这里是设置为1秒（即每秒刷新）</span>
+</span></span><span class="line"><span class="cl">        <span class="k">guard</span> <span class="n">timeDuration</span> <span class="o">&gt;=</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2、计算当前的FPS</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">fps</span> <span class="p">=</span> <span class="nb">Double</span><span class="p">(</span><span class="bp">count</span><span class="p">)</span><span class="o">/</span><span class="n">timeDuration</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">count</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">lastTime</span> <span class="p">=</span> <span class="n">link</span><span class="p">.</span><span class="n">timestamp</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">// 3、开始设置FPS了</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">progress</span> <span class="p">=</span> <span class="n">fps</span><span class="o">/</span><span class="mf">60.0</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">color</span> <span class="p">=</span> <span class="n">UIColor</span><span class="p">(</span><span class="n">hue</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">(</span><span class="mf">0.27</span> <span class="o">*</span> <span class="p">(</span><span class="n">progress</span> <span class="o">-</span> <span class="mf">0.2</span><span class="p">)),</span> <span class="n">saturation</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">brightness</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">self</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">&#34;</span><span class="si">\(</span><span class="nb">Int</span><span class="si">(</span><span class="n">round</span><span class="si">(</span><span class="n">fps</span><span class="si">)))</span><span class="s"> FPS&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">self</span><span class="p">.</span><span class="n">textColor</span> <span class="p">=</span> <span class="n">color</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="子线程ping"><span>子线程Ping</span>
+  <a href="#%e5%ad%90%e7%ba%bf%e7%a8%8bping" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>这种方法是创建了一个子线程，通过GCD给主线程添加异步任务：修改是否超时的参数，然后让子线程休眠一段时间，如果休眠的时间结束之后，超时参数未修改，那说明给主线程的任务并没有执行，那么这就说明主线程的上一个任务还没有做完，那就说明卡顿了，这种方式其实和RunLoop没有太多的关联，它不依赖RunLoop的状态。在ANREye(<a href="https://link.juejin.cn?target=https%3A%2F%2Flink.zhihu.com%2F%3Ftarget%3Dhttps%253A%2F%2Fgithub.com%2Fzixun%2FANREye" target="_blank" rel="external nofollow noopener noreferrer">github.com/zixun/ANREy…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>)中是采用子线程Ping的方式来监测卡顿的</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"> <span class="kd">class</span> <span class="nc">PingMonitor</span> <span class="p">{</span>   
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">timeoutInterval</span><span class="p">:</span> <span class="n">TimeInterval</span> <span class="p">=</span> <span class="mf">0.2</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">queueIdentifier</span><span class="p">:</span> <span class="nb">String</span> <span class="p">=</span> <span class="s">&#34;com.queue.PingMonitor&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">DispatchQueue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="n">queueIdentifier</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isMonitor</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">var</span> <span class="nv">semphore</span><span class="p">:</span> <span class="n">DispatchSemaphore</span> <span class="p">=</span> <span class="n">DispatchSemaphore</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">func</span> <span class="nf">startMonitor</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">guard</span> <span class="n">isMonitor</span> <span class="p">==</span> <span class="kc">false</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">isMonitor</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">queue</span><span class="p">.</span><span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="kc">self</span><span class="p">.</span><span class="n">isMonitor</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="kd">var</span> <span class="nv">timeout</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">timeout</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">                    <span class="kc">self</span><span class="p">.</span><span class="n">semphore</span><span class="p">.</span><span class="n">signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">forTimeInterval</span><span class="p">:</span><span class="n">PingMonitor</span><span class="p">.</span><span class="n">timeoutInterval</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="c1">// 说明等了timeoutInterval之后，主线程依然没有执行派发的任务，这里就认为它是处于卡顿的</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">timeout</span> <span class="p">==</span> <span class="kc">true</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">//</span><span class="cs">TODO:</span><span class="c1"> 这里需要取出崩溃方法栈中的符号来判断为什么出现了卡顿</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 可以使用微软的框架:PLCrashReporter</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="kc">self</span><span class="p">.</span><span class="n">semphore</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>这个方法在正常情况下会每隔一段时间让主线程执行GCD派发的任务，会造成部分资源的浪费，而且它是一种主动的去Ping主线程，并不能很及时的发现卡顿问题，所以这种方法会有一些缺点</p>
+<h3 class="heading-element" id="实时监控"><span>实时监控</span>
+  <a href="#%e5%ae%9e%e6%97%b6%e7%9b%91%e6%8e%a7" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>而我们知道，主线程中任务都是通过RunLoop来管理执行的，所以我们可以通过监听RunLoop的状态来知道是否会出现卡顿的情况，一般来说，我们会监测两种状态：第一种是kCFRunLoopAfterWaiting 的状态，第二种是kCFRunLoopBeforeSource的状态。为什么是两种状态呢？
+首先看第一种状态kCFRunLoopAfterWaiting ，它会在RunLoop被唤醒之后回调这种状态，然后根据被唤醒的端口来处理不同的任务，如果处理任务的过程中耗时过长，那么下一次检查的时候，它依然是这个状态，这个时候就可以说明它卡在了这个状态了，然后可以通过一些策略来提取出方法栈，来判断卡顿的代码。同理，第二种状态也是一样的，说明一直处于kCFRunLoopBeforeSource 状态，而没有进入下一状态（即休眠），也发生了卡顿</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">RunLoopMonitor</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">init</span><span class="p">()</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">shared</span><span class="p">:</span> <span class="n">RunLoopMonitor</span> <span class="p">=</span> <span class="n">RunLoopMonitor</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">timeoutCount</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">runloopObserver</span><span class="p">:</span> <span class="n">CFRunLoopObserver</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">runLoopActivity</span><span class="p">:</span> <span class="n">CFRunLoopActivity</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">dispatchSemaphore</span><span class="p">:</span> <span class="n">DispatchSemaphore</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// 原理：进入睡眠前方法的执行时间过长导致无法进入睡眠，或者线程唤醒之后，一直没进入下一步</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">func</span> <span class="nf">beginMonitor</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">uptr</span> <span class="p">=</span> <span class="nb">Unmanaged</span><span class="p">.</span><span class="n">passRetained</span><span class="p">(</span><span class="kc">self</span><span class="p">).</span><span class="n">toOpaque</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">vptr</span> <span class="p">=</span> <span class="n">UnsafeMutableRawPointer</span><span class="p">(</span><span class="n">uptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">var</span> <span class="nv">context</span> <span class="p">=</span> <span class="n">CFRunLoopObserverContext</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">version</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">vptr</span><span class="p">,</span> <span class="n">retain</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">release</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">copyDescription</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">runloopObserver</span> <span class="p">=</span> <span class="n">CFRunLoopObserverCreate</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="n">CFRunLoopActivity</span><span class="p">.</span><span class="n">allActivities</span><span class="p">.</span><span class="n">rawValue</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="n">observerCallBack</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="p">&amp;</span><span class="n">context</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CFRunLoopAddObserver</span><span class="p">(</span><span class="n">CFRunLoopGetMain</span><span class="p">(),</span> <span class="n">runloopObserver</span><span class="p">,</span> <span class="p">.</span><span class="n">commonModes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1">// 初始化的信号量为0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dispatchSemaphore</span> <span class="p">=</span> <span class="n">DispatchSemaphore</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">().</span><span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="kc">true</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 方案一：可以通过设置单次超时时间来判断 比如250毫秒</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 方案二：可以通过设置连续多次超时就是卡顿 戴铭在GCDFetchFeed中认为连续三次超时80秒就是卡顿</span>
+</span></span><span class="line"><span class="cl">                <span class="kd">let</span> <span class="nv">st</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">dispatchSemaphore</span><span class="p">?.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="p">:</span> <span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">.</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">st</span> <span class="p">==</span> <span class="p">.</span><span class="n">timedOut</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">runloopObserver</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="kc">self</span><span class="p">.</span><span class="n">dispatchSemaphore</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">                        <span class="kc">self</span><span class="p">.</span><span class="n">runLoopActivity</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">                        <span class="kc">self</span><span class="p">.</span><span class="n">timeoutCount</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">return</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="kc">self</span><span class="p">.</span><span class="n">runLoopActivity</span> <span class="p">==</span> <span class="p">.</span><span class="n">afterWaiting</span> <span class="o">||</span> <span class="kc">self</span><span class="p">.</span><span class="n">runLoopActivity</span> <span class="p">==</span> <span class="p">.</span><span class="n">beforeSources</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="kc">self</span><span class="p">.</span><span class="n">timeoutCount</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                        
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="kc">self</span><span class="p">.</span><span class="n">timeoutCount</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="p">{</span> <span class="k">continue</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        
+</span></span><span class="line"><span class="cl">                        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">().</span><span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="kd">let</span> <span class="nv">config</span> <span class="p">=</span> <span class="n">PLCrashReporterConfig</span><span class="p">(</span><span class="n">signalHandlerType</span><span class="p">:</span> <span class="p">.</span><span class="n">BSD</span><span class="p">,</span> <span class="n">symbolicationStrategy</span><span class="p">:</span> <span class="p">.</span><span class="n">all</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">guard</span> <span class="kd">let</span> <span class="nv">crashReporter</span> <span class="p">=</span> <span class="n">PLCrashReporter</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">config</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                            <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">crashReporter</span><span class="p">.</span><span class="n">generateLiveReport</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                            
+</span></span><span class="line"><span class="cl">                            <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="kd">let</span> <span class="nv">reporter</span> <span class="p">=</span> <span class="k">try</span> <span class="n">PLCrashReport</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                
+</span></span><span class="line"><span class="cl">                                <span class="kd">let</span> <span class="nv">report</span> <span class="p">=</span> <span class="n">PLCrashReportTextFormatter</span><span class="p">.</span><span class="n">stringValue</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="n">reporter</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">PLCrashReportTextFormatiOS</span><span class="p">)</span> <span class="p">??</span> <span class="s">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">                                
+</span></span><span class="line"><span class="cl">                                <span class="n">NSLog</span><span class="p">(</span><span class="s">&#34;------------卡顿时方法栈:</span><span class="se">\n</span><span class="s"> </span><span class="si">\(</span><span class="n">report</span><span class="si">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            <span class="p">}</span> <span class="k">catch</span> <span class="kc">_</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="n">NSLog</span><span class="p">(</span><span class="s">&#34;解析crash data错误&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">func</span> <span class="nf">end</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">guard</span> <span class="kd">let</span> <span class="nv">_</span> <span class="p">=</span> <span class="n">runloopObserver</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CFRunLoopRemoveObserver</span><span class="p">(</span><span class="n">CFRunLoopGetMain</span><span class="p">(),</span> <span class="n">runloopObserver</span><span class="p">,</span> <span class="p">.</span><span class="n">commonModes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">runloopObserver</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">observerCallBack</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">CFRunLoopObserverCallBack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{</span> <span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">let</span> <span class="nv">weakself</span> <span class="p">=</span> <span class="nb">Unmanaged</span><span class="p">&lt;</span><span class="n">RunLoopMonitor</span><span class="p">&gt;.</span><span class="n">fromOpaque</span><span class="p">(</span><span class="n">context</span><span class="p">!).</span><span class="n">takeUnretainedValue</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="n">weakself</span><span class="p">.</span><span class="n">runLoopActivity</span> <span class="p">=</span> <span class="n">activity</span>
+</span></span><span class="line"><span class="cl">            <span class="n">weakself</span><span class="p">.</span><span class="n">dispatchSemaphore</span><span class="p">?.</span><span class="n">signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="crash防护"><span>Crash防护</span>
+  <a href="#crash%e9%98%b2%e6%8a%a4" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Crash防护是一个很有意思的点，处于应用层的APP，在执行了某些不被操作系统允许的操作之后会触发操作系统抛出异常信号，但是因为没有处理这些异常从而被系操作系统杀掉的线程，比如常见的闪退。这里不对Crash做详细的描述，我会在下一个模块来描述iOS中的异常。要明确的是，有些场景下，是希望可以捕获到系统抛出的异常，然后将App从错误中恢复，重新启动，而不是被杀死。而对应在代码中，我们需要去手动的重启主线程，已达到继续运行App的目的</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">runloop</span> <span class="p">=</span> <span class="n">CFRunLoopGetCurrent</span> <span class="p">(</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">guard</span> <span class="kd">let</span> <span class="nv">allModes</span> <span class="p">=</span> <span class="n">CFRunLoopCopyA11Modes</span> <span class="p">(</span><span class="n">runloop</span><span class="p">)</span> <span class="k">as</span><span class="p">?</span> <span class="p">[</span><span class="n">CFRunLoopMode</span><span class="p">]</span> <span class="k">else</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="kc">true</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="n">mode</span> <span class="k">in</span> <span class="n">allModes</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CFRunLoopRunInMode</span> <span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>CFRunLoopRunInMode(mode, 0.001, false) 因为无法确定RunLoop到底是怎样启动的，所以采用了这种方式来启动RunLoop的每一个Mode，也算是一种替代方案了。因为CFRunLoopRunInMode 在运行的时候本身就是一个循环并不会退出，所以while循环不会一直执行，只是在mode退出之后，while循环遍历需要执行的mode，直到继续在一个mode中常驻。
+这里只是重启RunLoop，其实在Crash防护里最重要的还是要监测到何时发送崩溃，捕获系统的exception信息，以及singal信息等等，捕获到之后再对当前线程的方法栈进行分析，定位为crash的成因</p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>本篇文章我从线程保活开始介绍了RunLoop在实际开发中的使用，然后主要是介绍了卡顿监测和Crash防护中的高阶使用，当然，RunLoop的运用远不止这些，如果有更多更好的使用，希望大家可以留言交流
+参考：
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fqq_45836906%2Farticle%2Fdetails%2F119578794" target="_blank" rel="external nofollow noopener noreferrer">RunLoop详解<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2Fstreamery%2Farticle%2Fdetails%2F107737548" target="_blank" rel="external nofollow noopener noreferrer">RunLoop之线程保活<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="https://link.juejin.cn?target=https%3A%2F%2Fblog.csdn.net%2FKevinAshen%2Farticle%2Fdetails%2F99651068%3Fspm%3D1001.2014.3001.5502" target="_blank" rel="external nofollow noopener noreferrer">浅谈RunLoop<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" data-title="Runloop实际使用"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" data-title="Runloop实际使用"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/" class="post-nav-item" rel="prev" title="IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合</a><a href="/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/" class="post-nav-item" rel="next" title="IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金">IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/79c30f4502c519f201af85632959aa57.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

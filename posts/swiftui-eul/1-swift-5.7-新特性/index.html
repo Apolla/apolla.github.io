@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>1 Swift 5.7 新特性 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+简化的可选绑定（SE-0345） 对可选类型解包时无需显式绑定，写法更简洁：
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 14b3, Swift 5.7'>
+	<meta itemprop="name" content="1 Swift 5.7 新特性">
+	<meta itemprop="description" content="简化的可选绑定（SE-0345） 对可选类型解包时无需显式绑定，写法更简洁：">
+	<meta itemprop="datePublished" content="2022-07-15T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2022-07-15T08:00:00+08:00">
+	<meta itemprop="wordCount" content="2978">
+	<meta itemprop="keywords" content="Xcode 14b3,Swift 5.7"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="1 Swift 5.7 新特性">
+	<meta property="og:description" content="简化的可选绑定（SE-0345） 对可选类型解包时无需显式绑定，写法更简洁：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2022-07-15T08:00:00+08:00">
+		<meta property="article:modified_time" content="2022-07-15T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 14b3">
+		<meta property="article:tag" content="Swift 5.7">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="1 Swift 5.7 新特性">
+  <meta name="twitter:description" content="简化的可选绑定（SE-0345） 对可选类型解包时无需显式绑定，写法更简洁："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" title="1 Swift 5.7 新特性 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" title="2 Swift 中的不透明类型和存在类型" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3-swift-%E4%B8%AD%E7%9A%84-result-builders/" title="3 Swift 中的 Result builders" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "1 Swift 5.7 新特性",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7\/"
+    },"genre": "posts","keywords": "Xcode 14b3, Swift 5.7","wordcount":  2978 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7\/","datePublished": "2022-07-15T08:00:00+08:00","dateModified": "2022-07-15T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>1 Swift 5.7 新特性</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2022-07-15 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2022-07-15">2022-07-15</time></span>&nbsp;<span title="2978 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#默认表达式的类型推断se-0347">默认表达式的类型推断（SE-0347）</a></li>
+    <li><a href="#多语句闭包的类型推断se-0326">多语句闭包的类型推断（SE-0326）</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#正则类型se-0350">正则类型（SE-0350）</a></li>
+    <li><a href="#正则构造器-dslse-0351">正则构造器 DSL（SE-0351）</a></li>
+    <li><a href="#正则字面量se-0354">正则字面量（SE-0354）</a></li>
+    <li><a href="#基于正则的字符串处理算法se-0357">基于正则的字符串处理算法（SE-0357）</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#所有协议都可以作为存在类型使用se-0309">所有协议都可以作为存在类型使用（SE-0309）</a></li>
+    <li><a href="#隐式打开的存在的类型se-0352">隐式打开的存在的类型（SE-0352）</a></li>
+    <li><a href="#受约束的存在类型se-0353">受约束的存在类型（SE-0353）</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><br>
+<h1 class="heading-element" id="简化的可选绑定se-0345"><span>简化的可选绑定（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0345-if-let-shorthand.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0345<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e7%ae%80%e5%8c%96%e7%9a%84%e5%8f%af%e9%80%89%e7%bb%91%e5%ae%9ase-0345" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>对可选类型解包时无需显式绑定，写法更简洁：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">s1</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="s">&#34;s1&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">s1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="bp">print</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">guard</span> <span class="kd">let</span> <span class="nv">s1</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="bp">print</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="更强大的类型推断"><span>更强大的类型推断</span>
+  <a href="#%e6%9b%b4%e5%bc%ba%e5%a4%a7%e7%9a%84%e7%b1%bb%e5%9e%8b%e6%8e%a8%e6%96%ad" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="默认表达式的类型推断se-0347"><span>默认表达式的类型推断（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0347-type-inference-from-default-exprs.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0347<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e9%bb%98%e8%ae%a4%e8%a1%a8%e8%be%be%e5%bc%8f%e7%9a%84%e7%b1%bb%e5%9e%8b%e6%8e%a8%e6%96%adse-0347" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Swift 现在支持给泛型参数赋予默认值，并且能根据上下文推断泛型参数的具体类型。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">compute</span><span class="p">&lt;</span><span class="n">C</span><span class="p">:</span> <span class="n">Collection</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">values</span><span class="p">:</span> <span class="n">C</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">compute</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c1">// [Int]</span>
+</span></span><span class="line"><span class="cl"><span class="n">compute</span><span class="p">([</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">])</span> <span class="c1">// [String]</span>
+</span></span><span class="line"><span class="cl"><span class="n">compute</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;2&#34;</span><span class="p">,</span> <span class="p">{}])</span> <span class="c1">// [Any]</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="多语句闭包的类型推断se-0326"><span>多语句闭包的类型推断（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0326-extending-multi-statement-closure-inference.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0326<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e5%a4%9a%e8%af%ad%e5%8f%a5%e9%97%ad%e5%8c%85%e7%9a%84%e7%b1%bb%e5%9e%8b%e6%8e%a8%e6%96%adse-0326" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>以前的多语句闭包必须写明参数和返回值类型：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">_</span> <span class="p">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">].</span><span class="bp">map</span> <span class="p">{</span> <span class="n">v</span> <span class="p">-&gt;</span> <span class="nb">String</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;negative&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;positive&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;zero&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>现在，编译器会自动推断：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">_</span> <span class="p">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">].</span><span class="bp">map</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nv">$0</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;negative&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nv">$0</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;positive&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;zero&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="更灵活的正则表达式"><span>更灵活的正则表达式</span>
+  <a href="#%e6%9b%b4%e7%81%b5%e6%b4%bb%e7%9a%84%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="正则类型se-0350"><span>正则类型（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0350-regex-type-overview.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0350<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e6%ad%a3%e5%88%99%e7%b1%bb%e5%9e%8bse-0350" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Swift 5.7 新增了正则类型 <code>Regex&lt;Output&gt;</code>，用于便捷地构建正则表达式。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">s</span> <span class="p">=</span> <span class="s">&#34;Stay hungry, stay foolish.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex1</span> <span class="p">=</span> <span class="k">try</span><span class="p">!</span> <span class="n">Regex</span><span class="p">(</span><span class="s">&#34;[Ss]tay&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">matches1</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">matches</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">regex1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">match</span> <span class="k">in</span> <span class="n">matches1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">l</span> <span class="p">=</span> <span class="n">match</span><span class="p">.</span><span class="n">range</span><span class="p">.</span><span class="n">lowerBound</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="n">match</span><span class="p">.</span><span class="n">range</span><span class="p">.</span><span class="n">upperBound</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">l</span><span class="p">..&lt;</span><span class="n">r</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="正则构造器-dslse-0351"><span>正则构造器 DSL（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0351-regex-builder.md#regex-builder-dsl" target="_blank" rel="external nofollow noopener noreferrer">SE-0351<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e6%ad%a3%e5%88%99%e6%9e%84%e9%80%a0%e5%99%a8-dslse-0351" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>正则表达式简洁有力，但难以书写。因此 Swift 提供了 DSL 供我们使用，便于方便地书写正则表达式。比如下面示例代码中的 <code>OneOrMore(.word)</code> 表达的意思和 <code>/[A-Za-z0-9]+/</code> 是一样的。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">import</span> <span class="nc">RegexBuilder</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex2</span> <span class="p">=</span> <span class="n">Regex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;Stay &#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OneOrMore</span><span class="p">(.</span><span class="n">word</span><span class="p">)</span> <span class="c1">// matches2.1</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;, stay &#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OneOrMore</span><span class="p">(.</span><span class="n">word</span><span class="p">)</span> <span class="c1">// matches2.2</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">matches2</span> <span class="p">=</span> <span class="k">try</span> <span class="n">regex2</span><span class="p">.</span><span class="n">wholeMatch</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// matches2.0 是整个匹配的字符串</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">matches2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">matches2</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">matches2</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>Regex 还支持使用别名和下标来获取匹配结果：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">ref1</span> <span class="p">=</span> <span class="n">Reference</span><span class="p">(</span><span class="n">Substring</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">ref2</span> <span class="p">=</span> <span class="n">Reference</span><span class="p">(</span><span class="n">Substring</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex3</span> <span class="p">=</span> <span class="n">Regex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;Stay &#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span><span class="p">(</span><span class="k">as</span><span class="p">:</span> <span class="n">ref1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// res[ref1]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OneOrMore</span><span class="p">(.</span><span class="n">word</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;, stay &#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span><span class="p">(</span><span class="k">as</span><span class="p">:</span> <span class="n">ref2</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// res[ref2]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OneOrMore</span><span class="p">(.</span><span class="n">word</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">matches3</span> <span class="p">=</span> <span class="k">try</span> <span class="n">regex3</span><span class="p">.</span><span class="n">wholeMatch</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">matches3</span><span class="p">[</span><span class="n">ref1</span><span class="p">],</span> <span class="n">matches3</span><span class="p">[</span><span class="n">ref2</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>另外，RegexBuilder 中的 <a href="https://github.com/apple/swift-evolution/blob/main/proposals/0348-buildpartialblock.md" target="_blank" rel="external nofollow noopener noreferrer">buildPartialBlock<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 实现了基于结果生成器的重载。这是 SwiftUI 喜闻乐见的，因为此前的 <a href="https://developer.apple.com/documentation/swiftui/viewbuilder" target="_blank" rel="external nofollow noopener noreferrer">ViewBuilder<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> ********最多只能从 10 个子 view 构建，但 <code>buildPartialBlock</code> 可以突破这个限制。这和 <code>reduce</code> 函数有点类似，在前一个生成的结果基础上，继续累积新的值。</p>
+<p>更多相关 API 请查看：<a href="https://developer.apple.com/documentation/RegexBuilder" target="_blank" rel="external nofollow noopener noreferrer">RegexBuilder<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="正则字面量se-0354"><span>正则字面量（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0354-regex-literals.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0354<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e6%ad%a3%e5%88%99%e5%ad%97%e9%9d%a2%e9%87%8fse-0354" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Swift 支持使用字面量直接构建正则表达式，构建方式非常简单，只需要将表达式置于两个 <code>/</code> 之间：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex4</span> <span class="p">=</span> <span class="o">/</span><span class="p">[</span><span class="n">Ss</span><span class="p">]</span><span class="n">tay</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">matches4</span> <span class="p">=</span> <span class="n">s</span><span class="p">.</span><span class="n">matches</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">regex4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">match</span> <span class="k">in</span> <span class="n">matches4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">l</span> <span class="p">=</span> <span class="n">match</span><span class="p">.</span><span class="n">range</span><span class="p">.</span><span class="n">lowerBound</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="n">match</span><span class="p">.</span><span class="n">range</span><span class="p">.</span><span class="n">upperBound</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">l</span><span class="p">..&lt;</span><span class="n">r</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>字面量构建的正则表达式同样支持使用别名对匹配结果进行引用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex5</span> <span class="p">=</span> <span class="o">/</span><span class="n">Stay</span> <span class="p">(?&lt;</span><span class="n">s1</span><span class="p">&gt;.</span><span class="o">+</span><span class="p">),</span> <span class="n">stay</span> <span class="p">(?&lt;</span><span class="n">s2</span><span class="p">&gt;[</span><span class="n">A</span><span class="o">-</span><span class="n">Za</span><span class="o">-</span><span class="n">z0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">+</span><span class="p">).</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">matches5</span> <span class="p">=</span> <span class="k">try</span> <span class="n">regex5</span><span class="p">.</span><span class="n">wholeMatch</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">matches5</span><span class="p">.</span><span class="n">s1</span><span class="p">,</span> <span class="n">matches5</span><span class="p">.</span><span class="n">s2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>值得注意的是，基于字符串构建的 Regex 类型必须在运行时才能对该字符串进行正确解析。而<strong>正则字面量在编译期就能被编译器诊断出错误</strong>，这也是我们应该优先使用正则字面量的原因。下面是 Regex 类型和字面量结合使用的示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">regex6</span> <span class="p">=</span> <span class="n">Regex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;Stay&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span> <span class="p">{</span> <span class="c1">// 空格使用使用\\转义</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="err">\\</span> <span class="p">.</span><span class="o">+/</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;, stay&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Capture</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="err">\\</span> <span class="p">[</span><span class="n">A</span><span class="o">-</span><span class="n">Za</span><span class="o">-</span><span class="n">z0</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">+/</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">matches6</span> <span class="p">=</span> <span class="k">try</span> <span class="n">regex6</span><span class="p">.</span><span class="n">wholeMatch</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">matches6</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="n">matches6</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="基于正则的字符串处理算法se-0357"><span>基于正则的字符串处理算法（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0357-regex-string-processing-algorithms.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0357<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e5%9f%ba%e4%ba%8e%e6%ad%a3%e5%88%99%e7%9a%84%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%a4%84%e7%90%86%e7%ae%97%e6%b3%95se-0357" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>除了上面提到的 <code>matches(of:)</code>、<code>wholeMatch(in:)</code>，Swift 中的集合类型许多原有的方法也提供了对 Regex 的支持。比如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">replacing</span><span class="p">(</span><span class="o">/</span><span class="p">[</span><span class="n">Ss</span><span class="p">]</span><span class="n">tay</span><span class="o">/</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="s">&#34;be&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="bp">contains</span><span class="p">(</span><span class="o">/</span><span class="err">\\</span> <span class="n">foo</span><span class="p">.</span><span class="o">+/</span><span class="p">))</span> </span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="阐明了非隔离异步函数的执行se-0338"><span>阐明了非隔离异步函数的执行（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0338-clarify-execution-non-actor-async.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0338<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e9%98%90%e6%98%8e%e4%ba%86%e9%9d%9e%e9%9a%94%e7%a6%bb%e5%bc%82%e6%ad%a5%e5%87%bd%e6%95%b0%e7%9a%84%e6%89%a7%e8%a1%8cse-0338" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>在此之前，在 <code>g</code> 中调用 <code>f</code> 时，<code>f</code> 可能会 actor 上执行并造成长时间的阻塞。</p>
+<p>而现在所有的非隔离异步函数的执行，都会在全局的协作并发池上执行。当然，从 actor 切换至全局并发池执行时，程序依然会进行 <code>Sendable</code> 检查。比如，在 <code>g</code> 中调用 <code>f</code> 时，如果 c 没有实现 <code>Sendable</code>，编译器会发出警告。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">C</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 总是在全局的协作并发池上执行</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">f</span><span class="p">(</span><span class="kc">_</span><span class="p">:</span> <span class="n">C</span><span class="p">)</span> <span class="n">async</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">actor</span> <span class="n">A</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">g</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">C</span><span class="p">)</span> <span class="n">async</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// 总是在 actor 上执行</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;on the actor&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">await</span> <span class="n">f</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="新的时间-api-se-0329"><span>新的时间 API （<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0329-clock-instant-duration.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0329<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e6%96%b0%e7%9a%84%e6%97%b6%e9%97%b4-api-se-0329" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Swift 5.7 提供了一种新的标准化时间组件，由以下三部分组成：</p>
+<ul>
+<li>Clock：基于 Clock 协议实现，是一种计算时间的机制，定义了现在以及将来某个指定的时间点唤醒工作的方式。</li>
+<li>Instant：基于 <a href="https://developer.apple.com/documentation/swift/instantprotocol?changes=latest_major&language=_5" target="_blank" rel="external nofollow noopener noreferrer">InstantProtocol<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 协议实现，表示某个时间点。</li>
+<li><a href="https://developer.apple.com/documentation/swift/duration?changes=latest_major&language=_5" target="_blank" rel="external nofollow noopener noreferrer">Duration<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：基于 <a href="https://developer.apple.com/documentation/swift/durationprotocol?changes=latest_major&language=_5" target="_blank" rel="external nofollow noopener noreferrer">DurationProtocol<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 协议实现，表示两个时间点之间的间隔。</li>
+</ul>
+<p>Clock 协议定义如下，其中的关联类型 <code>Instant</code> 遵循 <code>InstantProtocol</code> 协议，而另一个关联类型 <code>Duration</code> 和 <code>InstantProtocol</code> 协议中的 <code>Duration: DurationProtocol</code> 的类型保持一致：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">available</span><span class="p">(</span><span class="n">macOS</span> <span class="mf">13.0</span><span class="p">,</span> <span class="n">iOS</span> <span class="mf">16.0</span><span class="p">,</span> <span class="n">watchOS</span> <span class="mf">9.0</span><span class="p">,</span> <span class="n">tvOS</span> <span class="mf">16.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">protocol</span> <span class="nc">Clock</span> <span class="p">:</span> <span class="n">Sendable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">associatedtype</span> <span class="n">Duration</span> <span class="k">where</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Duration</span> <span class="p">==</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Instant</span><span class="p">.</span><span class="n">Duration</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">associatedtype</span> <span class="n">Instant</span> <span class="p">:</span> <span class="n">InstantProtocol</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">now</span><span class="p">:</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Instant</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">minimumResolution</span><span class="p">:</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Duration</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">func</span> <span class="nf">sleep</span><span class="p">(</span><span class="n">until</span> <span class="n">deadline</span><span class="p">:</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Instant</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Instant</span><span class="p">.</span><span class="n">Duration</span><span class="p">?)</span> <span class="n">async</span> <span class="kr">throws</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>系统内置了两种 Clock：</p>
+<ul>
+<li>ContinuousClock：系统睡眠时，仍能计时。</li>
+<li>SuspendingClock：系统睡眠时，停止计时。</li>
+</ul>
+<p>两种 Clock 使用方式一样，这里以 ContinuousClock 为例。比如用来计算某个同步操作的耗时：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">clock</span> <span class="p">=</span> <span class="n">ContinuousClock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">elapsed</span> <span class="p">=</span> <span class="n">clock</span><span class="p">.</span><span class="n">measure</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="kc">_</span> <span class="k">in</span> <span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">999999</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="s">&#34;Loop duration: </span><span class="se">\\</span><span class="s">(elapsed)&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Clock 还能用来计算异步事件的耗时，Task 也新增了对 Clock 的支持：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">delayWork</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// tolerance 为容差，默认为 nil</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 这里表示任务会睡眠 0.5 至 1 秒</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">elapsed</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">clock</span><span class="p">.</span><span class="n">measure</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">until</span><span class="p">:</span> <span class="p">.</span><span class="n">now</span> <span class="o">+</span> <span class="p">.</span><span class="n">seconds</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">tolerance</span><span class="p">:</span> <span class="p">.</span><span class="n">seconds</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">clock</span><span class="p">:</span> <span class="p">.</span><span class="n">continuous</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="s">&#34;Sleep duration: </span><span class="se">\\</span><span class="s">(elapsed)&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="s">&#34;Time is up, keep working...&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">try</span> <span class="n">await</span> <span class="n">delayWork</span><span class="p">()</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>如果任务在睡眠时间结束前就结束了，会抛出 <code>CancellationError</code> 类型的错误。</p>
+<h1 class="heading-element" id="不透明类型增强了使用范围se-0341"><span>不透明类型增强了使用范围（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0341-opaque-parameters.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0341<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e4%b8%8d%e9%80%8f%e6%98%8e%e7%b1%bb%e5%9e%8b%e5%a2%9e%e5%bc%ba%e4%ba%86%e4%bd%bf%e7%94%a8%e8%8c%83%e5%9b%b4se-0341" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>此前，不透明类型只能用于返回值。现在，我们还可以将其用于属性、下标、函数参数以及结构化的返回类型（元组、数组、闭包等）。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">tuple</span><span class="p">(</span><span class="kc">_</span> <span class="n">v1</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span><span class="p">,</span> <span class="kc">_</span> <span class="n">v2</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="p">(</span><span class="n">some</span> <span class="n">View</span><span class="p">,</span> <span class="n">some</span> <span class="n">View</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="主要关联类型以及轻量级同类型要求se-0346"><span>主要关联类型以及轻量级同类型要求（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0346-light-weight-same-type-syntax.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0346<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e4%b8%bb%e8%a6%81%e5%85%b3%e8%81%94%e7%b1%bb%e5%9e%8b%e4%bb%a5%e5%8f%8a%e8%bd%bb%e9%87%8f%e7%ba%a7%e5%90%8c%e7%b1%bb%e5%9e%8b%e8%a6%81%e6%b1%82se-0346" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>协议支持多个关联类型，使用尖括号声明（类似泛型写法）的则是主要关联类型。</p>
+<p>我们来看看 <code>Collection</code> 协议最新的定义：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">protocol</span> <span class="nc">Collection</span><span class="p">&lt;</span><span class="n">Element</span><span class="p">&gt;</span> <span class="p">:</span> <span class="n">Sequence</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">associatedtype</span> <span class="n">Element</span>
+</span></span><span class="line"><span class="cl">  <span class="n">associatedtype</span> <span class="n">Iterator</span> <span class="p">=</span> <span class="n">IndexingIterator</span><span class="p">&lt;</span><span class="kc">Self</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这里的 <code>Element</code>，就是主要关联类型。借助这一特性以及增强了使用范围的不透明类型，在使用具有主要关联类型的协议时，写法可以更优雅。比如下面这个用于比较两个集合的函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">compare</span><span class="p">&lt;</span><span class="n">C1</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">C2</span><span class="p">:</span> <span class="n">Collection</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">c1</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="kc">_</span> <span class="n">c2</span><span class="p">:</span> <span class="n">C2</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span>
+</span></span><span class="line"><span class="cl"><span class="k">where</span> <span class="n">C1</span><span class="p">.</span><span class="n">Element</span> <span class="p">==</span> <span class="n">C2</span><span class="p">.</span><span class="n">Element</span><span class="p">,</span> <span class="n">C1</span><span class="p">.</span><span class="n">Element</span><span class="p">:</span> <span class="nb">Equatable</span> <span class="p">{</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>可以写得更简洁易读：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">compare</span><span class="p">&lt;</span><span class="n">E</span><span class="p">:</span> <span class="nb">Equatable</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">c1</span><span class="p">:</span> <span class="n">some</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">E</span><span class="p">&gt;,</span> <span class="kc">_</span> <span class="n">c2</span><span class="p">:</span> <span class="n">some</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">E</span><span class="p">&gt;)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>实际上，以前类似的泛型写法 <code>T where T: P, T.E: V</code> 一般都可以简写为 <code>some P&lt;V&gt;</code>。</p>
+<h1 class="heading-element" id="关于存在类型的改进"><span>关于存在类型的改进</span>
+  <a href="#%e5%85%b3%e4%ba%8e%e5%ad%98%e5%9c%a8%e7%b1%bb%e5%9e%8b%e7%9a%84%e6%94%b9%e8%bf%9b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="所有协议都可以作为存在类型使用se-0309"><span>所有协议都可以作为存在类型使用（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0309-unlock-existential-types-for-all-protocols.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0309<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e6%89%80%e6%9c%89%e5%8d%8f%e8%ae%ae%e9%83%bd%e5%8f%af%e4%bb%a5%e4%bd%9c%e4%b8%ba%e5%ad%98%e5%9c%a8%e7%b1%bb%e5%9e%8b%e4%bd%bf%e7%94%a8se-0309" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>Swift 5.6 之前，我么经常遇到协议相关的编译错误：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-markdown"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">Protocol can only be used as a generic constraint because it has &#39;Self&#39; or associated type requirements</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>通常我们的解决方法是将协议作为泛型约束来解决，Swift 5.6 为此引入了存在类型（一个能够容纳任意遵循某个协议的具体类型的容器类型），并新增了 <code>any</code> 关键字来进行标记。这一特性在 Swift 5.7 中全面解锁，所有的协议都可以使用 <code>any</code> 关键字来进行修饰。</p>
+<p>值得注意的是，存在类型会导致性能损耗，<code>any</code> 关键字的主要作用其实是为了提醒我们它带来的潜在副作用，因此我们应该尽量避免使用它，除非你真的需要一个动态的类型。</p>
+<h2 class="heading-element" id="隐式打开的存在的类型se-0352"><span>隐式打开的存在的类型（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0352-implicit-open-existentials.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0352<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e9%9a%90%e5%bc%8f%e6%89%93%e5%bc%80%e7%9a%84%e5%ad%98%e5%9c%a8%e7%9a%84%e7%b1%bb%e5%9e%8bse-0352" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>前面我们提到存在类型是一种容器类型，它只有在运行时才能将容器打开获取到内部的具体类型。这会导致如下的代码报错：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">protocol</span> <span class="nc">P</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">associatedtype</span> <span class="n">A</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">getA</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">A</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">takeP</span><span class="p">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">P</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">value</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">test</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">any</span> <span class="n">P</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// error: protocol &#39;P&#39; as a type cannot conform to itself</span>
+</span></span><span class="line"><span class="cl">  <span class="n">takeP</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>因为泛型约束，<code>takeP</code> 在入参时需要传入一个实现协议 <code>P</code> 的具体类型。而 <code>test</code> 中的 <code>p</code> 是存在类型，它是一个容器类型，其内部的具体类型可以动态改变，并且只有在运行时才能获取到真正的具体类型。所以，我们会看到如上的编译错误。</p>
+<p>但现在这个错误不存在了，Swift 赋予了存在类型隐式打开的特性。在 <code>test</code> 中将 <code>p</code> 传入 <code>takeP</code> 时，<code>p</code> 容器内部的具体类型会被自动取出，然后被传递至 <code>takeP</code> 函数。这个自动拆箱的过程，有点类似可选类型中的隐式解包。</p>
+<h2 class="heading-element" id="受约束的存在类型se-0353"><span>受约束的存在类型（<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0353-constrained-existential-types.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0353<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>）</span>
+  <a href="#%e5%8f%97%e7%ba%a6%e6%9d%9f%e7%9a%84%e5%ad%98%e5%9c%a8%e7%b1%bb%e5%9e%8bse-0353" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>具有主要关联类型的协议可以用于存在类型，通过主要关联类型对其进行约束。</p>
+<p>比如我们将某个包含整数的集合转换称数组类型：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">mapNumbers</span><span class="p">(</span><span class="kc">_</span> <span class="n">c</span><span class="p">:</span> <span class="n">any</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;)</span> <span class="p">-&gt;</span> <span class="p">[</span><span class="nb">Int</span><span class="p">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">c</span><span class="p">.</span><span class="bp">map</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="分布式-actor"><span>分布式 actor</span>
+  <a href="#%e5%88%86%e5%b8%83%e5%bc%8f-actor" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>分布式 actor 主要用于服务端，有兴趣的读者可以参考：<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0336-distributed-actor-isolation.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0336<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://github.com/apple/swift-evolution/blob/main/proposals/0344-distributed-actor-runtime.md" target="_blank" rel="external nofollow noopener noreferrer">SE-0344<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<hr>
+<p><em>本文仅是抛砖引玉，关于 Swift 5.7 更详细的变更请参考： <a href="https://github.com/apple/swift/blob/main/CHANGELOG.md" target="_blank" rel="external nofollow noopener noreferrer">Swift/CHANGELOG.md<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></em></p>
+<p><em>文中涉及源码参考：<a href="https://github.com/zzzwco/resources/blob/main/Swift-language/Swift5.7/main.swift" target="_blank" rel="external nofollow noopener noreferrer">Source code<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</em></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2022-07-15 08:00:00">更新于 2022-07-15&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" data-title="1 Swift 5.7 新特性" data-hashtags="Xcode 14b3,Swift 5.7"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" data-hashtag="Xcode 14b3"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" data-title="1 Swift 5.7 新特性"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-14b3/" class="post-tag" title="标签 - Xcode 14b3">Xcode 14b3</a><a href="/tags/swift-5.7/" class="post-tag" title="标签 - Swift 5.7">Swift 5.7</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" class="post-nav-item" rel="prev" title="2 Swift 中的不透明类型和存在类型"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2 Swift 中的不透明类型和存在类型</a><a href="/posts/swiftui-eul/1.1-app-%E5%85%A5%E5%8F%A3%E4%B8%8E%E9%85%8D%E7%BD%AE/" class="post-nav-item" rel="next" title="1.1 App 入口与配置">1.1 App 入口与配置<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a0cbfa3771581d2db1bec77c1287de88.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

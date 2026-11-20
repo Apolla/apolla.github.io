@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>15： IOS使用ijkPlayer - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：
+网络播放器相关 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+HLS流媒体开发 http://blog.csdn.net/sdvch/article/details/14047281
+HLS 比较全的中文博客 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+苹果 iOS 开发文档 （HLS） https://developer.apple.com/streaming/
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="15： IOS使用ijkPlayer">
+	<meta itemprop="description" content="最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：
+网络播放器相关 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+HLS流媒体开发 http://blog.csdn.net/sdvch/article/details/14047281
+HLS 比较全的中文博客 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+苹果 iOS 开发文档 （HLS） https://developer.apple.com/streaming/">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="867">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="15： IOS使用ijkPlayer">
+	<meta property="og:description" content="最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：
+网络播放器相关 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+HLS流媒体开发 http://blog.csdn.net/sdvch/article/details/14047281
+HLS 比较全的中文博客 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+苹果 iOS 开发文档 （HLS） https://developer.apple.com/streaming/">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="15： IOS使用ijkPlayer">
+  <meta name="twitter:description" content="最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：
+网络播放器相关 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+HLS流媒体开发 http://blog.csdn.net/sdvch/article/details/14047281
+HLS 比较全的中文博客 http://blog.csdn.net/Matthew_Fan/article/category/1200896
+苹果 iOS 开发文档 （HLS） https://developer.apple.com/streaming/"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/" title="15： IOS使用ijkPlayer - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/16ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8%E4%BB%A3%E7%A0%81%E5%92%8C%E7%95%8C%E9%9D%A2%E5%88%86%E7%A6%BB/" title="16：ios视频播放器，代码和界面分离" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/" title="13： ijkplayer 等多个项目开源" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "15： IOS使用ijkPlayer",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/15-ios%E4%BD%BF%E7%94%A8ijkplayer\/"
+    },"genre": "posts","wordcount":  867 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/15-ios%E4%BD%BF%E7%94%A8ijkplayer\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>15： IOS使用ijkPlayer</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="867 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>最近要做一个视频直播的项目，刚刚进入视频坑，开始自己琢磨AVPlayer，使用起来发现还挺多限制的，虽然当然知道要先把基础打好，相关基础链接：</p>
+<p>网络播放器相关
+<a href="http://blog.csdn.net/Matthew_Fan/article/category/1200896" target="_blank" rel="external nofollow noopener noreferrer">http://blog.csdn.net/Matthew_Fan/article/category/1200896<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>HLS流媒体开发
+<a href="http://blog.csdn.net/sdvch/article/details/14047281" target="_blank" rel="external nofollow noopener noreferrer">http://blog.csdn.net/sdvch/article/details/14047281<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>HLS 比较全的中文博客
+<a href="http://blog.csdn.net/Matthew_Fan/article/category/1200896" target="_blank" rel="external nofollow noopener noreferrer">http://blog.csdn.net/Matthew_Fan/article/category/1200896<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>苹果 iOS 开发文档 （HLS）
+<a href="https://developer.apple.com/streaming/" target="_blank" rel="external nofollow noopener noreferrer">https://developer.apple.com/streaming/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>正文
+但是急于做出一个demo交工，就简略的查了查攻略－ －，发现B站的开源项目ijkPlayer是一个很好借鉴的项目，赶紧下下来试试，
+链接：<a href="https://github.com/Bilibili/ijkplayer" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/Bilibili/ijkplayer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>具体怎么编译就不一一细说了，自己参照一下文档，这里我主要针对导入ijkplayer包并且使用做一些简单的说明。
+完成github上的步骤之后，我们打开ios文件夹下的IJKMediaPlayer工程，发现他的output是一个framework包，那样就轻松了</p>
+<p><img loading="lazy" src='/images/ac1d907e4221780b4b7ced5206dc2504.png' alt="image.png"></p>
+<p>build&amp;run以后，将framework包复制取出，可以从右侧栏直接查看路径</p>
+<p><img loading="lazy" src='/images/72b08df1871a8c6bad2a90a884da48cc.png' alt="image.png"></p>
+<p>或者直接右键进入路径</p>
+<p><img loading="lazy" src='/images/a87505b0227ea337afc62f003d9b0d58.png' alt="image.png"></p>
+<p>既然已经取出了framework文件，那么我们就将它导入到我们需要的工程里面，当然，前提是你不打算修改里面的东西，你也可以通过建立workplace加上建立依赖关系导入整个工程文件，省的每次修改都要重复导入包。ps：其他ijkplayerdemo上的包也最好一起导入了，不然可能会编译出错</p>
+<p><img loading="lazy" src='/images/c8976cef3a1ec85989ca5205eb7ec5d0.png' alt="image.png"></p>
+<p>之后的内容可以参考ijkdemo中的ijkMoviePlayerViewController实现调用播放器，如果你不需要这么多东西也可以直接像我这样简单写：
+ViewController</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="cp">#import &lt;IJKMediaFramework/IJKMediaFramework.h&gt;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@interface</span> <span class="nc">ViewController</span> : <span class="nc">UIViewController</span>
+</span></span><span class="line"><span class="cl"><span class="k">@property</span> <span class="p">(</span><span class="k">atomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">@property</span> <span class="p">(</span><span class="k">atomic</span><span class="p">,</span> <span class="k">retain</span><span class="p">)</span> <span class="kt">id</span> <span class="o">&lt;</span><span class="n">IJKMediaPlayback</span><span class="o">&gt;</span> <span class="n">player</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="n">UIView</span> <span class="o">*</span><span class="n">PlayerView</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="n">UIButton</span> <span class="o">*</span><span class="n">playButton</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>然后就通过初试化一些基本设置就可以播放了：
+1、url
+2、PlayView
+3、notification
+4、prepareToPlay</p>
+<p>简单把界面上的东西部署一下，url等初始化</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="nb">self</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="s">@&#34;http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">_player</span> <span class="o">=</span> <span class="p">[[</span><span class="n">IJKFFMoviePlayerController</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithContentURL</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">url</span> <span class="nl">withOptions</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">UIView</span> <span class="o">*</span><span class="n">playerView</span> <span class="o">=</span> <span class="p">[</span><span class="n">_player</span> <span class="n">view</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">playerView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">PlayerView</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">playerView</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="n">UIViewAutoresizingFlexibleWidth</span> <span class="o">|</span> <span class="n">UIViewAutoresizingFlexibleHeight</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">PlayerView</span> <span class="nl">insertSubview</span><span class="p">:</span><span class="n">playerView</span> <span class="nl">atIndex</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">_player</span> <span class="nl">setScalingMode</span><span class="p">:</span><span class="n">IJKMPMovieScalingModeAspectFill</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nb">self</span> <span class="n">installMovieNotificationObservers</span><span class="p">];</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>别忘记了这个</p>
+<p>[self.player prepareToPlay];</p>
+<p>最后在你需要的地方调用播放等接口</p>
+<p>[self.player play];</p>
+<p>demo链接：<a href="http://download.csdn.net/detail/atomic123/9402481" target="_blank" rel="external nofollow noopener noreferrer">http://download.csdn.net/detail/atomic123/9402481<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/" data-title="15： IOS使用ijkPlayer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/15-ios%E4%BD%BF%E7%94%A8ijkplayer/" data-title="15： IOS使用ijkPlayer"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/13-ijkplayer-%E7%AD%89%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%BC%80%E6%BA%90/" class="post-nav-item" rel="prev" title="13： Ijkplayer 等多个项目开源"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>13： Ijkplayer 等多个项目开源</a><a href="/posts/live/16ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE%E5%99%A8%E4%BB%A3%E7%A0%81%E5%92%8C%E7%95%8C%E9%9D%A2%E5%88%86%E7%A6%BB/" class="post-nav-item" rel="next" title="16：ios视频播放器，代码和界面分离">16：ios视频播放器，代码和界面分离<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/6b94124f057c0247fb1b8f02bf5687be.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

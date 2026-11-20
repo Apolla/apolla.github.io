@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>美术宝组件化架构工程步骤 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="一、新建SPArt用于存储学习的各个仓库 http://gitlab.meishubao.com/SPArt 1、准备仓库： SPArtRepo：私有源podspec SPArtMainProject ：测试主工程 SPArtCommon：通用层 SPArtFoundation：基础层
+2、创建SPArtMainProject项目 配置podfie
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="美术宝组件化架构工程步骤">
+	<meta itemprop="description" content="一、新建SPArt用于存储学习的各个仓库 http://gitlab.meishubao.com/SPArt 1、准备仓库： SPArtRepo：私有源podspec SPArtMainProject ：测试主工程 SPArtCommon：通用层 SPArtFoundation：基础层
+2、创建SPArtMainProject项目 配置podfie">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="2875">
+	<meta itemprop="keywords" content="组件化"><meta property="og:url" content="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="美术宝组件化架构工程步骤">
+	<meta property="og:description" content="一、新建SPArt用于存储学习的各个仓库 http://gitlab.meishubao.com/SPArt 1、准备仓库： SPArtRepo：私有源podspec SPArtMainProject ：测试主工程 SPArtCommon：通用层 SPArtFoundation：基础层
+2、创建SPArtMainProject项目 配置podfie">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="美术宝组件化架构工程步骤">
+  <meta name="twitter:description" content="一、新建SPArt用于存储学习的各个仓库 http://gitlab.meishubao.com/SPArt 1、准备仓库： SPArtRepo：私有源podspec SPArtMainProject ：测试主工程 SPArtCommon：通用层 SPArtFoundation：基础层
+2、创建SPArtMainProject项目 配置podfie"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/" title="美术宝组件化架构工程步骤 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/tips/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0-ios-16-%E5%B8%A6%E6%9D%A5%E7%9A%84-depth-effect-%E5%9B%BE%E7%89%87%E6%95%88%E6%9E%9C/" title="如何实现 iOS 16 带来的 Depth Effect 图片效果" /><link rel="next" type="text/html" href="https://apolla.cc/posts/modularization/%E7%81%AB%E6%8E%8C%E6%9F%9Cios%E7%AB%AF%E5%9F%BA%E4%BA%8Ecocoapods%E7%9A%84%E7%BB%84%E4%BB%B6%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E5%AE%9E%E8%B7%B5/" title="火掌柜iOS端基于CocoaPods的组件二进制化实践" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "美术宝组件化架构工程步骤",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/modularization\/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4\/"
+    },"genre": "posts","wordcount":  2875 ,
+    "url": "https:\/\/apolla.cc\/posts\/modularization\/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>美术宝组件化架构工程步骤</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BB%84%E4%BB%B6%E5%8C%96/" class="post-category" title="分类 - 组件化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 组件化</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="2875 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p><strong>一、新建SPArt用于存储学习的各个仓库</strong>
+<a href="http://gitlab.meishubao.com/SPArt" target="_blank" rel="external nofollow noopener noreferrer">http://gitlab.meishubao.com/SPArt<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<strong>1、准备仓库：</strong>
+SPArtRepo：私有源podspec
+SPArtMainProject ：测试主工程
+SPArtCommon：通用层
+SPArtFoundation：基础层</p>
+<p><img loading="lazy" src='/images/936306acc1dc98a8b268a7cac77ee05e.png' alt="image.png"></p>
+<p><strong>2、创建SPArtMainProject项目</strong>
+配置podfie</p>
+<p><img loading="lazy" src='/images/5716c77c0f97fe8a5fa2c0cae5dd32de.png' alt="image.png"></p>
+<p><strong>3、创建Framework类型项目SPArtCommon，SPArtFoundation</strong>
+3.1、配置podfile</p>
+<p><img loading="lazy" src='/images/6d9ebc1e545d6ef2bbcfb9cece8abf7b.png' alt="image.png"></p>
+<p>3.2、配置最低版本号：9.0
+3.3、修改Macho 为 Static Library静态库
+3.4、Build Setting 中添加key：CONFIGURATION_BUILD_DIR， value：$(PROJECT_DIR)/Product（作用于后续自动化配置）</p>
+<p><img loading="lazy" src='/images/8b32cafde4d881dbfbaa7324824f297d.png' alt="image.png"></p>
+<p>3.5、新建一个测试的.h.m（后续可删除，保证子库工程中有一个.h.m文件目的是为了保证pod install 配置文件.xcconfig配置中的 FRAMEWORK_SEARCH_PATHS= <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;的&quot; used in math mode [unicodeTextInMathMode] at position 38: …ation/Framework的̲标记，作用于后续自动化配置）
+…" style="color:#ff4949">{PODS_ROOT}/SPArtFoundation/Framework的标记，作用于后续自动化配置）
+3.6、Build Phases 的Header 将 .h 放在Public Headers下
+3.7、配置SPArtFoundation.podspec和SPArtCommon.podspec（各个配置项详见工程）
+二进制Fremework的项目，创建需要注意几点：
+xcode11 取消了编译路径的，修改但是 我们要这么做CONFIGURATION_BUILD_DIR = &quot;</span>(PROJECT_DIR)/Product&quot;;
+xcode 11将老工程的CONFIGURATION_BUILD_DIR 设置到了User-Define-Setting
+主工程build 先是Pods build 这个build的路径修改成 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;目&quot; used in math mode [unicodeTextInMathMode] at position 26: …IR)/../Product 目̲的是为了能够找到这个libPo…" style="color:#ff4949">(PROJECT_DIR)/../Product 目的是为了能够找到这个libPods-xx.a
+修改 Pods Pods-xxx 的build product 路径CONFIGURATION_BUILD_DIR</span>(PROJECT_DIR)/../Product
+Per-configuration Build Products Path
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>B</mi><mi>U</mi><mi>I</mi><mi>L</mi><msub><mi>D</mi><mi>D</mi></msub><mi>I</mi><mi>R</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi></mrow><annotation encoding="application/x-tex">(BUILD_DIR)/</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal">L</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mclose">)</span><span class="mord">/</span></span></span></span>(CONFIGURATION)<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>E</mi><mi>F</mi><mi>F</mi><mi>E</mi><mi>C</mi><mi>T</mi><mi>I</mi><mi>V</mi><msub><mi>E</mi><mi>P</mi></msub><mi>L</mi><mi>A</mi><mi>T</mi><mi>F</mi><mi>O</mi><mi>R</mi><msub><mi>M</mi><mi>N</mi></msub><mi>A</mi><mi>M</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(EFFECTIVE_PLATFORM_NAME)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">P</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">L</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mclose">)</span></span></span></span>(PROJECT_DIR)/Product</p>
+<p>CONFIGURATION_BUILD_DIR = &ldquo;<span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;默&quot; used in math mode [unicodeTextInMathMode] at position 25: …DIR)/Product&quot;;
+默̲认为" style="color:#ff4949">(PROJECT_DIR)/Product&quot;;
+默认为</span>(BUILD_DIR)/<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>C</mi><mi>O</mi><mi>N</mi><mi>F</mi><mi>I</mi><mi>G</mi><mi>U</mi><mi>R</mi><mi>A</mi><mi>T</mi><mi>I</mi><mi>O</mi><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(CONFIGURATION)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal">G</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose">)</span></span></span></span>(EFFECTIVE_PLATFORM_NAME)
+等于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>B</mi><mi>U</mi><mi>I</mi><mi>L</mi><msub><mi>T</mi><mi>P</mi></msub><mi>R</mi><mi>O</mi><mi>D</mi><mi>U</mi><mi>C</mi><mi>T</mi><msub><mi>S</mi><mi>D</mi></msub><mi>I</mi><mi>R</mi><mo stretchy="false">)</mo><mi>b</mi><mi>u</mi><mi>i</mi><mi>l</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">(BUILT_PRODUCTS_DIR)
+build
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal">L</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">P</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mclose">)</span><span class="mord mathnormal">b</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">d</span></span></span></span>(BUILD_DIR)/<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>C</mi><mi>O</mi><mi>N</mi><mi>F</mi><mi>I</mi><mi>G</mi><mi>U</mi><mi>R</mi><mi>A</mi><mi>T</mi><mi>I</mi><mi>O</mi><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(CONFIGURATION)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal">G</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mclose">)</span></span></span></span>(EFFECTIVE_PLATFORM_NAME)
+$(SYMROOT)
+3.8、关于SPArtRepo私有源首次拉取
+1、新建私有源SPArtRepo并添加将远程私有库拉倒本地私有库便于推送 pod repo add SPArtRepo <a href="http://gitlab.meishubao.com/SPArt/SPArtRepo.git（此处的新工程不能是空的否则" target="_blank" rel="external nofollow noopener noreferrer">http://gitlab.meishubao.com/SPArt/SPArtRepo.git（此处的新工程不能是空的否则<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 还需要重新引入，第一次上传子库会有Your configuration specifies to merge with the ref &lsquo;refs/heads/master&rsquo;
+from the remote, but no such ref was fetched.的报错）
+或者 git clone <a href="http://gitlab.meishubao.com/SPArt/SPArtRepo.git" target="_blank" rel="external nofollow noopener noreferrer">http://gitlab.meishubao.com/SPArt/SPArtRepo.git<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> ~/.cocoapods/repos/SPArtRepo
+//     git remote add origin <a href="http://gitlab.meishubao.com/SPArt/SPArtRepo.git" target="_blank" rel="external nofollow noopener noreferrer">http://gitlab.meishubao.com/SPArt/SPArtRepo.git<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+//      git remote add upstream <a href="http://gitlab.meishubao.com/SPArt/SPArtRepo.git" target="_blank" rel="external nofollow noopener noreferrer">http://gitlab.meishubao.com/SPArt/SPArtRepo.git<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<strong>二、添加自动化挂载源码开发脚本</strong></p>
+<p>脚本功能和使用方式方法
+**  Shell/install.sh（主动执行）**     : 执行安装源码 格式为 Shell/install.sh FrameworkName1:BranchName FrameworkName2:BranchName
+<strong>uninstall.sh（主动执行）</strong>             :解除源码开发模式，回到二进制build的模式 格式为 ：Shell/uninstall.sh all
+hook_pod.sh（关联被动执行）       : 执行 Shell/install FrameworkName:BranchName过程中替换Framework Search Path 和 Header Search Path 的值 将pod install 之后链接Framework库的路径，修改成本地Framework对应路径
+ggrep，gsed       :命令工具
+library_parent_relation：向上依赖关系
+library_sub_relation     ：向下依赖关系 如：SPArtCommon=SPArtFoundation 指的是SPArtCommon库 依赖SPArtFoundation
+pod-config                  :包含的是 子库的源码地址Framework=http://gitlab.xxx.com/xxx/Framework.git 可包含多个
+copy_framework_resources：解决关于源码挂载开发中，组件库中资源无法同步到项目中去，配置在主工程的Run Script中
+<strong>三、示例：业务需求跟进需要扩展SPArtCommon，SPArtFoundation 中的代码，同时需要修改</strong></p>
+<p>（1）新建需求分支：
+SPArtMainProject（主工程），SPArtCommon，SPArtFoundation 创建相同分支 future/newbranch名（相同名称便于区分管理）
+（2）挂载组件源码开发：
+执行install 脚本，Shell/install.sh SPArtCommon:future/newbranch SPArtFoundation:future/newbranch（前后顺序影响工程中挂载组件源码的上下位置顺序，不影响依赖关系），挂载组件源码开发，挂载组件源码工程结构图与原始结构对比：
+<img loading="lazy" src='/images/ac3885e6a0c1bb2f6306bad59d3c160e.png' alt="image.png">
+<img loading="lazy" src='/images/893f5c66bc7d44e272f67fb08d9b8dc4.png' alt="image.png"></p>
+<p>（3）挂载源码开发完毕：
+提交SPArtCommon，SPArtFoundation组件代码，推到对应future/newbranch分支的远程仓库
+（4）执行uninstall.sh all 脚本：
+卸载挂载模式，还原工程配置，提交主工程代码，推到对应future/newbranch的远程仓库
+（5）通过Jenkins平台打包以及上传测试分发平台：
+配置future/newbranch进行打测试包，Jenkins配置的，自动化脚本进行挂载源码打包，出包上传蒲公英平台
+（6）如遇相应的库有bug，进行第(2)步install操作，再次进入源码挂载模式进行 bugfix，commit，push，uninstall等操作
+（7）测试完毕，准备打appStore包前
+（7.1）修改组件版本到线上最近的版本号+需求号，（如：线上版本SPArtCommon，SPArtFoundation，组件版本1.0.1.0或者1.0.1.1（第3位为对应需求位），升级后的版本号为1.0.1.0），修改完成，推送到SPArtRepo私有源仓库中，完成组件版本迭代（可以通过脚本实现自动升级）
+（7.2）SPArtCommon，SPArtFoundation的future/newbranch分支合并到master主分支
+（7.3）将本此需求的SPArtMainProject（主工程）future/newbranch分支合并到master主分支，主工程根据需求版本自主升级版本号，修改主工程中podfile中的SPArtCommon，SPArtFoundation对应版本号，完成主工程配置迭代。（此处修改版本，以及buildversion可以通过配置脚本自动升级）
+（7.4）通过Jenkins进行master分支打线上TestFlight包配合API进行线上环境回归测试
+（7.5）测试无误，提包审核</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/" data-title="美术宝组件化架构工程步骤"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/modularization/%E7%BE%8E%E6%9C%AF%E5%AE%9D%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84%E5%B7%A5%E7%A8%8B%E6%AD%A5%E9%AA%A4/" data-title="美术宝组件化架构工程步骤"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/modularization/%E7%81%AB%E6%8E%8C%E6%9F%9Cios%E7%AB%AF%E5%9F%BA%E4%BA%8Ecocoapods%E7%9A%84%E7%BB%84%E4%BB%B6%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E5%AE%9E%E8%B7%B5/" class="post-nav-item" rel="prev" title="火掌柜iOS端基于CocoaPods的组件二进制化实践"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>火掌柜iOS端基于CocoaPods的组件二进制化实践</a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/c9255dcddcf54c947cfc10b5cf5e6aad.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>4.3 图表（Charts） - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+基础 Charts 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 15, iOS 17, macOS 14'>
+	<meta itemprop="name" content="4.3 图表（Charts）">
+	<meta itemprop="description" content="基础 Charts 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。">
+	<meta itemprop="datePublished" content="2023-10-10T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2023-10-10T08:00:00+08:00">
+	<meta itemprop="wordCount" content="2558">
+	<meta itemprop="keywords" content="Xcode 15,iOS 17,macOS 14"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="4.3 图表（Charts）">
+	<meta property="og:description" content="基础 Charts 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2023-10-10T08:00:00+08:00">
+		<meta property="article:modified_time" content="2023-10-10T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 15">
+		<meta property="article:tag" content="iOS 17">
+		<meta property="article:tag" content="macOS 14">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="4.3 图表（Charts）">
+  <meta name="twitter:description" content="基础 Charts 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/" title="4.3 图表（Charts） - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.4-swiftui-%E8%A7%86%E5%9B%BE%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/" title="1.4 SwiftUI 视图管理机制" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.3.3-%E6%A8%A1%E6%80%81modal/" title="1.3.3 模态（Modal）" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "4.3 图表（Charts）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.3-%E5%9B%BE%E8%A1%A8charts\/"
+    },"genre": "posts","keywords": "Xcode 15, iOS 17, macOS 14","wordcount":  2558 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.3-%E5%9B%BE%E8%A1%A8charts\/","datePublished": "2023-10-10T08:00:00+08:00","dateModified": "2023-10-10T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>4.3 图表（Charts）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2023-10-10 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2023-10-10">2023-10-10</time></span>&nbsp;<span title="2558 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<h1 class="heading-element" id="基础"><span>基础</span>
+  <a href="#%e5%9f%ba%e7%a1%80" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><a href="https://developer.apple.com/documentation/charts" target="_blank" rel="external nofollow noopener noreferrer">Charts<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是 iOS 16/macOS 13 的新特性，用于构建各种精美的图表，如柱状图、散点图、曲线图等。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>Charts 是一个独立的标准库，使用之前需要导入它：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">import</span> <span class="nc">Charts</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><a href="https://developer.apple.com/documentation/charts/chart" target="_blank" rel="external nofollow noopener noreferrer">Chart<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 构建方法和 List 类似，支持直接从数据源构建，也可以嵌套 ForEach 使用。</p>
+<p>以柱状图为例，先定义如下数据源：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">let</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="n">Storage</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Apps&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">22.3</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Photos&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">35.8</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;System&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">19.8</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Others&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">39.1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">struct</span> <span class="nc">Storage</span><span class="p">:</span> <span class="n">Identifiable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">id</span> <span class="p">=</span> <span class="n">UUID</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">category</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">sizes</span><span class="p">:</span> <span class="nb">Double</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>然后使用 Chart 构建：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Chart</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="n">id</span><span class="p">)</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">BarMark</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Category&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">category</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">y</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Sizes&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">sizes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>图表的尺寸由系统自动适配，也可以使用 <code>.frame</code> 设置。</p>
+<p>假设现在需要将 Apple 多个设备的存储进行可视化展现，可以将数据源作如下修改：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">let</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="n">Storage</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Apps&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">22.3</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPhone&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Photos&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">35.8</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPhone&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;System&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">19.8</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPhone&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Others&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">39.1</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPhone&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Apps&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">18.3</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPad&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Photos&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">5.8</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPad&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;System&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">22.8</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPad&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Others&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">12.3</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;iPad&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Apps&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">80.8</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;Mac&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Photos&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">25.6</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;Mac&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;System&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">39.5</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;Mac&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Others&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">100.2</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="s">&#34;Mac&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">struct</span> <span class="nc">Storage</span><span class="p">:</span> <span class="n">Identifiable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">id</span> <span class="p">=</span> <span class="n">UUID</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">category</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">sizes</span><span class="p">:</span> <span class="nb">Double</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">device</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>构建图表时作一些自定义设置：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Chart</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="n">id</span><span class="p">)</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">BarMark</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Sizes&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">sizes</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">y</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Category&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">category</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">foregroundStyle</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Device&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">device</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartForegroundStyleScale</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;iPhone&#34;</span> <span class="p">:</span> <span class="p">.</span><span class="n">blue</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;iPad&#34;</span> <span class="p">:</span> <span class="p">.</span><span class="n">yellow</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;Mac&#34;</span> <span class="p">:</span> <span class="p">.</span><span class="n">purple</span>
+</span></span><span class="line"><span class="cl"><span class="p">])</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>foregroundStyle(by:)</code> 可以设置指定数据类型的样式，默认由系统自动分配样式。</p>
+<p>使用 <code>chartForegroundStyleScale(_:)</code> 之后，表示不使用系统自动分配的样式，而是为 <code>foregroundStyle(by:)</code> 指定的数据类型自定义样式。</p>
+<p>Chart 内可以叠加使用不同样式的图表，比如示例中的步数图（StepsChart），就同时使用了 LineMark、AreaMark、PointMark、RuleMark。</p>
+<p>Charts 支持高度的自定义，比如：</p>
+<ul>
+<li><code>.foregroundStyle</code>：设置前景样式。</li>
+<li><code>.interpolationMethod</code>：设置插值样式，适用于 LineMarks、AreaMarks。</li>
+<li><code>.lineStyle</code>：设置线条样式，适用于 LineMarks、RuleMarks。</li>
+<li><code>.annotation</code>：设置注释。</li>
+<li><code>.chartLegend</code>：设置图例。</li>
+<li>&hellip;&hellip;</li>
+</ul>
+<p>StepsChart 支持手势交互，这里说一下思路，核心代码如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">selectedStep</span><span class="p">:</span> <span class="p">(</span><span class="nb">String</span><span class="p">,</span> <span class="nb">Int</span><span class="p">)?</span> <span class="p">=</span> <span class="p">(</span><span class="s">&#34;1/15&#34;</span><span class="p">,</span> <span class="mi">10876</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Chart</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="p">...</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="kd">let</span> <span class="nv">selectedStep</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">RuleMark</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Selected Date&#34;</span><span class="p">,</span> <span class="n">selectedStep</span><span class="p">.</span><span class="mi">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">foregroundStyle</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">lineStyle</span><span class="p">(.</span><span class="kd">init</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dash</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">PointMark</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">x</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Selected Date&#34;</span><span class="p">,</span> <span class="n">selectedStep</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">y</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Selected Count&#34;</span><span class="p">,</span> <span class="n">selectedStep</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">foregroundStyle</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">annotation</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Text</span><span class="p">(</span><span class="n">selectedStep</span><span class="p">.</span><span class="mf">1.</span><span class="n">formatted</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">font</span><span class="p">(.</span><span class="n">footnote</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">foregroundColor</span><span class="p">(.</span><span class="n">white</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">padding</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">cornerRadius</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartOverlay</span> <span class="p">{</span> <span class="n">chartProxy</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">GeometryReader</span> <span class="p">{</span> <span class="n">geometryProxy</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Rectangle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">fill</span><span class="p">(.</span><span class="n">clear</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">contentShape</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">gesture</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DragGesture</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">          <span class="p">.</span><span class="n">onChanged</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">            <span class="n">findSelectedStep</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">              <span class="n">at</span><span class="p">:</span> <span class="n">value</span><span class="p">.</span><span class="n">location</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="n">chartProxy</span><span class="p">:</span> <span class="n">chartProxy</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="n">geometryProxy</span><span class="p">:</span> <span class="n">geometryProxy</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">onTapGesture</span> <span class="p">{</span> <span class="n">location</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">        <span class="n">findSelectedStep</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="n">at</span><span class="p">:</span> <span class="n">location</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">chartProxy</span><span class="p">:</span> <span class="n">chartProxy</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">geometryProxy</span><span class="p">:</span> <span class="n">geometryProxy</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">findSelectedStep</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">at</span> <span class="n">location</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">chartProxy</span><span class="p">:</span> <span class="n">ChartProxy</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">geometryProxy</span><span class="p">:</span> <span class="n">GeometryProxy</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">origin</span> <span class="p">=</span> <span class="n">geometryProxy</span><span class="p">[</span><span class="n">chartProxy</span><span class="p">.</span><span class="n">plotAreaFrame</span><span class="p">].</span><span class="n">origin</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 当前位置</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">location</span> <span class="p">=</span> <span class="n">CGPoint</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span><span class="p">:</span> <span class="n">location</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">y</span><span class="p">:</span> <span class="n">location</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">origin</span><span class="p">.</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 获取当前位置对应的数据</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="kd">var</span> <span class="nv">step</span><span class="p">:</span> <span class="p">(</span><span class="nb">String</span><span class="p">,</span> <span class="nb">Int</span><span class="p">)</span> <span class="p">=</span> <span class="n">chartProxy</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="n">at</span><span class="p">:</span> <span class="n">location</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">step</span><span class="p">.</span><span class="mi">1</span> <span class="p">=</span> <span class="n">data</span><span class="p">.</span><span class="bp">first</span> <span class="p">{</span> <span class="nv">$0</span><span class="p">.</span><span class="n">date</span> <span class="p">==</span> <span class="n">step</span><span class="p">.</span><span class="mi">0</span> <span class="p">}?.</span><span class="bp">count</span> <span class="p">??</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">selectedStep</span> <span class="p">=</span> <span class="n">step</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">selectedStep</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>.chartOverlay</code> 可以为图表添加一个浮层，这里使用了 GeometryReader 用于获取手势的位置，并且添加了一个透明的矩形区域承载点击和拖拽手势。</p>
+<p>闭包内返回的是一个 <a href="https://developer.apple.com/documentation/charts/chartproxy" target="_blank" rel="external nofollow noopener noreferrer">ChartProxy<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 类型的实例，通过它可以获取到图表的尺寸、位置等信息。这里使用如下方法获取到手势当前位置对应的数据：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">var</span> <span class="nv">step</span><span class="p">:</span> <span class="p">(</span><span class="nb">String</span><span class="p">,</span> <span class="nb">Int</span><span class="p">)</span> <span class="p">=</span> <span class="n">chartProxy</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="n">at</span><span class="p">:</span> <span class="n">location</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>需要注意的是，这里获取的数据类型需要和图表的 x、y 轴的数据类型保持一致，否则是获取不到数据的。</p>
+<p>现在我们已经知道手势的具体位置和对应的数据了，剩下的工作就是将其展示出来，这里使用的是现成的RuleMark 和 PointMark 。当然，方法不止这一种，比如还可以使用 <code>.chartOverlay</code> 或者 <code>.chartBackground</code> 来实现。</p>
+<p>示例中只演示了 Charts 的部分功能，更多特性望读者自行探索。Github 上有个仓库提供了关于 Charts 的丰富样例，可供参考：<a href="https://github.com/jordibruin/Swift-Charts-Examples" target="_blank" rel="external nofollow noopener noreferrer">Swift-Charts-Example<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 。</p>
+<h1 class="heading-element" id="饼图与交互"><span>饼图与交互</span>
+  <a href="#%e9%a5%bc%e5%9b%be%e4%b8%8e%e4%ba%a4%e4%ba%92" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>这里并非有意将饼图单独介绍，而是因为它只支持 iOS 17/macOS 14，下文的滑动列表亦是如此。</p>
+<p>饼图的实现和上文的图表并无二致，唯一的区别是使用 <code>SectorMark</code>，它表示的是一个扇形区域。下面的代码是从示例中截取的部分代码，它表示的是将一个圆分成四个扇形，每个扇形的角度由 <code>Storage</code> 实例属性 <code>sizes</code> 决定。</p>
+<p>这里面有些需要注意的细节：</p>
+<ul>
+<li><code>chartAngleSelection</code> 是新增的 API，用于获取手指所处区域的扇形<strong>累计角度</strong>，也就是说，手指落在某个扇形上时，获取的不是对应扇形的 <code>sizes</code>，而是所有 sizes 总和乘以手指所在点对应的扇形角度。比如下面的代码，圆形被分为四份（22.3，35.8，19.8，39.1），其总和为 117，那么 Apps 对应的扇形所占的圆形区域为 22.3/117，它也是第一个扇形，默认从 12 点方向开始沿顺时针方向延展。假设手指正好落在第一个扇形的中心区域，那么 <code>selection</code> 的值就是 22.3 * 0.5，如果正好落在第三个扇形的中心区域，则获取的值为 22.3 + 35.8 + 19.8 * 0.5。</li>
+<li><code>chartAngleSelection</code> 获取的值是跟随手指实时变化的，如果手指离开了屏幕，则变为 nil。因此这里声明了一个属性 <code>selectedStorage</code> 来保存当前获取的扇形区域，根据上面提到的“累计角度”，可以计算出当前手指落在了那个扇形区域，这也是 <code>findSelectedStorage</code> 方法的内在逻辑。</li>
+</ul>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">let</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="n">Storage</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Apps&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">22.3</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Photos&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">35.8</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;System&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">19.8</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&#34;Others&#34;</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="mf">39.1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">struct</span> <span class="nc">Storage</span><span class="p">:</span> <span class="n">Identifiable</span><span class="p">,</span> <span class="nb">Equatable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">id</span> <span class="p">=</span> <span class="n">UUID</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">category</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">sizes</span><span class="p">:</span> <span class="nb">Double</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">selection</span><span class="p">:</span> <span class="nb">Double</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">selectedStorage</span><span class="p">:</span> <span class="n">Storage</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Chart</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="n">category</span><span class="p">)</span> <span class="p">{</span> <span class="n">element</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">SectorMark</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">angle</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Sizes&#34;</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">sizes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartAngleSelection</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="err">$</span><span class="n">selection</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">onChange</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">selection</span><span class="p">)</span> <span class="p">{</span> <span class="n">oldValue</span><span class="p">,</span> <span class="n">newValue</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="kd">let</span> <span class="nv">newValue</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">newSelectedStorage</span> <span class="p">=</span> <span class="n">findSelectedStorage</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">newValue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">selectedStorage</span> <span class="p">==</span> <span class="n">newSelectedStorage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">selectedStorage</span> <span class="p">=</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">selectedStorage</span> <span class="p">=</span> <span class="n">newSelectedStorage</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">findSelectedStorage</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">Double</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Storage</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">total</span> <span class="p">=</span> <span class="mf">0.0</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">ans</span> <span class="p">=</span> <span class="n">data</span><span class="p">.</span><span class="bp">first</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">total</span> <span class="o">+=</span> <span class="n">v</span><span class="p">.</span><span class="n">sizes</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">total</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">ans</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>iOS 17/macOS 14 简化了 Charts 的交互，除了上面提到的 <code>chartAngleSelection</code>，还有针对具有 X/Y 轴图表获取点或者范围的方法：<code>chartXSelection</code> 和 <code>chartYSelection</code>，详见<a href="https://developer.apple.com/documentation/swiftui/view-chart-view#selection" target="_blank" rel="external nofollow noopener noreferrer">文档<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p>除此以外，<code>SectorMark</code> 还支持自定义扇形的半径、内径、外径等，具体效果见示例。</p>
+<h1 class="heading-element" id="可滑动图表"><span>可滑动图表</span>
+  <a href="#%e5%8f%af%e6%bb%91%e5%8a%a8%e5%9b%be%e8%a1%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>iOS 17/macOS 14 对 Charts 的另一大更新就是支持滑动，在此之前，要基于 Charts 实现一个滑动图表非常繁琐，而且容易导致性能问题。</p>
+<p>现在只需要在原有的图表基础上添加一个方法 <a href="https://developer.apple.com/documentation/swiftui/view/chartscrollableaxes(_:)" target="_blank" rel="external nofollow noopener noreferrer">chartScrollableAxes(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 就能使其滑动，以下是示例代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Chart</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ForEach</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="n">date</span><span class="p">)</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BarMark</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">x</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Date&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">date</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="p">.</span><span class="n">day</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">y</span><span class="p">:</span> <span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#34;Steps&#34;</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="bp">count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">foregroundStyle</span><span class="p">(.</span><span class="n">pink</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">annotation</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Text</span><span class="p">(</span><span class="n">selectedStep</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="mi">160</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartScrollableAxes</span><span class="p">(.</span><span class="n">horizontal</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartXVisibleDomain</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="kc">Self</span><span class="p">.</span><span class="n">secondsPerDay</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartScrollPosition</span><span class="p">(</span><span class="n">initialX</span><span class="p">:</span> <span class="n">initialPosition</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartScrollPosition</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="err">$</span><span class="n">scrollPosition</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartScrollTargetBehavior</span><span class="p">(.</span><span class="n">paging</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">chartXSelection</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="err">$</span><span class="n">selection</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">onChange</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">selection</span><span class="p">)</span> <span class="p">{</span> <span class="n">oldValue</span><span class="p">,</span> <span class="n">newValue</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">selection</span> <span class="p">=</span> <span class="n">newValue</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>以下是对新增的一些 API 的说明：</p>
+<ul>
+<li>chartScrollableAxes：设置滑动的方向。</li>
+<li>chartXVisibleDomain：设置可见区域，<code>Self.secondsPerDay * 7</code> 表示可以展示 7 天的数据。</li>
+<li>chartScrollPosition(initialX:)：设置图表的初始位置。</li>
+<li>chartScrollPosition(x:)：获取图表滚动的位置，更改绑定的值也能触发图表滚动至指定位置。</li>
+<li>chartScrollTargetBehavior：设置图表的滚动方式，和 ScrollView 是一样的。</li>
+<li>chartXSelection：图表的选择，与上文提到的 <code>chartAngleSelection</code> 是类似的。</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-10-10 08:00:00">更新于 2023-10-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/" data-title="4.3 图表（Charts）" data-hashtags="Xcode 15,iOS 17,macOS 14"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/" data-hashtag="Xcode 15"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/4.3-%E5%9B%BE%E8%A1%A8charts/" data-title="4.3 图表（Charts）"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-15/" class="post-tag" title="标签 - Xcode 15">Xcode 15</a><a href="/tags/ios-17/" class="post-tag" title="标签 - iOS 17">iOS 17</a><a href="/tags/macos-14/" class="post-tag" title="标签 - macOS 14">macOS 14</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/1.3.3-%E6%A8%A1%E6%80%81modal/" class="post-nav-item" rel="prev" title="1.3.3 模态（Modal）"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>1.3.3 模态（Modal）</a><a href="/posts/swiftui-eul/1.5-swiftui-%E4%B8%AD%E7%9A%84%E5%B1%9E%E6%80%A7%E5%8C%85%E8%A3%85%E5%99%A8/" class="post-nav-item" rel="next" title="1.5 SwiftUI 中的属性包装器">1.5 SwiftUI 中的属性包装器<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a84fc96c03eaa8cd805b645f0c07209b.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

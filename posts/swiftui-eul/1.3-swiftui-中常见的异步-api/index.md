@@ -1,0 +1,102 @@
+# 1.3 SwiftUI 中常见的异步 API
+
+
+# .task
+
+SwiftUI 刚发布时，View 只有两个最基础的生命周期方法：`.onAppear` 和 `.onDisAppear`，iOS 14 又新增了 `.onChange` 这样的修饰器，可以监听值的变化。不过上面的几个 API 都是在主线程调用的，iOS 15 新增的 `.task`  修饰器赋予了 View 快速开启异步任务的能力。
+
+在上一节的示例中，我们已经使用过这个 API 了：
+
+```swift
+.task {
+  img = await fetchImage()
+}
+```
+
+`.task` 的会在 View 出现时调用，并立即开启一个异步任务，闭包内的代码就处于这个新开启的异步环境中。当 View 被释放时，如果任务还未结束，系统会自动取消该任务。
+
+`.task` 方法全名如下：
+
+```swift
+func task(priority: TaskPriority = .userInitiated, _ action: @escaping () async -> Void) -> some View
+```
+
+默认情况下，task 任务以最高的可用优先级运行，这取决于系统的调度，你也可以自定义任务的优先级（[TaskPriority](https://developer.apple.com/documentation/swift/taskpriority?changes=latest_minor))。
+
+此外，还有另一个 `.task` API ：
+
+```swift
+func task<T>(id value: T, priority: TaskPriority = .userInitiated, _ action: @escaping () async -> Void) -> some View where T : Equatable
+```
+
+它是上一个 API 的加强版，多了一个 id 参数，当我们使用这个 API 开启异步任务时，系统会监听 id 的值变化，一旦 id 发生了变化，原来的任务会被取消，系统会开启一个新的任务。
+
+比如我们常见的筛选菜单，是通过多个控制参数去拉取服务端的数据的，一旦其中一个参数发生变化，App 就会发起新的网络请求然后刷新界面。在弱网环境下，如果 App 没有处理好菜单切换时网络请求的取消，就容易会造成数据的错乱。为了处理好这种边界条件，我们需要管理好网络请求的生命周期。而现在使用 `task(id:priority:_:)` 可以非常方便地处理类似的问题，我们只需要新增一个遵循 `Equatable` 协议的 id 参数就行了。
+
+# .refreshable
+
+`.refreshable` 是 iOS 15 新增的 modifier，可以给 View 快速添加刷新控件。比如下面的示例代码，当我们使用下拉刷新时，会先去拉取三条随机的柴犬图片地址，然后使用 AsyncImage 去加载相应的图片。
+
+```swift
+struct ShibeView: View {
+  
+  @ObservedObject private var shibeVM = ShibeViewModel()
+  
+  var body: some View {
+    List {
+      ForEach(shibeVM.shibes, id: \.self) {
+        AsyncImage(url: .init(string: $0)) { image in
+          HStack {
+            Spacer()
+            image
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+              .cornerRadius(20)
+            Spacer()
+          }
+        } placeholder: {
+          ProgressView()
+        }
+      }
+    }
+    .listStyle(.plain)
+    .refreshable {
+      await shibeVM.fetchRandomShibes()
+    }
+    .task {
+      await shibeVM.fetchRandomShibes()
+    }
+  }
+}
+
+@MainActor class ShibeViewModel: ObservableObject {
+  @Published var shibes: [String] = []
+  
+  private let url = URL(string: "https://shibe.online/api/shibes?count=3")!
+  
+  func fetchRandomShibes() async {
+    let res = try? await URLSession.shared.data(from: url)
+    if let data = res?.0, let model = try? JSONDecoder().decode([String].self, from: data) {
+      shibes = model
+    }
+  }
+}
+```
+
+我们使用了 `MainActor` 修饰了 ShibeViewModel 类，它可以确保该类的属性和方法在主线程调用。因为这里使用 await 标记的 URLSession 方法是在子线程运行的，加载完数据后将其赋值给 *shibes* 会导致 UI 的刷新工作不在主线程，这是不可取的 。关于 actor，后面还会有详细的介绍，这里不必多作停留。
+
+在之前使用 Callback 范式编写代码时，我们通常使用 `DispatchQuene.main.async` 来切回至主线程，而且还要使用 `weak` 来解决循环引用的问题，这样的处理既麻烦且易遗漏。现在我们使用 `MainActor` 可以轻松解决这个问题，值得注意的是，`MainActor` 对 Callback 并不生效，我们必须使用新的 Concurrency 才能享受它带来的便捷和安全。
+
+如果你留意过苹果最新的文档，你会发现 UI 类控件，比如 UIView、UIViewController 等，现在都使用了 `MainActor` 修饰，这是为了确保 UI 在主线程更新。
+
+# 其它
+
+URLSession、AsyncImage 等，前面的章节已经介绍过了，不再赘述。
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/1.3-swiftui-%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%BC%82%E6%AD%A5-api/  
+

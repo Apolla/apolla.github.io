@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>3.5 滑动视图（ScrollView） - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+基础 ScrollView 初始化方法如下：
+1 2 3 4 5 init( _ axes: Axis.Set = .vertical, showsIndicators: Bool = true, content: () -&gt; Content ) axes 用于指定滑动的方向，默认是垂直方向。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 15b3, iOS 17, macOS 14'>
+	<meta itemprop="name" content="3.5 滑动视图（ScrollView）">
+	<meta itemprop="description" content="基础 ScrollView 初始化方法如下：
+1 2 3 4 5 init( _ axes: Axis.Set = .vertical, showsIndicators: Bool = true, content: () -&gt; Content ) axes 用于指定滑动的方向，默认是垂直方向。">
+	<meta itemprop="datePublished" content="2023-07-25T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2023-07-25T08:00:00+08:00">
+	<meta itemprop="wordCount" content="1719">
+	<meta itemprop="keywords" content="Xcode 15b3,iOS 17,macOS 14"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="3.5 滑动视图（ScrollView）">
+	<meta property="og:description" content="基础 ScrollView 初始化方法如下：
+1 2 3 4 5 init( _ axes: Axis.Set = .vertical, showsIndicators: Bool = true, content: () -&gt; Content ) axes 用于指定滑动的方向，默认是垂直方向。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2023-07-25T08:00:00+08:00">
+		<meta property="article:modified_time" content="2023-07-25T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 15b3">
+		<meta property="article:tag" content="iOS 17">
+		<meta property="article:tag" content="macOS 14">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="3.5 滑动视图（ScrollView）">
+  <meta name="twitter:description" content="基础 ScrollView 初始化方法如下：
+1 2 3 4 5 init( _ axes: Axis.Set = .vertical, showsIndicators: Bool = true, content: () -&gt; Content ) axes 用于指定滑动的方向，默认是垂直方向。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/" title="3.5 滑动视图（ScrollView） - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" title="2.2 图片" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.4-swiftui-%E8%A7%86%E5%9B%BE%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/" title="1.4 SwiftUI 视图管理机制" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "3.5 滑动视图（ScrollView）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview\/"
+    },"genre": "posts","keywords": "Xcode 15b3, iOS 17, macOS 14","wordcount":  1719 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview\/","datePublished": "2023-07-25T08:00:00+08:00","dateModified": "2023-07-25T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>3.5 滑动视图（ScrollView）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2023-07-25 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2023-07-25">2023-07-25</time></span>&nbsp;<span title="1719 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<h1 class="heading-element" id="基础"><span>基础</span>
+  <a href="#%e5%9f%ba%e7%a1%80" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>ScrollView 初始化方法如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">init</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">_</span> <span class="n">axes</span><span class="p">:</span> <span class="n">Axis</span><span class="p">.</span><span class="n">Set</span> <span class="p">=</span> <span class="p">.</span><span class="n">vertical</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">showsIndicators</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">=</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">content</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Content</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>axes</code> 用于指定滑动的方向，默认是垂直方向。</p>
+<p><code>showsIndicators</code> 表示是否显示滑动指示条，默认显示。另一个修饰器方法 <a href="https://developer.apple.com/documentation/swiftui/view/scrollindicators(_:axes:)" target="_blank" rel="external nofollow noopener noreferrer">scrollIndicators(_:axes:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 也能实现同样的效果，而且不仅仅局限于 ScrollView，还能用于其它滑动视图，比如 List、TextEditor 等，都可以用这个方法来控制滑动指示条的显隐。</p>
+<p>要禁用滑动特性，可以使用方法 <a href="https://developer.apple.com/documentation/swiftui/view/scrolldisabled(_:)" target="_blank" rel="external nofollow noopener noreferrer">scrollDisabled(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 。</p>
+<p>ScrollViewReader 支持跳转至指定 id 的视图，在 《SwiftUI 视图管理机制》 已经介绍过了，效果可以 <span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span> 。</p>
+<p>修饰器方法 <a href="https://developer.apple.com/documentation/swiftui/view/scrolldismisseskeyboard(_:)" target="_blank" rel="external nofollow noopener noreferrer">scrollDismissesKeyboard(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 用于处理滑动视图的键盘显隐，其具体使用可以参考 《文本-输入》 中关于键盘处理的章节内容，</p>
+<p>iOS 16/macOS 13 新增了一个方法 <a href="https://developer.apple.com/documentation/swiftui/view/scrollcontentbackground(_:)" target="_blank" rel="external nofollow noopener noreferrer">scrollContentBackground(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 用于改变系统内置的滑动视图的背景样式，比如 Form、List 等。示例中的代码使用该方法隐藏系统内置的背景后，才能使自定义的蓝色渐变背景生效：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Form</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Group</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;World&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 设置 item 背景</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">listRowBackground</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">purple</span><span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="mf">0.3</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">formStyle</span><span class="p">(.</span><span class="n">grouped</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 设置滑动视图背景</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">blue</span><span class="p">.</span><span class="n">gradient</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 隐藏系统内置的背景</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">scrollContentBackground</span><span class="p">(.</span><span class="n">hidden</span><span class="p">)</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>iOS 16.4 新增了一个方法 <a href="https://developer.apple.com/documentation/swiftui/view/scrollbouncebehavior(_:axes:)" target="_blank" rel="external nofollow noopener noreferrer">scrollBounceBehavior<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> ，通过指定 ScrollBounceBehavior 类型的参数来控制滑动视图的弹性行为，该参数有如下可选：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// 系统自适应</span>
+</span></span><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">var</span> <span class="nv">automatic</span><span class="err">：</span> <span class="n">ScrollBounceBehavior</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 总是可以滑动</span>
+</span></span><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">var</span> <span class="nv">always</span><span class="err">：</span> <span class="n">ScrollBounceBehavior</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 取决于视图尺寸，内容超出显示区域时，可以滑动</span>
+</span></span><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">var</span> <span class="nv">basedOnSize</span><span class="err">：</span> <span class="n">ScrollBounceBehavior</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>和上面的方法类似，该方法同样适用于 Form、List 等滑动视图。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>iOS 17、macOS 14 为 ScrollView 添加了一系列新特性，以下内容主要是关于这些新特性的介绍。</p>
+<h1 class="heading-element" id="滑动容器的布局与行为"><span>滑动容器的布局与行为</span>
+  <a href="#%e6%bb%91%e5%8a%a8%e5%ae%b9%e5%99%a8%e7%9a%84%e5%b8%83%e5%b1%80%e4%b8%8e%e8%a1%8c%e4%b8%ba" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><a href="https://developer.apple.com/documentation/swiftui/view/containerrelativeframe(_:alignment:_:)" target="_blank" rel="external nofollow noopener noreferrer">containerRelativeFrame(<em>:alignment:</em>:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是布局利器，如示例所示，它可以非常方便地根据容器尺寸调整设置 item 的尺寸。在此之前，可能需要通过 GeometryReader 进行复杂的计算才能实现。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">.</span><span class="n">containerRelativeFrame</span><span class="p">(.</span><span class="n">horizontal</span><span class="p">)</span> <span class="p">{</span> <span class="n">length</span><span class="p">,</span> <span class="kc">_</span> <span class="k">in</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">length</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>上面的代码表示每个 item 的宽度为 factor * length ，试着调整 slider，当 factor 为 1.0 时，item 正好和容器等宽。</p>
+<p>另一个命名比较相似的方法 containerRelativeFrame(_:count:span:spacing:alignment:) 则提供了更多的灵活性，读者可以将代码 copy 后在工程打开以下注释来查看效果。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// .containerRelativeFrame(.horizontal, count: 5, span: 2, spacing: 10)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>上面的代码表示将容器宽度分成 5 份，每个 item 占比 2 份，不过 item  的实际宽度和 spacing 也有关。具体的计算公式可以参考<a href="https://developer.apple.com/documentation/swiftui/view/containerrelativeframe(_:count:span:spacing:alignment:)" target="_blank" rel="external nofollow noopener noreferrer">文档<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p><a href="https://developer.apple.com/documentation/swiftui/view/scrolltargetbehavior(_:)" target="_blank" rel="external nofollow noopener noreferrer">scrollTargetBehavior(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 可以指定滑动时的行为，其参数遵循 ScrollTargetBehavior 协议。系统内置了 <code>paging</code> 和 <code>viewAligned</code> 两种常用类型，也支持自定义。</p>
+<p>ScrollView 增加了滑动至指定 item 的新方法，需要像下面这样：<code>.scrollTargetLayout()</code> 和 <code>.scrollPosition(id: $scrollID)</code> 搭配使用，当更新 <code>scrollID</code> 时，就会滑动至指定 ID 的视图。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">scrollID</span><span class="p">:</span> <span class="nb">Int</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ScrollView</span><span class="p">(.</span><span class="n">horizontal</span><span class="p">,</span> <span class="n">showsIndicators</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">LazyHStack</span><span class="p">(</span><span class="n">spacing</span><span class="p">:</span> <span class="mi">15</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ForEach</span><span class="p">(</span><span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">6</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">i</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">onTapGesture</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="n">i</span> <span class="p">==</span> <span class="mi">5</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">scrollID</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">scrollTargetLayout</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">scrollPosition</span><span class="p">(</span><span class="n">id</span><span class="p">:</span> <span class="err">$</span><span class="n">scrollID</span><span class="p">)</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><a href="https://developer.apple.com/documentation/swiftui/view/defaultscrollanchor(_:)" target="_blank" rel="external nofollow noopener noreferrer">defaultScrollAnchor(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 还能设置滑动视图的初始位置，比如一个竖向列表需要在界面呈现时展示最底部的数据时，可以这样设置：<code>.defaultScrollAnchor(.bottom)</code>。</p>
+<h1 class="heading-element" id="滑动转场动画"><span>滑动转场动画</span>
+  <a href="#%e6%bb%91%e5%8a%a8%e8%bd%ac%e5%9c%ba%e5%8a%a8%e7%94%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>iOS 17/macOS 14 为 ScrollView 新增了酷炫的转场动画，有两个方法可以实现：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">scrollTransition</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">_</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">ScrollTransitionConfiguration</span> <span class="p">=</span> <span class="p">.</span><span class="n">interactive</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">axis</span><span class="p">:</span> <span class="n">Axis</span><span class="p">?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">transition</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">EmptyVisualEffect</span><span class="p">,</span> <span class="n">ScrollTransitionPhase</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">VisualEffect</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">scrollTransition</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">topLeading</span><span class="p">:</span> <span class="n">ScrollTransitionConfiguration</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bottomTrailing</span><span class="p">:</span> <span class="n">ScrollTransitionConfiguration</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">axis</span><span class="p">:</span> <span class="n">Axis</span><span class="p">?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">transition</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">EmptyVisualEffect</span><span class="p">,</span> <span class="n">ScrollTransitionPhase</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">VisualEffect</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>以示例中的代码为例，先来看看第一个方法的使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">.</span><span class="n">scrollTransition</span> <span class="p">{</span> <span class="n">content</span><span class="p">,</span> <span class="n">phase</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">content</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">scaleEffect</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">isIdentity</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.95</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">isIdentity</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">rotationEffect</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">value</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">anchor</span><span class="p">:</span> <span class="n">phase</span> <span class="p">==</span> <span class="p">.</span><span class="n">bottomTrailing</span> <span class="p">?</span> <span class="p">.</span><span class="n">topLeading</span> <span class="p">:</span> <span class="p">.</span><span class="n">bottomLeading</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>前两个参数使用默认值，闭包内 content 表示即将出现或消失的 item 视图，phase 是枚举类型：ScrollTransitionPhase，它有以下枚举值：</p>
+<ul>
+<li>identity：没有进行任何转场。</li>
+<li>topLeading：滑动容器内子视图即将向上或向左移出可见区域时进行转场。</li>
+<li>bottomTrailing：滑动容器内子视图即将向下或向右移出可见区域时进行转场。</li>
+</ul>
+<p>另外，该枚举可以通过属性 <code>value</code> 获取转场进度添加转场效果，比如上面代码中的 <code>.radians(phase.value * 0.3)</code> 表示 item 会根据当前转场进度实时更新旋转角度。</p>
+<p>第二个方法的使用如下，它表示对于滑动容器顶部的子视图不进行转场，底部的子视图进行交互式转场。上面的第一个方法的默认 <code>configuration</code> 参数值就是 <code>.interactive</code> ，表示视图在滑动时，转场会随之进行。如果将该参数指定为 <code>.animated</code>，就没有交互式效果，只是一个简单的出现或者消失的动画，读者可以直接拷贝源码就行调试对比观察不同的效果。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">.</span><span class="n">scrollTransition</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">topLeading</span><span class="p">:</span> <span class="p">.</span><span class="n">identity</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">bottomTrailing</span><span class="p">:</span> <span class="p">.</span><span class="n">interactive</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span> <span class="n">content</span><span class="p">,</span> <span class="n">phase</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">content</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">scaleEffect</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">isIdentity</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.95</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">isIdentity</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">offset</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">phase</span><span class="p">.</span><span class="n">isIdentity</span> <span class="p">?</span> <span class="mf">0.0</span> <span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="其它"><span>其它</span>
+  <a href="#%e5%85%b6%e5%ae%83" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>以上只是对滑动容器一些主要功能以及新特性的介绍，对于一些比较细节的 API 并没有涉及到，有兴趣进一步探究的读者请移步官方文档：<a href="https://developer.apple.com/documentation/swiftui/scroll-views" target="_blank" rel="external nofollow noopener noreferrer">Scroll Views<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-07-25 08:00:00">更新于 2023-07-25&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/" data-title="3.5 滑动视图（ScrollView）" data-hashtags="Xcode 15b3,iOS 17,macOS 14"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/" data-hashtag="Xcode 15b3"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/" data-title="3.5 滑动视图（ScrollView）"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-15b3/" class="post-tag" title="标签 - Xcode 15b3">Xcode 15b3</a><a href="/tags/ios-17/" class="post-tag" title="标签 - iOS 17">iOS 17</a><a href="/tags/macos-14/" class="post-tag" title="标签 - macOS 14">macOS 14</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/4.5-%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB/" class="post-nav-item" rel="prev" title="4.5 转场动画"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>4.5 转场动画</a><a href="/posts/swiftui-eul/1.4-swiftui-%E8%A7%86%E5%9B%BE%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6/" class="post-nav-item" rel="next" title="1.4 SwiftUI 视图管理机制">1.4 SwiftUI 视图管理机制<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/b5cca85ba8d19ce17af01862fcaabd18.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

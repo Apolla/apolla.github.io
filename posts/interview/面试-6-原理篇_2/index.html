@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>面试 6 原理篇_2 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="面试 (六) :原理篇/2 2015年11月25日 星期三 10:09 lldb（gdb）常用的调试命令？ • po：打印对象，会调用对象description方法。是print-object的简写 • expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令 • print：也是打印命令，需要指定类型 • bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈 • br l：是breakpoint list的简写 BAD_ACCESS在什么情况下出现？ •访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息 •死循环 如何调试BAD_ACCESS错误 •设置全局断点快速定位问题代码所在行 开启僵尸对象调试功能
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="面试 6 原理篇_2">
+	<meta itemprop="description" content="面试 (六) :原理篇/2 2015年11月25日 星期三 10:09 lldb（gdb）常用的调试命令？ • po：打印对象，会调用对象description方法。是print-object的简写 • expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令 • print：也是打印命令，需要指定类型 • bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈 • br l：是breakpoint list的简写 BAD_ACCESS在什么情况下出现？ •访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息 •死循环 如何调试BAD_ACCESS错误 •设置全局断点快速定位问题代码所在行 开启僵尸对象调试功能">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="3848">
+	<meta itemprop="keywords" content="葵花宝典"><meta property="og:url" content="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="面试 6 原理篇_2">
+	<meta property="og:description" content="面试 (六) :原理篇/2 2015年11月25日 星期三 10:09 lldb（gdb）常用的调试命令？ • po：打印对象，会调用对象description方法。是print-object的简写 • expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令 • print：也是打印命令，需要指定类型 • bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈 • br l：是breakpoint list的简写 BAD_ACCESS在什么情况下出现？ •访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息 •死循环 如何调试BAD_ACCESS错误 •设置全局断点快速定位问题代码所在行 开启僵尸对象调试功能">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="面试 6 原理篇_2">
+  <meta name="twitter:description" content="面试 (六) :原理篇/2 2015年11月25日 星期三 10:09 lldb（gdb）常用的调试命令？ • po：打印对象，会调用对象description方法。是print-object的简写 • expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令 • print：也是打印命令，需要指定类型 • bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈 • br l：是breakpoint list的简写 BAD_ACCESS在什么情况下出现？ •访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息 •死循环 如何调试BAD_ACCESS错误 •设置全局断点快速定位问题代码所在行 开启僵尸对象调试功能"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/" title="面试 6 原理篇_2 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-7-%E5%85%B6%E4%BB%96%E7%AF%87/" title="面试 7 其他篇" /><link rel="next" type="text/html" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-5-ui%E7%AF%87/" title="面试 5 UI篇" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "面试 6 原理篇_2",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/interview\/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2\/"
+    },"genre": "posts","wordcount":  3848 ,
+    "url": "https:\/\/apolla.cc\/posts\/interview\/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>面试 6 原理篇_2</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E8%91%B5%E8%8A%B1%E5%AE%9D%E5%85%B8/" class="post-category" title="分类 - 葵花宝典"><i class="fa-regular fa-folder" aria-hidden="true"></i> 葵花宝典</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="3848 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>面试   (六) :原理篇/2
+2015年11月25日 星期三
+10:09
+lldb（gdb）常用的调试命令？
+• po：打印对象，会调用对象description方法。是print-object的简写
+• expr：可以在调试时动态执行指定表达式，并将结果打印出来，很有用的命令
+• print：也是打印命令，需要指定类型
+• bt：打印调用堆栈，是thread backtrace的简写，加all可打印所有thread的堆栈
+• br l：是breakpoint list的简写
+BAD_ACCESS在什么情况下出现？
+•访问一个僵尸对象，访问僵尸对象的成员变量或者向其发消息
+•死循环
+如何调试BAD_ACCESS错误
+•设置全局断点快速定位问题代码所在行
+开启僵尸对象调试功能</p>
+<p>简述下Objective-C中调用方法的过程（runtime）
+• Objective-C是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)，整个过程介绍如下：
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类
+○然后在该类中的方法列表以及其父类方法列表中寻找方法运行
+○如果，在最顶层的父类（一般也就NSObject）中依然找不到相应的方法时，程序在运行时会挂掉并抛出异常unrecognized selector sent to XXX
+○但是在这之前，objc的运行时会给出三次拯救程序崩溃的机会，这三次拯救程序奔溃的说明见问题《什么时候会报unrecognized selector的异常》中的说明
+•补充说明：Runtime铸就了Objective-C是动态语言的特性，使得C语言具备了面向对象的特性，在程序运行期创建，检查，修改类、对象及其对应的方法，这些操作都可以使用runtime中的对应方法实现。</p>
+<p>什么是method swizzling（俗称黑魔法）
+•简单说就是进行方法交换
+•在Objective-C中调用一个方法，其实是向一个对象发送消息，查找消息的唯一依据是selector的名字。利用Objective-C的动态特性，可以实现在运行时偷换selector对应的方法实现，达到给方法挂钩的目的
+•每个类都有一个方法列表，存放着方法的名字和方法实现的映射关系，selector的本质其实就是方法名，IMP有点类似函数指针，指向具体的Method实现，通过selector就可以找到对应的IMP</p>
+<ul>
+<li>交换方法的几种实现方式
+<ul>
+<li>利用 method_exchangeImplementations 交换两个方法的实现</li>
+<li>利用 class_replaceMethod 替换方法的实现</li>
+<li>利用 method_setImplementation 来直接设置某个方法的IMP</li>
+</ul>
+</li>
+</ul>
+<p>objc中向一个nil对象发送消息将会发生什么？
+•在Objective-C中向nil发送消息是完全有效的——只是在运行时不会有任何作用
+○如果一个方法返回值是一个对象，那么发送给nil的消息将返回0(nil)
+○如果方法返回值为指针类型，其指针大小为小于或者等于sizeof(void*)
+○float，double，long double或者long long的整型标量，发送给nil的消息将返回0
+○如果方法返回值为结构体,发送给nil的消息将返回0。结构体中各个字段的值将都是0
+○如果方法的返回值不是上述提到的几种情况，那么发送给nil的消息的返回值将是未定义的
+•具体原因分析
+○ objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)
+○为了方便理解这个内容，还是贴一个objc的源代码</p>
+<p>struct objc_class
+{
+// isa指针指向Meta Class，因为Objc的类的本身也是一个Object，
+//为了处理这个关系，runtime就创造了Meta Class，
+//当给类发送[NSObject alloc]这样消息时，实际上是把这个消息发给了Class Object
+Class isa OBJC_ISA_AVAILABILITY;
+#if !<strong>OBJC2</strong>
+Class super_class OBJC2_UNAVAILABLE; //父类
+const char*name OBJC2_UNAVAILABLE;//类名
+longversion OBJC2_UNAVAILABLE;//类的版本信息，默认为0
+longinfo OBJC2_UNAVAILABLE;//类信息，供运行期使用的一些位标识
+longinstance_size OBJC2_UNAVAILABLE;//该类的实例变量大小
+structobjc_ivar_list *ivars OBJC2_UNAVAILABLE;//该类的成员变量链表
+structobjc_method_list **methodLists OBJC2_UNAVAILABLE;//方法定义的链表
+//方法缓存，对象接到一个消息会根据isa指针查找消息对象，
+//这时会在method Lists中遍历，
+//如果cache了，常用的方法调用时就能够提高调用的效率。
+//这个方法缓存只存在一份，不是每个类的实例对象都有一个方法缓存
+//子类会在自己的方法缓存中缓存父类的方法，父类在自己的方法缓存中也会缓存自己的方法，而不是说子类就不缓存父类方法了
+struct objc_cache *cache OBJC2_UNAVAILABLE;
+structobjc_protocol_list *protocols OBJC2_UNAVAILABLE;//协议链表
+#endif
+} OBJC2_UNAVAILABLE;
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类，然后在该类中的方法列表以及其父类方法列表中寻找方法运行，然后再发送消息的时候，objc_msgSend方法不会返回值，所谓的返回内容都是具体调用时执行的。
+○如果向一个nil对象发送消息，首先在寻找对象的isa指针时就是0地址返回了，所以不会出现任何错误</p>
+<p>objc中向一个对象发送消息[obj foo]和objc_msgSend()函数之间有什么关系？
+• [obj foo];在objc动态编译时，会被转意为：objc_msgSend(obj,@selector(foo));
+什么时候会报unrecognized selector的异常？
+•当调用该对象上某个方法,而该对象上没有实现这个方法的时候， 可以通过“消息转发”进行解决，如果还是不行就会报unrecognized selector异常
+• objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)，整个过程介绍如下：
+○ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找到该对象实际所属的类
+○然后在该类中的方法列表以及其父类方法列表中寻找方法运行
+○如果，在最顶层的父类中依然找不到相应的方法时，程序在运行时会挂掉并抛出异常unrecognized selector sent to XXX。但是在这之前，objc的运行时会给出三次拯救程序崩溃的机会
+•三次拯救程序崩溃的机会
+○ Method resolution
+§ objc运行时会调用+resolveInstanceMethod:或者+resolveClassMethod:，让你有机会提供一个函数实现。
+§如果你添加了函数并返回  YES，那运行时系统就会重新启动一次消息发送的过程
+§如果resolve方法返回NO，运行时就会移到下一步，消息转发
+○ Fast forwarding
+§如果目标对象实现了-forwardingTargetForSelector:，Runtime这时就会调用这个方法，给你把这个消息转发给其他对象的机会
+§只要这个方法返回的不是nil和self，整个消息发送的过程就会被重启，当然发送的对象会变成你返回的那个对象。
+§否则，就会继续Normal Fowarding。
+§这里叫Fast，只是为了区别下一步的转发机制。因为这一步不会创建任何新的对象，但Normal forwarding转发会创建一个NSInvocation对象，相对Normal forwarding转发更快点，所以这里叫Fast forwarding
+○ Normal forwarding
+§这一步是Runtime最后一次给你挽救的机会。
+§首先它会发送-methodSignatureForSelector:消息获得函数的参数和返回值类型。
+§如果-methodSignatureForSelector:返回nil，Runtime则会发出-doesNotRecognizeSelector:消息，程序这时也就挂掉了。
+§如果返回了一个函数签名，Runtime就会创建一个NSInvocation对象并发送-forwardInvocation:消息给目标对象</p>
+<p>HTTP协议中POST方法和GET方法有那些区别?
+• GET用于向服务器请求数据，POST用于提交数据
+• GET请求，请求参数拼接形式暴露在地址栏，而POST请求参数则放在请求体里面，因此GET请求不适合用于验证密码等操作
+• GET请求的URL有长度限制，POST请求不会有长度限制
+使用block时什么情况会发生引用循环，如何解决？
+在block内如何修改block外部变量？
+使用系统的某些block api（如UIView的block版本写动画时），是否也考虑循环引用问题？
+•系统的某些block api中，UIView的block版本写动画时不需要考虑，但也有一些api需要考虑
+•以下这些使用方式不会引起循环引用的问题</p>
+<p>[UIView animateWithDuration:duration animations:^
+{ [self.superview layoutIfNeeded]; }];
+[[NSOperationQueue mainQueue] addOperationWithBlock:^
+{ self.someProperty = xyz; }];
+[[NSNotificationCenter defaultCenter] addObserverForName:@&ldquo;someNotification&rdquo;
+object: nil
+queue:[NSOperationQueue mainQueue]
+usingBlock:^(NSNotification * notification)
+{ self.someProperty = xyz; }];
+•但如果方法中的一些参数是 成员变量，那么可以造成循环引用，如GCD、NSNotificationCenter调用就要小心一点，比如GCD内部如果引用了self，而且GCD的参数是 成员变量，则要考虑到循环引用，举例如下：
+○ GCD
+§分析：self&ndash;&gt;_operationsQueue&ndash;&gt;block&ndash;&gt;self形成闭环，就造成了循环引用</p>
+<p>__weak <strong>typeof</strong>(self) weakSelf =self;
+dispatch_group_async(_operationsGroup, _operationsQueue, ^
+{
+[weakSelf doSomething];
+[weakSelf doSomethingElse];
+} );
+○ NSNotificationCenter
+§分析：self&ndash;&gt;_observer&ndash;&gt;block&ndash;&gt;self形成闭环，就造成了循环引用
+○
+__weak <strong>typeof</strong>(self) weakSelf =self;
+_observer = [[NSNotificationCenter defaultCenter]
+addObserverForName: @&ldquo;testKey&rdquo;
+object: nil
+queue: nil
+usingBlock:^(NSNotification *note){
+[weakSelf dismissModalViewControllerAnimated: YES];
+}];</p>
+<p>已使用 Microsoft OneNote 2016 创建。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/" data-title="面试 6 原理篇_2"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-6-%E5%8E%9F%E7%90%86%E7%AF%87_2/" data-title="面试 6 原理篇_2"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/interview/%E9%9D%A2%E8%AF%95-5-ui%E7%AF%87/" class="post-nav-item" rel="prev" title="面试 5 UI篇"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>面试 5 UI篇</a><a href="/posts/interview/%E9%9D%A2%E8%AF%95-7-%E5%85%B6%E4%BB%96%E7%AF%87/" class="post-nav-item" rel="next" title="面试 7 其他篇">面试 7 其他篇<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/989e41771afd77e385f6bf3a06942171.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

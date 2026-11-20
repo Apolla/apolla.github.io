@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>3.1 异步序列 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="AsyncSequence 简介 AsyncSequence 是一个支持异步迭代的协议，它和 Sequence 非常类似，同样支持使用 for、while、repeat 循环访问子元素，也支持使用 map、filter、reduce 等高阶函数，只不过这些操作都是异步的。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='for, while, repeat, map, filter, reduce'>
+	<meta itemprop="name" content="3.1 异步序列">
+	<meta itemprop="description" content="AsyncSequence 简介 AsyncSequence 是一个支持异步迭代的协议，它和 Sequence 非常类似，同样支持使用 for、while、repeat 循环访问子元素，也支持使用 map、filter、reduce 等高阶函数，只不过这些操作都是异步的。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="1626">
+	<meta itemprop="keywords" content="for,while,repeat,map,filter,reduce"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="3.1 异步序列">
+	<meta property="og:description" content="AsyncSequence 简介 AsyncSequence 是一个支持异步迭代的协议，它和 Sequence 非常类似，同样支持使用 for、while、repeat 循环访问子元素，也支持使用 map、filter、reduce 等高阶函数，只不过这些操作都是异步的。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:tag" content="for">
+		<meta property="article:tag" content="while">
+		<meta property="article:tag" content="repeat">
+		<meta property="article:tag" content="map">
+		<meta property="article:tag" content="filter">
+		<meta property="article:tag" content="reduce">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="3.1 异步序列">
+  <meta name="twitter:description" content="AsyncSequence 简介 AsyncSequence 是一个支持异步迭代的协议，它和 Sequence 非常类似，同样支持使用 for、while、repeat 循环访问子元素，也支持使用 map、filter、reduce 等高阶函数，只不过这些操作都是异步的。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" title="3.1 异步序列 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" title="3.2 异步流" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" title="2.3 小结" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "3.1 异步序列",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97\/"
+    },"genre": "posts","keywords": "for, while, repeat, map, filter, reduce","wordcount":  1626 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>3.1 异步序列</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1626 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><h1 class="heading-element" id="asyncsequence-简介"><span>AsyncSequence 简介</span>
+  <a href="#asyncsequence-%e7%ae%80%e4%bb%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><a href="https://developer.apple.com/documentation/swift/asyncsequence" target="_blank" rel="external nofollow noopener noreferrer">AsyncSequence<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是一个支持异步迭代的协议，它和 <a href="https://developer.apple.com/documentation/swift/sequence" target="_blank" rel="external nofollow noopener noreferrer">Sequence<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 非常类似，同样支持使用 <code>for</code>、<code>while</code>、<code>repeat</code> 循环访问子元素，也支持使用 <code>map</code>、<code>filter</code>、<code>reduce</code> 等高阶函数，只不过这些操作都是异步的。</p>
+<p><code>URL</code> 在 iOS 15.0 内置了一个属性 <a href="https://developer.apple.com/documentation/foundation/url/3767315-lines" target="_blank" rel="external nofollow noopener noreferrer">line<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> ，它的定义如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">lines</span><span class="p">:</span> <span class="n">AsyncLineSequence</span><span class="p">&lt;</span><span class="n">URL</span><span class="p">.</span><span class="n">AsyncBytes</span><span class="p">&gt;</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>AsyncLineSequence</code> 是泛型结构体：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">AsyncLineSequence</span><span class="p">&lt;</span><span class="n">Base</span><span class="p">&gt;</span> <span class="k">where</span> <span class="n">Base</span> <span class="p">:</span> <span class="n">AsyncSequence</span><span class="p">,</span> <span class="n">Base</span><span class="p">.</span><span class="n">Element</span> <span class="p">==</span> <span class="nb">UInt8</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>我们在这里看到了 <code>AsyncSequence</code> 的身影，正是它赋予了 <code>URL</code> 异步获取数据的能力。我们来看看如下示例代码，它会逐行打印返回的内容：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">fetchLines</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">url</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="s">&#34;https://raw.githubusercontent.com/zzzwco/resources/main/eul/lovethree.txt&#34;</span><span class="p">)</span><span class="o">!</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="k">try</span> <span class="n">await</span> <span class="n">line</span> <span class="k">in</span> <span class="n">url</span><span class="p">.</span><span class="n">lines</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;###</span><span class="se">\n</span><span class="si">\(</span><span class="n">line</span><span class="si">)</span><span class="se">\n</span><span class="s">###</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">fetchLines</span><span class="p">()</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在介绍 <code>TaskGroup</code> 时，我们就已经遇到过使用 <code>for await</code> 进行异步迭代了，这是循环遍历 <code>AsyncSequence</code> 的常用方式。上例中还使用了 <code>try</code> ，是因为从网络获取数据可能会失败并抛出错误。这里我们没有在内部处理错误，而是选择了向外传递错误。</p>
+<p>和 <code>Sequence</code> 一样，异步序列也可以使用 <code>makeAsyncIterator()</code> 方法生成迭代器，然后不停地重复调用 <code>next()</code>，直到返回 nil 时循环结束。与 <code>Sequence</code> 不一样的是，这里的 <code>next()</code> 是使用 <code>async</code> 标记的异步方法，调用方需要使用 <code>await</code> 来标识等待单个异步结果的返回。</p>
+<p>实际上，编译器会将上面的 <code>for-try-await-in</code> 转换成如下代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">iterator</span> <span class="p">=</span> <span class="n">url</span><span class="p">.</span><span class="n">lines</span><span class="p">.</span><span class="n">makeAsyncIterator</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="kd">let</span> <span class="nv">line</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">iterator</span><span class="p">.</span><span class="n">next</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="bp">print</span><span class="p">(</span><span class="s">&#34;###</span><span class="se">\n</span><span class="si">\(</span><span class="n">line</span><span class="si">)</span><span class="se">\n</span><span class="s">###</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>我们也可以通过上面的代码获取迭代器，然后进行更多的操作，比如只获取第一行内容：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">if</span> <span class="kd">let</span> <span class="nv">first</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">iterator</span><span class="p">.</span><span class="n">next</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="bp">print</span><span class="p">(</span><span class="s">&#34;###</span><span class="se">\n</span><span class="si">\(</span><span class="bp">first</span><span class="si">)</span><span class="se">\n</span><span class="s">###</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>AsyncSequence</code> 支持常用的选择、查找等操作，比如判断异步结果是否包含 &ldquo;love&rdquo;：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">hasLove</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">url</span><span class="p">.</span><span class="n">lines</span><span class="p">.</span><span class="bp">contains</span><span class="p">{</span> <span class="nv">$0</span><span class="p">.</span><span class="bp">contains</span><span class="p">(</span><span class="s">&#34;love&#34;</span><span class="p">)</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">hasLove</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>还能进行各种转换操作，比如使用 <code>reduce</code> 方法拼接各个异步结果：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">res</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">url</span><span class="p">.</span><span class="n">lines</span><span class="p">.</span><span class="bp">reduce</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="o">+</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>对原有的异步序列进行转换操作时，会生成一个新的异步类型实例。比如下面的 <em>stream</em> 是经 <code>map</code> 操作后返回的 <code>AsyncMapSequence</code> 类型实例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">stream</span> <span class="p">=</span> <span class="n">url</span><span class="p">.</span><span class="n">lines</span><span class="p">.</span><span class="bp">map</span> <span class="p">{</span> <span class="n">v</span> <span class="p">-&gt;</span> <span class="nb">String</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="s">&#34;❤️</span><span class="si">\(</span><span class="n">v</span><span class="si">)</span><span class="s">❤️&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="k">try</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">stream</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>通过打印结果可以看出，每获取一行内容，<em>stream</em> 就进行一次转换操作。也就是说，异步序列的转换操作并不是等所有的结果返回之后才集中处理，这个操作是即时的。</p>
+<p>我们试着将如下代码删除：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">for</span> <span class="k">try</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">stream</span> <span class="p">{</span> <span class="c1">// -</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="c1">// -</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// -</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>结果控制台并没有打印任何东西，由于转换操作只是将原来的异步序列转换成另一种特定类型的异步序列，本质上它们都是异步序列。因此我们可以得出一个结论：异步序列只是定义了获取数据的方式，它并不生产和存储任何数据，只有数据被请求时，它才会作出响应。</p>
+<p>我们可以把异步序列想象成一个工厂，数据经过加工后然后返回。而转换操作就像把原来的工厂换成另一种特殊的工厂，但工厂的职责是一样的，只是返回的数据不一样。不管是什么工厂，它都不会自己生产数据。它是懒惰的，除非我们主动向它索要数据时，它才会向外部请求数据然后进行加工处理。它也是无私的，不会贪婪地存储数据，外部输入的数据经过加工后都会被送回给请求方。</p>
+<h1 class="heading-element" id="自定义-asyncsequence"><span>自定义 AsyncSequence</span>
+  <a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-asyncsequence" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>系统内置的许多类型都已经默认支持 <code>AsyncSequence</code>，比如 TaskGroup、URLSession、Notification 等，我们可以很方便地调用相应的 API 来实现功能，但有时候我们要实现自己的异步序列来满足特定的需求场景。</p>
+<p>要实现自定义异步序列，需要实现 <code>AsyncSequence</code> 协议，其定义如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">protocol</span> <span class="nc">AsyncSequence</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">associatedtype</span> <span class="n">AsyncIterator</span> <span class="p">:</span> <span class="n">AsyncIteratorProtocol</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">associatedtype</span> <span class="n">Element</span> <span class="k">where</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Element</span> <span class="p">==</span> <span class="kc">Self</span><span class="p">.</span><span class="n">AsyncIterator</span><span class="p">.</span><span class="n">Element</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">func</span> <span class="nf">makeAsyncIterator</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="kc">Self</span><span class="p">.</span><span class="n">AsyncIterator</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>要实现该协议，只需实现 <code>makeAsyncIterator()</code> 方法即可，该方法返回的是遵循 <code>AsyncIteratorProtocol</code> 的关联类型 <code>AsyncIterator</code> 实例。需要注意的是，另一个关联类型 <code>Element</code> 在这两个协议中需要保持类型一致。</p>
+<p><code>AsyncIteratorProtocol</code> 协议定义如下，实现 <code>next()</code> 方法即可实现该协议：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">protocol</span> <span class="nc">AsyncIteratorProtocol</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">associatedtype</span> <span class="n">Element</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">mutating</span> <span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="kc">Self</span><span class="p">.</span><span class="n">Element</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>了解了以上概念后，下面的示例就很好理解了。它实现的是给定一系列的底数和指数（以元组类型表示一对数据），对每对数据其进行指数计算，异步迭代返回幂值，这里我们使用 <code>Task.sleep</code> 将计算过程模拟成了耗时的异步事件。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">Power</span><span class="p">:</span> <span class="n">AsyncSequence</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">typealias</span> <span class="n">Element</span> <span class="p">=</span> <span class="n">CGFloat</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">input</span><span class="p">:</span> <span class="p">[(</span><span class="n">x</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">struct</span> <span class="nc">AsyncIterator</span><span class="p">:</span> <span class="n">AsyncIteratorProtocol</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">input</span><span class="p">:</span> <span class="p">[(</span><span class="n">x</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">idx</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kr">mutating</span> <span class="kd">func</span> <span class="nf">next</span><span class="p">()</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">Element</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">guard</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="bp">count</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">defer</span> <span class="p">{</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nv">v</span> <span class="p">=</span> <span class="n">input</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 模拟耗时的异步操作</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">Task</span> <span class="p">{</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">CGFloat</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">0.</span><span class="p">..</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">pow</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">task</span><span class="p">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">makeAsyncIterator</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">AsyncIterator</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">AsyncIterator</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="n">input</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">random</span> <span class="p">=</span> <span class="p">{</span> <span class="n">CGFloat</span><span class="p">(</span><span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="nv">$0</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">input</span> <span class="p">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">10</span><span class="p">).</span><span class="bp">map</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span> <span class="p">(</span><span class="n">random</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">Power</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" data-title="3.1 异步序列" data-hashtags="for,while,repeat,map,filter,reduce"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" data-hashtag="for"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" data-title="3.1 异步序列"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/for/" class="post-tag" title="标签 - for">for</a><a href="/tags/while/" class="post-tag" title="标签 - while">while</a><a href="/tags/repeat/" class="post-tag" title="标签 - repeat">repeat</a><a href="/tags/map/" class="post-tag" title="标签 - map">map</a><a href="/tags/filter/" class="post-tag" title="标签 - filter">filter</a><a href="/tags/reduce/" class="post-tag" title="标签 - reduce">reduce</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" class="post-nav-item" rel="prev" title="2.3 小结"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.3 小结</a><a href="/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" class="post-nav-item" rel="next" title="3.2 异步流">3.2 异步流<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/157c95fa89c99135ab7d3f876b0a8cd5.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>1.1 Combine 概览 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。
+Combine 框架包含三个核心概念：Publisher、Subscriber、Operator。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="1.1 Combine 概览">
+	<meta itemprop="description" content="WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。
+Combine 框架包含三个核心概念：Publisher、Subscriber、Operator。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="810">
+	<meta itemprop="keywords" content="SwiftUI"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="1.1 Combine 概览">
+	<meta property="og:description" content="WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。
+Combine 框架包含三个核心概念：Publisher、Subscriber、Operator。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="1.1 Combine 概览">
+  <meta name="twitter:description" content="WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。
+Combine 框架包含三个核心概念：Publisher、Subscriber、Operator。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/" title="1.1 Combine 概览 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.1-publisher-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E4%B8%80/" title="2.1 Publisher 的基本使用（一）" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.3-operators-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E4%B8%89/" title="4.3 Operators 使用手册（三）" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "1.1 Combine 概览",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.1-combine-%E6%A6%82%E8%A7%88\/"
+    },"genre": "posts","wordcount":  810 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.1-combine-%E6%A6%82%E8%A7%88\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>1.1 Combine 概览</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="810 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>WWDC 2019 上与声明式框架 SwiftUI 一同发布的，还有同等重要的响应式框架 Combine，它用于处理（异步）事件和数据流。随着 Concurrency 框架的发布和 SwiftUI 的不断完善，可能在实际开发中 Combine 直接露面的概率会越来越小。但它是 SwiftUI 简洁高效的基石，了解它有助于更好地理解和使用 SwiftUI。</p>
+<p>Combine 框架包含三个核心概念：Publisher、Subscriber、Operator。</p>
+<h1 class="heading-element" id="publisher发布者"><span>Publisher（发布者）</span>
+  <a href="#publisher%e5%8f%91%e5%b8%83%e8%80%85" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Publisher 是一个协议，遵循这个协议的对象，我们称之为发布者，它可以向订阅者（Subscriber）发送数据。</p>
+<p>一个发布者可以有多个订阅者，如果没有任何订阅者，那么数据流中不会产生任何数据。</p>
+<p>Publisher 定义了两个关联类型：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// Publisher 发送的数据</span>
+</span></span><span class="line"><span class="cl"><span class="n">associatedtype</span> <span class="n">Output</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 可能会遇到的错误</span>
+</span></span><span class="line"><span class="cl"><span class="n">associatedtype</span> <span class="n">Failure</span> <span class="p">:</span> <span class="n">Error</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="subscriber订阅者"><span>Subscriber（订阅者）</span>
+  <a href="#subscriber%e8%ae%a2%e9%98%85%e8%80%85" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>订阅者可以接收发布者发送的数据，与发布者类似，它也是一个协议，定义了两个关联类型：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// 从 Publisher 接收到的数据</span>
+</span></span><span class="line"><span class="cl"><span class="n">associatedtype</span> <span class="n">Input</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 可能接收到的错误</span>
+</span></span><span class="line"><span class="cl"><span class="n">associatedtype</span> <span class="n">Failure</span> <span class="p">:</span> <span class="n">Error</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>数据流中会随着时间的推移产生许多的数据，有一点是必须要遵守的：订阅者的 Input、Failure 必须要和发布者的 Output、Failure 保持类型一致。</p>
+<p>发布者和订阅者的关系可以用下图表示：</p>
+<p><img loading="lazy" src='/images/publisher_subscriber.png' alt="/images/publisher_subscriber.png"></p>
+<h1 class="heading-element" id="operator操作者"><span>Operator（操作者）</span>
+  <a href="#operator%e6%93%8d%e4%bd%9c%e8%80%85" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>我们可以把数据流想象成一条生产线，Publisher 位于上游，Subscriber 位于下游，而 Operator 则位于中游，它可以对数据流中产生的数据进行加工。Operator 不是必须存在的，只有我们需要它时才会调用。</p>
+<p>打个比方，Publisher 是牧场，发送一头头生猛的牛，中间有一系列的 Operators，有的 Operator 负责屠宰、有的负责运送、有的负责烹饪等等，最终到达 Subscriber 的是一块香喷喷的牛排！我们只需要享受美味即可，其它的工序交给中间的操作者去处理即可。当然，我们也可能收到一些意外情况，比如某个中间环节出了问题，最后我们收到的不是牛排，而是 Failure。</p>
+<p>以上就是 Combine 中最为关键的三个核心内容的概念性介绍，后续的主要内容都会围绕这三个概念展开。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/" data-title="1.1 Combine 概览"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/1.1-combine-%E6%A6%82%E8%A7%88/" data-title="1.1 Combine 概览"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/4.2-@globalactor@mainactor-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="4.2 @GlobalActor、@MainActor 的使用"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>4.2 @GlobalActor、@MainActor 的使用</a><a href="/posts/swiftui-eul/2.1-publisher-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E4%B8%80/" class="post-nav-item" rel="next" title="2.1 Publisher 的基本使用（一）">2.1 Publisher 的基本使用（一）<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/0c4138e79199b683f8130a835839ba35.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

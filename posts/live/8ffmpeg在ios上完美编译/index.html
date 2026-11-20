@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>8：FFmpeg在iOS上完美编译 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（https://github.com/kewlbear/FFmpeg-iOS-build-script），就可完美编译 准备条件
+先下载文件：https://github.com/libav/gas-preprocessor， 复制gas-preprocessor.pl到/usr/sbin下， 修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl 安装yasm 具体步骤如下：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="8：FFmpeg在iOS上完美编译">
+	<meta itemprop="description" content="最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（https://github.com/kewlbear/FFmpeg-iOS-build-script），就可完美编译 准备条件
+先下载文件：https://github.com/libav/gas-preprocessor， 复制gas-preprocessor.pl到/usr/sbin下， 修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl 安装yasm 具体步骤如下：">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="1146">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="8：FFmpeg在iOS上完美编译">
+	<meta property="og:description" content="最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（https://github.com/kewlbear/FFmpeg-iOS-build-script），就可完美编译 准备条件
+先下载文件：https://github.com/libav/gas-preprocessor， 复制gas-preprocessor.pl到/usr/sbin下， 修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl 安装yasm 具体步骤如下：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="8：FFmpeg在iOS上完美编译">
+  <meta name="twitter:description" content="最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（https://github.com/kewlbear/FFmpeg-iOS-build-script），就可完美编译 准备条件
+先下载文件：https://github.com/libav/gas-preprocessor， 复制gas-preprocessor.pl到/usr/sbin下， 修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl 安装yasm 具体步骤如下："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/" title="8：FFmpeg在iOS上完美编译 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/media/ffmpeg%E7%BC%96%E8%AF%91/" title="FFmpeg编译" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/" title="6：推荐的直播文章和rtmp直播地址" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "8：FFmpeg在iOS上完美编译",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91\/"
+    },"genre": "posts","wordcount":  1146 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>8：FFmpeg在iOS上完美编译</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="1146 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>最近刚接触ffmpeg,找了很多相关的编译资料，都没有编译成功，前几天在 github上找到一个脚本（<a href="https://github.com/kewlbear/FFmpeg-iOS-build-script" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/kewlbear/FFmpeg-iOS-build-script<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>），就可完美编译
+<strong>准备条件</strong></p>
+<ul>
+<li>先下载文件：<a href="https://github.com/libav/gas-preprocessor" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/libav/gas-preprocessor<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，
+复制gas-preprocessor.pl到/usr/sbin下，
+修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl</li>
+<li>安装yasm</li>
+</ul>
+<p><strong>具体步骤如下：</strong></p>
+<ol>
+<li>下载脚本：<a href="https://github.com/kewlbear/FFmpeg-iOS-build-script" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/kewlbear/FFmpeg-iOS-build-script<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解压，找到文件 build-ffmpeg.sh</li>
+<li>执行服本文件：./build-ffmpeg.sh, 由于本人没有事先安装Yasm 执行脚本文件会出错，
+如下：</li>
+</ol>
+<p>| 1
+2
+3
+4
+5
+6
+7
+8 | MAC:FFmpeg-iOS-build-script-master-2 jinsonglnan<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">.</mi><mi mathvariant="normal">/</mi><mi>b</mi><mi>u</mi><mi>i</mi><mi>l</mi><mi>d</mi><mo>−</mo><mi>f</mi><mi>f</mi><mi>m</mi><mi>p</mi><mi>e</mi><mi>g</mi><mi mathvariant="normal">.</mi><mi>s</mi><mi>h</mi><mi>Y</mi><mi>a</mi><mi>s</mi><mi>m</mi><mi>n</mi><mi>o</mi><mi>t</mi><mi>f</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>d</mi><mi>H</mi><mi>o</mi><mi>m</mi><mi>e</mi><mi>b</mi><mi>r</mi><mi>e</mi><mi>w</mi><mi>n</mi><mi>o</mi><mi>t</mi><mi>f</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>d</mi><mi mathvariant="normal">.</mi><mi>T</mi><mi>r</mi><mi>y</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>t</mi><mi>o</mi><mi>i</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>l</mi><mi>l</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi>W</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>p</mi><mi>s</mi><mo separator="true">,</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi>H</mi><mi>o</mi><mi>m</mi><mi>e</mi><mi>b</mi><mi>r</mi><mi>e</mi><mi>w</mi><mi>i</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>l</mi><mi>l</mi><mi>e</mi><mi>r</mi><mi>h</mi><mi>a</mi><mi>s</mi><mi>m</mi><mi>o</mi><mi>v</mi><mi>e</mi><mi>d</mi><mo stretchy="false">!</mo><mi>P</mi><mi>l</mi><mi>e</mi><mi>a</mi><mi>s</mi><mi>e</mi><mi>i</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>e</mi><mi>a</mi><mi>d</mi><mi>r</mi><mi>u</mi><mi>n</mi><mo>:</mo><mi>r</mi><mi>u</mi><mi>b</mi><mi>y</mi><mo>−</mo><mi>e</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex"> ./build-ffmpeg.sh 
+Yasm not found
+Homebrew not found. Trying to install...
+Whoops, the Homebrew installer has moved! Please instead run:
+ruby -e &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">./</span><span class="mord mathnormal">b</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mord">.</span><span class="mord mathnormal">s</span><span class="mord mathnormal" style="margin-right:0.2222em;">hY</span><span class="mord mathnormal">a</span><span class="mord mathnormal">s</span><span class="mord mathnormal">mn</span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mord mathnormal">n</span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mord mathnormal">t</span><span class="mord mathnormal">o</span><span class="mord mathnormal">in</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord">...</span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="mord mathnormal">h</span><span class="mord mathnormal">oo</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">h</span><span class="mord mathnormal" style="margin-right:0.0813em;">eH</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mord mathnormal">in</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mord mathnormal">ha</span><span class="mord mathnormal">s</span><span class="mord mathnormal">m</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mclose">!</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">se</span><span class="mord mathnormal">in</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">e</span><span class="mord">&quot;</span></span></span></span>(curl -fsSL <a href="https://raw.githubusercontent.com/Homebrew/install/master/install" target="_blank" rel="external nofollow noopener noreferrer">https://raw.githubusercontent.com/Homebrew/install/master/install<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>)&quot;
+Also, please ask wherever you got <strong>this</strong> link from to update it to the above.
+Trying to install Yasm&hellip;</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>./build-ffmpeg.sh: line 67: brew: command not found</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div><p>意思就是说，没有yasm, 看到提示执行 ruby -e &ldquo;<span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;安&quot; used in math mode [unicodeTextInMathMode] at position 81: …aster/install)&quot;安̲装](https://raw.…" style="color:#ff4949">(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;安装](https://raw.githubusercontent.com/Homebrew/install/master/install)%22安装)
+4.编译完成后，终端进入FFmpeg-iOS-build-script目录，然后输入./build-ffmpeg.sh lipo，这个命令是讲.a文件合并成一个
+5.把ffmpeg-iOS文件加入到工程中
+6.添加一个头文件引用 #include &quot;avformat.h&quot;
+添加一个api语句：av_register_all();给一个类文件.m后缀改为.mm，开启混编模式。
+运行工程，如果没有报错，则表明编译成功
+7.其他注意细节 
+编译的时候报错： &#x27;libavcodec/avcodec.h&#x27; file not found ，修改Header search paths 里的路径：</span>(PROJECT_DIR)/FFmpeg-iOS/include
+加入External libraries：</p>
+<p>| 1
+2
+3 | libz.dylib
+libbz2.dylib</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>libiconv.dylib</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div><p>8.编译好，写了个demo：<a href="http://download.csdn.net/detail/baitxaps/8657935" target="_blank" rel="external nofollow noopener noreferrer">点此下载<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/" data-title="8：FFmpeg在iOS上完美编译"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/" data-title="8：FFmpeg在iOS上完美编译"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/" class="post-nav-item" rel="prev" title="6：推荐的直播文章和rtmp直播地址"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>6：推荐的直播文章和rtmp直播地址</a><a href="/posts/live/1%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="post-nav-item" rel="next" title="1：技术分析与实现">1：技术分析与实现<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/2357ae797264f25fc215b66a326eeb4f.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

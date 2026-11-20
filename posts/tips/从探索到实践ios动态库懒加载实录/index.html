@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>从探索到实践，iOS动态库懒加载实录 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="导读 业务功能只增不减，图片已无压缩空间，业务代码无法快速下线，一个历经10年，由2000万条指令、6万多个类构成的APP如何才能在业务迭代过程中实现启动优化与下载优化？
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="从探索到实践，iOS动态库懒加载实录">
+	<meta itemprop="description" content="导读 业务功能只增不减，图片已无压缩空间，业务代码无法快速下线，一个历经10年，由2000万条指令、6万多个类构成的APP如何才能在业务迭代过程中实现启动优化与下载优化？">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="6729">
+	<meta itemprop="keywords" content="碎片芝士收藏"><meta property="og:url" content="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="从探索到实践，iOS动态库懒加载实录">
+	<meta property="og:description" content="导读 业务功能只增不减，图片已无压缩空间，业务代码无法快速下线，一个历经10年，由2000万条指令、6万多个类构成的APP如何才能在业务迭代过程中实现启动优化与下载优化？">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="从探索到实践，iOS动态库懒加载实录">
+  <meta name="twitter:description" content="导读 业务功能只增不减，图片已无压缩空间，业务代码无法快速下线，一个历经10年，由2000万条指令、6万多个类构成的APP如何才能在业务迭代过程中实现启动优化与下载优化？"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/" title="从探索到实践，iOS动态库懒加载实录 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/tips/%E5%85%B3%E4%BA%8E-app-store-%E8%8B%B9%E6%9E%9C%E5%95%86%E5%BA%97%E4%BB%B7%E6%A0%BC%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%8E%86%E4%B8%8A%E6%9C%80%E5%85%A8%E7%89%88-%E6%8E%98%E9%87%91/" title="关于 App Store 苹果商店价格的那些事（历上最全版） - 掘金" /><link rel="next" type="text/html" href="https://apolla.cc/posts/media/%E4%BC%A0%E8%BE%93%E5%B8%B8%E8%A7%81%E6%9E%B6%E6%9E%84/" title="传输常见架构" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "从探索到实践，iOS动态库懒加载实录",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/tips\/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95\/"
+    },"genre": "posts","wordcount":  6729 ,
+    "url": "https:\/\/apolla.cc\/posts\/tips\/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>从探索到实践，iOS动态库懒加载实录</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F/" class="post-category" title="分类 - 碎片芝士收藏"><i class="fa-regular fa-folder" aria-hidden="true"></i> 碎片芝士收藏</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="6729 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 6800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 14 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#导读">导读</a></li>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#业界调研">业界调研</a></li>
+    <li><a href="#方案及过程">方案及过程</a>
+      <ul>
+        <li><a href="#1如何识别sdk之间的依赖关系">1.如何识别SDK之间的依赖关系?</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#n_undf未定义">N_UNDF（未定义）;</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#2-动态库的依赖配置"><strong>2 动态库的依赖配置</strong></a></li>
+        <li><a href="#3如何降低业务代码的改动"><strong>3 如何降低业务代码的改动</strong></a></li>
+        <li></li>
+        <li><a href="#5-懒加载如何配置"><strong>5 懒加载如何配置</strong></a></li>
+        <li><a href="#6-懒加载如何调用"><strong>6 懒加载如何调用</strong></a></li>
+        <li><a href="#7-如何量化收益">7 如何量化收益</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></template><div class="content" id="content"><h2 class="heading-element" id="导读"><span>导读</span>
+  <a href="#%e5%af%bc%e8%af%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>业务功能只增不减，图片已无压缩空间，业务代码无法快速下线，一个历经10年，由2000万条指令、6万多个类构成的APP如何才能在业务迭代过程中实现启动优化与下载优化？</p>
+<h2 class="heading-element" id="背景"><span>背景</span>
+  <a href="#%e8%83%8c%e6%99%af" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>经过近10年的迭代，iOS客户端已经接入了几十个三方SDK，达到100余个静态库。这些SDK在启动阶段会启动和加载，如某SDK在启动阶段hook大量的系统方法，其中一个类的load方法的耗时就已经达到了数十ms。但是它的业务却处于二级页面，甚至更深的入口，因此很多用户在APP使用过程中都不会触发此业务场景，这就造成了启动任务的浪费。除此之外，iOS客户端一直在致力于降低APP的下载大小。图片压缩、无用代码删除等常规技术手段都经过尝试后，可优化的范围越来越小。通过与苹果的开发者关系部的多次沟通，苹果建议我们使用动态库来实现APP的增量更新。
+在版本迭代中，有些SDK的更新频率较低，也就是说用户更新前后的两个版本的SDK其实并无差异。App Store上提供了增量更新的功能，当APP中的文件前后两个版本不发生变化时，此部分数据不会被重复下载。我们通过测试发现，在iPhone 11 pro max等机型上，我们APP的10.3.1版本全量下载需要88MB流量，但是从10.2.5版本更新到10.3.1版本时只需要74MB的流量。目前我们只检测到App Store具备diff能力，TestFlight包并不具备此能力。基于以上背景，我们开始将APP的部分静态库转为动态库。</p>
+<h2 class="heading-element" id="业界调研"><span>业界调研</span>
+  <a href="#%e4%b8%9a%e7%95%8c%e8%b0%83%e7%a0%94" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>首先我们调研了业界的一部分APP，动态库在一些新APP上使用还是较为广泛的，尤其是引入Swift的APP。但是在一些大型APP上，则相对较为谨慎。除个别大型APP外，极少APP会使用动态库懒加载。</p>
+<h2 class="heading-element" id="方案及过程"><span>方案及过程</span>
+  <a href="#%e6%96%b9%e6%a1%88%e5%8f%8a%e8%bf%87%e7%a8%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在当前APP的架构下，我们是把所有的代码都打包成动态库，还是把一部分业务作出动态库，还是选取耗时且稳定的底层库作为动态库？这涉及到技术成本和收益的问题。由于动态库的吸附性，动态库经过编译链接后会将所依赖的代码和静态库一并打包到动态库中，因此需要避免这种情况，防止代码的重复引入。 （或者通过添加链接参数不将静态库打包到动态库中：other link flags 设置 -undefined dynamic_lookup。）因此现阶段的技术方案为，从架构底层开始，自下而上的进行动态库化。我们决定先将底层的不常变更的SDK优先制作成动态库。目前我们已经将13个SDK做成了动态库，并对其中的10个进行懒加载。
+在实际开发过程中，我们遇到了很多的问题。之前提到，很多新的APP都可以使用动态库，为什么老的业务复杂的APP不太容易做到全面动态库化呢？这里涉及到工程配置、项目架构、性能损耗及收益的权衡、动态库的特性等问题。在进行动态库化之前，我们使用的CocoaPods 版本为1.2版本，CocoaPods 1.2版本对动态库的兼容性略差，很多脚本和流程都需要自己引入。好在CocoaPods1.8 对动态库的支持很友好，架构剥离、重签名等流程已经实现了自动化。为了避免多个动态库吸附相同静态库导致包增大，我们目前采用的方式是从架构底层开始，自下而上的进行动态库化。现阶段采用的方式是将静态库放到独立的工程中编译链接成对应的动态库，然后将该动态库接入到项目中。
+“自下而上的进行动态库化”看起来很简单，但是实际操作中遇到了很多的问题。</p>
+<h3 class="heading-element" id="1如何识别sdk之间的依赖关系"><span>1.如何识别SDK之间的依赖关系?</span>
+  <a href="#1%e5%a6%82%e4%bd%95%e8%af%86%e5%88%absdk%e4%b9%8b%e9%97%b4%e7%9a%84%e4%be%9d%e8%b5%96%e5%85%b3%e7%b3%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>为什么要识别SDK之间的依赖关系？在项目中，三方SDK以及TEG、信安等部门提供的静态库文件数量总数达到了上百个。这些SDK之间存在复杂的依赖关系。这些依赖关系隐含在SDK内部，由于缺乏源码，我们很难直接通过文件来确定。但是如果不确定SDK之间的依赖关系，那么在生成动态库时会将只能目标SDK放入工程中，当缺乏目标SDK所依赖的其他SDK时会报错，然后通过报错提示我们再将所依赖的SDK转成动态库，此种方式效率较为低下。因此我们直接解析静态库的二进制文件，通过对静态库中所有目标文件的内外符号的识别，整理出静态库之间的依赖关系。
+<img loading="lazy" src='/images/ea429716505d327f97b9b6f495967454.png' alt="image.png"></p>
+<p>首先将静态库中的目标文件的符号表进行整合，梳理出每个目标文件的内部符号表和外部符号表。目标文件中存在一个符号表，符号表用于记录符号的类型和符号对应的地址。以iOS系统中的目标文件的符号表为例,其符号表结构体如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">nlist_64</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">union</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kt">uint32_t</span>  <span class="n">n_strx</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">n_un</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">n_type</span><span class="p">;</span>        
+</span></span><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">n_sect</span><span class="p">;</span>        
+</span></span><span class="line"><span class="cl"><span class="kt">uint16_t</span> <span class="n">n_desc</span><span class="p">;</span>       
+</span></span><span class="line"><span class="cl"><span class="kt">uint64_t</span> <span class="n">n_value</span><span class="p">;</span>      
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define N_UNDF  0x0     
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define N_ABS   0x2     
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define N_SECT  0xe     
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define N_PBUD  0xc     
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define N_INDR  0xa</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>在iOS中符号的n_type类型分为：</p>
+<h5 class="heading-element" id="n_undf未定义"><span>N_UNDF（未定义）;</span>
+  <a href="#n_undf%e6%9c%aa%e5%ae%9a%e4%b9%89" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h5><p>N_ABS（）;
+N_SECT（有定义）;
+N_PBUD（在动态库中定义）;
+N_INDR（间接类型）;
+5种类型。首先我们为每个目标文件创建两个集合表：外部符号表和内部符号表。我们将符号表中每个n_type为N_UNDF的符号放入外部符号表中。其他类型的符号放入内部符号表中。
+随后我们将静态库的每个目标文件的内部符号表和外部符号表进行整合，形成静态库级别的内部符号表和外部符号表。终根据静态库的内部符号和外部符号确立彼此的依赖关系。在此过程中，我们也发现1个小插曲，我们发现输出的结果存在一定的异常，如公司内部的SDK的依赖了第三方的某个SDK，这显然与事实不符。其原因为外部三方SDK自定义了系统库C函数，导致项目中所有的调用此函数的地方全部走到了这个SDK定义的函数中。</p>
+<h3 class="heading-element" id="2-动态库的依赖配置"><span><strong>2 动态库的依赖配置</strong></span>
+  <a href="#2-%e5%8a%a8%e6%80%81%e5%ba%93%e7%9a%84%e4%be%9d%e8%b5%96%e9%85%8d%e7%bd%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>假设有两个静态库A和B，A依赖B。如果A要做成动态库则需要将B打成动态库，然后将A的静态库和B的动态库放入一个动态库的工程项目中，编译链接后将生成A的动态库。假设B不放入动态库工程，则A无法链接成功，也就无法生成动态库。如果将问题进一步复杂化，假设有N个上层SDK，随机依赖了K个底层SDK，那么如何保证这上层SDK所依赖的每个底层SDK版本都是一致的呢？如果一旦更新一个底层SDK，那么是不是要同步修改N个动态库工程呢？这个问题简单的处理方式就是通过CocoaPods来实现管理，创建动态库工程组，当前CocoaPods 1.8 版本非常友好的解决了动态库的问题，在podfile中使用use_frameworks创建N+K个pod，Pod之间的依赖关系交给CocoaPods来管理。</p>
+<h3 class="heading-element" id="3如何降低业务代码的改动"><span><strong>3 如何降低业务代码的改动</strong></span>
+  <a href="#3%e5%a6%82%e4%bd%95%e9%99%8d%e4%bd%8e%e4%b8%9a%e5%8a%a1%e4%bb%a3%e7%a0%81%e7%9a%84%e6%94%b9%e5%8a%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>为了保持上层业务代码的保持不变，因此我们尽量保持头文件不发生变化。当.a文件转成.framework时，头文件单独剥离，不存放到framework中。如果是.framework静态库转为.framework动态库，则保持framework名称相同。头文件与原来的方式一致。资源方面不要打到动态库的framework中。如果资源加入asserts文件在framework下，那么在编译成动态库原有代码的访问方式无法访问到，可能会造成一些问题。另外，在这里需要提一下，如果静态库转为动态库时如果为同名framework，并且你的工程中将Other Linker Flags设置为-all_load，那么可能会存在报xxx_vers.o符号冲突错误。这是由于在生成framework时，Xcode动态的写入了xxx_vers.m文件并参与了编译和链接。那么在进行二次打包成framework时，编译器会再次写入xxx_vers.m。导致链接冲突。这种情况可以将静态库中每个架构下的xxx_vers.o文件剔除。（如何剔除文件：ar -x 将静态库拆分为目标文件，然后删除指定文件，再通过 libtool -static -o 将目标文件重新合并为静态库。）或者不要使用-all_load，改为-ObjC即可。</p>
+<h3 class="heading-element"><span></span>
+  <a href="#" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>4 development target 与bundle id
+在创建动态库时需要额外注意一点，动态库工程的development target 版本务必要小于等于iOS工程的版本号。这是由于在某些高版本打包出来的二进制与低版本的二进制不同。如果高版本的动态库运行在低版本的机型上会造成崩溃，这里与代码的API兼容无关，从底层的二进制就不兼容。另外每个动态库的bundle id必须保持，如果一个APP中两个动态库的bundle id 相同，则无法安装成功。用CocoaPods管理则不会出现此类问题。</p>
+<h3 class="heading-element" id="5-懒加载如何配置"><span><strong>5 懒加载如何配置</strong></span>
+  <a href="#5-%e6%87%92%e5%8a%a0%e8%bd%bd%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>众所周知，苹果不推荐过多的使用自定义动态库，因为非懒加载的动态库会造成额外的启动时间消耗。表 1 接入上述8个静态库demo时的pre main耗时</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>System Interface</th>
+            <th>Static Runtime Initialization</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>154ms</td>
+            <td></td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>| 37ms</p>
+<p>|
+| 147ms</p>
+<p>| 38ms</p>
+<p>|
+| 157ms</p>
+<p>| 34ms</p>
+<p>|</p>
+<p><strong>表 2 接入上述8个静态库demo对应的动态库</strong></p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>System Interface</th>
+            <th>Static Runtime Initialization</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>224ms</td>
+            <td></td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>| 40ms</p>
+<p>|
+| 224ms</p>
+<p>| 42ms</p>
+<p>|
+| 224ms</p>
+<p>| 43ms</p>
+<p>|</p>
+<p>业界通常认为的优化方案为进行动态库合并，将多个动态库合并为1个。经过测试后发现，动态库合并在iOS13系统的中高端设备上优化并不明显，但是iOS11上，用5s测试就能看出效果来。</p>
+<p><em>（推测有两方面原因：</em>
+1、<em>中高端设备性能太快，测试数据又太小，数据不明显。</em>
+2、<em>iOS11上使用dyld2加载动态库，ios 13上使用dyld3加载动态库，dyld3优化了启动时间。）</em></p>
+<p>终我们没有采用动态库合并的方式，这是因为动态库合并违背了我们的架构解耦原则。如果实现动态库合并，那么在多APP代码复用的背景下，业务APP使用了其中的一个SDK，就需要将整个集合引入到APP中，这一点不符合我们的业务背景。</p>
+<p><strong>表 3 接入上述8个demo动态库并懒加载</strong></p>
+<p>|</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>System Interface</th>
+            <th>Static Runtime Initialization</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>150ms</td>
+            <td></td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>| 8ms</p>
+<p>|
+| 125ms</p>
+<p>| 7ms</p>
+<p>|
+| 126ms</p>
+<p>| 7ms</p>
+<p>|</p>
+<p>采用懒加载的话，动态库在启动时并不加载，而是在业务使用时再进行加载，从而优化了启动耗时。</p>
+<p>那么如何进行懒加载呢？</p>
+<p>在升级到CocoaPods1.8后，CocoaPods1.2上可以配置动态库懒加载的入口已经没了，自定义动态库体现在哪里呢？开始怀疑在CocoaPods 自动生成的Pods-xxx-frameworks.sh 脚本中，但是实际上这个脚本并不控制链接，这个脚本负责架构剔除及重签名等。静态库与动态库的链接在xcconfig文件中配置，修改xcconfig每次编译立即生效，如果不生效那么需要检查build setting 中是否还有相关链接配置。</p>
+<p>因此可以在pod install 后每次都修改xcconfig文件，让懒加载的动态库只参与签名与拷贝，不参与链接。在这里需要注意的是如果你的动态库没有剥离符号表，那么请在发版前将其从动态库中剥离保存，像我们这样在使用CocoaPods静态库模式来接入动态库的方案，符号表需要自己管理。</p>
+<h3 class="heading-element" id="6-懒加载如何调用"><span><strong>6 懒加载如何调用</strong></span>
+  <a href="#6-%e6%87%92%e5%8a%a0%e8%bd%bd%e5%a6%82%e4%bd%95%e8%b0%83%e7%94%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>动态库懒加载由于动态库在代码编译时不参与链接，因此通过原有的方式调用代码会报链接错误，找不到动态库对应的符号。因此调用动态库的地方需要修改为runtime动态调用。目前的懒加载实现方式比较简单，当使用某个类时，动态获取这个类，如果获取不到这个类，则加载相应的动态库。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"> <span class="n">dlopen</span><span class="p">([</span><span class="n">path</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="n">RTLD_LAZY</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>可能有同学比较关注dlopen可能带来的风险，苹果是不推荐使用dlopen的，但是目前没有遇到相关审核问题。另外可能一部分同学比较关注dlopen的失败率，通过埋点我们监测到，dlopen确实会存在不到万分之一的卡死概率。其实系统库内部也存在一些懒加载，如果感兴趣的话可以通过注册监听来断点查看。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">extern</span> <span class="n">void</span> <span class="n">_dyld_register_func_for_add_image</span><span class="p">(</span><span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="kd">func</span><span class="p">)(</span><span class="n">const</span> <span class="kd">struct</span> <span class="nc">mach_header</span><span class="o">*</span> <span class="n">mh</span><span class="p">,</span> <span class="n">intptr_t</span> <span class="n">vmaddr_slide</span><span class="p">))</span>    
+</span></span><span class="line"><span class="cl"><span class="n">__OSX_AVAILABLE_STARTING</span><span class="p">(</span><span class="n">__MAC_10_1</span><span class="p">,</span> <span class="n">__IPHONE_2_0</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>由于懒加载动态库的代码调用为动态调用的方式，因此在接口较多、变更频繁、调用处较多的SDK并不适合做动态库懒加载。而那些代码稳定、接口较为收敛，业务调用收敛的SDK较适合做动态库懒加载。也就是说，如果你能掌握SDK所有的调用处，并且这些SDK即无法推动下线，又不经常使用，那么把它作为动态库懒加载还是比较合适的。在SDK接口收敛的前提下，我们可以将SDK的类映射成对应的协议。如果类的参数递归扩展，那么想办法用ID代替，如果还不能解决收敛问题，那么就不要使用懒加载了，否则可能由1个协议引申出多个协议，工作量大大增加。以科大讯飞SDK为例，终的代码调用如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">DylibRedefineClass</span><span class="p">(</span><span class="n">IFlySpeechRecognizer</span><span class="p">)</span> <span class="n">iflySpeechRecognizer</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">iflySpeechRecognizer</span> <span class="p">=</span> <span class="p">[</span><span class="n">DylibObtainClass</span><span class="p">(</span><span class="n">IFlySpeechRecognizer</span><span class="p">)</span> <span class="n">sharedInstance</span><span class="p">];</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>只需要声明变量和获取类，API和代码调用都不需要变动。runtime虽然灵活，但是也带来1个问题：如果动态库升级了，API存在变动怎么办?
+虽然懒加载动态库的前提是不做频繁升级和变更，但是一旦升级则可能引起灾难性的后果，即API发生变更，编译却正常通过。因为我们编译是依赖协议进行的，及时API发生了变更很可能负责升级的同学并没有对协议进行升级。这就容易让后续升级维护的带来风险。因此我们针对这种情况作了自动检测，在启动时通过runtime进行检测。在开发阶段，每个动态懒加载的类都会被自动插入一个自检函数，在启动时会检测该类是否都能响应其对应协议的所有函数。这里有个问题需要注意下，如果协议没有被任何类标记为遵循，那么通过runtime是获取不到的，如果你在开发时发现通过runtime获取不到协议，那么试着将其标记为被遵循。另外，我们在开发中还遇到一个小问题，有些SDK在打成动态库后如果不采用懒加载的方式会报链接失败，这是由于SDK中有些类或符号被标记为隐藏。
+<strong>attribute</strong>((visibility(&ldquo;hidden&rdquo;))) //设置为符号不导出，在export info 中没有相关符号。
+遇到这种情况就只能采用懒加载或者是保持静态库的方式了。</p>
+<h3 class="heading-element" id="7-如何量化收益"><span>7 如何量化收益</span>
+  <a href="#7-%e5%a6%82%e4%bd%95%e9%87%8f%e5%8c%96%e6%94%b6%e7%9b%8a" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>收益可以分为2部分，一个是APP更新大小的减少，另一个是启动耗时的减少。
+• APP更新大小的减少 很遗憾，由于只有App Store包才具备diff下载的能力，通过TF包没法检测，因此这部分数据很难量化。并且，App Store在下载时会对下载数据进行压缩，可能单台设备200MB左右的安装大小，其实下载大小还不到100MB，各个机型下载大小的数据可以在App Store后台看到。
+• 启动优化量化 启动优化量化这块还是有现成方案可以借鉴的，但是我们终还是使用instrument来进行统计。之所以使用instrument有以下两点原因：
+（1）、我们不需要运行期间收集数据， 开发阶段单台设备采集数据即可。
+（2）、rebase 和 bind的优化时间目前通过代码还监控不到。
+在这里提一个小问题，大家都知道dyld会先加载可执行程序所依赖的多个动态库，程序在启动时是加载完一个动态库后立即调用这个库中的load方法吗？
+之所以提出这个问题是因为开始我们想通过代码拿到动态库从在load方法调用前的耗时。开始选择的技术方案是通过：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">_dyld_register_func_for_add_image</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>注册image的加载时间，当系统加载image时会将事件回调给我们。那么我们在回调开始时打点计时，当连续两个回调打点时，其时间差即可认为是这个动态库的加载耗时。但是在实践时发现，当我们进行注册时，回调函数密集回调，时间间隔极其短，这是因为_dyld_register_func_for_add_image在注册时会将已经加载的镜像一并返回。原因是image在加载后并不是同步立即加载这个库中的所有load方法。如何论证呢？创建一个哨兵动态库，让这个动态库先参与链接。在哨兵动态库的类的load方法中注册_dyld_register_func_for_add_image回调。运行后发现，在执行哨兵库的类的load方法执行时，_dyld_register_func_for_add_image会同步执行多次回调，获取image的名字会发现我们自定义的动态库都已经回调，只是对应的动态库的load方法都还没有执行。因此通过_dyld_register_func_for_add_image无法获取到每个动态库的加载时间。从dyld的源码中也可以看出来dyld是先通知runtime让动态库先初始化，然后再让主应用进行初始化。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">initializeMainExecutable</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">gLinkContext</span><span class="p">.</span><span class="n">startedInitializingMainExecutable</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">ImageLoader</span><span class="o">::</span><span class="n">InitializerTimingList</span> <span class="n">initializerTimes</span><span class="p">[</span><span class="n">allImagesCount</span><span class="p">()];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">initializerTimes</span><span class="p">[].</span><span class="n">count</span> <span class="o">=</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">size_t</span> <span class="n">rootCount</span> <span class="o">=</span> <span class="n">sImageRoots</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">rootCount</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rootCount</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sImageRoots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">runInitializers</span><span class="p">(</span><span class="n">gLinkContext</span><span class="p">,</span> <span class="n">initializerTimes</span><span class="p">[]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">sMainExecutable</span><span class="o">-&gt;</span><span class="n">runInitializers</span><span class="p">(</span><span class="n">gLinkContext</span><span class="p">,</span> <span class="n">initializerTimes</span><span class="p">[]);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">gLibSystemHelpers</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="p">)</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">gLibSystemHelpers</span><span class="o">-&gt;</span><span class="n">cxa_atexit</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">runAllStaticTerminators</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">sEnv</span><span class="p">.</span><span class="n">DYLD_PRINT_STATISTICS</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ImageLoader</span><span class="o">::</span><span class="n">printStatistics</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">allImagesCount</span><span class="p">(),</span> <span class="n">initializerTimes</span><span class="p">[]);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="n">sEnv</span><span class="p">.</span><span class="n">DYLD_PRINT_STATISTICS_DETAILS</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ImageLoaderMachO</span><span class="o">::</span><span class="n">printStatisticsDetails</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">allImagesCount</span><span class="p">(),</span> <span class="n">initializerTimes</span><span class="p">[]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>动态库懒加载优化主要在三个方面：</p>
+<p>• 将代码从可执行文件中剥离出来，减少了可执行文件rebase 和 bind的时间；</p>
+<p>• 懒加载动态库的load、contructor函数、静态变量初始化的时机延后，在dlopen后调用；</p>
+<p>• 还有隐藏的一块是被该SDK依赖的系统动态库可能由于我们懒加载相应的SDK后也被间接懒加载。</p>
+<p>其实减少系统动态库的依赖数量要比单纯的SDK动态库懒加载要更为有效。如果要做到减少对系统库的依赖，首先我们就要确定哪些SDK或代码依赖了哪些系统库，如果不太复杂那么可以考虑将其处理成动态库进行懒加载。这一步可能还需要跟业务结合做评估。在启动优化方面，这也是个值得努力的方向。</p>
+<p><strong>总结</strong></p>
+<p>目前我们累计通过动态库懒加载所达到的优化在iPhone 6Plus ( iOS 12)设备上为817ms 左右，相当于优化了12%的启动速度。动态库懒加载与其他方案相比，其优势是具有长期优化的空间。缺点为懒加载增加了代码维护成本。另外，在降低更新大小上，不太好量化具体的收益，但是根据苹果的答复应该是有效果的，只是我们还没有找到很好的量化方法。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/" data-title="从探索到实践，iOS动态库懒加载实录"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/tips/%E4%BB%8E%E6%8E%A2%E7%B4%A2%E5%88%B0%E5%AE%9E%E8%B7%B5ios%E5%8A%A8%E6%80%81%E5%BA%93%E6%87%92%E5%8A%A0%E8%BD%BD%E5%AE%9E%E5%BD%95/" data-title="从探索到实践，iOS动态库懒加载实录"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/tips/xcode15%E4%B8%8Eios1717.1-%E7%9C%9F%E6%9C%BA%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86_xcode-%E7%9C%9F%E6%9C%BA%E6%B5%8B%E8%AF%95/" class="post-nav-item" rel="prev" title="XCode15与iOS17!17.1 真机测试问题处理_xcode 真机测试"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>XCode15与iOS17!17.1 真机测试问题处理_xcode 真机测试</a><a href="/posts/tips/%E5%85%B3%E4%BA%8E-app-store-%E8%8B%B9%E6%9E%9C%E5%95%86%E5%BA%97%E4%BB%B7%E6%A0%BC%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%8E%86%E4%B8%8A%E6%9C%80%E5%85%A8%E7%89%88-%E6%8E%98%E9%87%91/" class="post-nav-item" rel="next" title="关于 App Store 苹果商店价格的那些事（历上最全版） - 掘金">关于 App Store 苹果商店价格的那些事（历上最全版） - 掘金<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/075b77301861f3f8b33f73707033f7fe.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

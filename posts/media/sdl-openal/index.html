@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>SDL OpenAL - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="1.引言 SDL (Simple DirectMedia Layer) 是一个跨平台的开源多媒体库，它提供了访问音频、键盘、鼠标、操纵杆以及图形硬件的底层接口。SDL 可用于开发游戏、仿真器、媒体播放器等多种类型的应用程序。 1.1 SDL 的背景与应用领域 SDL 由 Sam Lantinga 开发，最早发布于 1998 年。SDL 的设计目标是提供一个简单、轻量级且高效的多媒体库，使得开发者能够轻松地创建跨平台的应用程序。SDL 支持多种操作系统，包括 Windows、macOS、Linux、iOS 和 Android。 SDL 的应用领域广泛，它常被用于以下场景：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="SDL OpenAL">
+	<meta itemprop="description" content="1.引言 SDL (Simple DirectMedia Layer) 是一个跨平台的开源多媒体库，它提供了访问音频、键盘、鼠标、操纵杆以及图形硬件的底层接口。SDL 可用于开发游戏、仿真器、媒体播放器等多种类型的应用程序。 1.1 SDL 的背景与应用领域 SDL 由 Sam Lantinga 开发，最早发布于 1998 年。SDL 的设计目标是提供一个简单、轻量级且高效的多媒体库，使得开发者能够轻松地创建跨平台的应用程序。SDL 支持多种操作系统，包括 Windows、macOS、Linux、iOS 和 Android。 SDL 的应用领域广泛，它常被用于以下场景：">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="12686">
+	<meta itemprop="keywords" content="音视频"><meta property="og:url" content="https://apolla.cc/posts/media/sdl-openal/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="SDL OpenAL">
+	<meta property="og:description" content="1.引言 SDL (Simple DirectMedia Layer) 是一个跨平台的开源多媒体库，它提供了访问音频、键盘、鼠标、操纵杆以及图形硬件的底层接口。SDL 可用于开发游戏、仿真器、媒体播放器等多种类型的应用程序。 1.1 SDL 的背景与应用领域 SDL 由 Sam Lantinga 开发，最早发布于 1998 年。SDL 的设计目标是提供一个简单、轻量级且高效的多媒体库，使得开发者能够轻松地创建跨平台的应用程序。SDL 支持多种操作系统，包括 Windows、macOS、Linux、iOS 和 Android。 SDL 的应用领域广泛，它常被用于以下场景：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SDL OpenAL">
+  <meta name="twitter:description" content="1.引言 SDL (Simple DirectMedia Layer) 是一个跨平台的开源多媒体库，它提供了访问音频、键盘、鼠标、操纵杆以及图形硬件的底层接口。SDL 可用于开发游戏、仿真器、媒体播放器等多种类型的应用程序。 1.1 SDL 的背景与应用领域 SDL 由 Sam Lantinga 开发，最早发布于 1998 年。SDL 的设计目标是提供一个简单、轻量级且高效的多媒体库，使得开发者能够轻松地创建跨平台的应用程序。SDL 支持多种操作系统，包括 Windows、macOS、Linux、iOS 和 Android。 SDL 的应用领域广泛，它常被用于以下场景："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/media/sdl-openal/" title="SDL OpenAL - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-1-%E5%9F%BA%E7%A1%80%E7%AF%87/" title="面试 1 基础篇" /><link rel="next" type="text/html" href="https://apolla.cc/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" title="Runloop实际使用" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/media/sdl-openal/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "SDL OpenAL",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/media\/sdl-openal\/"
+    },"genre": "posts","wordcount":  12686 ,
+    "url": "https:\/\/apolla.cc\/posts\/media\/sdl-openal\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>SDL OpenAL</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" class="post-category" title="分类 - 音视频"><i class="fa-regular fa-folder" aria-hidden="true"></i> 音视频</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="12686 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 12700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 26 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#2-sdl基本概念与架构">2. SDL基本概念与架构</a>
+      <ul>
+        <li><a href="#sdl的设计原则与模块架构">SDL的设计原则与模块架构</a></li>
+        <li><a href="#sdl版本sdl-12与sdl-20">SDL版本：SDL 1.2与SDL 2.0</a></li>
+        <li><a href="#跨平台支持windowslinuxmacos等">跨平台支持：Windows、Linux、macOS等</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-初始化与窗口创建">3. 初始化与窗口创建</a>
+      <ul>
+        <li><a href="#sdl初始化与库设置">SDL初始化与库设置</a></li>
+        <li><a href="#窗口创建与渲染器初始化">窗口创建与渲染器初始化</a></li>
+        <li><a href="#设置视频模式与全屏切换">设置视频模式与全屏切换</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-图形绘制与纹理管理">4. 图形绘制与纹理管理</a>
+      <ul>
+        <li><a href="#sdl_surface与sdl_texture概念">SDL_Surface与SDL_Texture概念</a></li>
+        <li><a href="#图形绘制点线矩形与多边形">图形绘制：点、线、矩形与多边形</a>
+          <ul>
+            <li><a href="#绘制点">绘制点</a></li>
+            <li><a href="#绘制线">绘制线</a></li>
+            <li><a href="#绘制矩形">绘制矩形</a></li>
+            <li><a href="#绘制多边形">绘制多边形</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-图像加载与纹理操作">5. 图像加载与纹理操作</a>
+      <ul>
+        <li><a href="#图像加载">图像加载</a></li>
+        <li><a href="#纹理操作">纹理操作</a>
+          <ul>
+            <li><a href="#设置纹理透明度">设置纹理透明度</a></li>
+            <li><a href="#设置纹理颜色调制">设置纹理颜色调制</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-纹理剪裁与动画实现">6. 纹理剪裁与动画实现</a>
+      <ul>
+        <li><a href="#纹理剪裁">纹理剪裁</a></li>
+        <li><a href="#动画实现">动画实现</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#sdl音频模块简介">SDL音频模块简介</a></li>
+    <li><a href="#加载与播放音效与音乐">加载与播放音效与音乐</a></li>
+    <li><a href="#音频控制音量循环与暂停等">音频控制：音量、循环与暂停等</a></li>
+    <li><a href="#音频格式与解码库的选择">音频格式与解码库的选择</a>
+      <ul>
+        <li><a href="#常见音频格式">常见音频格式：</a></li>
+        <li><a href="#音频解码库">音频解码库：</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#sdl事件系统简介">SDL事件系统简介</a></li>
+    <li><a href="#键盘与鼠标事件处理">键盘与鼠标事件处理</a></li>
+    <li><a href="#游戏手柄与触摸输入支持">游戏手柄与触摸输入支持</a></li>
+    <li><a href="#自定义事件与事件过滤">自定义事件与事件过滤</a>
+      <ul>
+        <li><a href="#自定义事件">自定义事件</a></li>
+        <li><a href="#事件过滤">事件过滤</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#使用sdl_ttf库处理truetype字体">使用SDL_ttf库处理TrueType字体</a></li>
+    <li><a href="#文本渲染与字体样式">文本渲染与字体样式</a></li>
+    <li><a href="#多语言文本支持与unicode">多语言文本支持与Unicode</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sdl_net网络模块简介">SDL_net网络模块简介</a></li>
+    <li><a href="#tcp与udp通信实现">TCP与UDP通信实现</a>
+      <ul>
+        <li><a href="#tcp通信">TCP通信</a></li>
+        <li><a href="#udp通信">UDP通信</a></li>
+      </ul>
+    </li>
+    <li><a href="#多人游戏架构与同步策略">多人游戏架构与同步策略</a>
+      <ul>
+        <li><a href="#状态同步">状态同步</a></li>
+        <li><a href="#输入同步">输入同步</a></li>
+        <li><a href="#混合同步">混合同步</a></li>
+      </ul>
+    </li>
+    <li><a href="#实战案例基于sdl的网络游戏">实战案例：基于SDL的网络游戏</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sdl性能特点与优化策略">SDL性能特点与优化策略</a></li>
+    <li><a href="#跨平台开发注意事项">跨平台开发注意事项</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><h1 class="heading-element" id="1引言"><span>1.引言</span>
+  <a href="#1%e5%bc%95%e8%a8%80" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>SDL (Simple DirectMedia Layer) 是一个跨平台的开源多媒体库，它提供了访问音频、键盘、鼠标、操纵杆以及图形硬件的底层接口。SDL 可用于开发游戏、仿真器、媒体播放器等多种类型的应用程序。
+1.1 SDL 的背景与应用领域
+SDL 由 Sam Lantinga 开发，最早发布于 1998 年。SDL 的设计目标是提供一个简单、轻量级且高效的多媒体库，使得开发者能够轻松地创建跨平台的应用程序。SDL 支持多种操作系统，包括 Windows、macOS、Linux、iOS 和 Android。
+SDL 的应用领域广泛，它常被用于以下场景：</p>
+<ul>
+<li>游戏开发：SDL 提供了 2D 图形渲染、音频播放、用户输入处理等基本功能，使得开发者能够快速搭建游戏框架。</li>
+<li>媒体播放器：借助 SDL，开发者可以轻松地创建多媒体播放器，实现音频和视频的播放、暂停、快进等操作。</li>
+<li>仿真器和模拟器：SDL 适用于开发各种仿真器和模拟器，如游戏机模拟器、硬件模拟器等。</li>
+<li>图形应用程序：SDL 可以用于开发各种图形界面应用程序，如图像编辑器、数据可视化工具等。</li>
+</ul>
+<p>1.2 SDL 相对于其他游戏开发库的优势
+相比于其他游戏开发库，SDL 具有以下优势：</p>
+<ol>
+<li>跨平台：SDL 支持多种操作系统，开发者只需编写一次代码，就可以在不同平台上运行。这大大减少了开发和维护的成本。</li>
+<li>开源：SDL 是一个开源项目，开发者可以自由使用和修改源代码。这使得 SDL 具有很高的灵活性和可定制性。</li>
+<li>简单易用：SDL 的 API 设计简洁易懂，开发者可以快速上手。此外，SDL 提供了丰富的文档和示例，方便开发者学习和参考。</li>
+<li>轻量级：SDL 是一个轻量级的库，它不包含复杂的游戏引擎功能，而是专注于提供基本的多媒体接口。这使得 SDL 的性能非常高，适用于对性能要求较高的应用程序。</li>
+</ol>
+<h2 class="heading-element" id="2-sdl基本概念与架构"><span>2. SDL基本概念与架构</span>
+  <a href="#2-sdl%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5%e4%b8%8e%e6%9e%b6%e6%9e%84" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="sdl的设计原则与模块架构"><span>SDL的设计原则与模块架构</span>
+  <a href="#sdl%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99%e4%b8%8e%e6%a8%a1%e5%9d%97%e6%9e%b6%e6%9e%84" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>简单直接媒体层（Simple DirectMedia Layer，SDL）是一个跨平台的开源C库，用于处理图形、音频、输入和其他多媒体组件。SDL旨在提供一个简单、统一的接口，让开发者能够方便地创建各种应用，如游戏、仿真器和其他交互式软件。
+SDL的主要设计原则是易用性和可移植性。其模块架构主要包括以下几个部分：</p>
+<ol>
+<li><strong>视频（Video）</strong>：SDL提供了对视频输出的抽象，支持多种图形渲染方式，如软件渲染、OpenGL、Direct3D等。它还提供了对2D图形的基本绘制操作，如矩形填充、线条绘制等。</li>
+<li><strong>音频（Audio）</strong>：SDL提供了对音频设备的抽象，支持多种音频格式和音频混合。它还提供了简单的音频回放和录制功能。</li>
+<li><strong>输入（Input）</strong>：SDL支持键盘、鼠标、触摸屏和游戏控制器等多种输入设备。它提供了一种统一的事件处理机制，使得开发者可以方便地处理不同类型的输入事件。</li>
+<li><strong>定时器（Timer）</strong>：SDL提供了对时间和定时器的抽象，使得开发者可以实现帧率控制、动画等功能。</li>
+<li><strong>文件 I/O（File I/O）</strong>：SDL还提供了一个简单的文件I/O抽象层，支持从文件系统或者内存中读取文件。</li>
+</ol>
+<h3 class="heading-element" id="sdl版本sdl-12与sdl-20"><span>SDL版本：SDL 1.2与SDL 2.0</span>
+  <a href="#sdl%e7%89%88%e6%9c%acsdl-12%e4%b8%8esdl-20" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>SDL有两个主要版本：SDL 1.2和SDL 2.0。SDL 1.2是较旧的版本，虽然现在已经很少使用，但在某些情况下仍然会被保留。
+SDL 2.0是最新的版本，相较于SDL 1.2，它带来了许多改进和新特性，如硬件加速渲染、多窗口支持、更好的输入设备支持等。开发者应优先选择SDL 2.0进行项目开发。</p>
+<h3 class="heading-element" id="跨平台支持windowslinuxmacos等"><span>跨平台支持：Windows、Linux、macOS等</span>
+  <a href="#%e8%b7%a8%e5%b9%b3%e5%8f%b0%e6%94%af%e6%8c%81windowslinuxmacos%e7%ad%89" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>SDL（Simple DirectMedia Layer）是一个跨平台的多媒体开发库，它提供了一套简单的接口，帮助开发者轻松实现音频、视频、输入等多媒体应用程序。其中一个显著特点就是跨平台支持。下面我们就来详细了解一下SDL跨平台支持的实现原理。
+首先，跨平台支持的实现主要依赖于SDL内部对不同平台的底层API进行抽象和封装。例如，在Windows平台上，SDL使用DirectX API作为底层图形和音频API，在macOS上，它使用Core Audio和Core Video API，在Linux上，它使用ALSA（Advanced Linux Sound Architecture）和OpenGL等。通过对底层API的抽象和封装，SDL为开发者提供了一致的接口，使得开发者能够以相同的方式使用不同平台上的底层API。这样，开发者只需编写一套代码，就能在多个平台上运行。
+其次，SDL还提供了一些跨平台的工具和功能，如文件操作、事件处理、定时器等，这些工具和功能都可以在不同的平台上使用。例如，SDL提供了一个跨平台的文件读写函数，使得开发者能够在不同的平台上以相同的方式读写文件。SDL还提供了一些事件处理函数，如鼠标、键盘、触摸屏等，这些事件处理函数可以在不同的平台上使用，并提供了一致的接口。此外，SDL还提供了一个跨平台的定时器函数，使得开发者能够在不同的平台上以相同的方式管理定时器。
+最后，SDL提供了一个跨平台的编译工具链，使得开发者能够在不同的平台上使用相同的编译器和工具。例如，SDL提供了一个跨平台的Makefile，使得开发者能够在不同的平台上使用相同的Makefile文件进行编译和构建。这些工具和功能都为开发者提供了跨平台开发和维护应用程序的便利。
+总的来说，SDL的跨平台支持主要依赖于其对底层API的抽象和封装、提供的跨平台工具和功能以及跨平台编译工具链等。这些特点使得开发者能够以相同的方式使用SDL来开发和维护多个平台上的应用程序，从而大大降低了开发和维护的成本。</p>
+<h2 class="heading-element" id="3-初始化与窗口创建"><span>3. 初始化与窗口创建</span>
+  <a href="#3-%e5%88%9d%e5%a7%8b%e5%8c%96%e4%b8%8e%e7%aa%97%e5%8f%a3%e5%88%9b%e5%bb%ba" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="sdl初始化与库设置"><span>SDL初始化与库设置</span>
+  <a href="#sdl%e5%88%9d%e5%a7%8b%e5%8c%96%e4%b8%8e%e5%ba%93%e8%ae%be%e7%bd%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在开始使用SDL时，首先需要对SDL进行初始化。初始化的主要目的是准备SDL库，使其能够正常工作。通过调用SDL_Init函数并传入相应的子系统标志（如SDL_INIT_VIDEO，SDL_INIT_AUDIO等），可以实现对SDL子系统的初始化。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL.h&gt;int main(int argc, char* argv[]) {if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) &lt; 0) {printf(&#34;Unable to initialize SDL: %s\n&#34;, SDL_GetError());return 1;}// Your code here...SDL_Quit();return 0;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在程序结束时，应调用SDL_Quit函数，以释放资源并关闭SDL。</p>
+<h3 class="heading-element" id="窗口创建与渲染器初始化"><span>窗口创建与渲染器初始化</span>
+  <a href="#%e7%aa%97%e5%8f%a3%e5%88%9b%e5%bb%ba%e4%b8%8e%e6%b8%b2%e6%9f%93%e5%99%a8%e5%88%9d%e5%a7%8b%e5%8c%96" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>创建窗口是使用SDL进行图形输出的第一步。可以通过调用SDL_CreateWindow函数创建一个窗口。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Window* window = SDL_CreateWindow(&#34;My SDL Window&#34;,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,640, 480,SDL_WINDOW_SHOWN);
+</span></span><span class="line"><span class="cl">if (window == nullptr) {printf(&#34;Could not create window: %s\n&#34;, SDL_GetError());return 1;
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>SDL_CreateWindow函数接收窗口标题、位置、大小等参数。创建成功后，返回一个指向窗口的指针。
+接下来，需要创建一个与窗口关联的渲染器。渲染器用于绘制图形并显示到窗口上。可以使用SDL_CreateRenderer函数创建一个渲染器：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+</span></span><span class="line"><span class="cl">if (renderer == nullptr) {printf(&#34;Could not create renderer: %s\n&#34;, SDL_GetError());return 1;
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在程序结束时，需要使用SDL_DestroyRenderer和SDL_DestroyWindow函数销毁渲染器和窗口。</p>
+<h3 class="heading-element" id="设置视频模式与全屏切换"><span>设置视频模式与全屏切换</span>
+  <a href="#%e8%ae%be%e7%bd%ae%e8%a7%86%e9%a2%91%e6%a8%a1%e5%bc%8f%e4%b8%8e%e5%85%a8%e5%b1%8f%e5%88%87%e6%8d%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在SDL中，可以通过设置窗口的模式来切换全屏模式。可以使用SDL_SetWindowFullscreen函数实现全屏切换：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) &lt; 0) {printf(&#34;Failed to switch to fullscreen: %s\n&#34;, SDL_GetError());
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>要从全屏模式切换回窗口模式，可以调用SDL_SetWindowFullscreen函数并传入0：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_SetWindowFullscreen(window, 0);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>此外，可以通过SDL_SetWindowSize和SDL_SetWindowPosition函数调整窗口的大小和位置。</p>
+<h2 class="heading-element" id="4-图形绘制与纹理管理"><span>4. 图形绘制与纹理管理</span>
+  <a href="#4-%e5%9b%be%e5%bd%a2%e7%bb%98%e5%88%b6%e4%b8%8e%e7%ba%b9%e7%90%86%e7%ae%a1%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="sdl_surface与sdl_texture概念"><span>SDL_Surface与SDL_Texture概念</span>
+  <a href="#sdl_surface%e4%b8%8esdl_texture%e6%a6%82%e5%bf%b5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在SDL中，SDL_Surface和SDL_Texture是两个核心概念，用于表示图像数据。
+SDL_Surface是一个包含像素数据的结构，用于表示位图图像。它包含图像的宽度、高度、像素格式以及指向像素数据的指针。通过操作SDL_Surface，可以实现对图像的加载、修改、存储等功能。
+SDL_Texture则是一个与渲染器关联的GPU纹理对象。与SDL_Surface不同，SDL_Texture是存储在显存中的，因此可以通过硬件加速进行绘制。使用SDL_Texture进行绘制时，效率通常会更高。
+在绘制图像时，通常需要将SDL_Surface转换为SDL_Texture。可以通过SDL_CreateTextureFromSurface函数实现这一转换：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="图形绘制点线矩形与多边形"><span>图形绘制：点、线、矩形与多边形</span>
+  <a href="#%e5%9b%be%e5%bd%a2%e7%bb%98%e5%88%b6%e7%82%b9%e7%ba%bf%e7%9f%a9%e5%bd%a2%e4%b8%8e%e5%a4%9a%e8%be%b9%e5%bd%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在SDL中，可以使用渲染器提供的一些基本绘图函数进行图形绘制。</p>
+<h4 class="heading-element" id="绘制点"><span>绘制点</span>
+  <a href="#%e7%bb%98%e5%88%b6%e7%82%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>要绘制一个点，可以使用SDL_RenderDrawPoint函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // 设置绘制颜色为红色
+</span></span><span class="line"><span class="cl">SDL_RenderDrawPoint(renderer, x, y); // 绘制点(x, y)</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="绘制线"><span>绘制线</span>
+  <a href="#%e7%bb%98%e5%88%b6%e7%ba%bf" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>要绘制一条线段，可以使用SDL_RenderDrawLine函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // 设置绘制颜色为绿色
+</span></span><span class="line"><span class="cl">SDL_RenderDrawLine(renderer, x1, y1, x2, y2); // 绘制从(x1, y1)到(x2, y2)的线段</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="绘制矩形"><span>绘制矩形</span>
+  <a href="#%e7%bb%98%e5%88%b6%e7%9f%a9%e5%bd%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>要绘制一个矩形，可以使用SDL_RenderDrawRect函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Rect rect;
+</span></span><span class="line"><span class="cl">rect.x = x;
+</span></span><span class="line"><span class="cl">rect.y = y;
+</span></span><span class="line"><span class="cl">rect.w = width;
+</span></span><span class="line"><span class="cl">rect.h = height;SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // 设置绘制颜色为蓝色
+</span></span><span class="line"><span class="cl">SDL_RenderDrawRect(renderer, &amp;rect); // 绘制矩形</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>要绘制一个填充矩形，可以使用SDL_RenderFillRect函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); // 设置绘制颜色为黄色
+</span></span><span class="line"><span class="cl">SDL_RenderFillRect(renderer, &amp;rect); // 绘制填充矩形</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="绘制多边形"><span>绘制多边形</span>
+  <a href="#%e7%bb%98%e5%88%b6%e5%a4%9a%e8%be%b9%e5%bd%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>SDL本身不提供绘制多边形的函数。如果需要绘制多边形，可以使用第三方库，例如SDL_gfx。</p>
+<h2 class="heading-element" id="5-图像加载与纹理操作"><span>5. 图像加载与纹理操作</span>
+  <a href="#5-%e5%9b%be%e5%83%8f%e5%8a%a0%e8%bd%bd%e4%b8%8e%e7%ba%b9%e7%90%86%e6%93%8d%e4%bd%9c" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在SDL中，可以使用SDL_image库加载常见的图像格式（如JPEG、PNG等）。
+首先，需要安装SDL_image库并将其包含到项目中。
+在C++代码中，需要包含SDL_image头文件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL_image.h&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="图像加载"><span>图像加载</span>
+  <a href="#%e5%9b%be%e5%83%8f%e5%8a%a0%e8%bd%bd" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>要加载一张图像，可以使用IMG_Load函数。这个函数会返回一个SDL_Surface指针，之后可以将其转换为SDL_Texture：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Surface* surface = IMG_Load(&#34;path/to/image.png&#34;);
+</span></span><span class="line"><span class="cl">if (!surface) {// 处理图像加载错误
+</span></span><span class="line"><span class="cl">}SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+</span></span><span class="line"><span class="cl">if (!texture) {// 处理纹理创建错误
+</span></span><span class="line"><span class="cl">}SDL_FreeSurface(surface); // 释放已不再使用的SDL_Surface</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="纹理操作"><span>纹理操作</span>
+  <a href="#%e7%ba%b9%e7%90%86%e6%93%8d%e4%bd%9c" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><h4 class="heading-element" id="设置纹理透明度"><span>设置纹理透明度</span>
+  <a href="#%e8%ae%be%e7%bd%ae%e7%ba%b9%e7%90%86%e9%80%8f%e6%98%8e%e5%ba%a6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>要设置纹理的透明度，可以使用SDL_SetTextureAlphaMod函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Uint8 alpha = 128; // 透明度取值范围为0-255，0为完全透明，255为不透明
+</span></span><span class="line"><span class="cl">SDL_SetTextureAlphaMod(texture, alpha);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="设置纹理颜色调制"><span>设置纹理颜色调制</span>
+  <a href="#%e8%ae%be%e7%bd%ae%e7%ba%b9%e7%90%86%e9%a2%9c%e8%89%b2%e8%b0%83%e5%88%b6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p>要设置纹理的颜色调制，可以使用SDL_SetTextureColorMod函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Uint8 r = 255, g = 255, b = 255; // 设置纹理颜色调制为白色
+</span></span><span class="line"><span class="cl">SDL_SetTextureColorMod(texture, r, g, b);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="6-纹理剪裁与动画实现"><span>6. 纹理剪裁与动画实现</span>
+  <a href="#6-%e7%ba%b9%e7%90%86%e5%89%aa%e8%a3%81%e4%b8%8e%e5%8a%a8%e7%94%bb%e5%ae%9e%e7%8e%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="纹理剪裁"><span>纹理剪裁</span>
+  <a href="#%e7%ba%b9%e7%90%86%e5%89%aa%e8%a3%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>要实现纹理剪裁，可以在调用SDL_RenderCopy函数时传入表示剪裁矩形的SDL_Rect：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Rect src_rect;
+</span></span><span class="line"><span class="cl">src_rect.x = x;
+</span></span><span class="line"><span class="cl">src_rect.y = y;
+</span></span><span class="line"><span class="cl">src_rect.w = width;
+</span></span><span class="line"><span class="cl">src_rect.h = height;SDL_Rect dst_rect;
+</span></span><span class="line"><span class="cl">dst_rect.x = dst_x;
+</span></span><span class="line"><span class="cl">dst_rect.y = dst_y;
+</span></span><span class="line"><span class="cl">dst_rect.w = width;
+</span></span><span class="line"><span class="cl">dst_rect.h = height;SDL_RenderCopy(renderer, texture, &amp;src_rect, &amp;dst_rect);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>src_rect表示源纹理中需要剪裁的矩形区域，dst_rect表示绘制到目标窗口的位置和大小。</p>
+<h3 class="heading-element" id="动画实现"><span>动画实现</span>
+  <a href="#%e5%8a%a8%e7%94%bb%e5%ae%9e%e7%8e%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>要实现简单的帧动画，可以将动画帧组合成一张图像，然后通过纹理剪裁实现动画效果。
+以下是一个简单的动画实现示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="k">const</span> <span class="ne">int</span> <span class="n">kFrameWidth</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="ne">int</span> <span class="n">kFrameHeight</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="ne">int</span> <span class="n">kNumFrames</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="n">SDL_Rect</span> <span class="n">src_rect</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">src_rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">src_rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">src_rect</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">kFrameWidth</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">src_rect</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">kFrameHeight</span><span class="p">;</span><span class="n">SDL_Rect</span> <span class="n">dst_rect</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">dst_rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">dst_x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">dst_rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">dst_y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">dst_rect</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">kFrameWidth</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">dst_rect</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">kFrameHeight</span><span class="p">;</span><span class="ne">int</span> <span class="n">current_frame</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Uint32</span> <span class="n">last_frame_time</span> <span class="o">=</span> <span class="n">SDL_GetTicks</span><span class="p">();</span><span class="k">while</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="p">{</span><span class="o">//</span> <span class="o">...</span><span class="n">Uint32</span> <span class="n">current_time</span>  <span class="o">=</span> <span class="n">SDL_GetTicks</span><span class="p">();</span><span class="k">if</span> <span class="p">(</span><span class="n">current_time</span> <span class="o">-</span> <span class="n">last_frame_time</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span> <span class="o">//</span> <span class="err">动画帧切换的时间间隔（单位：毫秒）</span><span class="n">current_frame</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">kNumFrames</span><span class="p">;</span><span class="n">src_rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">current_frame</span> <span class="o">*</span> <span class="n">kFrameWidth</span><span class="p">;</span><span class="n">last_frame_time</span> <span class="o">=</span> <span class="n">current_time</span><span class="p">;}</span><span class="o">//</span> <span class="err">绘制当前帧</span><span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">texture</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">src_rect</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst_rect</span><span class="p">);</span><span class="o">//</span> <span class="o">...</span><span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="err">```在这个示例中，我们使用了一个循环计算当前帧的时间与上一帧的时间差，当时间差大于设定的间隔时，切换到下一帧。通过这种方式，可以实现简单的帧动画效果。</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>在这个示例中，我们使用了一个循环计算当前帧的时间与上一帧的时间差，当时间差大于设定的间隔时，切换到下一帧。通过这种方式，可以实现简单的帧动画效果。</p>
+<h1 class="heading-element" id="7音频播放与管理"><span>7.音频播放与管理</span>
+  <a href="#7%e9%9f%b3%e9%a2%91%e6%92%ad%e6%94%be%e4%b8%8e%e7%ae%a1%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="sdl音频模块简介"><span>SDL音频模块简介</span>
+  <a href="#sdl%e9%9f%b3%e9%a2%91%e6%a8%a1%e5%9d%97%e7%ae%80%e4%bb%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL (Simple DirectMedia Layer) 提供了处理音频的模块，允许开发者在不同平台上实现音频播放、音效加载、音量控制等功能。SDL支持多种音频格式，包括WAV，MP3，OGG等。使用SDL处理音频可以简化跨平台音频播放的实现。</p>
+<h2 class="heading-element" id="加载与播放音效与音乐"><span>加载与播放音效与音乐</span>
+  <a href="#%e5%8a%a0%e8%bd%bd%e4%b8%8e%e6%92%ad%e6%94%be%e9%9f%b3%e6%95%88%e4%b8%8e%e9%9f%b3%e4%b9%90" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>使用SDL播放音频分为两个主要步骤：加载音频文件，然后播放音频。这里我们介绍如何使用SDL_mixer库来实现这些功能。</p>
+<ol>
+<li>首先，需要安装SDL_mixer库。在Ubuntu下，可以使用如下命令安装：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install libsdl2-mixer-dev</span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol>
+<li>加载与播放音效：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#include &lt;SDL2/SDL.h&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;SDL2/SDL_mixer.h&gt;int main(int argc, char* argv[]) {// 初始化SDLSDL_Init(SDL_INIT_AUDIO);// 初始化SDL_mixer库Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);// 加载音效Mix_Chunk *sound_effect = Mix_LoadWAV(&#34;sound_effect.wav&#34;);if (!sound_effect) {printf(&#34;Error loading sound effect: %s\n&#34;, Mix_GetError());return 1;}// 播放音效Mix_PlayChannel(-1, sound_effect, 0);// 等待音效播放完毕SDL_Delay(2000);// 释放资源并关闭库Mix_FreeChunk(sound_effect);Mix_CloseAudio();SDL_Quit();return 0;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol>
+<li>加载与播放音乐：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#include &lt;SDL2/SDL.h&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;SDL2/SDL_mixer.h&gt;int main(int argc, char* argv[]) {// 初始化SDLSDL_Init(SDL_INIT_AUDIO);// 初始化SDL_mixer库Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);// 加载音乐Mix_Music *music = Mix_LoadMUS(&#34;music.mp3&#34;);if (!music) {printf(&#34;Error loading music: %s\n&#34;, Mix_GetError());return 1;}// 播放音乐Mix_PlayMusic(music, -1);// 等待音乐播放完毕SDL_Delay(10000);// 释放资源并关闭库Mix_FreeMusic(music);Mix_CloseAudio();SDL_Quit();return 0;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="音频控制音量循环与暂停等"><span>音频控制：音量、循环与暂停等</span>
+  <a href="#%e9%9f%b3%e9%a2%91%e6%8e%a7%e5%88%b6%e9%9f%b3%e9%87%8f%e5%be%aa%e7%8e%af%e4%b8%8e%e6%9a%82%e5%81%9c%e7%ad%89" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>使用SDL_mixer库，我们可以实现音频播放的控制，包括调整音量、设置循环播放、暂停和恢复等。</p>
+<ol>
+<li>设置音量：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 设置音效音量
+</span></span><span class="line"><span class="cl">Mix_VolumeChunk(sound_effect, MIX_MAX_VOLUME / 2);// 设置音乐音量
+</span></span><span class="line"><span class="cl">Mix_VolumeMusic(MIX_MAX_VOLUME / 2);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="2">
+<li>循环播放：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 循环播放音效放音效(-1, sound_effect, -1); // -1 表示无限循环// 循环播放音乐
+</span></span><span class="line"><span class="cl">Mix_PlayMusic(music, -1); // -1 表示无限循环</span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="3">
+<li>暂停与恢复：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 暂停音效
+</span></span><span class="line"><span class="cl">Mix_Pause(channel); // “channel”是播放音效时返回的通道值// 恢复音效
+</span></span><span class="line"><span class="cl">Mix_Resume(channel);// 暂停音乐
+</span></span><span class="line"><span class="cl">Mix_PauseMusic();// 恢复音乐</span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="4">
+<li>停止播放：</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 停止播放音效
+</span></span><span class="line"><span class="cl">Mix_HaltChannel(channel);// 停止播放音乐
+</span></span><span class="line"><span class="cl">Mix_HaltMusic();</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>通过上述控制，我们可以实现更加丰富的音频播放功能，如音量调节、循环播放、暂停、恢复和停止等，满足各种场景的需求。</p>
+<h2 class="heading-element" id="音频格式与解码库的选择"><span>音频格式与解码库的选择</span>
+  <a href="#%e9%9f%b3%e9%a2%91%e6%a0%bc%e5%bc%8f%e4%b8%8e%e8%a7%a3%e7%a0%81%e5%ba%93%e7%9a%84%e9%80%89%e6%8b%a9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在处理音频时，我们需要关注音频格式和解码库的选择。不同的音频格式有不同的特性，如文件大小、压缩率、音质等。根据实际需求，我们可以选择合适的音频格式和解码库来实现对音频文件的处理。</p>
+<h3 class="heading-element" id="常见音频格式"><span>常见音频格式：</span>
+  <a href="#%e5%b8%b8%e8%a7%81%e9%9f%b3%e9%a2%91%e6%a0%bc%e5%bc%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ol>
+<li>WAV：无损音频格式，文件较大，音质较好，但不适用于需要压缩的场景。</li>
+<li>MP3：有损音频格式，文件较小，音质较好，广泛应用于音乐播放等场景。</li>
+<li>OGG：开源的有损音频格式，具有良好的压缩比和音质，适用于游戏和多媒体应用。</li>
+<li>FLAC：无损音频格式，文件较大，音质极佳，适用于音频存储和高保真音频播放。</li>
+</ol>
+<h3 class="heading-element" id="音频解码库"><span>音频解码库：</span>
+  <a href="#%e9%9f%b3%e9%a2%91%e8%a7%a3%e7%a0%81%e5%ba%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ol>
+<li>libsndfile：支持多种音频格式的解码，如WAV、AIFF、FLAC等。</li>
+<li>libmad：用于解码MP3音频文件的库。</li>
+<li>libvorbis：用于解码OGG音频文件的库。</li>
+<li>libFLAC：用于解码FLAC音频文件的库。</li>
+</ol>
+<p>在选择音频格式和解码库时，需要权衡文件大小、音质、解码效率等因素，以满足实际应用的需求。例如，对于游戏和多媒体应用，OGG格式可能是一个较好的选择，因为它提供了良好的压缩比和音质。而对于需要高保真音频的场景，FLAC格式可能是更合适的选择。不同的解码库可以支持不同的音频格式，我们需要根据实际需求选择合适的解码库。</p>
+<h1 class="heading-element" id="8-事件处理与用户输入"><span>8. 事件处理与用户输入</span>
+  <a href="#8-%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86%e4%b8%8e%e7%94%a8%e6%88%b7%e8%be%93%e5%85%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>在游戏和多媒体应用中，事件处理和用户输入是至关重要的部分。SDL提供了一套简洁的事件系统，用于处理各种类型的用户输入。</p>
+<h2 class="heading-element" id="sdl事件系统简介"><span>SDL事件系统简介</span>
+  <a href="#sdl%e4%ba%8b%e4%bb%b6%e7%b3%bb%e7%bb%9f%e7%ae%80%e4%bb%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL事件系统处理来自操作系统的各种输入事件，例如键盘、鼠标、触摸屏等。SDL将这些输入事件封装成SDL_Event结构体，并通过SDL_PollEvent()或SDL_WaitEvent()函数将它们放入事件队列。</p>
+<h2 class="heading-element" id="键盘与鼠标事件处理"><span>键盘与鼠标事件处理</span>
+  <a href="#%e9%94%ae%e7%9b%98%e4%b8%8e%e9%bc%a0%e6%a0%87%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL支持对键盘和鼠标事件的处理。对于键盘事件，我们关注SDL_KEYDOWN和SDL_KEYUP事件，它们分别表示按键按下和释放。我们可以从SDL_Event结构体中的key.keysym.sym字段获取具体的按键信息。
+对于鼠标事件，我们关注SDL_MOUSEMOTION（鼠标移动）、SDL_MOUSEBUTTONDOWN（鼠标按键按下）和SDL_MOUSEBUTTONUP（鼠标按键释放）事件。我们可以从SDL_Event结构体的相关字段获取鼠标位置、按键信息等。</p>
+<h2 class="heading-element" id="游戏手柄与触摸输入支持"><span>游戏手柄与触摸输入支持</span>
+  <a href="#%e6%b8%b8%e6%88%8f%e6%89%8b%e6%9f%84%e4%b8%8e%e8%a7%a6%e6%91%b8%e8%be%93%e5%85%a5%e6%94%af%e6%8c%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL还支持游戏手柄和触摸屏输入。对于游戏手柄，我们需要先使用SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER)初始化游戏控制器子系统。然后，我们可以监听SDL_CONTROLLERBUTTONDOWN、SDL_CONTROLLERBUTTONUP等事件来处理游戏手柄输入。
+对于触摸屏输入，SDL提供了一系列API用于处理多点触控事件。例如，我们可以使用SDL_Finger结构体获取触摸点的信息，并监听SDL_FINGERMOTION、SDL_FINGERDOWN和SDL_FINGERUP等事件来处理触摸输入。</p>
+<h2 class="heading-element" id="自定义事件与事件过滤"><span>自定义事件与事件过滤</span>
+  <a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e4%ba%8b%e4%bb%b6%e4%b8%8e%e4%ba%8b%e4%bb%b6%e8%bf%87%e6%bb%a4" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在某些情况下，我们需要在应用程序中创建和处理自定义事件，或者对特定类型的事件进行过滤。SDL提供了一套API来实现这些功能。</p>
+<h3 class="heading-element" id="自定义事件"><span>自定义事件</span>
+  <a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e4%ba%8b%e4%bb%b6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>要创建自定义事件，首先需要定义一个新的事件类型。可以使用SDL_RegisterEvents函数来注册一个或多个事件类型。此函数返回一个新的事件类型ID，或在失败时返回-1。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Uint32 CUSTOM_EVENT_TYPE = SDL_RegisterEvents(1);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>接着，我们可以创建一个新的SDL_Event结构体，并设置其类型为自定义事件类型。最后，使用SDL_PushEvent函数将自定义事件压入事件队列。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SDL_Event custom_event;
+</span></span><span class="line"><span class="cl">custom_event.type = CUSTOM_EVENT_TYPE;
+</span></span><span class="line"><span class="cl">// 设置其他字段（例如custom_event.user.code等）SDL_PushEvent(&amp;custom_event);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在事件处理循环中，我们可以检查SDL_Event结构体的类型字段，以判断是否收到了自定义事件。</p>
+<h3 class="heading-element" id="事件过滤"><span>事件过滤</span>
+  <a href="#%e4%ba%8b%e4%bb%b6%e8%bf%87%e6%bb%a4" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>要对特定类型的事件进行过滤，可以使用SDL_SetEventFilter函数。该函数接受一个回调函数作为参数，此回调函数用于处理和过滤事件。事件过滤器的回调函数的原型如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">int SDLCALL event_filter(void *userdata, SDL_Event *event);</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>此回调函数返回1表示允许事件通过，返回0表示阻止事件通过。在以下示例中，我们创建了一个事件过滤器，它只允许键盘和鼠标事件通过：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">int event_filter(void *userdata, SDL_Event *event) {if (event-&gt;type == SDL_KEYDOWN || event-&gt;type == SDL_KEYUP || event-&gt;type == SDL_MOUSEMOTION || event-&gt;type == SDL_MOUSEBUTTONDOWN || event-&gt;type == SDL_MOUSEBUTTONUP) {return 1; // 允许事件通过}return 0; // 阻止其他事件通过
+</span></span><span class="line"><span class="cl">}int main() {// ...SDL_SetEventFilter(event_filter, nullptr);// ...
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>注意，在设置事件过滤器时，要谨慎处理。如果过滤器过于严格，可能导致应用程序无法正常响应用户输入。</p>
+<h1 class="heading-element" id="9-字体与文本渲染"><span>9. 字体与文本渲染</span>
+  <a href="#9-%e5%ad%97%e4%bd%93%e4%b8%8e%e6%96%87%e6%9c%ac%e6%b8%b2%e6%9f%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>处理文本和字体是游戏和多媒体应用的一个重要部分。SDL_ttf是一个独立的库，用于处理TrueType字体和文本渲染。</p>
+<h2 class="heading-element" id="使用sdl_ttf库处理truetype字体"><span>使用SDL_ttf库处理TrueType字体</span>
+  <a href="#%e4%bd%bf%e7%94%a8sdl_ttf%e5%ba%93%e5%a4%84%e7%90%86truetype%e5%ad%97%e4%bd%93" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>首先需要下载并安装SDL_ttf库。在安装后，需要在项目中包含SDL_ttf.h头文件，并链接到SDL_ttf库。以下是初始化SDL_ttf库和加载字体文件的示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#include &lt;SDL_ttf.h&gt;int main() {// 初始化SDL_ttf库if (TTF_Init() &lt; 0) {std::cerr &lt;&lt; &#34;Error initializing SDL_ttf: &#34; &lt;&lt; TTF_GetError() &lt;&lt; std::endl;return 1;}// 加载字体文件const char *font_path = &#34;path/to/font.ttf&#34;;int font_size = 24;TTF_Font *font = TTF_OpenFont(font_path, font_size);if (!font) {std::cerr &lt;&lt; &#34;Error loading font: &#34; &lt;&lt; TTF_GetError() &lt;&lt; std::endl;return 1;}// ...// 清理资源TTF_CloseFont(font);TTF_Quit();return 0;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="文本渲染与字体样式"><span>文本渲染与字体样式</span>
+  <a href="#%e6%96%87%e6%9c%ac%e6%b8%b2%e6%9f%93%e4%b8%8e%e5%ad%97%e4%bd%93%e6%a0%b7%e5%bc%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>使用TTF_Font结构体，可以设置文本的样式、大小等属性。以下是一个渲染文本到SDL_Texture的示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">SDL_Color</span> <span class="n">text_color</span> <span class="o">=</span> <span class="p">{</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">};</span> <span class="o">//</span> <span class="err">文本颜色（白色）</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;Hello, SDL_ttf!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">text_surface</span> <span class="o">=</span> <span class="n">TTF_RenderText_Blended</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">text_color</span><span class="p">);</span><span class="o">//</span> <span class="err">将</span><span class="n">SDL_Surface转换为SDL_Texture</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">text_texture</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">text_surface</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_FreeSurface</span><span class="p">(</span><span class="n">text_surface</span><span class="p">);</span> <span class="o">//</span> <span class="err">释放</span><span class="n">SDL_Surface资源</span><span class="o">//</span> <span class="err">计算文本尺寸</span>
+</span></span><span class="line"><span class="cl"><span class="ne">int</span> <span class="n">text_width</span><span class="p">,</span> <span class="n">text_height</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">TTF_SizeText</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text_width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text_height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_Rect</span> <span class="n">dst_rect</span> <span class="o">=</span> <span class="p">{</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">text_width</span><span class="p">,</span> <span class="n">text_height</span><span class="p">};</span><span class="o">//</span> <span class="err">渲染文本</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">text_texture</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst_rect</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">SDL_DestroyTexture</span><span class="p">(</span><span class="n">text_texture</span><span class="p">);</span> <span class="o">//</span> <span class="err">释放</span><span class="n">SDL_Texture资源</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="多语言文本支持与unicode"><span>多语言文本支持与Unicode</span>
+  <a href="#%e5%a4%9a%e8%af%ad%e8%a8%80%e6%96%87%e6%9c%ac%e6%94%af%e6%8c%81%e4%b8%8eunicode" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>为了支持多种语言和Unicode字符集，SDL_ttf提供了处理UTF-8、UTF-16和UTF-32编码的函数。例如，使用TTF_RenderUTF8_Blended()函数渲染UTF-8编码的文本。对于其他编码，可以使用相应的函数，如TTF_RenderUTF16_Blended()和TTF_RenderUTF32_Blended()。
+这使得在应用程序中使用多种语言和字符集成为可能，包括复杂的文字排版和书写系统。</p>
+<h1 class="heading-element" id="10-网络编程与多人游戏"><span>10. 网络编程与多人游戏</span>
+  <a href="#10-%e7%bd%91%e7%bb%9c%e7%bc%96%e7%a8%8b%e4%b8%8e%e5%a4%9a%e4%ba%ba%e6%b8%b8%e6%88%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>多人游戏的开发需要网络编程知识。SDL_net是一个独立的网络编程库，与SDL框架紧密结合，用于处理网络通信。</p>
+<h2 class="heading-element" id="sdl_net网络模块简介"><span>SDL_net网络模块简介</span>
+  <a href="#sdl_net%e7%bd%91%e7%bb%9c%e6%a8%a1%e5%9d%97%e7%ae%80%e4%bb%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>首先需要下载并安装SDL_net库。在安装后，需要在项目中包含SDL_net.h头文件，并链接到SDL_net库。</p>
+<h2 class="heading-element" id="tcp与udp通信实现"><span>TCP与UDP通信实现</span>
+  <a href="#tcp%e4%b8%8eudp%e9%80%9a%e4%bf%a1%e5%ae%9e%e7%8e%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL_net支持TCP和UDP两种通信协议。TCP用于可靠的、面向连接的通信，而UDP用于快速、无连接的通信。选择合适的通信协议取决于游戏类型和对网络通信的需求。</p>
+<h3 class="heading-element" id="tcp通信"><span>TCP通信</span>
+  <a href="#tcp%e9%80%9a%e4%bf%a1" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>以下是使用SDL_net实现TCP通信的示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL_net.h&gt;// 初始化SDL_net库</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">SDLNet_Init</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Error initializing SDL_net: &#34;</span> <span class="o">&lt;&lt;</span> <span class="nf">SDLNet_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 创建TCP套接字
+</span></span></span><span class="line"><span class="cl"><span class="n">IPaddress</span> <span class="n">ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_ResolveHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ip</span><span class="p">,</span> <span class="s">&#34;localhost&#34;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">TCPsocket</span> <span class="n">tcp_socket</span> <span class="o">=</span> <span class="nf">SDLNet_TCP_Open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ip</span><span class="p">);</span><span class="c1">// 发送与接收数据
+</span></span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 包括字符串的null终止符
+</span></span></span><span class="line"><span class="cl"><span class="nf">SDLNet_TCP_Send</span><span class="p">(</span><span class="n">tcp_socket</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_TCP_Recv</span><span class="p">(</span><span class="n">tcp_socket</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span><span class="c1">// 关闭套接字与退出SDL_net库
+</span></span></span><span class="line"><span class="cl"><span class="nf">SDLNet_TCP_Close</span><span class="p">(</span><span class="n">tcp_socket</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_Quit</span><span class="p">();</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="udp通信"><span>UDP通信</span>
+  <a href="#udp%e9%80%9a%e4%bf%a1" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>以下是使用SDL_net实现UDP通信的示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL_net.h&gt;// 初始化SDL_net库</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">SDLNet_Init</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Error initializing SDL_net: &#34;</span> <span class="o">&lt;&lt;</span> <span class="nf">SDLNet_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 创建UDP套接字
+</span></span></span><span class="line"><span class="cl"><span class="n">UDPsocket</span> <span class="n">udp_socket</span> <span class="o">=</span> <span class="nf">SDLNet_UDP_Open</span><span class="p">(</span><span class="mi">1234</span><span class="p">);</span><span class="c1">// 发送与接收数据
+</span></span></span><span class="line"><span class="cl"><span class="n">IPaddress</span> <span class="n">ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_ResolveHost</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ip</span><span class="p">,</span> <span class="s">&#34;localhost&#34;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">UDPpacket</span> <span class="o">*</span><span class="n">packet</span> <span class="o">=</span> <span class="nf">SDLNet_AllocPacket</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">strcpy</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">packet</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="s">&#34;Hello, UDP!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">packet</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">=</span> <span class="nf">strlen</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">packet</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">packet</span><span class="o">-&gt;</span><span class="n">address</span> <span class="o">=</span> <span class="n">ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_UDP_Send</span><span class="p">(</span><span class="n">udp_socket</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">packet</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_UDP_Recv</span><span class="p">(</span><span class="n">udp_socket</span><span class="p">,</span> <span class="n">packet</span><span class="p">);</span><span class="c1">// 关闭套接字与释放资源
+</span></span></span><span class="line"><span class="cl"><span class="nf">SDLNet_UDP_Close</span><span class="p">(</span><span class="n">udp_socket</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_FreePacket</span><span class="p">(</span><span class="n">packet</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">SDLNet_Quit</span><span class="p">();</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="多人游戏架构与同步策略"><span>多人游戏架构与同步策略</span>
+  <a href="#%e5%a4%9a%e4%ba%ba%e6%b8%b8%e6%88%8f%e6%9e%b6%e6%9e%84%e4%b8%8e%e5%90%8c%e6%ad%a5%e7%ad%96%e7%95%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>多人游戏通常采用客户端-服务器（Client-Server）架构或对等（Peer-to-Peer）架构。客户端-服务器架构中，服务器负责处理游戏逻辑和同步，客户端负责渲染和用户输入。对等架构中，所有参与者共同处理游戏逻辑和同步。
+同步策略是多人游戏开发的关键部分。同步策略包括状态同步、输入同步和混合同步等。选择合适的同步策略需要权衡网络延迟、游戏逻辑复杂性和游戏类型等因素。</p>
+<h3 class="heading-element" id="状态同步"><span>状态同步</span>
+  <a href="#%e7%8a%b6%e6%80%81%e5%90%8c%e6%ad%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>状态同步是一种简单的同步策略。游戏实体的状态（如位置、速度等）定期发送给其他参与者。接收到状态更新后，客户端将其应用于本地游戏实体。这种同步策略易于实现，但可能导致较高的网络带宽消耗。</p>
+<h3 class="heading-element" id="输入同步"><span>输入同步</span>
+  <a href="#%e8%be%93%e5%85%a5%e5%90%8c%e6%ad%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>输入同步是一种更复杂的同步策略。参与者之间仅同步输入信息，如按键和鼠标点击。每个参与者独立地执行游戏逻辑并处理输入。这种策略需要确保所有参与者的游戏逻辑完全一致，否则可能导致不同步现象。输入同步通常用于实时策略游戏（RTS）。</p>
+<h3 class="heading-element" id="混合同步"><span>混合同步</span>
+  <a href="#%e6%b7%b7%e5%90%88%e5%90%8c%e6%ad%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>混合同步结合了状态同步和输入同步的优点。这种策略允许在同步过程中实现更高的灵活性和效率。具体的实现方式取决于游戏类型和需求。</p>
+<h2 class="heading-element" id="实战案例基于sdl的网络游戏"><span>实战案例：基于SDL的网络游戏</span>
+  <a href="#%e5%ae%9e%e6%88%98%e6%a1%88%e4%be%8b%e5%9f%ba%e4%ba%8esdl%e7%9a%84%e7%bd%91%e7%bb%9c%e6%b8%b8%e6%88%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>以下是一个基于SDL和SDL_net库的简单多人游戏示例。这个示例仅作为参考，实际项目中需要根据游戏类型和需求进行相应的修改和扩展。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;SDL_net.h&gt;</span><span class="cp">bool game_is_running = true;
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">is_server</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 根据实际情况设置为服务器或客户端
+</span></span></span><span class="line"><span class="cl"><span class="n">IPaddress</span> <span class="n">server_ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">TCPsocket</span> <span class="n">server_socket</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">TCPsocket</span> <span class="n">client_socket</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span><span class="c1">// 初始化SDL、SDL_net、游戏窗口、渲染器、游戏逻辑等...
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">init_game</span><span class="p">()</span> <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Error initializing SDL: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="k">return</span> <span class="nb">false</span><span class="p">;}</span><span class="k">if</span> <span class="p">(</span><span class="n">SDLNet_Init</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Error initializing SDL_net: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">SDLNet_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span><span class="n">SDL_Quit</span><span class="p">();</span><span class="k">return</span> <span class="nb">false</span><span class="p">;}</span><span class="c1">// 创建游戏窗口、渲染器等...return true;
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="kt">void</span> <span class="nf">cleanup_game</span><span class="p">()</span> <span class="p">{</span><span class="c1">// 释放游戏资源、关闭窗口、渲染器等...SDLNet_Quit();SDL_Quit();
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 处理用户输入和游戏事件
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">process_input</span><span class="p">()</span> <span class="p">{</span><span class="n">SDL_Event</span> <span class="n">event</span><span class="p">;</span><span class="k">while</span> <span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">event</span><span class="p">))</span> <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_QUIT</span><span class="p">)</span> <span class="p">{</span><span class="n">game_is_running</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;}}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 更新游戏逻辑
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">update_game</span><span class="p">()</span> <span class="p">{</span><span class="c1">// 更新游戏状态，如玩家位置、动画等...
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 渲染游戏画面
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">render_game</span><span class="p">()</span> <span class="p">{</span><span class="c1">// 绘制游戏场景、玩家、UI等...
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="c1">// 网络通信
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">network_communication</span><span class="p">()</span> <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">is_server</span><span class="p">)</span> <span class="p">{</span><span class="c1">// 处理来自客户端的请求// ...// 同步游戏状态给客户端// ...} else {// 处理来自服务器的响应// ...// 发送用户输入给服务器// ...}
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">init_game</span><span class="p">())</span> <span class="p">{</span><span class="k">return</span> <span class="mi">1</span><span class="p">;}</span><span class="c1">// 游戏循环while (game_is_running) {process_input();update_game();render_game();network_communication();SDL_Delay(16); // 控制帧率}cleanup_game();return 0;
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>在这个示例中，游戏的网络部分根据是否为服务器或客户端执行不同的代码。服务器负责处理客户端的请求并同步游戏状态。客户端负责处理服务器的响应并发送用户输入。具体的网络通信和同步策略取决于游戏类型和需求。请注意，这个示例只是一个基本的框架，你需要根据实际项目需求添加具体的游戏逻辑、渲染和网络代码。</p>
+<h1 class="heading-element" id="11-性能优化与移植性"><span>11. 性能优化与移植性</span>
+  <a href="#11-%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96%e4%b8%8e%e7%a7%bb%e6%a4%8d%e6%80%a7" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="sdl性能特点与优化策略"><span>SDL性能特点与优化策略</span>
+  <a href="#sdl%e6%80%a7%e8%83%bd%e7%89%b9%e7%82%b9%e4%b8%8e%e4%bc%98%e5%8c%96%e7%ad%96%e7%95%a5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SDL (Simple DirectMedia Layer) 是一个跨平台的多媒体库，它为游戏和应用程序提供了一套统一的接口来处理图形、声音、输入和网络功能。SDL 的性能通常足以满足大部分 2D 游戏和应用程序的需求，但在某些情况下可能需要对其进行优化。以下是一些 SDL 性能特点和优化策略：</p>
+<ol>
+<li><strong>使用硬件加速</strong>: 如果可能的话，尽量使用 SDL 的硬件加速功能。例如，当创建 SDL_Renderer 时，使用 SDL_RENDERER_ACCELERATED 标志。这将尽可能地利用图形处理器 (GPU) 来提高图形性能。</li>
+<li><strong>纹理格式与压缩</strong>: 使用与显卡本地支持的像素格式，可以减少纹理转换的开销。此外，使用压缩纹理格式（如 DXT1，DXT3，DXT5 或 ASTC）可减少显存占用和纹理传输的开销。</li>
+<li><strong>避免频繁地锁定纹理</strong>: 锁定纹理可能导致显著的性能损失，因为它会中断 GPU 和 CPU 之间的并行执行。尽量避免频繁地锁定和修改纹理，而是在初始化时一次性创建和设置纹理。</li>
+<li><strong>批处理绘制操作</strong>: 将具有相同纹理和属性的绘制操作批量进行，可以减少状态切换的次数，从而提高性能。可以使用一些开源库如 SDL_gpu 来实现自动批处理。</li>
+<li><strong>合理地控制帧率</strong>: 通过限制游戏帧率，可以降低 CPU 和 GPU 的负载。一般情况下，保持在 30fps 或 60fps 是合理的。可以使用 SDL_Delay 函数来实现帧率控制。</li>
+<li><strong>优化事件处理</strong>: 减少事件处理的次数和复杂度。对于非关键事件（如鼠标移动），可以通过合并连续的事件来减少处理次数。</li>
+<li><strong>减少内存分配次数</strong>: 避免在游戏循环中频繁地分配和释放内存。尽量使用预先分配的内存池和对象池来重复使用对象。</li>
+<li><strong>音频优化</strong>: 对于音频处理，使用合适的音频格式和采样率。避免在游戏循环中频繁加载和解码音频文件。可以使用音频流来减少内存占用。</li>
+<li><strong>多线程与异步操作</strong>: 利用多线程可以将一些耗时操作（如资源加载、网络通信等）放到后台线程中处理，从而不影响主线程的性能。但请注意</li>
+</ol>
+<h2 class="heading-element" id="跨平台开发注意事项"><span>跨平台开发注意事项</span>
+  <a href="#%e8%b7%a8%e5%b9%b3%e5%8f%b0%e5%bc%80%e5%8f%91%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>在使用 SDL 进行跨平台开发时，特别是在 ARM 平台上，有一些注意事项可以帮助您确保项目的兼容性和性能。以下是一些建议：</p>
+<ol>
+<li><strong>端序问题</strong>：在跨平台开发时，请注意端序（字节序）问题。不同的处理器可能使用大端序或小端序。在处理多字节数据类型（例如整数、浮点数等）时，确保正确处理端序问题。使用 SDL 提供的字节序转换函数，如 SDL_Swap16()、SDL_Swap32() 和 SDL_Swap64()。</li>
+<li><strong>数据类型和字节大小</strong>：请确保使用具有一致字节大小的数据类型。例如，使用 int32_t 和 uint32_t 代替 int 和 unsigned int，以确保跨平台一致性。在需要时，可以使用 SDL 提供的数据类型，如 Sint16、Uint32 等。</li>
+<li><strong>编译器和选项</strong>：使用跨平台编译器，如 GCC 和 Clang，以确保源代码可以在各个平台上正确编译。使用适当的编译器选项来优化 ARM 平台的性能，例如：-march=armv7-a -mfpu=neon -mfloat-abi=softfp（针对 ARMv7 平台）。</li>
+<li><strong>硬件加速和 OpenGL ES 支持</strong>：请确保使用支持 ARM 平台的硬件加速功能。尽量使用 SDL_Renderer 的硬件加速渲染，并考虑在需要时使用 OpenGL ES。注意，SDL 2 默认支持 OpenGL ES 2.0。</li>
+<li><strong>触摸输入和屏幕旋转</strong>：在移动设备（如 Android 和 iOS）上，需要处理触摸输入和屏幕旋转。请确保使用 SDL 提供的触摸输入 API（如 SDL_GetNumTouchDevices() 和 SDL_GetTouchDevice()）来处理触摸输入，并在需要时处理屏幕旋转事件。</li>
+<li><strong>屏幕分辨率和 DPI</strong>：不同的设备可能具有不同的屏幕分辨率和 DPI。在布局和绘制界面元素时，确保考虑不同分辨率和 DPI 的设备。使用相对布局和可伸缩的用户界面元素，以适应不同屏幕尺寸。</li>
+<li><strong>资源管理</strong>：ARM 设备通常具有较低的内存和存储空间。请确保合理地管理资源，避免浪费内存。使用压缩的纹理格式，按需加载资源，及时释放不再使用的资源。</li>
+<li><strong>性能优化</strong>：请注意优化 ARM 平台的性能，尤其是在处理器性能较弱的设备上。请参阅上一个回答中关于 SDL 性能特点与优化策略的建议。</li>
+</ol>
+<p>从心理学的角度来看，SDL（Simple DirectMedia Layer）库为开发者提供了一个跨平台的多媒体框架，以简化游戏和应用程序的开发过程。心理学在这里的作用主要体现在以下几个方面：</p>
+<ol>
+<li><strong>认知负荷降低</strong>：SDL 通过为不同的操作系统和硬件平台提供统一的接口，降低了开发者在学习和使用过程中的认知负荷。这使得开发者可以更快地掌握和运用 SDL 进行项目开发。</li>
+<li><strong>注意力集中</strong>：SDL 的模块化设计，让开发者可以专注于游戏和应用程序的核心逻辑，而无需关注底层的硬件和操作系统差异。这有助于提高开发者的注意力和工作效率。</li>
+<li><strong>创造力激发</strong>：由于 SDL 提供了丰富的多媒体功能，如图形、音频、输入和网络等，开发者可以更容易地尝试和实现各种创新的游戏和应用程序设计。这有助于激发开发者的创造力和想象力。</li>
+<li><strong>情感满足感</strong>：使用 SDL，开发者可以更快地完成项目开发并看到成果，从而获得成就感。同时，因为 SDL 的跨平台特性，开发者能够在不同的设备上分享自己的作品，进一步增加情感满足感。</li>
+<li><strong>社群互动与支持</strong>：SDL 拥有庞大的开发者社群，这使得开发者在遇到问题时可以寻求帮助和资源，增强了开发者之间的互动和支持。这种互助和合作的氛围有助于提高开发者的自信心和归属感。</li>
+</ol>
+<p>综上所述，从心理学角度来看，SDL 库在简化跨平台多媒体开发的同时，也提高了开发者的认知效率、创造力和情感满足感。此外，SDL 库的社群互动为开发者提供了良好的学习和成长环境。</p>
+<h1 class="heading-element" id="12qt和sdl之间的关联"><span>12.Qt和SDL之间的关联</span>
+  <a href="#12qt%e5%92%8csdl%e4%b9%8b%e9%97%b4%e7%9a%84%e5%85%b3%e8%81%94" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Qt和SDL（Simple DirectMedia Layer）都是广泛使用的跨平台库，它们在一些功能上存在重叠。以下是Qt和SDL库中功能重叠的一些领域：</p>
+<ol>
+<li><strong>窗口管理和输入处理</strong>：Qt和SDL都提供了创建和管理窗口的功能。它们都可以处理键盘、鼠标和其他输入设备的事件。</li>
+<li><strong>图形渲染</strong>：Qt和SDL都支持2D图形渲染。Qt拥有强大的图形库（包括QPainter和QGraphicsScene），可以处理各种2D绘图任务。而SDL则提供了基于SDL_Surface的简单图形渲染能力。此外，它们都支持使用OpenGL进行3D图形渲染。</li>
+<li><strong>图像处理</strong>：Qt和SDL都提供了处理和操作图像的功能。Qt的QImage类提供了丰富的图像处理功能，而SDL则通过SDL_Surface和SDL_Image库（一个额外的扩展库）提供图像处理功能。</li>
+<li><strong>音频播放</strong>：Qt和SDL都可以用于播放音频文件。Qt提供了QMediaPlayer和QAudioOutput等类来处理音频播放。SDL则通过SDL_mixer库（一个额外的扩展库）提供音频播放功能。</li>
+<li><strong>定时器</strong>：Qt和SDL都提供了定时器功能，用于在特定的时间间隔执行某些操作。Qt提供了QTimer类，而SDL提供了SDL_AddTimer和SDL_RemoveTimer函数。</li>
+<li><strong>多线程</strong>：Qt和SDL都支持多线程编程。Qt提供了QThread类和相关的同步原语（如QMutex、QSemaphore等）。SDL则提供了SDL_Thread、SDL_CreateThread、SDL_WaitThread等函数和同步原语（如SDL_mutex、SDL_sem等）。</li>
+</ol>
+<p>尽管Qt和SDL在这些领域具有功能重叠，但它们的侧重点和使用场景有所不同：</p>
+<ul>
+<li><strong>Qt</strong>：Qt是一个功能丰富的应用程序框架，特别擅长于创建具有复杂GUI的跨平台应用程序。它提供了许多高级功能，如网络、数据库访问、XML处理等。Qt适用于创建桌面应用程序、嵌入式系统和移动应用程序。</li>
+<li><strong>SDL</strong>：SDL是一个轻量级的多媒体库，主要用于开发游戏和多媒体应用程序。它提供了一个低级别的、接近硬件的接口，用于图形、音频、输入和定时器。SDL的优势在于对游戏和实时图形的支持，以及较低的性能开销。</li>
+</ul>
+<p>根据项目的需求和目标平台，可以根据Qt和SDL的特点和优势选择适当的库。在某些情况下，也可以考虑将两者结合.</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/media/sdl-openal/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/media/sdl-openal/" data-title="SDL OpenAL"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/media/sdl-openal/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/media/sdl-openal/" data-title="SDL OpenAL"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/media/ffmpeg%E7%BC%96%E8%AF%91/" class="post-nav-item" rel="prev" title="FFmpeg编译"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>FFmpeg编译</a><a href="/posts/media/rgbyuv/" class="post-nav-item" rel="next" title="RGB、YUV">RGB、YUV<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/546523ee93a3e2756514bd72fa870381.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

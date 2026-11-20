@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>音视频入门 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="一、音视频处理流程 音视频通信是指将音频和视频数据从一个端点传输到另一个端点的过程。通常，音视频通信流程包括音视频采集、编码、传输、解码和渲染五个主要环节。下面是更详细的描述：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="音视频入门">
+	<meta itemprop="description" content="一、音视频处理流程 音视频通信是指将音频和视频数据从一个端点传输到另一个端点的过程。通常，音视频通信流程包括音视频采集、编码、传输、解码和渲染五个主要环节。下面是更详细的描述：">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="4673">
+	<meta itemprop="keywords" content="音视频"><meta property="og:url" content="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="音视频入门">
+	<meta property="og:description" content="一、音视频处理流程 音视频通信是指将音频和视频数据从一个端点传输到另一个端点的过程。通常，音视频通信流程包括音视频采集、编码、传输、解码和渲染五个主要环节。下面是更详细的描述：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="音视频入门">
+  <meta name="twitter:description" content="一、音视频处理流程 音视频通信是指将音频和视频数据从一个端点传输到另一个端点的过程。通常，音视频通信流程包括音视频采集、编码、传输、解码和渲染五个主要环节。下面是更详细的描述："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/" title="音视频入门 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/tips/%E7%94%A8-swiftui-%E5%AE%9E%E7%8E%B0-ai-%E8%81%8A%E5%A4%A9%E5%AF%B9%E8%AF%9D-app-ichatgpt/" title="用 SwiftUI 实现 AI 聊天对话 app - iChatGPT" /><link rel="next" type="text/html" href="https://apolla.cc/posts/media/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%9F%BA%E7%A1%80/" title="网络传输基础" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "音视频入门",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/media\/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8\/"
+    },"genre": "posts","wordcount":  4673 ,
+    "url": "https:\/\/apolla.cc\/posts\/media\/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>音视频入门</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/" class="post-category" title="分类 - 音视频"><i class="fa-regular fa-folder" aria-hidden="true"></i> 音视频</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="4673 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 4700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 10 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一音视频处理流程">一、音视频处理流程</a></li>
+        <li><a href="#11-音频处理流程">1.1 音频处理流程</a></li>
+        <li><a href="#12-视频处理流程">1.2 视频处理流程</a></li>
+        <li><a href="#13-音视频数据流转">1.3 音视频数据流转</a></li>
+        <li><a href="#14-为什么音视频采集完之后不能直接传输要进行编码">1.4 为什么音视频采集完之后，不能直接传输，要进行编码？</a></li>
+        <li><a href="#15-模数转换">1.5 模数转换</a></li>
+        <li><a href="#16-pcm">1.6 PCM</a></li>
+        <li><a href="#17-wav">1.7 WAV</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></template><div class="content" id="content"><h3 class="heading-element" id="一音视频处理流程"><span>一、音视频处理流程</span>
+  <a href="#%e4%b8%80%e9%9f%b3%e8%a7%86%e9%a2%91%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>音视频通信是指将音频和视频数据从一个端点传输到另一个端点的过程。通常，音视频通信流程包括音视频采集、编码、传输、解码和渲染五个主要环节。下面是更详细的描述：</p>
+<ol>
+<li>音视频采集：音视频采集是指将麦克风、摄像头等音视频设备中的模拟信号转换成数字信号的过程。这个数字信号可以是PCM音频数据或者视频帧。在采集过程中需要确定采样率、采样精度等参数。</li>
+<li>音视频编码：音视频编码是指将数字信号转换成可传输或存储的格式的过程。常见的音视频编码格式有H.264、H.265、VP8、VP9、AAC、MP3等。编码后的音视频数据可以更有效地进行传输和存储。</li>
+<li>传输：音视频数据传输可以通过网络或者本地传输。在传输过程中需要注意网络带宽、延迟、丢包等因素。传输过程中的数据可以通过一些协议进行控制和优化，如RTP、RTCP、STUN等。</li>
+<li>音视频解码：音视频解码是指将接收到的音视频数据解码成原始的数字信号的过程。解码器需要知道解码的格式和参数。解码后的音视频数据可以用于播放或者后续处理。</li>
+<li>音视频渲染：音视频渲染是指将解码后的音视频数据还原成模拟信号，输出到扬声器或者显示器上。在渲染过程中需要注意音频音量控制和视频的帧率、分辨率等参数。</li>
+</ol>
+<p>下面为具体的音频和视频处理流程：</p>
+<h3 class="heading-element" id="11-音频处理流程"><span>1.1 音频处理流程</span>
+  <a href="#11-%e9%9f%b3%e9%a2%91%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>音频处理是将声音信号进行数字化、处理和还原的过程。音频处理流程包括以下几个步骤：</p>
+<ol>
+<li>采集：将声音信号从模拟信号转换成数字信号。采集可以通过麦克风、音频接口等设备进行。采集过程中需要注意采样率和位深度的设置，采样率表示每秒采集的样本数，位深度表示每个采样值所占用的位数。</li>
+<li>预处理：对采集到的音频信号进行一些预处理，如滤波、降噪、增益调整等。这些预处理步骤有助于减少噪音、改善音质。</li>
+<li>数字信号处理（DSP）：对数字信号进行一系列的数字信号处理，如均衡器、压缩器、限幅器、混响器等。这些数字信号处理步骤可以改变音频的频率响应、动态范围、时域特性等。</li>
+<li>编码：将数字信号编码成可传输或存储的格式，如MP3、AAC、WAV等。在编码过程中需要选择适当的编码算法和参数设置，以达到合适的压缩比和音质。</li>
+<li>传输或存储：将编码后的音频信号进行传输或存储。音频信号可以通过网络传输，也可以存储到本地硬盘或其他存储介质上。</li>
+<li>解码：将传输或存储的音频信号解码成数字信号，以便进行后续的数字信号处理或者还原成模拟信号输出。</li>
+<li>输出：将数字信号转换成模拟信号输出，如通过扬声器、耳机等设备输出。在输出过程中需要注意音量控制和音质保护。</li>
+</ol>
+<h3 class="heading-element" id="12-视频处理流程"><span>1.2 视频处理流程</span>
+  <a href="#12-%e8%a7%86%e9%a2%91%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>视频处理流程包括以下主要步骤：</p>
+<ol>
+<li>视频采集：采集视频信号源，如摄像头、录像机、电视等，将模拟视频信号转换成数字视频信号，通常使用视频采集卡或者专业视频采集设备。</li>
+<li>视频编码：将原始数字视频信号进行压缩编码，减少数据量，便于传输和存储。常见的视频编码标准包括H.264、H.265、MPEG-4、AVC等。</li>
+<li>视频传输：将编码后的视频数据通过网络或者传输介质传输到接收端。视频传输涉及到网络传输协议、传输带宽、网络延迟等因素。</li>
+<li>视频解码：接收端使用相应的解码器对传输过来的视频数据进行解码，还原出原始的数字视频信号。</li>
+<li>视频处理：对解码后的视频信号进行各种处理，如裁剪、旋转、调整亮度、对比度、色彩等，实现特殊效果和优化处理。</li>
+<li>视频渲染：将处理后的视频信号渲染成可视化的视频画面，通常使用显示器、投影仪等设备进行展示。</li>
+</ol>
+<h3 class="heading-element" id="13-音视频数据流转"><span>1.3 音视频数据流转</span>
+  <a href="#13-%e9%9f%b3%e8%a7%86%e9%a2%91%e6%95%b0%e6%8d%ae%e6%b5%81%e8%bd%ac" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>音视频的流转简单来说就是：PCM（采集数据的格式，数字信号）-&gt;acc/mp3（编码器）-&gt;mp4/flv（套一层马甲，生成多媒体文件），详细来讲就是：
+首先，在音视频采集过程中，通常需要将模拟信号转换成PCM格式的数字信号，以便于后续的处理和传输。
+然后，PCM格式的音频数据需要进行压缩，以便于存储和传输。常见的压缩格式包括AAC、MP3等。这些压缩格式通常采用有损压缩算法，即通过去除一些听觉上不太明显的音频信号，来减少数据量和提高压缩比。在进行压缩时，可以设置一些编码参数，如码率、采样率、声道数、编码质量等。这些参数的设置会影响到压缩后的音频质量和数据量。
+最后，压缩后的音频数据可以通过容器格式进行打包，生成多媒体文件。常见的容器格式包括MP4、FLV、AVI等。容器格式可以包含音频、视频、字幕、元数据等多种媒体数据，同时还可以提供索引和元数据信息，方便多媒体文件的管理和播放。</p>
+<h3 class="heading-element" id="14-为什么音视频采集完之后不能直接传输要进行编码"><span>1.4 为什么音视频采集完之后，不能直接传输，要进行编码？</span>
+  <a href="#14-%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9f%b3%e8%a7%86%e9%a2%91%e9%87%87%e9%9b%86%e5%ae%8c%e4%b9%8b%e5%90%8e%e4%b8%8d%e8%83%bd%e7%9b%b4%e6%8e%a5%e4%bc%a0%e8%be%93%e8%a6%81%e8%bf%9b%e8%a1%8c%e7%bc%96%e7%a0%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>音视频数据采集之后，得到的是原始的模拟信号或数字信号，这些信号通常是非常庞大的，无法直接传输或存储。同时，由于音视频数据传输具有时延和带宽等限制，需要进行压缩以减少数据量，保证数据传输的实时性和稳定性。
+音视频编码可以将音视频信号转换成压缩格式，以减少数据量和提高传输效率。编码可以根据不同的应用场景和需求，选择不同的编码格式和编码参数。常见的音视频编码格式包括H.264、H.265、VP8、VP9、AAC、MP3等，它们各自具有不同的压缩比、编码质量、延迟等特点，可以根据实际情况进行选择和优化。
+因此，进行音视频编码可以提高数据传输的效率，降低带宽成本，同时也可以提高音视频质量，减少传输延迟。采集完音视频数据之后，必须对其进行编码才能使其适合进行传输和存储。</p>
+<h3 class="heading-element" id="15-模数转换"><span>1.5 模数转换</span>
+  <a href="#15-%e6%a8%a1%e6%95%b0%e8%bd%ac%e6%8d%a2" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>音视频模数转换（ADC/DAC）是指将模拟信号转换成数字信号或将数字信号转换成模拟信号的过程。在音视频领域，模数转换通常用于音视频的采集和输出，以便于数字信号的处理和传输。
+首先，将模拟信号转换成数字信号的过程被称为ADC（模数转换器）。ADC接受模拟信号输入，并将其转换成数字信号。这个过程分为三个主要步骤：</p>
+<ol>
+<li>采样：模拟信号在时间轴上进行采样，即周期性地测量信号的幅值，并将其转换成数字值。采样的频率被称为采样率，通常以Hz为单位表示。</li>
+<li>量化：将采样后的模拟信号幅值转换成数字值的过程称为量化。量化的精度通常由量化位数（即每个采样值的位数）来衡量。例如，16位的ADC可以将每个采样值转换成一个16位的数字值。</li>
+<li>编码：将量化后的数字值编码成特定格式的二进制码流。编码的格式通常与音频数据的压缩格式有关，如PCM、AAC、MP3等。</li>
+</ol>
+<p>接下来是数字信号转换成模拟信号的过程，被称为DAC（数字模拟转换器）。DAC接受数字信号输入，并将其转换成模拟信号。这个过程与ADC相反，分为三个步骤：</p>
+<ol>
+<li>解码：将二进制码流解码成数字值。</li>
+<li>量化：将数字值转换成幅值，即将数字信号离散化成一系列幅度值。</li>
+<li>重建：将量化后的数字信号转换成模拟信号。这个过程涉及到信号重建滤波器，通常是一个低通滤波器，以平滑模拟信号的波形，防止信号中出现干扰。</li>
+</ol>
+<p>总的来说，音视频模数转换是音视频处理中重要的步骤，将模拟信号转换成数字信号或将数字信号转换成模拟信号。这个过程需要采样、量化、编码、解码、重建等多个步骤，对音视频信号的质量和处理效果有很大影响。
+第一次更新：2023/3/2</p>
+<hr>
+<h3 class="heading-element" id="16-pcm"><span>1.6 PCM</span>
+  <a href="#16-pcm" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>PCM（Pulse Code Modulation）是指脉冲编码调制，是一种用于模拟信号数字化的标准方法。PCM将模拟信号通过采样、量化、编码等处理，转换成数字信号，从而可以方便地进行数字信号的存储、处理和传输。PCM通常采用的量化方法是线性量化，采用的编码方法是二进制编码。PCM的采样位数和采样率决定了数字音频的精度和质量，通常采用16位或24位采样位数，采样率则通常为44.1kHz或48kHz。
+<strong>PCM码率计算：</strong>
+<img loading="lazy" src='/images/04f8e9d08402198b7315ddd3c31eb57c.webp' alt="/images/04f8e9d08402198b7315ddd3c31eb57c.webp"></p>
+<h3 class="heading-element" id="17-wav"><span>1.7 WAV</span>
+  <a href="#17-wav" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>WAV是指Windows Audio File，是一种使用PCM编码的数字音频文件格式。WAV文件格式由Microsoft和IBM联合开发，是Windows系统中常见的音频文件格式之一。WAV文件是无损的数字音频格式，支持多种采样位数和采样率，通常支持16位、24位和32位的采样位数，以及44.1kHz、48kHz、96kHz等不同的采样率。WAV文件可以存储单声道或双声道的音频数据，支持使用各种编码器进行压缩和解压缩，但由于采用的是无损压缩算法，因此WAV文件通常较大，不适合网络传输或存储空间有限的设备。
+具体来讲，WAV包括以下几个方面的内容：</p>
+<ol>
+<li>音频数据：WAV文件中包含采样后的数字音频数据，这些数据是经过量化和编码后的，以二进制形式存储。WAV文件支持多种采样位数和采样率，通常采用16位或24位的采样位数，以及44.1kHz或48kHz的采样率。</li>
+<li>头部信息：WAV文件的头部包含了音频数据的基本信息，如采样率、采样位数、声道数等。头部信息也包含了WAV文件的格式信息，如文件类型、块大小、格式子块等。WAV文件头部通常占据文件的前44个字节。</li>
+<li>格式子块：WAV文件中还包括了格式子块，用于描述音频数据的格式。格式子块包含了音频数据的格式类型、声道数、采样率、平均字节率、块对齐字节数等信息。</li>
+<li>数据块：WAV文件中的数据块存储了音频数据的实际内容，包括了每个采样点的采样值。数据块的大小取决于音频数据的大小，通常为文件总大小减去头部信息和格式子块的大小。</li>
+</ol>
+<p>总的来说，WAV文件包含了音频数据、头部信息、格式子块和数据块等内容，是一种常见的无损音频文件格式。WAV文件的结构和内容在数字音频处理和应用中具有重要的作用，需要深入理解和掌握。</p>
+<p>WAV 文件头部信息包括以下内容：</p>
+<ol>
+<li>ChunkID：4 字节，文件标识符，固定值为 &ldquo;RIFF&rdquo;。</li>
+<li>ChunkSize：4 字节，整个文件长度（不包括 ChunkID 和 ChunkSize 所占的字节数）。</li>
+<li>Format：4 字节，文件格式标识符，固定值为 &ldquo;WAVE&rdquo;。</li>
+<li>Subchunk1ID：4 字节，子块标识符，固定值为 &ldquo;fmt &ldquo;。</li>
+<li>Subchunk1Size：4 字节，子块大小，一般为 16。</li>
+<li>AudioFormat：2 字节，音频格式，如 PCM 等。</li>
+<li>NumChannels：2 字节，声道数，如单声道、立体声等。</li>
+<li>SampleRate：4 字节，采样率，表示每秒采样次数。</li>
+<li>ByteRate：4 字节，数据传输速率，表示每秒传输的字节数。</li>
+<li>BlockAlign：2 字节，数据块对齐单位，表示每个采样块所占的字节数。</li>
+<li>BitsPerSample：2 字节，采样位数，如 8 位、16 位等。</li>
+<li>Subchunk2ID：4 字节，子块标识符，固定值为 &ldquo;data&rdquo;。</li>
+<li>Subchunk2Size：4 字节，子块大小，表示音频数据的长度。</li>
+</ol>
+<p>其中，Subchunk1 和 Subchunk2 是 WAV 文件中的两个子块，分别存储文件格式信息和音频数据信息。这些头部信息对于解码和播放 WAV 文件非常重要，因为它们提供了必要的参数和元数据，帮助解码器正确地读取和解码音频数据。
+<img loading="lazy" src='/images/72b2a5bff15a21b52836a5e400d4d990.webp' alt="/images/72b2a5bff15a21b52836a5e400d4d990.webp">
+<img loading="lazy" src='/images/22a3652bd01167b32db56afea50394db.webp' alt="/images/22a3652bd01167b32db56afea50394db.webp">
+WAV 格式文件包含多个子块，其中两个最为重要，分别是 fmt 和 data 子块。</p>
+<ol>
+<li>fmt 子块：存储音频格式信息，包括采样率、声道数、采样位数等。一般情况下，这个子块的大小是 16 字节，但是也可能有其他大小。这个子块的标识符是 &ldquo;fmt &ldquo;（注意末尾有一个空格字符）。</li>
+<li>data 子块：存储实际的音频数据，这个子块的大小由音频数据的长度决定。这个子块的标识符是 &ldquo;data&rdquo;。</li>
+</ol>
+<p>此外，WAV 文件还可以包含其他子块，比如 LIST 和 fact 子块，用于存储附加信息或者数据样本的数量等。这些子块不是必需的，而且其格式和用途也比较复杂，因此在一般情况下，解码器只需要关注 fmt 和 data 子块即可。
+总的来说，PCM是一种数字音频编码标准，用于将模拟信号数字化，而WAV是一种基于PCM编码的数字音频文件格式，用于存储和传输数字音频数据。PCM和WAV在数字音频处理和应用中具有重要的作用，是数字音频领域中必须掌握的基础知识。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/" data-title="音视频入门"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/" data-title="音视频入门"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/media/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%9F%BA%E7%A1%80/" class="post-nav-item" rel="prev" title="网络传输基础"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>网络传输基础</a><a href="/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="next" title="14： Ijkplayer阅读笔记">14： Ijkplayer阅读笔记<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/68a141004bf9916edf57909130ace674.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

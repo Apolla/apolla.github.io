@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>4.4 基础动画 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+视图是数据状态的反映，状态的更新会驱动视图的更新。如果没有动画过渡，视图的变化会显得突兀。SwiftUI 提供了几种基于状态的动画，这些都是非常常用和基础的添加动画的方式。
+.animation 方法 修饰器方法 animation(_:value:) 可以方便的创建动画，它的声明如下：
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 15b3, iOS 17, macOS 14'>
+	<meta itemprop="name" content="4.4 基础动画">
+	<meta itemprop="description" content="视图是数据状态的反映，状态的更新会驱动视图的更新。如果没有动画过渡，视图的变化会显得突兀。SwiftUI 提供了几种基于状态的动画，这些都是非常常用和基础的添加动画的方式。
+.animation 方法 修饰器方法 animation(_:value:) 可以方便的创建动画，它的声明如下：">
+	<meta itemprop="datePublished" content="2023-07-24T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2023-07-24T08:00:00+08:00">
+	<meta itemprop="wordCount" content="3256">
+	<meta itemprop="keywords" content="Xcode 15b3,iOS 17,macOS 14"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="4.4 基础动画">
+	<meta property="og:description" content="视图是数据状态的反映，状态的更新会驱动视图的更新。如果没有动画过渡，视图的变化会显得突兀。SwiftUI 提供了几种基于状态的动画，这些都是非常常用和基础的添加动画的方式。
+.animation 方法 修饰器方法 animation(_:value:) 可以方便的创建动画，它的声明如下：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2023-07-24T08:00:00+08:00">
+		<meta property="article:modified_time" content="2023-07-24T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 15b3">
+		<meta property="article:tag" content="iOS 17">
+		<meta property="article:tag" content="macOS 14">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="4.4 基础动画">
+  <meta name="twitter:description" content="视图是数据状态的反映，状态的更新会驱动视图的更新。如果没有动画过渡，视图的变化会显得突兀。SwiftUI 提供了几种基于状态的动画，这些都是非常常用和基础的添加动画的方式。
+.animation 方法 修饰器方法 animation(_:value:) 可以方便的创建动画，它的声明如下："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" title="4.4 基础动画 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.5-%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB/" title="4.5 转场动画" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" title="2.2 图片" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "4.4 基础动画",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB\/"
+    },"genre": "posts","keywords": "Xcode 15b3, iOS 17, macOS 14","wordcount":  3256 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB\/","datePublished": "2023-07-24T08:00:00+08:00","dateModified": "2023-07-24T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>4.4 基础动画</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2023-07-24 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2023-07-24">2023-07-24</time></span>&nbsp;<span title="3256 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<br>
+<p>视图是数据状态的反映，状态的更新会驱动视图的更新。如果没有动画过渡，视图的变化会显得突兀。SwiftUI 提供了几种基于状态的动画，这些都是非常常用和基础的添加动画的方式。</p>
+<h1 class="heading-element" id="animation-方法"><span>.animation 方法</span>
+  <a href="#animation-%e6%96%b9%e6%b3%95" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>修饰器方法 <a href="https://developer.apple.com/documentation/swiftui/view/animation(_:value:)" target="_blank" rel="external nofollow noopener noreferrer">animation(_:value:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 可以方便的创建动画，它的声明如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">animation</span><span class="p">&lt;</span><span class="n">V</span><span class="p">&gt;(</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">_</span> <span class="n">animation</span><span class="p">:</span> <span class="n">Animation</span><span class="p">?,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span><span class="p">:</span> <span class="n">V</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="k">where</span> <span class="n">V</span> <span class="p">:</span> <span class="nb">Equatable</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>当 <code>value</code> 发生变化时，将 <code>animation</code> 应用到相应的视图。<code>animation</code> 可选，默认的动画效果是平滑的淡入淡出，系统提供了多种 <a href="https://developer.apple.com/documentation/swiftui/animation" target="_blank" rel="external nofollow noopener noreferrer">Animation<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 动画效果。</p>
+<p><code>animation</code> 参数为可选的，如果传入 nil，<code>value</code> 变化时，相应的视图则不会执行动画。通常用于在一组视图中应用了动画时，需要禁用某个子视图动画的场景。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>示例中的加载动画代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">to</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">rotation</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Circle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">trim</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="n">to</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">stroke</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">lineCap</span><span class="p">:</span> <span class="p">.</span><span class="n">round</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">foregroundColor</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">40</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">rotationEffect</span><span class="p">(.</span><span class="n">degrees</span><span class="p">(</span><span class="n">rotation</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">animation</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">repeatForever</span><span class="p">(</span><span class="n">autoreverses</span><span class="p">:</span> <span class="kc">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span><span class="p">:</span> <span class="n">rotation</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">animation</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">repeatForever</span><span class="p">(</span><span class="n">autoreverses</span><span class="p">:</span> <span class="kc">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span><span class="p">:</span> <span class="n">to</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">onAppear</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">to</span> <span class="p">=</span> <span class="mf">1.0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rotation</span> <span class="p">=</span> <span class="mi">360</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>当视图出现时，改变圆的绘制比例（to）和旋转角度（rotation），由于这两个属性被添加了动画，当状态的改变驱动视图更新时，就会执行指定的动画。为了便于演示，这里添加了 <code>repeatForever</code> ，表示是否重复，<code>autoreverses</code> 表示是否倒放，默认是 true。</p>
+<p>iOS 17、macOS 14 新增了一个方法：<a href="https://developer.apple.com/documentation/swiftui/view/animation(_:body:)" target="_blank" rel="external nofollow noopener noreferrer">animation(_:body:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，使用是类似的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">MyView</span><span class="p">(</span><span class="n">isActive</span><span class="p">:</span> <span class="n">isActive</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">animation</span><span class="p">(.</span><span class="n">easeInOut</span><span class="p">)</span> <span class="p">{</span> <span class="n">content</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">content</span><span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isActive</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>该方法可以更好地控制动画的作用范围，避免意外的动画效果，更多细节可以观看 <a href="https://developer.apple.com/videos/play/wwdc2023/10156/?time=1200" target="_blank" rel="external nofollow noopener noreferrer">Explore SwiftUI animation<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。该 Session 也提到了 <a href="https://developer.apple.com/documentation/swiftui/transaction" target="_blank" rel="external nofollow noopener noreferrer">Transaction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> ，它是处理视图状态变更的上下文，无论是 <code>.animation</code> 还是后文提到的 <code>withAnimation</code> ，其实都是基于 Transaction 封装的便捷方法。</p>
+<h1 class="heading-element" id="全局函数-withanimation"><span>全局函数 withAnimation</span>
+  <a href="#%e5%85%a8%e5%b1%80%e5%87%bd%e6%95%b0-withanimation" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>全局函数 <a href="https://developer.apple.com/documentation/swiftui/withanimation(_:_:)" target="_blank" rel="external nofollow noopener noreferrer">withAnimation<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 可以方便地在合适的时机执行动画，比如点击按钮时执行一连串的动画。</p>
+<p>上面示例中的 animation 修饰器方法需要对多个不同的变量执行相同的代码，这显然不够方便。当然，我们也可以将分散的变量包装成一个结构体，对整个结构体实例进行状态监听。如果想偷懒，也可以使用全局函数进行改写，代码会变得更加紧凑：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Circle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">trim</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="n">to</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">stroke</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">lineCap</span><span class="p">:</span> <span class="p">.</span><span class="n">round</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">foregroundColor</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">40</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">rotationEffect</span><span class="p">(.</span><span class="n">degrees</span><span class="p">(</span><span class="n">rotation</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Button</span><span class="p">(</span><span class="s">&#34;Perform&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">withAnimation</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">repeatForever</span><span class="p">(</span><span class="n">autoreverses</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">to</span> <span class="p">=</span> <span class="mf">1.0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rotation</span> <span class="p">=</span> <span class="mi">360</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>示例中还演示了内置的部分 Animation，更多内置动画请查阅<a href="https://developer.apple.com/documentation/swiftui/animation" target="_blank" rel="external nofollow noopener noreferrer">文档<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p>这里以如下几个方法为例解释一下弹性动画的一些参数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">func</span> <span class="nf">spring</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.55</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dampingFraction</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.825</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">blendDuration</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Animation</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">func</span> <span class="nf">interactiveSpring</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.15</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dampingFraction</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.86</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">blendDuration</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.25</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Animation</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">func</span> <span class="nf">interpolatingSpring</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mass</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">1.0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stiffness</span><span class="p">:</span> <span class="nb">Double</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">damping</span><span class="p">:</span> <span class="nb">Double</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">initialVelocity</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.0</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Animation</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>前两个方法的参数是一样的，只是默认值不同。</p>
+<p>在解释各个参数之前，先把示例中的圆形视图想象成生活中一个挂在弹簧上的球，弹簧的运动轨迹受弹簧的弹性和初始速度以及球的质量等因素影响。</p>
+<ul>
+<li>response：弹簧硬度，值越小弹簧越硬，震动效果越明显，反之则波动幅度越大。</li>
+<li>dampingFraction：阻尼系数，值越大表示阻力越大，运动停止的越快。</li>
+<li>blendDuration：笔者尚未弄清其意义及用法，如果你对此有清晰的见解，望不吝赐教，谢谢～</li>
+</ul>
+<p>最后一个方法有更多的控制参数：</p>
+<ul>
+<li>mass：物体质量，质量越大惯性越大。</li>
+<li>stiffness：弹簧硬度，值越大弹簧越硬，震动效果越明显，反之则波动幅度越大。</li>
+<li>damping：阻尼系数，值越大表示阻力越大，运动停止的越快。</li>
+<li>initialVelocity：弹簧的初始速度。文档中说范围是 [0, 1]，实际上这个范围可以是正负区间。正负分别表示速度和运动方向是否一致，绝对值越大，表示初始速度越大。</li>
+</ul>
+<p>当然，系统也内置了一些调整好参数的弹性动画，比如 bouncy、snappy 等。</p>
+<p>iOS 17、macOS 14 新增了一个方法：<a href="https://developer.apple.com/documentation/swiftui/withanimation(_:completioncriteria:_:completion:)" target="_blank" rel="external nofollow noopener noreferrer">withAnimation(<em>:completionCriteria:</em>:completion:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，它提供了一个动画完成的闭包，便于按顺序执行一些简单的动画。比如示例中所示代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Button</span><span class="p">(</span><span class="s">&#34;Perform&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">withAnimation</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">circled</span><span class="p">.</span><span class="n">toggle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">completion</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">withAnimation</span><span class="p">(.</span><span class="n">bouncy</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">scaled</span><span class="p">.</span><span class="n">toggle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>当点击按钮时，视图会先执行改变圆角的动画，然后执行缩放动画。</p>
+<p>理论上来说，我们可以通过嵌套来执行一系列的动画，但这样的代码不便于书写和阅读。对于一系列的复杂动画，可以使用后文介绍的相位动画和关键帧动画。</p>
+<p>这个新方法有个 <a href="https://developer.apple.com/documentation/swiftui/animationcompletioncriteria?changes=latest_major" target="_blank" rel="external nofollow noopener noreferrer">AnimationCompletionCriteria<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 类型的参数 <code>completionCriteria</code>，它可以被指定为以下值：</p>
+<ul>
+<li>logicallyComplete</li>
+<li>removed</li>
+</ul>
+<p><code>removed</code> 表示动画完全完成之后才去执行下一个动画，通常这是符合常理的。但有时候我们可能正在执行一个弹簧动画，动画的长尾时间会非常长，但弹簧动画的后期效果却不那么明显，这个等待过程的意义不大，只会阻碍后续动画的执行，导致不好的用户体验。所以系统默认的值为 <code>logicallyComplete</code>，即逻辑上的动画结束，即使弹簧动画仍然处于运动的长尾时间内，系统就会执行下一个动画，以减少无谓的等待。</p>
+<h1 class="heading-element" id="绑定值动画"><span>绑定值动画</span>
+  <a href="#%e7%bb%91%e5%ae%9a%e5%80%bc%e5%8a%a8%e7%94%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Binding 提供了便利的 <code>.animation</code> 方法，当绑定值发生改变时，会执行相应的动画。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Toggle</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;blooming&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">isOn</span><span class="p">:</span> <span class="err">$</span><span class="n">blooming</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">animation</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">spring</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">dampingFraction</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h1 class="heading-element" id="相位动画"><span>相位动画</span>
+  <a href="#%e7%9b%b8%e4%bd%8d%e5%8a%a8%e7%94%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>“相位”是物理学、数学中的一个概念，通常表示物体周期性运动的阶段。相位动画，顾名思义，表示的是视图在某个阶段内的动画。</p>
+<p><a href="https://developer.apple.com/documentation/swiftui/phaseanimator" target="_blank" rel="external nofollow noopener noreferrer">PhaseAnimator<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 遵循 View 协议，我们可以直接使用它来创建具有相位动画的视图（后文提到的 <a href="https://developer.apple.com/documentation/swiftui/keyframeanimator" target="_blank" rel="external nofollow noopener noreferrer">KeyframeAnimator<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是类似的）。也可以直接使用 SwiftUI 提供的 modifer（iOS 17、macOS 14）：</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/phaseanimator(_:content:animation:)" target="_blank" rel="external nofollow noopener noreferrer">phaseAnimator(_:content:animation:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/phaseanimator(_:trigger:content:animation:)" target="_blank" rel="external nofollow noopener noreferrer">phaseAnimator(_:trigger:content:animation:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul>
+<p>示例中使用第二个方法演示了一个 like 动画，主要代码如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Button</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">like</span><span class="p">.</span><span class="n">toggle</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">label</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="n">like</span> <span class="p">?</span> <span class="s">&#34;heart.fill&#34;</span> <span class="p">:</span> <span class="s">&#34;heart&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">symbolRenderingMode</span><span class="p">(.</span><span class="n">multicolor</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">phaseAnimator</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">LikePhase</span><span class="p">.</span><span class="n">allCases</span><span class="p">,</span> <span class="c1">// phase</span>
+</span></span><span class="line"><span class="cl">      <span class="n">trigger</span><span class="p">:</span> <span class="n">like</span> <span class="c1">// trigger</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span> <span class="p">{</span> <span class="n">content</span><span class="p">,</span> <span class="n">phase</span> <span class="k">in</span> <span class="c1">// content</span>
+</span></span><span class="line"><span class="cl">      <span class="n">content</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">offset</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">phase</span><span class="p">.</span><span class="n">offsetY</span><span class="p">(</span><span class="n">like</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">scaleEffect</span><span class="p">(</span><span class="n">phase</span><span class="p">.</span><span class="n">scale</span><span class="p">(</span><span class="n">like</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">animation</span><span class="p">:</span> <span class="p">{</span> <span class="n">phase</span> <span class="k">in</span> <span class="c1">// animation</span>
+</span></span><span class="line"><span class="cl">      <span class="n">phase</span><span class="p">.</span><span class="n">animation</span><span class="p">(</span><span class="n">like</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fileprivate</span> <span class="kd">enum</span> <span class="nc">LikePhase</span><span class="p">:</span> <span class="n">CaseIterable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">toggle</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">move</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">reset</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">offsetY</span><span class="p">(</span><span class="kc">_</span> <span class="n">like</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">CGFloat</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span> <span class="p">==</span> <span class="p">.</span><span class="n">move</span> <span class="o">&amp;&amp;</span> <span class="n">like</span> <span class="p">?</span> <span class="o">-</span><span class="mi">15</span> <span class="p">:</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">scale</span><span class="p">(</span><span class="kc">_</span> <span class="n">like</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">CGFloat</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span> <span class="p">==</span> <span class="p">.</span><span class="n">move</span> <span class="o">&amp;&amp;</span> <span class="n">like</span> <span class="p">?</span> <span class="mf">1.2</span> <span class="p">:</span> <span class="mf">1.0</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">animation</span><span class="p">(</span><span class="kc">_</span> <span class="n">like</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Animation</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span> <span class="p">==</span> <span class="p">.</span><span class="n">move</span> <span class="o">&amp;&amp;</span> <span class="n">like</span> <span class="p">?</span> <span class="p">.</span><span class="n">bouncy</span> <span class="p">:</span> <span class="p">.</span><span class="k">default</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>参数解释：</p>
+<ul>
+<li>phase：相位动画各个阶段的序列。比如我们这里指定的是 <code>LikePhase</code> 的所有枚举值，如果只想针对其中的某些阶段执行动画，那么可以根据实际需要移除相应的枚举值。</li>
+<li>trigger：用于触发动画。</li>
+<li>content：闭包内返回当前视图（content），以及当前的阶段（phase）。</li>
+<li>animation：闭包内返回过渡到下一个阶段的动画，如果返回 nil，则禁用动画。</li>
+</ul>
+<p>另一个方法 <code>phaseAnimator(_:content:animation:)</code> 使用是类似的，只不过没有了 trigger 来触发动画，视图会根据指定的 phase 周而复始地执行动画。具体效果可以 copy 代码后自行实践，只需要移除 trigger 参数并将 like 变量的初始值指定为 true 即可。</p>
+<h1 class="heading-element" id="关键帧动画"><span>关键帧动画</span>
+  <a href="#%e5%85%b3%e9%94%ae%e5%b8%a7%e5%8a%a8%e7%94%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>在动画和视频制作中，关键帧是一种特殊的帧，它定义了一个特定的点，动画在这个点应该处于特定的状态。在两个关键帧之间，SwiftUI 会对视图进行插值运算，以生成顺滑的动画效果。</p>
+<p>比起相位动画，关键帧动画的控制更为复杂和精细。与相位动画类似，SwiftUI 提供了如下 modifier：</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/keyframeanimator(initialvalue:repeating:content:keyframes:)" target="_blank" rel="external nofollow noopener noreferrer">keyframeAnimator(initialValue:repeating:content:keyframes:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/keyframeanimator(initialvalue:trigger:content:keyframes:)" target="_blank" rel="external nofollow noopener noreferrer">keyframeAnimator(initialValue:trigger:content:keyframes:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul>
+<p>参数释义：</p>
+<ul>
+<li><code>initialValue</code>：帧动画的初始值。</li>
+<li><code>repeating</code>：是否重复。</li>
+<li><code>trigger</code>：用于触发动画。</li>
+<li><code>content</code>：闭包内返回当前视图（content），以及当前差值（value）。</li>
+<li><code>keyframes</code>：随时间变化的关键帧。</li>
+</ul>
+<p><code>keyframes</code> 定义了动画的行为，系统内置了以下几种常用的关键帧：</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/cubickeyframe" target="_blank" rel="external nofollow noopener noreferrer">CubicKeyframe<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：使用三次曲线平滑<strong>插值</strong>的关键帧。</li>
+<li><a href="https://developer.apple.com/documentation/swiftui/linearkeyframe" target="_blank" rel="external nofollow noopener noreferrer">LinearKeyframe<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：使用简单线性<strong>插值</strong>的关键帧。</li>
+<li><a href="https://developer.apple.com/documentation/swiftui/springkeyframe" target="_blank" rel="external nofollow noopener noreferrer">SpringKeyframe<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：使用弹簧动画<strong>插值</strong>到给定值的关键帧。</li>
+<li><a href="https://developer.apple.com/documentation/swiftui/movekeyframe" target="_blank" rel="external nofollow noopener noreferrer">MoveKeyframe<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：一个<strong>无插值</strong>，立即移动到给定值的关键帧。</li>
+</ul>
+<p>前几种比较常用，它们都提供了平滑的过渡效果，MoveKeyframe 几乎不会用到，它呈现的视觉效果就是没有任何动画的突变。</p>
+<h1 class="heading-element" id="更多示例"><span>更多示例</span>
+  <a href="#%e6%9b%b4%e5%a4%9a%e7%a4%ba%e4%be%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>示例中还演示了一个渐变的 “WWDC23” 文字，这里说一下实现思路：</p>
+<ol>
+<li>文字背景是一个渐变区域，通过定时器不断地触发 updatePoints 方法，让 startPoint 和 endPoint 这两个控制点在渐变矩形区域的边上缓慢前行，从而实现渐变区域的动画效果。</li>
+<li>使用 mask 方法将文字作为渐变区域的遮罩，以此实现渐变色文字。</li>
+<li>定时器事件触发时，同时更新 degrees 变量，实现文字的 3d 旋转效果。</li>
+</ol>
+<p>当然，这个动画还有很多改进的空间，以上仅为抛砖引玉。</p>
+<p>这个示例的渐变动画是通过更新 startPoint 和 endPoint 的值来驱动视图更新实现的，稍微有点复杂。在 iOS 17、macOS 14 之后，我们可以直接通过改变 colors 来实现动画：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">LinearGradient</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">colors</span><span class="p">:</span> <span class="n">animate</span> <span class="p">?</span> <span class="p">[.</span><span class="n">orange</span><span class="p">,</span> <span class="p">.</span><span class="n">red</span><span class="p">,</span> <span class="p">.</span><span class="n">purple</span><span class="p">]</span> <span class="p">:</span> <span class="p">[.</span><span class="n">green</span><span class="p">,</span> <span class="p">.</span><span class="n">teal</span><span class="p">,</span> <span class="p">.</span><span class="n">blue</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="n">startPoint</span><span class="p">:</span> <span class="p">.</span><span class="n">topLeading</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">endPoint</span><span class="p">:</span> <span class="p">.</span><span class="n">bottomTrailing</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在 iOS 17、macOS 14 上可以查看示例效果。；；；， ，‘ v宝宝</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-07-24 08:00:00">更新于 2023-07-24&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" data-title="4.4 基础动画" data-hashtags="Xcode 15b3,iOS 17,macOS 14"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" data-hashtag="Xcode 15b3"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" data-title="4.4 基础动画"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-15b3/" class="post-tag" title="标签 - Xcode 15b3">Xcode 15b3</a><a href="/tags/ios-17/" class="post-tag" title="标签 - iOS 17">iOS 17</a><a href="/tags/macos-14/" class="post-tag" title="标签 - macOS 14">macOS 14</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" class="post-nav-item" rel="prev" title="2.2 图片"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.2 图片</a><a href="/posts/swiftui-eul/4.5-%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB/" class="post-nav-item" rel="next" title="4.5 转场动画">4.5 转场动画<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/c7a102d23048e92f00621aa8f7ca1493.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

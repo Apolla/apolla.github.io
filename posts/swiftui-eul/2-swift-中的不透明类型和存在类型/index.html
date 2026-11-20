@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>2 Swift 中的不透明类型和存在类型 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+不透明类型、some 关键字 some 关键字由 Swift 5.1 引入，它用来修饰某个协议，使之成为不透明类型。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 14b3, Swift 5.7'>
+	<meta itemprop="name" content="2 Swift 中的不透明类型和存在类型">
+	<meta itemprop="description" content="不透明类型、some 关键字 some 关键字由 Swift 5.1 引入，它用来修饰某个协议，使之成为不透明类型。">
+	<meta itemprop="datePublished" content="2022-07-13T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2022-07-13T08:00:00+08:00">
+	<meta itemprop="wordCount" content="2008">
+	<meta itemprop="keywords" content="Xcode 14b3,Swift 5.7"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="2 Swift 中的不透明类型和存在类型">
+	<meta property="og:description" content="不透明类型、some 关键字 some 关键字由 Swift 5.1 引入，它用来修饰某个协议，使之成为不透明类型。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2022-07-13T08:00:00+08:00">
+		<meta property="article:modified_time" content="2022-07-13T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 14b3">
+		<meta property="article:tag" content="Swift 5.7">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2 Swift 中的不透明类型和存在类型">
+  <meta name="twitter:description" content="不透明类型、some 关键字 some 关键字由 Swift 5.1 引入，它用来修饰某个协议，使之成为不透明类型。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" title="2 Swift 中的不透明类型和存在类型 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swift/memorylayout/" title="MemoryLayout" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" title="1 Swift 5.7 新特性" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "2 Swift 中的不透明类型和存在类型",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B\/"
+    },"genre": "posts","keywords": "Xcode 14b3, Swift 5.7","wordcount":  2008 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B\/","datePublished": "2022-07-13T08:00:00+08:00","dateModified": "2022-07-13T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>2 Swift 中的不透明类型和存在类型</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2022-07-13 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2022-07-13">2022-07-13</time></span>&nbsp;<span title="2008 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<h1 class="heading-element" id="不透明类型some-关键字"><span>不透明类型、some 关键字</span>
+  <a href="#%e4%b8%8d%e9%80%8f%e6%98%8e%e7%b1%bb%e5%9e%8bsome-%e5%85%b3%e9%94%ae%e5%ad%97" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><code>some</code> 关键字由 Swift 5.1 引入，它用来修饰某个协议，使之成为<strong>不透明类型</strong>。</p>
+<p>不透明类型是隐藏类型信息的抽象类型，其底层的具体类型不可动态改变。</p>
+<p>初次接触 SwiftUI 的读者会看到这样的代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>body</code> 是不透明类型 <code>some View</code>，调用者只知其是一个遵循 <code>View</code> 协议的抽象类型，却不知其底层的具体类型（<code>Text</code>），因为不透明类型对调用者隐藏了类型信息。</p>
+<p>这里的”不可见“是对调用者而言的，而编译器具有”透视“视角，它能够在编译期获取到不透明类型底层的具体类型（<code>Text</code>），并确保其底层类型是静态的。</p>
+<p>如果在 <code>body</code> 内这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="nb">Bool</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="p">?</span> <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span> <span class="p">:</span> <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="s">&#34;swift&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>编译器能够诊断出 <code>Text</code> 和 <code>Image</code> 是不同的类型，因而抛出错误。假设 <code>body</code> 内部可以动态地改变其底层的具体类型，这意味着更多的内存占用和复杂计算，这会导致程序的性能损耗。</p>
+<p>基于以上特性，不透明类型非常适合在模块之间调用，它可以保护类型信息为私有状态而不被暴露，而编译器能够访问类型信息并作出优化工作。</p>
+<p>不透明类型受实现者约束，这和泛型受调用者约束是相反的。因此，不透明类型又被称为<strong>反向泛型</strong>。比如下面的代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">build1</span><span class="p">&lt;</span><span class="n">V</span><span class="p">:</span> <span class="n">View</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">v</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">V</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// v1 is Text</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">v1</span> <span class="p">=</span> <span class="n">build1</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">build2</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// v2 is View</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">v2</span> <span class="p">=</span> <span class="n">build2</span><span class="p">()</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>调用 <code>build1</code> 时就需要指定具体类型，此处入参为 <code>Text</code> 类型，因此 <code>v1</code> 的类型也是 <code>Text</code>。</p>
+<p><code>build2</code> 返回的具体类型由内部实现决定，这里返回的是 <code>Text</code> 类型。鉴于不透明类型对调用者隐藏了类型信息，因此 <code>v2</code> 的类型在编译期是 <code>View</code>，在运行时是 <code>Text</code>。</p>
+<h1 class="heading-element" id="更优雅的泛型"><span>更优雅的泛型</span>
+  <a href="#%e6%9b%b4%e4%bc%98%e9%9b%85%e7%9a%84%e6%b3%9b%e5%9e%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>下面的代码用于比较两个集合，如果所有元素相同，返回 true。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">compare</span><span class="p">&lt;</span><span class="n">C1</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">C2</span><span class="p">:</span> <span class="n">Collection</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">c1</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="kc">_</span> <span class="n">c2</span><span class="p">:</span> <span class="n">C2</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span>
+</span></span><span class="line"><span class="cl"><span class="k">where</span> <span class="n">C1</span><span class="p">.</span><span class="n">Element</span> <span class="p">==</span> <span class="n">C2</span><span class="p">.</span><span class="n">Element</span><span class="p">,</span> <span class="n">C1</span><span class="p">.</span><span class="n">Element</span><span class="p">:</span> <span class="nb">Equatable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">c1</span><span class="p">.</span><span class="bp">count</span> <span class="o">!=</span> <span class="n">c2</span><span class="p">.</span><span class="bp">count</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">0.</span><span class="p">.&lt;</span><span class="n">c1</span><span class="p">.</span><span class="bp">count</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">v1</span> <span class="p">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">c1</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">c1</span><span class="p">.</span><span class="n">startIndex</span><span class="p">,</span> <span class="n">offsetBy</span><span class="p">:</span> <span class="n">i</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">v2</span> <span class="p">=</span> <span class="n">c2</span><span class="p">[</span><span class="n">c2</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">c2</span><span class="p">.</span><span class="n">startIndex</span><span class="p">,</span> <span class="n">offsetBy</span><span class="p">:</span> <span class="n">i</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">v1</span> <span class="o">!=</span> <span class="n">v2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">c1</span><span class="p">:</span> <span class="p">[</span><span class="nb">Int</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">c2</span><span class="p">:</span> <span class="n">Set</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">ans</span> <span class="p">=</span> <span class="n">compare</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="c1">// true</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>这里使用泛型约束保证 <code>C1</code> 和 <code>C2</code> 是集合类型，使用 <code>where</code> 分句确保二者的关联类型 <code>Element</code> 是能够判等的相同类型。功能虽已实现，但写起来非常繁琐，也不利于阅读。那么，该如何简化呢？</p>
+<p>在简化之前，先来看看 Swift 5.7 新增的两个新特性：</p>
+<ol>
+<li>
+<p>使用范围更广的不透明类型</p>
+<p>此前，不透明类型只能用于返回值。现在，我们还可以将其用于属性、下标以及函数参数。</p>
+</li>
+<li>
+<p>主要关联类型</p>
+<p>协议支持多个关联类型，使用尖括号声明（类似泛型写法）的则是主要关联类型。</p>
+<p>如下 <code>Collection</code> 协议中的 <code>Element</code>，就是主要关联类型。</p>
+<p>借助这一特性，在使用具有关联类型的协议时，写法可以非常简洁。比如上面的 <code>where</code> 分句，我们可以简写成 <code>Collection&lt;Equatable&gt;</code>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">protocol</span> <span class="nc">Collection</span><span class="p">&lt;</span><span class="n">Element</span><span class="p">&gt;</span> <span class="p">:</span> <span class="n">Sequence</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">associatedtype</span> <span class="n">Element</span>
+</span></span><span class="line"><span class="cl">  <span class="n">associatedtype</span> <span class="n">Iterator</span> <span class="p">=</span> <span class="n">IndexingIterator</span><span class="p">&lt;</span><span class="kc">Self</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div></li>
+</ol>
+<p>将以上两点结合起来，更优雅的写法如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">compare</span><span class="p">&lt;</span><span class="n">E</span><span class="p">:</span> <span class="nb">Equatable</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">c1</span><span class="p">:</span> <span class="n">some</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">E</span><span class="p">&gt;,</span> <span class="kc">_</span> <span class="n">c2</span><span class="p">:</span> <span class="n">some</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">E</span><span class="p">&gt;)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>c1</code> 和 <code>c2</code> 可以是任意集合类型，如果没有使用 <code>some</code> 标记，它就是下文提到的存在类型，编译器会提示使用 <code>any</code> 修饰。但这里将其声明为不透明类型，基于以下两点：</p>
+<ol>
+<li>旧函数在调用时就已经确定了入参的具体类型，这和 <code>any</code> 的表达的意思有悖。</li>
+<li>此处的不透明类型并没有用作返回值，只是在函数被调用时的入参，其具体类型是固定的，没有必要使用 <code>any</code>，这和旧函数表达的意图一致。</li>
+</ol>
+<p>仔细对比两个函数，能够发现：<code>some P</code> 和 <code>T where T: P</code> 表达的意思其实是一样的。如果 <code>P</code> 带有关联类型 <code>E</code>，那么 <code>T where T: P, T.E: V</code> 可以简写为 <code>some P&lt;V&gt;</code>。</p>
+<h1 class="heading-element" id="存在类型any-关键字"><span>存在类型、any 关键字</span>
+  <a href="#%e5%ad%98%e5%9c%a8%e7%b1%bb%e5%9e%8bany-%e5%85%b3%e9%94%ae%e5%ad%97" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><code>any</code> 关键字由 Swift 5.6 引入，它用来修饰<strong>存在类型</strong>：一个能够容纳任意遵循某个协议的的具体类型的容器类型。</p>
+<p>我们结合下面的代码来理解这段抽象的描述：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">protocol</span> <span class="nc">P</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">CP1</span><span class="p">:</span> <span class="n">P</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">CP2</span><span class="p">:</span> <span class="n">P</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">f1</span><span class="p">(</span><span class="kc">_</span> <span class="n">p</span><span class="p">:</span> <span class="n">any</span> <span class="n">P</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">any</span> <span class="n">P</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">f2</span><span class="p">&lt;</span><span class="n">V</span><span class="p">:</span> <span class="n">P</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">p</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">V</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>f1</code> 中的 <code>p</code> 及其返回值都是存在类型，只要是遵循协议 <code>P</code> 的类型实例都是合法的。</p>
+<p><code>f2</code> 中的 <code>p</code> 及其返回值都不是存在类型，而是遵循协议 <code>P</code> 的某个<strong>具体类型</strong>。</p>
+<p>在编译期间，<code>f1</code> 中 <code>p</code> 是存在类型（<code>any P</code>），它将 <code>p</code> 底层的具体类型包装在一个“容器”中。而在运行时，从容器中取出内容物才能得知 <code>p</code> 底层的具体类型。<code>p</code> 的类型可被任何遵循协议 <code>P</code> 的某个具体类型进行替换，因此存在类型具有<strong>动态分发</strong>的特性。</p>
+<p>比如下面的代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">f3</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">any</span> <span class="n">P</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">Bool</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="p">?</span> <span class="n">CP1</span><span class="p">()</span> <span class="p">:</span> <span class="n">CP2</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>f3</code> 的返回类型在编译期间是存在类型 <code>any P</code>，但是在运行期间的具体类型是 <code>CP1</code> 或 <code>CP2</code>。</p>
+<p>而 <code>f2</code> 中的 <code>p</code> 没有被“容器”包装，无需进行装箱、拆箱操作。由于泛型的约束，当我们调用该方法时，就已经确定了它的具体类型。无论是编译期还是运行时，它的类型都是具体的，这又称为<strong>静态分发</strong>。比如这样调用时：<code>f2(CP1())</code> ，入参和返回值类型都就已经固化为 <code>CP1</code>，在编译期和运行时都保持为该具体类型。</p>
+<p>因为动态分发会带来一定的性能损耗，因此 Swift 引入了 <code>any</code> 关键字来向我们警示存在类型的负面影响，我们应该尽量避免使用它。</p>
+<p>上面的示例代码不使用 <code>any</code> 关键字还能通过编译，但从 Swift 6 开始，当我们使用存在类型时，编译器会强制要求使用 <code>any</code> 关键字标记，否则会报错。</p>
+<p>在实际开发中，推荐优先使用泛型和 <code>some</code>，尽可能地避免使用 <code>any</code>，除非你真的需要一个动态的类型。</p>
+<hr>
+<p><em>文中涉及源码参考：<a href="https://github.com/zzzwco/resources/blob/main/Swift-language/any-some/main.swift" target="_blank" rel="external nofollow noopener noreferrer">Source code<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</em></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2022-07-13 08:00:00">更新于 2022-07-13&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" data-title="2 Swift 中的不透明类型和存在类型" data-hashtags="Xcode 14b3,Swift 5.7"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" data-hashtag="Xcode 14b3"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/2-swift-%E4%B8%AD%E7%9A%84%E4%B8%8D%E9%80%8F%E6%98%8E%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%AD%98%E5%9C%A8%E7%B1%BB%E5%9E%8B/" data-title="2 Swift 中的不透明类型和存在类型"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-14b3/" class="post-tag" title="标签 - Xcode 14b3">Xcode 14b3</a><a href="/tags/swift-5.7/" class="post-tag" title="标签 - Swift 5.7">Swift 5.7</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swift/%E5%8F%AF%E9%80%89%E9%A1%B9/" class="post-nav-item" rel="prev" title="可选项"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>可选项</a><a href="/posts/swiftui-eul/1-swift-5.7-%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-nav-item" rel="next" title="1 Swift 5.7 新特性">1 Swift 5.7 新特性<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/fd7c92d40db157621b832fb7fed8cc22.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>7：最简单的基于FFmpeg的推流器 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="7：最简单的基于FFmpeg的推流器">
+	<meta itemprop="description" content="本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="3400">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="7：最简单的基于FFmpeg的推流器">
+	<meta property="og:description" content="本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="7：最简单的基于FFmpeg的推流器">
+  <meta name="twitter:description" content="本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/" title="7：最简单的基于FFmpeg的推流器 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/9%E7%BC%96%E8%AF%91ffmpeg%E5%92%8C%E9%9B%86%E6%88%90%E7%AC%AC%E4%B8%89%E6%96%B9%E5%AE%9E%E7%8E%B0%E7%9B%B4%E6%92%AD%E7%9B%91%E6%8E%A7%E7%B1%BB/" title="9：编译ffmpeg和集成第三方实现直播（监控类）" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/" title="5：推流发布和播放【RTMP】介绍" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "7：最简单的基于FFmpeg的推流器",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8\/"
+    },"genre": "posts","wordcount":  3400 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>7：最简单的基于FFmpeg的推流器</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="3400 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#程序流程图">程序流程图</a></li>
+    <li><a href="#代码">代码</a></li>
+    <li><a href="#结果">结果</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><p>本文记录一个最简单的基于FFmpeg的推流器（simplest ffmpeg streamer）。推流器的作用就是将本地的视频数据推送至流媒体服务器。本文记录的推流器，可以将本地的 MOV / AVI / MKV / MP4 / FLV 等格式的媒体文件，通过流媒体协议（例如RTMP，HTTP，UDP，TCP，RTP等等）以直播流的形式推送出去。由于流媒体协议种类繁多，不一一记录。在这里记录将本地文件以RTMP直播流的形式推送至RTMP流媒体服务器（例如 Flash Media Server，Red5，Wowza等等）的方法。</p>
+<p>在这个推流器的基础上可以进行多种方式的修改，实现各式各样的推流器。例如：</p>
+<ul>
+<li>将输入文件改为网络流URL，可以实现转流器。</li>
+<li>将输入的文件改为回调函数（内存读取）的形式，可以推送内存中的视频数据。</li>
+<li>将输入文件改为系统设备（通过libavdevice），同时加上编码的功能，可以实现实时推流器（现场直播）。</li>
+</ul>
+<blockquote>
+<p>PS：本程序并不包含视频转码的功能。</p>
+</blockquote>
+<h1 class="heading-element" id="简介"><span>简介</span>
+  <a href="#%e7%ae%80%e4%bb%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>RTMP推流器（Streamer）的在流媒体系统中的作用可以用下图表示。首先将视频数据以RTMP的形式发送到流媒体服务器端（Server，比如FMS，Red5，Wowza等），然后客户端（一般为Flash Player）通过访问流媒体服务器就可以收看实时流了。
+运行本程序之前需要先运行RTMP流媒体服务器，并在流媒体服务器上建立相应的Application。有关流媒体服务器的操作不在本文的论述范围内，在此不再详述。本程序运行后，即可通过RTMP客户端（例如 Flash Player, FFplay等等）收看推送的直播流。</p>
+<blockquote>
+<p>需要要注意的地方</p>
+</blockquote>
+<p>封装格式
+RTMP采用的封装格式是FLV。因此在指定输出流媒体的时候需要指定其封装格式为“flv”。同理，其他流媒体协议也需要指定其封装格式。例如采用UDP推送流媒体的时候，可以指定其封装格式为“mpegts”。</p>
+<h1 class="heading-element" id="延时"><span>延时</span>
+  <a href="#%e5%bb%b6%e6%97%b6" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>发送流媒体的数据的时候需要延时。不然的话，FFmpeg处理数据速度很快，瞬间就能把所有的数据发送出去，流媒体服务器是接受不了的。因此需要按照视频实际的帧率发送数据。本文记录的推流器在视频帧与帧之间采用了av_usleep()函数休眠的方式来延迟发送。这样就可以按照视频的帧率发送数据了，参考代码如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl">	<span class="n">int64_t</span> <span class="n">start_time</span><span class="o">=</span><span class="n">av_gettime</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nl">Important</span><span class="p">:</span><span class="n">Delay</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">stream_index</span><span class="o">==</span><span class="n">videoindex</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">AVRational</span> <span class="n">time_base</span><span class="o">=</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">AVRational</span> <span class="n">time_base_q</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="n">AV_TIME_BASE</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">		<span class="n">int64_t</span> <span class="n">pts_time</span> <span class="o">=</span> <span class="n">av_rescale_q</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">dts</span><span class="p">,</span> <span class="n">time_base</span><span class="p">,</span> <span class="n">time_base_q</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">int64_t</span> <span class="n">now_time</span> <span class="o">=</span> <span class="n">av_gettime</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">pts_time</span> <span class="o">&gt;</span> <span class="n">now_time</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="n">av_usleep</span><span class="p">(</span><span class="n">pts_time</span> <span class="o">-</span> <span class="n">now_time</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>i</p>
+<h1 class="heading-element" id="ptsdts问题"><span>PTS/DTS问题</span>
+  <a href="#ptsdts%e9%97%ae%e9%a2%98" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>没有封装格式的裸流（例如H.264裸流）是不包含PTS、DTS这些参数的。在发送这种数据的时候，需要自己计算并写入AVPacket的PTS，DTS，duration等参数。这里还没有深入研究，简单写了一点代码，如下所示。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="c1">//FIX：No PTS (Example: Raw H.264)
+</span></span></span><span class="line"><span class="cl"><span class="c1">//Simple Write PTS
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="o">==</span><span class="n">AV_NOPTS_VALUE</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//Write PTS
+</span></span></span><span class="line"><span class="cl">	<span class="n">AVRational</span> <span class="n">time_base1</span><span class="o">=</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Duration</span> <span class="n">between</span> <span class="mi">2</span> <span class="nf">frames</span> <span class="p">(</span><span class="n">us</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">int64_t</span> <span class="n">calc_duration</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">AV_TIME_BASE</span><span class="o">/</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r_frame_rate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//Parameters
+</span></span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">frame_index</span><span class="o">*</span><span class="n">calc_duration</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">time_base1</span><span class="p">)</span><span class="o">*</span><span class="n">AV_TIME_BASE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">dts</span><span class="o">=</span><span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">duration</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">calc_duration</span><span class="o">/</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">time_base1</span><span class="p">)</span><span class="o">*</span><span class="n">AV_TIME_BASE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="程序流程图"><span>程序流程图</span>
+  <a href="#%e7%a8%8b%e5%ba%8f%e6%b5%81%e7%a8%8b%e5%9b%be" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>程序的流程图如下图所示。可以看出和《最简单的基于FFMPEG的封装格式转换器（无编解码）》中的封装格式转换器比较类似。它们之间比较明显的区别在于：</p>
+<ol>
+<li>Streamer输出为URL</li>
+<li>Streamer包含了延时部分
+<img loading="lazy" src='/images/cab854762d9552bb288ec1bb7d8a5569.png' alt="image.png"></li>
+</ol>
+<h2 class="heading-element" id="代码"><span>代码</span>
+  <a href="#%e4%bb%a3%e7%a0%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>代码如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="3" style="--fi-max-shown-lines:10;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 最简单的基于FFmpeg的推流器（推送RTMP）
+</span></span></span><span class="line"><span class="cl"><span class="cm">* Simplest FFmpeg Streamer (Send RTMP)
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 本例子实现了推送本地视频至流媒体服务器（以RTMP为例）。
+</span></span></span><span class="line"><span class="cl"><span class="cm">* 是使用FFmpeg进行流媒体推送最简单的教程。
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* This example stream local media files to streaming media
+</span></span></span><span class="line"><span class="cl"><span class="cm">* server (Use RTMP as example).
+</span></span></span><span class="line"><span class="cl"><span class="cm">* It&#39;s the simplest FFmpeg streamer.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define __STDC_CONSTANT_MACROS
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef _WIN32
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Windows</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="s">&#34;C&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&#34;libavformat/avformat.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&#34;libavutil/mathematics.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&#34;libavutil/time.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="n">Linux</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef __cplusplus
+</span></span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="s">&#34;C&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&lt;libavformat/avformat.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&lt;libavutil/mathematics.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#include</span> <span class="cpf">&lt;libavutil/time.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">	<span class="cp">#ifdef __cplusplus
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">AVOutputFormat</span> <span class="o">*</span><span class="n">ofmt</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//输入对应一个AVFormatContext，输出对应一个AVFormatContext
+</span></span></span><span class="line"><span class="cl">	<span class="err">（</span><span class="n">Input</span> <span class="n">AVFormatContext</span> <span class="n">and</span> <span class="n">Output</span> <span class="n">AVFormatContext</span><span class="err">）</span>
+</span></span><span class="line"><span class="cl">	<span class="n">AVFormatContext</span> <span class="o">*</span><span class="n">ifmt_ctx</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">ofmt_ctx</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">AVPacket</span> <span class="n">pkt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">in_filename</span><span class="p">,</span> <span class="o">*</span><span class="n">out_filename</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">videoindex</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">frame_index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">int64_t</span> <span class="n">start_time</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.mov&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.mkv&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.ts&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.mp4&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.h264&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;cuc_ieschool.flv&#34;</span><span class="p">;</span><span class="c1">//输入URL（Input file URL）
+</span></span></span><span class="line"><span class="cl">	<span class="n">in_filename</span>  <span class="o">=</span> <span class="s">&#34;shanghai03_p.h264&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">out_filename</span> <span class="o">=</span> <span class="s">&#34;rtmp://localhost/publishlive/livestream&#34;</span><span class="p">;</span><span class="err">输出</span> <span class="n">URL</span><span class="err">（</span><span class="n">Output</span> <span class="n">URL</span><span class="err">）</span><span class="p">[</span><span class="n">RTMP</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="n">out_filename</span> <span class="o">=</span> <span class="s">&#34;rtp://233.233.233.233:6666&#34;</span><span class="p">;</span><span class="err">输出</span> <span class="n">URL</span><span class="err">（</span><span class="n">Output</span> <span class="n">URL</span><span class="err">）</span><span class="p">[</span><span class="n">UDP</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">av_register_all</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//Network
+</span></span></span><span class="line"><span class="cl">	<span class="n">avformat_network_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//输入（Input）
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">((</span><span class="n">ret</span> <span class="o">=</span> <span class="n">avformat_open_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ifmt_ctx</span><span class="p">,</span> <span class="n">in_filename</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Could not open input file.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">((</span><span class="n">ret</span> <span class="o">=</span> <span class="n">avformat_find_stream_info</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Failed to retrieve input stream information&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">nb_streams</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">codec</span><span class="o">-&gt;</span><span class="n">codec_type</span><span class="o">==</span><span class="n">AVMEDIA_TYPE_VIDEO</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">videoindex</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">av_dump_format</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">in_filename</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">//输出（Output）
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">avformat_alloc_output_context2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;flv&#34;</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">);</span> <span class="n">RTMP</span>
+</span></span><span class="line"><span class="cl">	<span class="n">avformat_alloc_output_context2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="s">&#34;mpegts&#34;</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">);</span><span class="n">UDP</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ofmt_ctx</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Could not create output context</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">ret</span> <span class="o">=</span> <span class="n">AVERROR_UNKNOWN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">ofmt</span> <span class="o">=</span> <span class="n">ofmt_ctx</span><span class="o">-&gt;</span><span class="n">oformat</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">nb_streams</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//根据输入流创建输出流（Create output AVStream according to input AVStream）
+</span></span></span><span class="line"><span class="cl">		<span class="n">AVStream</span> <span class="o">*</span><span class="n">in_stream</span> <span class="o">=</span> <span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">		<span class="n">AVStream</span> <span class="o">*</span><span class="n">out_stream</span> <span class="o">=</span> <span class="n">avformat_new_stream</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="n">in_stream</span><span class="o">-&gt;</span><span class="n">codec</span><span class="o">-&gt;</span><span class="n">codec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">out_stream</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Failed allocating output stream</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="n">ret</span> <span class="o">=</span> <span class="n">AVERROR_UNKNOWN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">//复制AVCodecContext的设置（Copy the settings of AVCodecContext）
+</span></span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">avcodec_copy_context</span><span class="p">(</span><span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">codec</span><span class="p">,</span> <span class="n">in_stream</span><span class="o">-&gt;</span><span class="n">codec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Failed to copy context from input to output stream codec context</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">codec</span><span class="o">-&gt;</span><span class="n">codec_tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ofmt_ctx</span><span class="o">-&gt;</span><span class="n">oformat</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">AVFMT_GLOBALHEADER</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">codec</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">|=</span> <span class="n">CODEC_FLAG_GLOBAL_HEADER</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">//Dump Format
+</span></span></span><span class="line"><span class="cl">	<span class="n">av_dump_format</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//打开输出URL（Open output URL）
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">ofmt</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">AVFMT_NOFILE</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">avio_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ofmt_ctx</span><span class="o">-&gt;</span><span class="n">pb</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">,</span> <span class="n">AVIO_FLAG_WRITE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Could not open output URL &#39;%s&#39;&#34;</span><span class="p">,</span> <span class="n">out_filename</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">//写文件头（Write file header）
+</span></span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">avformat_write_header</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Error occurred when opening output URL</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">end</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">start_time</span><span class="o">=</span><span class="n">av_gettime</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">AVStream</span> <span class="o">*</span><span class="n">in_stream</span><span class="p">,</span> <span class="o">*</span><span class="n">out_stream</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//获取一个AVPacket（Get an AVPacket）
+</span></span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">av_read_frame</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//FIX：No PTS (Example: Raw H.264)
+</span></span></span><span class="line"><span class="cl">	<span class="c1">//Simple Write PTS
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="o">==</span><span class="n">AV_NOPTS_VALUE</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">//Write PTS
+</span></span></span><span class="line"><span class="cl">		<span class="n">AVRational</span> <span class="n">time_base1</span><span class="o">=</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">Duration</span> <span class="n">between</span> <span class="mi">2</span> <span class="n">frames</span> <span class="p">(</span><span class="n">us</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="n">int64_t</span> <span class="n">calc_duration</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">AV_TIME_BASE</span><span class="o">/</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r_frame_rate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">//Parameters
+</span></span></span><span class="line"><span class="cl">		<span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">frame_index</span><span class="o">*</span><span class="n">calc_duration</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">time_base1</span><span class="p">)</span><span class="o">*</span><span class="n">AV_TIME_BASE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">dts</span><span class="o">=</span><span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">duration</span><span class="o">=</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">calc_duration</span><span class="o">/</span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">av_q2d</span><span class="p">(</span><span class="n">time_base1</span><span class="p">)</span><span class="o">*</span><span class="n">AV_TIME_BASE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">//Important:Delay
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">stream_index</span><span class="o">==</span><span class="n">videoindex</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">AVRational</span> <span class="n">time_base</span><span class="o">=</span><span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">videoindex</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">AVRational</span> <span class="n">time_base_q</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="n">AV_TIME_BASE</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">		<span class="n">int64_t</span> <span class="n">pts_time</span> <span class="o">=</span> <span class="n">av_rescale_q</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">dts</span><span class="p">,</span> <span class="n">time_base</span><span class="p">,</span> <span class="n">time_base_q</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">int64_t</span> <span class="n">now_time</span> <span class="o">=</span> <span class="n">av_gettime</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">pts_time</span> <span class="o">&gt;</span> <span class="n">now_time</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="n">av_usleep</span><span class="p">(</span><span class="n">pts_time</span> <span class="o">-</span> <span class="n">now_time</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">in_stream</span>  <span class="o">=</span> <span class="n">ifmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">pkt</span><span class="p">.</span><span class="n">stream_index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="n">out_stream</span> <span class="o">=</span> <span class="n">ofmt_ctx</span><span class="o">-&gt;</span><span class="n">streams</span><span class="p">[</span><span class="n">pkt</span><span class="p">.</span><span class="n">stream_index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="cm">/* copy packet */</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//转换PTS/DTS（Convert PTS/DTS）
+</span></span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">pts</span> <span class="o">=</span> <span class="n">av_rescale_q_rnd</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">pts</span><span class="p">,</span> <span class="n">in_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">,</span> <span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">,</span> <span class="p">(</span><span class="n">AVRounding</span><span class="p">)(</span><span class="n">AV_ROUND_NEAR_INF</span><span class="o">|</span><span class="n">AV_ROUND_PASS_MINMAX</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">dts</span> <span class="o">=</span> <span class="n">av_rescale_q_rnd</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">dts</span><span class="p">,</span> <span class="n">in_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">,</span> <span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">,</span> <span class="p">(</span><span class="n">AVRounding</span><span class="p">)(</span><span class="n">AV_ROUND_NEAR_INF</span><span class="o">|</span><span class="n">AV_ROUND_PASS_MINMAX</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">av_rescale_q</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">duration</span><span class="p">,</span> <span class="n">in_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">,</span> <span class="n">out_stream</span><span class="o">-&gt;</span><span class="n">time_base</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">pkt</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Print</span> <span class="n">to</span> <span class="n">Screen</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="n">pkt</span><span class="p">.</span><span class="n">stream_index</span><span class="o">==</span><span class="n">videoindex</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Send %8d video frames to output URL</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">frame_index</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">frame_index</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">av_write_frame</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">ret</span> <span class="o">=</span> <span class="n">av_interleaved_write_frame</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Error muxing packet</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">av_free_packet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//写文件尾（Write file trailer）
+</span></span></span><span class="line"><span class="cl">	<span class="n">av_write_trailer</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">end</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="n">avformat_close_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ifmt_ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* close output */</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ofmt_ctx</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">ofmt</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">AVFMT_NOFILE</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">avio_close</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="o">-&gt;</span><span class="n">pb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">avformat_free_context</span><span class="p">(</span><span class="n">ofmt_ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ret</span> <span class="o">!=</span> <span class="n">AVERROR_EOF</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">printf</span><span class="p">(</span> <span class="s">&#34;Error occurred.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="结果"><span>结果</span>
+  <a href="#%e7%bb%93%e6%9e%9c" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>程序开始运行后。截图如下所示。
+<img loading="lazy" src='/images/b77ddba806239978f6507d9be0ae5ded.png' alt="image.png"></p>
+<p>可以通过网页播放器播放推送的直播流。
+例如下图所示，使用Flash Media Server 的Samples文件夹下的videoPlayer播放直播流的截图如下图所示。（直播地址：rtmp://localhost/publishlive/livestream）
+<img loading="lazy" src='/images/f8834dab749df348a4ff351eede8e32c.png' alt="image.png"></p>
+<p>此外，也可以通过FFplay这样的客户端播放直播流。</p>
+<h1 class="heading-element" id="下载"><span>下载</span>
+  <a href="#%e4%b8%8b%e8%bd%bd" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>simplest ffmpeg streamer</p>
+<p>项目主页
+SourceForge：https://sourceforge.net/projects/simplestffmpegstreamer/
+Github：https://github.com/leixiaohua1020/simplest_ffmpeg_streamer
+开源中国：http://git.oschina.net/leixiaohua1020/simplest_ffmpeg_streamer</p>
+<p>CSDN下载地址：
+<a href="http://download.csdn.net/detail/leixiaohua1020/8005311" target="_blank" rel="external nofollow noopener noreferrer">http://download.csdn.net/detail/leixiaohua1020/8005311<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<h1 class="heading-element" id="更新-11"><span>更新-1.1</span>
+  <a href="#%e6%9b%b4%e6%96%b0-11" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>这次考虑到了跨平台的要求，调整了源代码。经过这次调整之后，源代码可以在以下平台编译通过：</p>
+<p>VC++：打开sln文件即可编译，无需配置。
+cl.exe：打开compile_cl.bat即可命令行下使用cl.exe进行编译，注意可能需要按照VC的安装路径调整脚本里面的参数。编译命令如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="o">::</span><span class="n">VS2010</span> <span class="n">Environment</span>
+</span></span><span class="line"><span class="cl"><span class="n">call</span> <span class="s">&#34;D:\Program Files\Microsoft Visual Studio 10.0\VC</span><span class="se">\v</span><span class="s">cvarsall.bat&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">::</span><span class="n">include</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">set</span> <span class="n">INCLUDE</span><span class="o">=</span><span class="n">include</span><span class="p">;</span><span class="o">%</span><span class="n">INCLUDE</span><span class="o">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">::</span><span class="n">lib</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">set</span> <span class="n">LIB</span><span class="o">=</span><span class="n">lib</span><span class="p">;</span><span class="o">%</span><span class="n">LIB</span><span class="o">%</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">::</span><span class="n">compile</span> <span class="n">and</span> <span class="n">link</span>
+</span></span><span class="line"><span class="cl"><span class="n">cl</span> <span class="n">simplest_ffmpeg_streamer</span><span class="p">.</span><span class="n">cpp</span> <span class="o">/</span><span class="n">link</span> <span class="n">avcodec</span><span class="p">.</span><span class="n">lib</span> <span class="n">avformat</span><span class="p">.</span><span class="n">lib</span> <span class="n">avutil</span><span class="p">.</span><span class="n">lib</span> <span class="o">^</span>
+</span></span><span class="line"><span class="cl"><span class="n">avdevice</span><span class="p">.</span><span class="n">lib</span> <span class="n">avfilter</span><span class="p">.</span><span class="n">lib</span> <span class="n">postproc</span><span class="p">.</span><span class="n">lib</span> <span class="n">swresample</span><span class="p">.</span><span class="n">lib</span> <span class="n">swscale</span><span class="p">.</span><span class="n">lib</span> <span class="o">/</span><span class="nl">OPT</span><span class="p">:</span><span class="n">NOREF</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>MinGW：MinGW命令行下运行compile_mingw.sh即可使用MinGW的g++进行编译。编译命令如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="n">g</span><span class="o">++</span> <span class="n">simplest_ffmpeg_streamer</span><span class="p">.</span><span class="n">cpp</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">o</span> <span class="n">simplest_ffmpeg_streamer</span><span class="p">.</span><span class="n">exe</span> \
+</span></span><span class="line"><span class="cl"><span class="o">-</span><span class="n">I</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span> <span class="o">-</span><span class="n">L</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">lavformat</span> <span class="o">-</span><span class="n">lavcodec</span> <span class="o">-</span><span class="n">lavutil</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>GCC：Linux或者MacOS命令行下运行compile_gcc.sh即可使用GCC进行编译。编译命令如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="n">cc</span> <span class="n">simplest_ffmpeg_streamer</span><span class="p">.</span><span class="n">cpp</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">o</span> <span class="n">simplest_ffmpeg_streamer</span><span class="p">.</span><span class="k">out</span> \
+</span></span><span class="line"><span class="cl"><span class="o">-</span><span class="n">I</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span> <span class="o">-</span><span class="n">L</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span> <span class="o">-</span><span class="n">lavformat</span> <span class="o">-</span><span class="n">lavcodec</span> <span class="o">-</span><span class="n">lavutil</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>PS：相关的编译命令已经保存到了工程文件夹中</p>
+<p>CSDN下载地址：http://download.csdn.net/detail/leixiaohua1020/8445455
+SourceForge上已经更新。</p>
+<h1 class="heading-element" id="更新-12"><span>更新-1.2</span>
+  <a href="#%e6%9b%b4%e6%96%b0-12" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>增加了下列工程：
+simplest_ffmpeg_receiver: 将流媒体数据保存成本地文件。</p>
+<p>CSDN项目下载地址：http://download.csdn.net/detail/leixiaohua1020/8924345
+SourceForge、Github等上面已经更新。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/" data-title="7：最简单的基于FFmpeg的推流器"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/" data-title="7：最简单的基于FFmpeg的推流器"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/" class="post-nav-item" rel="prev" title="5：推流发布和播放【RTMP】介绍"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>5：推流发布和播放【RTMP】介绍</a><a href="/posts/live/9%E7%BC%96%E8%AF%91ffmpeg%E5%92%8C%E9%9B%86%E6%88%90%E7%AC%AC%E4%B8%89%E6%96%B9%E5%AE%9E%E7%8E%B0%E7%9B%B4%E6%92%AD%E7%9B%91%E6%8E%A7%E7%B1%BB/" class="post-nav-item" rel="next" title="9：编译ffmpeg和集成第三方实现直播（监控类）">9：编译ffmpeg和集成第三方实现直播（监控类）<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a8e6b3193530a964e1d298e725db71c8.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

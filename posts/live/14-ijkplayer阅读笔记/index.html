@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>14： Ijkplayer阅读笔记 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="读取视频包 &mdash;&mdash;&gt; 解码 &mdash;&mdash;&gt; 显示
+视频流程：
+1)读取线程：读取视频包，推入videoq队列中
+1 2 3 4 5 6 7 8 9 10 11 12 13 read_thread{ ret = stream_component_open(ffp, st_index[AVMEDIA_TYPE_VIDEO]);{ is-&gt;video_tid = SDL_CreateThreadEx(&amp;is-&gt;_video_tid, video_thread, ffp, &#34;ff_video_dec&#34;); } for (;;) { if (is-&gt;abort_request) break; ret = av_read_frame(ic, pkt); packet_queue_put(&amp;is-&gt;videoq, pkt); //将获取到的视频包推入videoq队列中 } } 2）解码线程 软解：从videoq队列中获取视频包，解码视频帧放入pictq列表中 硬解：从videoq队列中获取视频包，推送MediaCodec解码，获取解码outputbuffer index并存储在pictq列表中
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="14： ijkplayer阅读笔记">
+	<meta itemprop="description" content="读取视频包 ——&gt; 解码 ——&gt; 显示
+视频流程：
+1)读取线程：读取视频包，推入videoq队列中
+1 2 3 4 5 6 7 8 9 10 11 12 13 read_thread{ ret = stream_component_open(ffp, st_index[AVMEDIA_TYPE_VIDEO]);{ is-&gt;video_tid = SDL_CreateThreadEx(&amp;is-&gt;_video_tid, video_thread, ffp, &#34;ff_video_dec&#34;); } for (;;) { if (is-&gt;abort_request) break; ret = av_read_frame(ic, pkt); packet_queue_put(&amp;is-&gt;videoq, pkt); //将获取到的视频包推入videoq队列中 } } 2）解码线程 软解：从videoq队列中获取视频包，解码视频帧放入pictq列表中 硬解：从videoq队列中获取视频包，推送MediaCodec解码，获取解码outputbuffer index并存储在pictq列表中">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="467">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="14： ijkplayer阅读笔记">
+	<meta property="og:description" content="读取视频包 ——&gt; 解码 ——&gt; 显示
+视频流程：
+1)读取线程：读取视频包，推入videoq队列中
+1 2 3 4 5 6 7 8 9 10 11 12 13 read_thread{ ret = stream_component_open(ffp, st_index[AVMEDIA_TYPE_VIDEO]);{ is-&gt;video_tid = SDL_CreateThreadEx(&amp;is-&gt;_video_tid, video_thread, ffp, &#34;ff_video_dec&#34;); } for (;;) { if (is-&gt;abort_request) break; ret = av_read_frame(ic, pkt); packet_queue_put(&amp;is-&gt;videoq, pkt); //将获取到的视频包推入videoq队列中 } } 2）解码线程 软解：从videoq队列中获取视频包，解码视频帧放入pictq列表中 硬解：从videoq队列中获取视频包，推送MediaCodec解码，获取解码outputbuffer index并存储在pictq列表中">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="14： ijkplayer阅读笔记">
+  <meta name="twitter:description" content="读取视频包 ——&gt; 解码 ——&gt; 显示
+视频流程：
+1)读取线程：读取视频包，推入videoq队列中
+1 2 3 4 5 6 7 8 9 10 11 12 13 read_thread{ ret = stream_component_open(ffp, st_index[AVMEDIA_TYPE_VIDEO]);{ is-&gt;video_tid = SDL_CreateThreadEx(&amp;is-&gt;_video_tid, video_thread, ffp, &#34;ff_video_dec&#34;); } for (;;) { if (is-&gt;abort_request) break; ret = av_read_frame(ic, pkt); packet_queue_put(&amp;is-&gt;videoq, pkt); //将获取到的视频包推入videoq队列中 } } 2）解码线程 软解：从videoq队列中获取视频包，解码视频帧放入pictq列表中 硬解：从videoq队列中获取视频包，推送MediaCodec解码，获取解码outputbuffer index并存储在pictq列表中"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" title="14： ijkplayer阅读笔记 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/17-mpmovieplayerviewcontroller/" title="17： MPMoviePlayerViewController" /><link rel="next" type="text/html" href="https://apolla.cc/posts/bluetooth/1-%E8%93%9D%E7%89%99%E8%BF%9E%E6%8E%A5%E6%B5%81%E7%A8%8B/" title="1 ：蓝牙连接流程" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "14： ijkplayer阅读笔记",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0\/"
+    },"genre": "posts","wordcount":  467 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>14： Ijkplayer阅读笔记</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="467 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>读取视频包 &mdash;&mdash;&gt; 解码  &mdash;&mdash;&gt; 显示</p>
+<p>视频流程：</p>
+<p>1)读取线程：读取视频包，推入videoq队列中</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="n">read_thread</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="n">stream_component_open</span><span class="p">(</span><span class="n">ffp</span><span class="p">,</span> <span class="n">st_index</span><span class="p">[</span><span class="n">AVMEDIA_TYPE_VIDEO</span><span class="p">]);{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">is</span><span class="o">-&gt;</span><span class="n">video_tid</span> <span class="o">=</span> <span class="n">SDL_CreateThreadEx</span><span class="p">(</span><span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">_video_tid</span><span class="p">,</span> <span class="n">video_thread</span><span class="p">,</span> <span class="n">ffp</span><span class="p">,</span> <span class="s">&#34;ff_video_dec&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">abort_request</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">        <span class="n">ret</span> <span class="o">=</span> <span class="n">av_read_frame</span><span class="p">(</span><span class="n">ic</span><span class="p">,</span> <span class="n">pkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">packet_queue_put</span><span class="p">(</span><span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">videoq</span><span class="p">,</span> <span class="n">pkt</span><span class="p">);</span>   <span class="c1">//将获取到的视频包推入videoq队列中
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>2）解码线程
+软解：从videoq队列中获取视频包，解码视频帧放入pictq列表中
+硬解：从videoq队列中获取视频包，推送MediaCodec解码，获取解码outputbuffer index并存储在pictq列表中</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="n">video_thread</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ffpipenode_run_sync</span><span class="p">(</span><span class="n">ffp</span><span class="o">-&gt;</span><span class="n">node_vdec</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">func_run_sync</span><span class="p">(</span><span class="n">node</span><span class="p">);{</span> <span class="c1">// decoder_from_android_mediacodec 硬解流程
+</span></span></span><span class="line"><span class="cl">            <span class="n">SDL_CreateThreadEx</span><span class="p">(</span><span class="n">enqueue_thread_func</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="o">-&gt;</span><span class="n">abort_request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">feed_input_buffer</span><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">                        <span class="n">ffp_packet_queue_get_or_buffering</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">SDL_AMediaCodec_dequeueInputBuffer</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">input_buffer_ptr</span> <span class="o">=</span> <span class="n">SDL_AMediaCodec_getInputBuffer</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">memcpy</span><span class="p">(</span><span class="n">input_buffer_ptr</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">pkt_temp</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">copy_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">SDL_AMediaCodec_queueInputBuffer</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">drain_output_buffer</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                     <span class="n">output_buffer_index</span> <span class="o">=</span> <span class="n">SDL_AMediaCodec_dequeueOutputBuffer</span>   
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="n">node</span><span class="o">-&gt;</span><span class="n">func_run_sync</span><span class="p">(</span><span class="n">node</span><span class="p">);{</span> <span class="c1">// decoder_from_ffplay 软解流程
+</span></span></span><span class="line"><span class="cl">        <span class="n">func_run_sync</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ffp_video_thread</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ffplay_video_thread</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                     <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                         <span class="n">get_video_frame</span><span class="p">(</span><span class="n">ffp</span><span class="p">,</span> <span class="n">frame</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">decoder_decode_frame</span><span class="p">(</span><span class="n">ffp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">viddec</span><span class="p">,</span> <span class="n">frame</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                                  <span class="n">avcodec_decode_video2</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">avctx</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">got_frame</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                                  <span class="o">||</span> <span class="n">avcodec_decode_audio4</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">avctx</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">got_frame</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                             <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                         <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                         <span class="n">queue_picture</span><span class="p">(</span><span class="n">ffp</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">duration</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">vp</span> <span class="o">=</span> <span class="n">frame_queue_peek_writable</span><span class="p">(</span><span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">pictq</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">SDL_VoutFFmpeg_ConvertFrame</span><span class="p">(</span><span class="n">vp</span><span class="o">-&gt;</span><span class="n">bmp</span><span class="p">,</span> <span class="n">src_frame</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                      
+</span></span><span class="line"><span class="cl">                             <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                         <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                         <span class="n">frame_queue_push</span><span class="p">(</span><span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">pictq</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                     <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>3）显示线程
+硬解：由MediaCodec configure Surface，自动完成视频帧的渲染
+软解：从pictq列表中获取视频帧，写入nativewindows视频缓冲中渲染</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="n">video_refresh_thread</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">IJKFF_Pipenode</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">ffpipeline_open_video_output</span><span class="p">(</span><span class="n">ffp</span><span class="o">-&gt;</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">ffp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ffpipenode_run_sync</span><span class="p">(</span><span class="n">node</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">ffp_video_refresh_thread</span><span class="p">(</span><span class="n">opaque</span><span class="o">-&gt;</span><span class="n">ffp</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">              <span class="n">ffplay_video_refresh_thread</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                  <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">abort_request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">video_refresh</span><span class="p">(</span><span class="n">ffp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">remaining_time</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">video_image_display2</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">vp</span> <span class="o">=</span> <span class="n">frame_queue_peek</span><span class="p">(</span><span class="o">&amp;</span><span class="n">is</span><span class="o">-&gt;</span><span class="n">pictq</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">SDL_VoutDisplayYUVOverlay</span><span class="p">(</span><span class="n">ffp</span><span class="o">-&gt;</span><span class="n">vout</span><span class="p">,</span> <span class="n">vp</span><span class="o">-&gt;</span><span class="n">bmp</span><span class="p">);{</span>
+</span></span><span class="line"><span class="cl">                                 <span class="n">SDL_VoutOverlayAMediaCodec_releaseFrame</span>  <span class="n">or</span>
+</span></span><span class="line"><span class="cl">                                 <span class="n">SDL_Android_NativeWindow_display_l</span>
+</span></span><span class="line"><span class="cl">                             <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>    
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" data-title="14： Ijkplayer阅读笔记"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/14-ijkplayer%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" data-title="14： Ijkplayer阅读笔记"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/media/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%85%A5%E9%97%A8/" class="post-nav-item" rel="prev" title="音视频入门"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>音视频入门</a><a href="/posts/live/17-mpmovieplayerviewcontroller/" class="post-nav-item" rel="next" title="17： MPMoviePlayerViewController">17： MPMoviePlayerViewController<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/e1c96bde0ae3d171960f7f19921e6bcf.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

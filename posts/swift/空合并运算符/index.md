@@ -1,0 +1,117 @@
+# 空合并运算符??
+
+
+ ## 描述
+* a?? b
+* a 是可选项
+* b 是可选项 或者 不是可选项
+* b 跟 a 的存储类型必须相同
+* 如果 a 不为nil,就返回 a
+* 如果a 为nil,就返回 b
+* 如果 b 不是可选项，返回 a 时会自动解包
+> 举例说明
+```swift
+let a: Int?= 1
+let b: Int?= 2
+let c = a??b // c是Int?，0ptional(1)
+
+let a: Int?= 1
+let b: Int = 2
+let c = a??b //c是Int ，1
+
+let a: Int? = nil
+let b: Int? = 2
+let c = a??b // c是Int?,0ptional(2)
+
+let a: Int? = nil
+let b: Int? = nil
+let c = a??b
+//c是Int? ，nil
+```
+
+> 注：?? 是否可选类型  取决于B的类型   
+
+### 多个??使用
+```swift
+let a: Int? = 1
+let b: Int? = 2
+let c = a ?? b ?? 3 // c是Int ，1
+
+let a: Int? = nil
+let b: Int? = 2
+let c = a ?? b ?? 3 //c是Int ，2
+
+let a: Int? = nil
+let b: Int? = nil
+let c = a ?? b ??3 //c是Int ，3
+```
+
+### ??和if let 配合使用
+```swift
+let a: Int? = nil
+let b: Int? = 2
+if let c = a ?? b {
+    print(c)
+}
+
+//类似于if a != nil ll b != nil
+if let c = a, let d = b{
+    print(c)
+    print(d)
+}
+
+//类似于if a != nil && b != nil
+```
+
+## guard语句
+* 当guard语句的条件为false时，就会执行大括号里面的代码
+* 当guard语句的条件为true时，就会跳过guard语句
+* guard语句特别适合用来“提前退出”
+* 当使用guard语句进行可选项绑定时，绑定的常量(let)、变量(var)也能在外层作用域中使用  
+
+```swift
+func login( info: [String :String]){
+    let username: String
+    if let tmp = info["username"]{
+        username = tmp
+    } else {
+        print("请输入用户名")
+        return
+    }
+    let password: String
+    if let tmp = info["password"]{
+        password = tmp
+    } else {
+        print("请输入密码")
+        return
+    }
+    print("用户名:\(username)","密码:\(password)","登陆ing")
+
+}
+
+// guard
+func login( info: [String : String]){
+    guard let username = info["username"] else {
+        print("请输入用户名")
+        return
+    }
+    guard let password = info["password"] else {
+        print("请输入密码")
+        return
+    }
+    print("用户名:\(username)","密码:\(password)","登陆ing")
+
+}
+```
+
+
+
+
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swift/%E7%A9%BA%E5%90%88%E5%B9%B6%E8%BF%90%E7%AE%97%E7%AC%A6/  
+

@@ -1,0 +1,39 @@
+# 3.2.1 视图组
+
+
+<br>
+
+
+# Group
+
+前面提到过 SwiftUI 能够将各种视图组合在一起，得益于结果生成器，关于结果生成器，参考 《Swift 中的 Result builders》 。
+
+[ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) 其实是一个结果生成器，通过文档可以看出，在构建视图的闭包中，最多只能传入 10 个子视图。
+
+在 HStack、VStack 或其它视图容器中生成超过 10 个视图时，编译器会提示“Extra argument in call”错误。Group 可以解决这个参数过多的问题，它将多个视图组合成一个新的视图组，整体作为一个子 view。
+
+除此以外，Group 还可以用于将多个需要使用同一 modifier 的视图组合在一起，使代码更精简易读。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+# GroupBox
+
+GroupBox 是可以添加 label 标签的 Group，外观上保持了和系统风格一致的样式。
+
+# Section
+
+Section 常用于 List、Form 等列表视图，将同类型的视图进行分组，可以添加 header 和 footer。
+
+# Form
+
+Form 是常用的表单组件，经常和 Section 配合使用。
+
+[LabeledContent](https://developer.apple.com/documentation/swiftui/labeledcontent) 是 iOS 16/macOS 13 新出的视图容器，在 Form 中非常实用。默认左边是标签视图，右边内容视图常用于放置输入类型控件或其它任何视图。
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/3.2.1-%E8%A7%86%E5%9B%BE%E7%BB%84/  
+

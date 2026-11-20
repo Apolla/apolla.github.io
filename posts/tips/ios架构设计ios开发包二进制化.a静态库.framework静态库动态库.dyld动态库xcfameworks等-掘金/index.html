@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="前言 我们之前通过一篇文章在讨论“移动客户端架构设计的时候，仅是通过一篇文章进行了综述。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='移动客户端架构设计, XCFramework'>
+	<meta itemprop="name" content="iOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金">
+	<meta itemprop="description" content="前言 我们之前通过一篇文章在讨论“移动客户端架构设计的时候，仅是通过一篇文章进行了综述。">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="5578">
+	<meta itemprop="keywords" content="移动客户端架构设计,XCFramework"><meta property="og:url" content="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="iOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金">
+	<meta property="og:description" content="前言 我们之前通过一篇文章在讨论“移动客户端架构设计的时候，仅是通过一篇文章进行了综述。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:tag" content="移动客户端架构设计">
+		<meta property="article:tag" content="XCFramework">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金">
+  <meta name="twitter:description" content="前言 我们之前通过一篇文章在讨论“移动客户端架构设计的时候，仅是通过一篇文章进行了综述。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/" title="iOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swift/%E5%8F%AF%E9%80%89%E9%A1%B9/" title="可选项" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swift/memorylayout/" title="MemoryLayout" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "iOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/tips\/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91\/"
+    },"genre": "posts","keywords": "移动客户端架构设计, XCFramework","wordcount":  5578 ,
+    "url": "https:\/\/apolla.cc\/posts\/tips\/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F/" class="post-category" title="分类 - 碎片芝士收藏"><i class="fa-regular fa-folder" aria-hidden="true"></i> 碎片芝士收藏</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="5578 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 5600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#一综述">一、综述</a></li>
+    <li><a href="#项目中库的划分"><strong>项目中库的划分:</strong></a></li>
+    <li><a href="#ios开发中的库的二进制化处理功能模块闭源处理">iOS开发中的库的二进制化处理(功能模块闭源处理)</a>
+      <ul>
+        <li><a href="#1-二进制化库的几种分类">1. 二进制化库的几种分类</a></li>
+        <li><a href="#2-简单了解cpu架构">2. 简单了解CPU架构</a>
+          <ul>
+            <li><a href="#21-什么是cpu架构">2.1 什么是CPU架构？</a></li>
+            <li><a href="#22-arm处理器">2.2 ARM处理器</a></li>
+            <li><a href="#23-进一步认识-指令集-对应的机型">2.3 进一步认识 指令集 对应的机型</a></li>
+            <li><a href="#24-二进制化库适配架构的设置build-setting">2.4 二进制化库适配架构的设置<code>Build Setting</code></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二开发二进制化库的实践">二、开发二进制化库的实践</a>
+      <ul>
+        <li><a href="#1-首先创建frmawork项目">1. 首先创建<code>.frmawork</code>项目</a></li>
+        <li><a href="#2-接下来进行项目配置">2. 接下来进行项目配置：</a></li>
+        <li><a href="#3framework的使用将封装好的framework拉入需要使用的项目中">3.framework的使用将封装好的<code>.framework</code>拉入需要使用的项目中</a></li>
+        <li><a href="#4工程运行">4.工程运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#三二进制包的架构检查包的合并与拆分">三、二进制包的架构检查，包的合并与拆分</a>
+      <ul>
+        <li><a href="#1相关概念以及常规处理">1、相关概念以及常规处理</a></li>
+        <li><a href="#2-了解xcframework">2. 了解XCFramework</a></li>
+        <li><a href="#3-终端指令制作xcframework">3. 终端指令制作XCFramework</a></li>
+        <li><a href="#4制作xcframework的脚本">4.制作XCFramework的脚本</a>
+          <ul>
+            <li><a href="#41-创建framework脚本模拟器模式">4.1 创建Framework脚本:<code>模拟器模式</code></a></li>
+            <li><a href="#42-创建framework脚本真机模式">4.2 创建Framework脚本:<code>真机模式</code></a></li>
+            <li><a href="#43-创建framework脚本">4.3 创建Framework脚本</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#专题系列文章">专题系列文章</a>
+      <ul>
+        <li><a href="#ios架构设计">iOS架构设计</a></li>
+        <li><a href="#探索ios底层原理">探索iOS底层原理</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></template><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>我们之前通过一篇文章在讨论“<code>移动客户端架构设计</code>的时候，仅是通过<a href="https://juejin.cn/post/7118599362036367391" target="_blank" rel="external nofollow noopener noreferrer">一篇文章<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行了综述。</p>
+<p>后来，我就换工作，来到了Nike。近半年一直很忙,最近接到一个工单，要求升级SDK。借此契机,简单回顾一下iOS开发包二进制化,并进一步认识一下我们比较陌生的 <code>XCFramework</code></p>
+<h2 class="heading-element" id="一综述"><span>一、综述</span>
+  <a href="#%e4%b8%80%e7%bb%bc%e8%bf%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><blockquote>
+<blockquote>
+<h2 class="heading-element" id="项目中库的划分"><span><strong>项目中库的划分:</strong></span>
+  <a href="#%e9%a1%b9%e7%9b%ae%e4%b8%ad%e5%ba%93%e7%9a%84%e5%88%92%e5%88%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2></blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>我们在实际开发中,若是项目比较庞大,我们可以将 库 划分为:</li>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong><code>私有库:</code></strong> (若是我们的公司移动开发建设比较成熟,也可以理解为我们内部移动开发套件的私有库)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong><code>二方库</code>:</strong> 因项目建设需要而采购的，由 服务 供应商 提供的SDK库。如:埋点服务SDK、阿里的反爬虫服务SDK、OCR扫描服务等。(通常需要付费 或 有限 免费体验 SDK功能)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong><code>三方库</code>:</strong> 免费使用的外部库(通常来源于Github等开源平台)</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<h2 class="heading-element" id="ios开发中的库的二进制化处理功能模块闭源处理"><span>iOS开发中的库的二进制化处理(功能模块闭源处理)</span>
+  <a href="#ios%e5%bc%80%e5%8f%91%e4%b8%ad%e7%9a%84%e5%ba%93%e7%9a%84%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%a4%84%e7%90%86%e5%8a%9f%e8%83%bd%e6%a8%a1%e5%9d%97%e9%97%ad%e6%ba%90%e5%a4%84%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2></blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>根据是否将库的功能服务实现代码开源,我们又可以将库 划分为 “<code>开源库</code>”、“<code>闭源库</code>”</li>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong><code>二进制化</code>:</strong> 把功能服务模块的源码 打包成 【<strong>闭源库</strong>】的开发，也就是 <code>iOS开发包二进制化</code> 处理！！！！（二进制化处理也可以称为SDK开发）</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>在iOS二进制化开发中,可以将模块打包成<code>静态库</code>/<code>动态库</code>的形式</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>这些 <code>静态库</code>、<code>动态库</code>，可以统称为 <code>二进制库</code>；</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>二进制化库开发完毕后，我们可以把库<code>集成</code>在一个项目里面进行使用；</li>
+</ul>
+</blockquote>
+<h3 class="heading-element" id="1-二进制化库的几种分类"><span>1. 二进制化库的几种分类</span>
+  <a href="#1-%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%ba%93%e7%9a%84%e5%87%a0%e7%a7%8d%e5%88%86%e7%b1%bb" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>在iOS开发中的二进制化库可以简单划分为,<strong>静态库</strong>、<strong>动态库</strong>(.framework)<code>（注:不是所有的.framework就一定是动态库）</code></p>
+<ul>
+<li>
+<p><strong>静态库:</strong> 以<code>.a</code> 或者 <code>.framework</code> 作为文件的扩展名。链接时完整地拷贝至可执行文件中，被多次使用就有多份冗余拷贝</p>
+</li>
+<li>
+<p><strong>动态库:</strong> 以<code>.dylib</code> 或者 <code>.framework</code> 作为文件的扩展名。链接时不复制，程序运行时由系统动态加载到内存，供程序调用，系统只加载一次，多个程序共用，节省内存。<code>注意</code>：</p>
+<ul>
+<li>动态库只能苹果使用，如果项目中使用了动态库不允许上架(如：jspatch)</li>
+<li>我们在开发过程中,即使有用到系统动态库的需求,也要常常检查对动态库的引入需要,因为这会影响App的启动速度。(若是不太了解这一块的朋友,可以通过我的这篇文章简单了解一下:<a href="https://juejin.cn/post/7096480684847415303#heading-8" target="_blank" rel="external nofollow noopener noreferrer">App启动装载的过程<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>.a</code>与<code>.framework</code>的区别？</p>
+</li>
+<li></li>
+<li>
+<p>.a是一个纯二进制文件，.framework中除了有二进制文件之外还有资源文件；</p>
+</li>
+<li></li>
+<li>
+<p>.a文件不能直接使用，至少要有.h文件配合，.framework文件可以直接使用。</p>
+</li>
+<li></li>
+<li>
+<p>.a + .h + sourceFile = .framework</p>
+</li>
+<li></li>
+<li>
+<p>建议用.framework</p>
+</li>
+</ul>
+<h3 class="heading-element" id="2-简单了解cpu架构"><span>2. 简单了解CPU架构</span>
+  <a href="#2-%e7%ae%80%e5%8d%95%e4%ba%86%e8%a7%a3cpu%e6%9e%b6%e6%9e%84" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>我们在开发好功能服务模块，准备导出二进制化包的时候，我们要根据 自身投放应用市场的需要硬件适配需要，对库进行的CPU架构的支持。从而在满足自身需要的同时，避免导出二进制化包的体积过大。</p>
+<h4 class="heading-element" id="21-什么是cpu架构"><span>2.1 什么是CPU架构？</span>
+  <a href="#21-%e4%bb%80%e4%b9%88%e6%98%afcpu%e6%9e%b6%e6%9e%84" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><blockquote>
+<p>CPU架构是CPU厂商给属于同一系列的CPU产品定的一个规范，主要目的是为了区分不同类型CPU的重要标示。</p>
+</blockquote>
+<p>目前市面上的CPU分类主要分有两大阵营，一类是复杂指令集(CISC)CPU，另一类是精简指令集(RISC)CPU。我们今天要讨论的ARM指令集就属于精简指令集(RISC)CPU。</p>
+<h4 class="heading-element" id="22-arm处理器"><span>2.2 ARM处理器</span>
+  <a href="#22-arm%e5%a4%84%e7%90%86%e5%99%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><blockquote>
+<p>ARM处理器是英国Acorn有限公司设计的低功耗成本的第一款RISC微处理器。全称为Advanced RISC Machine。</p>
+</blockquote>
+<p>我们之前有一篇文章是关于<a href="https://juejin.cn/post/7115302848270696485/" target="_blank" rel="external nofollow noopener noreferrer">探究iOS底层原理|ARM64汇编<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的。其中简单介绍了，不同的型号真机硬件设备的CPU硬件架构:</p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>架构</th>
+            <th>设备</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>armv6</strong></td>
+            <td>iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</td>
+        </tr>
+        <tr>
+            <td><strong>armv7</strong></td>
+            <td>iPhone3GS, iPhone4, iPhone4S,iPad, iPad2, iPad3(The New iPad), iPad mini, iPod Touch 3G, iPod Touch4</td>
+        </tr>
+        <tr>
+            <td><strong>armv7s</strong></td>
+            <td>iPhone5, iPhone5C, iPad4(iPad with Retina Display)</td>
+        </tr>
+        <tr>
+            <td><strong>arm64</strong></td>
+            <td>iPhone5S 以后 iPhoneX , iPad Air, iPad mini2以后</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>ARM处理器因其低功耗和尺寸小而闻名，iPhone的处理器全部都基于ARM。</p>
+<p>我们经常见到的armv7 | armv7s | arm64都是ARM处理器的指令集。</p>
+<p>指令集应用于开发有如下特点:</p>
+<ul>
+<li>所有指令集原则上向下兼容。</li>
+<li>Xcode的模拟器是运行在电脑上的，所以iPhone模拟器并没有使用ARM指令集(在Intel芯片的老款Mac上的iPhone模拟器)，而是使用的X86(64为处理器)或者i386(32位处理器)。</li>
+<li>通过Xcode打包时，会为支持的所有的指令集编译出对应的指令集代码的数据包，所以工程支持的指令集越多，生成的二进制包就越大。</li>
+</ul>
+<h4 class="heading-element" id="23-进一步认识-指令集-对应的机型"><span>2.3 进一步认识 指令集 对应的机型</span>
+  <a href="#23-%e8%bf%9b%e4%b8%80%e6%ad%a5%e8%ae%a4%e8%af%86-%e6%8c%87%e4%bb%a4%e9%9b%86-%e5%af%b9%e5%ba%94%e7%9a%84%e6%9c%ba%e5%9e%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><blockquote>
+<p><strong>机型-架构</strong> 对照表</p>
+</blockquote>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>架构</th>
+            <th>设备</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>armv6</strong></td>
+            <td>iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</td>
+        </tr>
+        <tr>
+            <td><strong>armv7</strong></td>
+            <td>iPhone3GS, iPhone4, iPhone4S,iPad, iPad2, iPad3(The New iPad), iPad mini, iPod Touch 3G, iPod Touch4</td>
+        </tr>
+        <tr>
+            <td><strong>armv7s</strong></td>
+            <td>iPhone5, iPhone5C, iPad4(iPad with Retina Display)</td>
+        </tr>
+        <tr>
+            <td><strong>arm64</strong></td>
+            <td>iPhone 5S、iPhone 6、iPhone 6 Plus、iPhone 6S、iPhone 6S Plus、iPhone 7、 iPhone 7 Plus、 iPad (2018)、 iPhone 8 、 iPhone 8 Plus 、 and iPhone X</td>
+        </tr>
+        <tr>
+            <td><strong>arm64e</strong></td>
+            <td>iPhone XS 、iPhone XS Max 、 iPhoneXR、iPhone 11 、 iPhone 11 Pro、 iPhone 11 Pro Max、iPhone 12 、 iPhone 12 Mini 、 iPhone 12 Pro 、 iPhone 12 Pro Max &hellip; 等</td>
+        </tr>
+    </tbody>
+  </table>
+</div><blockquote>
+<p><strong><code>模拟器</code></strong></p>
+</blockquote>
+<ul>
+<li></li>
+<li>
+<p>模拟器32位处理器测试需要i386架构</p>
+</li>
+<li></li>
+<li>
+<p>模拟器64位处理器测试需要x86_64架构</p>
+</li>
+<li></li>
+<li>
+<p>模拟器64位处理器测试需要arm64架构(<code>采用了苹果公司内部自行设计的M1系列芯片的新款Mac,该Mac上跑的模拟器架构也是arm64架构,但不是iPhone真机那种arm64</code>)</p>
+</li>
+</ul>
+<blockquote>
+<p><strong><code>真机</code></strong></p>
+</blockquote>
+<ul>
+<li></li>
+<li>
+<p>真机32位处理器需要armv7,或者armv7s架构</p>
+</li>
+<li></li>
+<li>
+<p>真机64位处理器需要arm64架构</p>
+</li>
+</ul>
+<blockquote>
+<p><strong><code>应对当前(2023年)市场常用的设备推荐适配 指令集</code></strong></p>
+</blockquote>
+<ul>
+<li>模拟器: 64位处理器<code>x86_64</code>架构、<code>arm64</code>架构</li>
+<li>真机:64位处理器<code>arm64</code>架构、<code>armv7s</code>架构(iPhone5及其以上的设备)</li>
+</ul>
+<h4 class="heading-element" id="24-二进制化库适配架构的设置build-setting"><span>2.4 二进制化库适配架构的设置<code>Build Setting</code></span>
+  <a href="#24-%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%ba%93%e9%80%82%e9%85%8d%e6%9e%b6%e6%9e%84%e7%9a%84%e8%ae%be%e7%bd%aebuild-setting" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><p><code>Build Settings</code>中搜索<code>Architecture</code>，可以看到如下图的设置项：</p>
+<p><img loading="lazy" src='/images/743f545288891f29c138f06520bc46fb.webp' alt="/images/743f545288891f29c138f06520bc46fb.webp"></p>
+<ul>
+<li></li>
+</ul>
+<p>Architectures</p>
+<p>指定当前<code>Target</code>被编译时支持的指令集的列表，如果指定了多个架构，机会生成多个架构需要的二进制文件。</p>
+<ul>
+<li></li>
+</ul>
+<p>Build Active Architecture Only</p>
+<p>指定是否只编译当前连接设备所支持的指令集。</p>
+<p>默认<code>Debug</code>时为<code>YES</code>，<code>Release</code>时为<code>NO</code>。设置为<code>YES</code>时，编译后只生成当前连接设备所支持的指令集代码，编译速度更快。</p>
+<ul>
+<li></li>
+</ul>
+<p>Excluded Architectures</p>
+<p>指定当前<code>Target</code>被编译时拒绝接纳的指令集列表，编译后最终生成的二进制文件支持的指令集是<code>Architectures</code>减去<code>Excluded Architectures</code>。</p>
+<h2 class="heading-element" id="二开发二进制化库的实践"><span>二、开发二进制化库的实践</span>
+  <a href="#%e4%ba%8c%e5%bc%80%e5%8f%91%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%96%e5%ba%93%e7%9a%84%e5%ae%9e%e8%b7%b5" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>我们前面有提及 <code>静态库</code>、<code>动态库</code>，的区别。我们这里就不再重复介绍。</p>
+<p>我们直接进入创建一个.framework静态库的实践(此次我采用的是Xcode14.1,与之前的Xcode版本的创建过程总体上大致相似，略有不同。若是同学们用比较老的Xcode版本，请自行寻找相应教程)</p>
+<h3 class="heading-element" id="1-首先创建frmawork项目"><span>1. 首先创建<code>.frmawork</code>项目</span>
+  <a href="#1-%e9%a6%96%e5%85%88%e5%88%9b%e5%bb%bafrmawork%e9%a1%b9%e7%9b%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><img loading="lazy" src='/images/4e2724af6588c17c18ee202484069ed3.webp' alt="/images/4e2724af6588c17c18ee202484069ed3.webp"></p>
+<p><img loading="lazy" src='/images/b64d66c6e01cdff8718a342cf8df9e2b.webp' alt="/images/b64d66c6e01cdff8718a342cf8df9e2b.webp"></p>
+<p>在<code>framewrok</code>中可以封装入自己需要封装的内容</p>
+<p><img loading="lazy" src='/images/7fcff7c321c4b892a45613634df51329.webp' alt="/images/7fcff7c321c4b892a45613634df51329.webp"></p>
+<p>eg: 我在<code>Logger.h</code>中加入了一个测试方法</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#import &#34;Logger.h&#34;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@implementation</span> <span class="nc">Logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">logWithString:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">log</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;Log:%@&#34;</span><span class="p">,</span><span class="n">log</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">testString:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="s">@&#34;NKTestOCFramework: &#34;</span> <span class="nl">stringByAppendingString</span><span class="p">:</span><span class="n">string</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">@end</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h3 class="heading-element" id="2-接下来进行项目配置"><span>2. 接下来进行项目配置：</span>
+  <a href="#2-%e6%8e%a5%e4%b8%8b%e6%9d%a5%e8%bf%9b%e8%a1%8c%e9%a1%b9%e7%9b%ae%e9%85%8d%e7%bd%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>1、设置Build Setting参数 <code>将Build Active Architecture only</code>设置为NO</p>
+<p><img loading="lazy" src='/images/12894a4f716fc287fafe9b6ac77ff3ed.webp' alt="/images/12894a4f716fc287fafe9b6ac77ff3ed.webp"></p>
+<p>2、设置Build Setting参数 <code>Mach-O Type</code> 为Static Library （配置静态、动态）</p>
+<p><img loading="lazy" src='/images/df8670292df233e977c424417c0403b0.webp' alt="/images/df8670292df233e977c424417c0403b0.webp"></p>
+<p>3、设置Build Setting参数 在<code>Architectures</code>下增加 需要适配的硬件CPU,如 <code>armv7s</code>、<code>armv7</code>(我们当下流行的设备基本都是iPhone5s以上了，通常我们直接arm64就够用了)</p>
+<p><img loading="lazy" src='/images/f07b7f4af835b3f48f2710b2b7e1169b.webp' alt="/images/f07b7f4af835b3f48f2710b2b7e1169b.webp"></p>
+<p>4、在Build Phases中设置需要公开和需要隐藏的头文件 <img loading="lazy" src='/images/2e9ab84e15f15b5cc5ccc0d86a57ac87.webp' alt="/images/2e9ab84e15f15b5cc5ccc0d86a57ac87.webp"></p>
+<p>5、将头文件引入到<code>NKTestOCFramework</code> (自己SDK的头文件) <img loading="lazy" src='/images/a2caccfe8ebde757b2221e27050e6a9d.webp' alt="/images/a2caccfe8ebde757b2221e27050e6a9d.webp"></p>
+<p>6、<code>Command + B</code>运行项目，在<code>Product</code>中找到<code>framework</code> (在Xcode14创建的工程中，我们找不到<code>Product</code>文件夹，需要做如下调整:)</p>
+<ul>
+<li>1、找到.xcodeproj文件</li>
+<li>2、右键显示包内容</li>
+<li>3、找到project.pbxproj并双击打开</li>
+<li>4、在文件内搜索productRefGroup，旁边还有一个mainGroup，把mainGroup后边的值复制一下替换到productRefGroup后边，然后关闭文件并且保存。</li>
+</ul>
+<p><img loading="lazy" src='/images/9792bfb88e0a1012a8887e2bebbc3ed5.webp' alt="/images/9792bfb88e0a1012a8887e2bebbc3ed5.webp"></p>
+<h3 class="heading-element" id="3framework的使用将封装好的framework拉入需要使用的项目中"><span>3.framework的使用将封装好的<code>.framework</code>拉入需要使用的项目中</span>
+  <a href="#3framework%e7%9a%84%e4%bd%bf%e7%94%a8%e5%b0%86%e5%b0%81%e8%a3%85%e5%a5%bd%e7%9a%84framework%e6%8b%89%e5%85%a5%e9%9c%80%e8%a6%81%e4%bd%bf%e7%94%a8%e7%9a%84%e9%a1%b9%e7%9b%ae%e4%b8%ad" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p><img loading="lazy" src='/images/c22ac2026896ebb124c5acf0322e88de.webp' alt="/images/c22ac2026896ebb124c5acf0322e88de.webp"></p>
+<p><img loading="lazy" src='/images/16addcb23204d0a758d173addd1e9a35.webp' alt="/images/16addcb23204d0a758d173addd1e9a35.webp"></p>
+<h3 class="heading-element" id="4工程运行"><span>4.工程运行</span>
+  <a href="#4%e5%b7%a5%e7%a8%8b%e8%bf%90%e8%a1%8c" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>想要对Demo进行运行实践的朋友，可以通过以下链接,下载:</p>
+<ul>
+<li><a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2FVanZhang-CN-SZ-SN9037%2FiOS-SDK-Development" target="_blank" rel="external nofollow noopener noreferrer">github.com/VanZhang-CN…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul>
+<h2 class="heading-element" id="三二进制包的架构检查包的合并与拆分"><span>三、二进制包的架构检查，包的合并与拆分</span>
+  <a href="#%e4%b8%89%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%8c%85%e7%9a%84%e6%9e%b6%e6%9e%84%e6%a3%80%e6%9f%a5%e5%8c%85%e7%9a%84%e5%90%88%e5%b9%b6%e4%b8%8e%e6%8b%86%e5%88%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="1相关概念以及常规处理"><span>1、相关概念以及常规处理</span>
+  <a href="#1%e7%9b%b8%e5%85%b3%e6%a6%82%e5%bf%b5%e4%bb%a5%e5%8f%8a%e5%b8%b8%e8%a7%84%e5%a4%84%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li></li>
+</ul>
+<p>二进制包文件都是 Mach-O 文件的一种(可以通过这篇文章简单了解<a href="https://juejin.cn/post/7117274106940096520#heading-1" target="_blank" rel="external nofollow noopener noreferrer">Mach-O文件<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>)</p>
+<ul>
+<li></li>
+</ul>
+<p>iOS 的 二进制包 文件 分为 <code>fat</code> 二进制文件 和 <code>thin</code> 二进制文件</p>
+<ul>
+<li>胖二进制文件:包含多套指令集架构的Mach-O文件（比如同时包含<code>armv7</code>、<code>armv7s</code>、<code>armv64</code>、<code>i386</code>、<code>x86_64</code>其中的两种以上）</li>
+<li>thin二进制文件: 仅包含一套指令集架构的Mach-O文件</li>
+<li></li>
+</ul>
+<p>二进制文件处理:</p>
+<ol>
+<li><strong><code>lipo -info</code>:</strong> 检查二进制文件支持的架构</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">info</span> <span class="o">+</span> <span class="err">二进制文件路径</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="2">
+<li><strong><code>lipo -remove</code>:</strong> 移除二进制文件支持的某架构</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">remove</span> <span class="o">+</span> <span class="err">要删除的指令集架构</span> <span class="o">+</span> <span class="err">二进制文件路径</span> <span class="o">+</span> <span class="o">-</span><span class="n">output</span> <span class="o">+</span> <span class="err">输出的二进制文件路径</span>
+</span></span><span class="line"><span class="cl"><span class="err">如</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">remove</span> <span class="n">armv7</span> <span class="n">origin_xxx</span><span class="p">.</span><span class="n">a</span> <span class="o">-</span><span class="n">output</span> <span class="n">op_xxx</span><span class="p">.</span><span class="n">a</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="3">
+<li><strong><code>lipo -thin</code>:</strong> 导出二进制文件支持的某架构</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">thin</span> <span class="o">+</span> <span class="err">要导出的指令集架构</span> <span class="o">+</span> <span class="err">二进制文件路径</span> <span class="o">-</span><span class="n">output</span> <span class="o">+</span> <span class="err">输出的二进制文件路径</span>
+</span></span><span class="line"><span class="cl"><span class="err">如</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">thin</span> <span class="n">arm64</span> <span class="n">origin_xxx</span><span class="p">.</span><span class="n">a</span> <span class="o">-</span><span class="n">output</span> <span class="n">op_xxx</span><span class="p">.</span><span class="n">a</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ol start="4">
+<li><strong><code>lipo -create</code>:</strong> 创建一个fat二进制文件使其支持的多个架构</li>
+</ol>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">create</span> <span class="o">+</span> <span class="err">二进制文件路径</span><span class="mi">1</span> <span class="o">+</span> <span class="err">二进制文件路径</span><span class="mi">2</span> <span class="o">-</span><span class="n">output</span> <span class="err">输出的二进制文件路径</span>
+</span></span><span class="line"><span class="cl"><span class="err">如</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">lipo</span> <span class="o">-</span><span class="n">create</span> <span class="n">device_xxx</span><span class="p">.</span><span class="n">a</span> <span class="n">simulator_xxx</span><span class="p">.</span><span class="n">a</span> <span class="o">-</span><span class="n">output</span> <span class="n">universal_xxx</span><span class="p">.</span><span class="n">a</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="2-了解xcframework"><span>2. 了解XCFramework</span>
+  <a href="#2-%e4%ba%86%e8%a7%a3xcframework" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><blockquote>
+<p><strong>快速了解XCFramework:</strong></p>
+</blockquote>
+<p>官方视频链接:<a href="https://link.juejin.cn/?target=https%3A%2F%2Fdeveloper.apple.com%2Fvideos%2Fplay%2Fwwdc2019%2F416%2F" target="_blank" rel="external nofollow noopener noreferrer">developer.apple.com/videos/play…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 官方文档链接:<a href="https://link.juejin.cn/?target=https%3A%2F%2Fdeveloper.apple.com%2Fdocumentation%2Fxcode%2Fcreating-a-multi-platform-binary-framework-bundle" target="_blank" rel="external nofollow noopener noreferrer">developer.apple.com/documentati…<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<ul>
+<li>
+<p>XCFramework 是苹果新出的库类型，在 Xcode 11 及 cocoapods 1.9 以上版本被支持</p>
+</li>
+<li>
+<p>与普通动态库/静态库最大的区别是将<strong>多个平台</strong>的二进制库，捆绑到一个可分发的<code>.xcframework</code>捆绑包中，支持所有的苹果平台和架构。</p>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<p>这里的关键词是<strong>多个平台</strong>（iOS, macOS, tvOS, watchOS, iPadOS, carPlayOS）<img loading="lazy" src='/images/3587142c632cc93408307f0b1ba90d05.webp' alt="/images/3587142c632cc93408307f0b1ba90d05.webp"></p>
+<ul>
+<li></li>
+</ul>
+<p>我们使用的普通动态库/静态库属于<code>fat file</code>，仅仅是包含多个架构，如<code>armv7 armv7s arm64 arm64e x86_64</code>等</p>
+<ul>
+<li></li>
+</ul>
+<p>XCFramework 可以包含 iOS 设备，iOS 模拟器和 Mac Catalyst 等多个平台的二进制库。<img loading="lazy" src='/images/7b3ff22eb8338b726911bc4bf74d922d.webp' alt="/images/7b3ff22eb8338b726911bc4bf74d922d.webp"></p>
+<ul>
+<li></li>
+</ul>
+<p>XCFramework库是把不同平台、不同架构的Framework库放在一起(与Framework的开发相同,支持C、OC、C++、Swift)<img loading="lazy" src='/images/402064e1416bbd1a2393c15867934ebb.webp' alt="/images/402064e1416bbd1a2393c15867934ebb.webp"></p>
+<pre><code>  - 注意: 若是原本的Framework库中有C文件(.hpp、.cpp),要尽可能地转换成Objective-C文件(.h、.mm)。
+  - 我们的项目若是存量项目(旧项目),通常开发项目的时候还是会或多或少地引入不同开发语言的库。
+
+     - 比如:Swift语言开发+Swift库+OC库
+     - OC语言开发+Swift库+OC库
+  - 只要我们用到OC或OC库,内部若是使用了runtime 或 KVC、KVO等。无法避免的,我们需要在项目主工程的Build Setting-&gt; Other Linker Flag 添加一项: `-all_load`
+  - 添加 `-all_load` 会导致 包含 了 C++ 的库,在导入 主工程 后 发生冲突
+  - 因此要尽可能 把 在 OC库中的C文件(.hpp、.cpp)转换成Objective-C文件(.h、.mm)
+</code></pre>
+<h3 class="heading-element" id="3-终端指令制作xcframework"><span>3. 终端指令制作XCFramework</span>
+  <a href="#3-%e7%bb%88%e7%ab%af%e6%8c%87%e4%bb%a4%e5%88%b6%e4%bd%9cxcframework" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>通过<code>xcodebuild -create-xcframework</code>命令即可完成制作 <code>XCFramework</code> 示例如下:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">ios_arm64</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="mi">0</span><span class="n">CD1FB8D</span><span class="o">-</span><span class="mi">9</span><span class="n">D63</span><span class="o">-</span><span class="mi">3092</span><span class="o">-</span><span class="n">B68B</span><span class="o">-</span><span class="mf">2E579</span><span class="n">A306D3F</span><span class="p">.</span><span class="n">bcsymbolmap</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span><span class="p">.</span><span class="n">dSYM</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">ios_simulator_x86</span><span class="o">-</span><span class="mi">64</span><span class="n">_arm64</span>
+</span></span><span class="line"><span class="cl">    <span class="err">├──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span>
+</span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span><span class="p">.</span><span class="n">dSYM</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>通过<code>xcodebuild -create-xcframework</code>命令来合并为 XCFramework。</p>
+<p><img loading="lazy" src='/images/dfd2f1d0b4580abb4baeb80a6369065f.webp' alt="/images/dfd2f1d0b4580abb4baeb80a6369065f.webp"></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">xcodebuild</span> <span class="o">-</span><span class="n">create</span><span class="o">-</span><span class="n">xcframework</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">framework</span> <span class="n">ios_arm64</span><span class="o">/</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">framework</span> <span class="n">ios_simulator_x86</span><span class="o">-</span><span class="mi">64</span><span class="n">_arm64</span><span class="o">/</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">output</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">xcframework</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/13a7c6905346c93ee3365f54884781e0.webp' alt="/images/13a7c6905346c93ee3365f54884781e0.webp"></p>
+<p>合并后的 NKTestOCFramework.xcframework 目录结构如下，包含 <code>arm64</code> 和 <code>x86_64</code> 版本，这和 lipo 操作类似，合并其他平台时操作类似。 <img loading="lazy" src='/images/2cf7a3ad4326ab03e087adf2cc41eb42.webp' alt="/images/2cf7a3ad4326ab03e087adf2cc41eb42.webp"></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">xcframework</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">Info</span><span class="p">.</span><span class="n">plist</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">ios</span><span class="o">-</span><span class="n">arm64</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">ios</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="n">simulator</span>
+</span></span><span class="line"><span class="cl">    <span class="err">└──</span> <span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/fcddb2d5229c946fd0d148d79104f90c.webp' alt="/images/fcddb2d5229c946fd0d148d79104f90c.webp"></p>
+<p>如果是静态库 .a 文件，则需要用<code>-library</code>和<code>-headers</code>来指定静态库和头文件。</p>
+<p><img loading="lazy" src='/images/4dc21153c45c1b1942d86ef7d62b81f0.webp' alt="/images/4dc21153c45c1b1942d86ef7d62b81f0.webp"></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">xcodebuild</span> <span class="o">-</span><span class="n">create</span><span class="o">-</span><span class="n">xcframework</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">library</span> <span class="n">ios</span><span class="o">-</span><span class="n">arm64</span><span class="o">/</span><span class="n">libNKTestOCLib</span><span class="p">.</span><span class="n">a</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">headers</span> <span class="n">ios</span><span class="o">-</span><span class="n">arm64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">NKTestOCLib</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">library</span> <span class="n">ios</span><span class="o">-</span><span class="n">simulator</span><span class="o">-</span><span class="n">arm64</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">libNKTestOCLib</span><span class="p">.</span><span class="n">a</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">headers</span> <span class="n">ios</span><span class="o">-</span><span class="n">simulator</span><span class="o">-</span><span class="n">arm64</span><span class="o">-</span><span class="n">x86_64</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">NKTestOCLib</span>\
+</span></span><span class="line"><span class="cl">           <span class="o">-</span><span class="n">output</span> <span class="n">NKTestOCLib</span><span class="p">.</span><span class="n">xcframework</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/1c3a30fbc1bc8bf04e4a6d78ad95997b.webp' alt="/images/1c3a30fbc1bc8bf04e4a6d78ad95997b.webp"></p>
+<h3 class="heading-element" id="4制作xcframework的脚本"><span>4.制作XCFramework的脚本</span>
+  <a href="#4%e5%88%b6%e4%bd%9cxcframework%e7%9a%84%e8%84%9a%e6%9c%ac" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><h4 class="heading-element" id="41-创建framework脚本模拟器模式"><span>4.1 创建Framework脚本:<code>模拟器模式</code></span>
+  <a href="#41-%e5%88%9b%e5%bb%baframework%e8%84%9a%e6%9c%ac%e6%a8%a1%e6%8b%9f%e5%99%a8%e6%a8%a1%e5%bc%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="n">xcodebuild</span> <span class="n">archive</span> <span class="o">-</span><span class="n">project</span> <span class="err">&#39;</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">xcodeproj</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">scheme</span> <span class="err">&#39;</span><span class="n">NKTestOCFramework</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">configuration</span> <span class="n">Release</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">destination</span> <span class="err">&#39;</span><span class="n">generic</span><span class="o">/</span><span class="n">platform</span><span class="o">=</span><span class="n">iOS</span> <span class="n">Simulator</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">archivePath</span> <span class="err">&#39;</span><span class="p">.</span><span class="o">/</span><span class="n">archives</span><span class="o">/</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span><span class="o">-</span><span class="n">iphonesimulator</span><span class="p">.</span><span class="n">xcarchive</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="n">SKIP_INSTALL</span><span class="o">=</span><span class="nb">NO</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ul>
+<li><code>xcodebuild</code>: 在Xcode中实际使用的命令</li>
+<li><code>archive</code>: 打包</li>
+<li><code>project</code>: 工程名</li>
+<li><code>scheme</code>: 选择 scheme</li>
+<li><code>configuration</code>: 哪种环境下</li>
+<li><code>destination</code>: 要分发的平台，当前指定的是 iOS Simulator</li>
+<li><code>archivePath</code>: 压缩之后，存放的路径</li>
+<li><code>SKIP_INSTALL=NO</code>:如果设置为YES，则不会将生成的framwork文件存放在Products目录下</li>
+</ul>
+<h4 class="heading-element" id="42-创建framework脚本真机模式"><span>4.2 创建Framework脚本:<code>真机模式</code></span>
+  <a href="#42-%e5%88%9b%e5%bb%baframework%e8%84%9a%e6%9c%ac%e7%9c%9f%e6%9c%ba%e6%a8%a1%e5%bc%8f" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objc"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="n">xcodebuild</span> <span class="n">archive</span> <span class="o">-</span><span class="n">project</span> <span class="err">&#39;</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">xcodeproj</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">scheme</span> <span class="err">&#39;</span><span class="n">NKTestOCFramework</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">configuration</span> <span class="n">Release</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">destination</span> <span class="err">&#39;</span><span class="n">generic</span><span class="o">/</span><span class="n">platform</span><span class="o">=</span><span class="n">iOS</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="n">archivePath</span> <span class="err">&#39;</span><span class="p">.</span><span class="o">/</span><span class="n">archives</span><span class="o">/</span><span class="n">NKTestOCFramework</span><span class="p">.</span><span class="n">framework</span><span class="o">-</span><span class="n">iphoneos</span><span class="p">.</span><span class="n">xcarchive</span><span class="err">&#39;</span>\
+</span></span><span class="line"><span class="cl">    <span class="n">SKIP_INSTALL</span><span class="o">=</span><span class="nb">NO</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="43-创建framework脚本"><span>4.3 创建Framework脚本</span>
+  <a href="#43-%e5%88%9b%e5%bb%baframework%e8%84%9a%e6%9c%ac" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h4><blockquote>
+<p><strong>framework-&gt;XCFramework:</strong></p>
+</blockquote>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 参数</span>
+</span></span><span class="line"><span class="cl"><span class="nv">scheme</span><span class="o">=</span><span class="s2">&#34;&lt;your scheme&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">framework_name</span><span class="o">=</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_path</span><span class="o">=</span><span class="s2">&#34;archives&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_iphoneos_path</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_path</span><span class="si">}</span><span class="s2">/iphoneos.xcarchive&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_iphone_simulator_path</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_path</span><span class="si">}</span><span class="s2">/iphonesimulator.xcarchive&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">out_dir</span><span class="o">=</span><span class="s2">&#34;out&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 清理</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_clean<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_clean======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    rm -rf ./archives
+</span></span><span class="line"><span class="cl">    rm -rf ./<span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_framework <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_framework======&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    xcodebuild archive -scheme <span class="si">${</span><span class="nv">scheme</span><span class="si">}</span> -sdk iphoneos -archivePath <span class="si">${</span><span class="nv">archive_iphoneos_path</span><span class="si">}</span> <span class="nv">BUILD_LIBRARY_FOR_DISTRIBUTION</span><span class="o">=</span>YES <span class="nv">SKIP_INSTALL</span><span class="o">=</span>NO <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    xcodebuild archive -scheme <span class="si">${</span><span class="nv">scheme</span><span class="si">}</span> -sdk iphonesimulator -archivePath <span class="si">${</span><span class="nv">archive_iphone_simulator_path</span><span class="si">}</span> <span class="nv">BUILD_LIBRARY_FOR_DISTRIBUTION</span><span class="o">=</span>YES <span class="nv">SKIP_INSTALL</span><span class="o">=</span>NO <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 合并</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_xcframework<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_xcframework======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    xcodebuild -create-xcframework -framework <span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_iphoneos_path</span><span class="si">}</span><span class="s2">/Products/Library/Frameworks/</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span><span class="s2">.framework&#34;</span> -framework <span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_iphone_simulator_path</span><span class="si">}</span><span class="s2">/Products/Library/Frameworks/</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span><span class="s2">.framework&#34;</span> -output <span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>/<span class="si">${</span><span class="nv">framework_name</span><span class="si">}</span>.xcframework <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 压缩</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_zip <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_zip======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">time</span><span class="o">=</span><span class="sb">`</span>date +%y%m%d%H%M%S<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">name</span><span class="o">=</span><span class="si">${</span><span class="nv">framework_name</span><span class="si">}</span>_<span class="si">${</span><span class="nv">time</span><span class="si">}</span>.zip
+</span></span><span class="line"><span class="cl">    zip -r -m -o <span class="si">${</span><span class="nv">framework_name</span><span class="si">}</span>.xcframework.zip <span class="si">${</span><span class="nv">framework_name</span><span class="si">}</span>.xcframework <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用</span>
+</span></span><span class="line"><span class="cl">build_clean
+</span></span><span class="line"><span class="cl">build_framework
+</span></span><span class="line"><span class="cl">build_xcframework
+</span></span><span class="line"><span class="cl">build_zip</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><strong><code>注意修改参数值</code></strong></p>
+<ul>
+<li><code>scheme</code>=&ldquo;要打包的scheme的具体值&rdquo;</li>
+<li><code>archive_path</code>=&ldquo;archives文件夹的路径&rdquo;</li>
+<li><code>out_dir</code>=&ldquo;输出文件夹的路径&rdquo;</li>
+</ul>
+<blockquote>
+<p><strong>.a-&gt;XCFramework</strong></p>
+</blockquote>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 参数</span>
+</span></span><span class="line"><span class="cl"><span class="nv">scheme</span><span class="o">=</span><span class="s2">&#34;&lt;your scheme&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">library_name</span><span class="o">=</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_path</span><span class="o">=</span><span class="s2">&#34;archives&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_iphoneos_path</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_path</span><span class="si">}</span><span class="s2">/iphoneos.xcarchive&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">archive_iphone_simulator_path</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_path</span><span class="si">}</span><span class="s2">/iphonesimulator.xcarchive&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 静态库公共头文件目录</span>
+</span></span><span class="line"><span class="cl"><span class="nv">library_public_header_path</span><span class="o">=</span><span class="s2">&#34;&lt;your library public header path&gt;&#34;</span> <span class="c1"># 如：${scheme}/public_headers</span>
+</span></span><span class="line"><span class="cl"><span class="nv">out_dir</span><span class="o">=</span><span class="s2">&#34;out&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 清理</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_clean<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_clean======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    rm -rf ./archives
+</span></span><span class="line"><span class="cl">    rm -rf ./<span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_library <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_library======&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    xcodebuild archive -scheme <span class="si">${</span><span class="nv">scheme</span><span class="si">}</span> -sdk iphoneos -archivePath <span class="si">${</span><span class="nv">archive_iphoneos_path</span><span class="si">}</span> <span class="nv">BUILD_LIBRARY_FOR_DISTRIBUTION</span><span class="o">=</span>YES <span class="nv">SKIP_INSTALL</span><span class="o">=</span>NO <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    xcodebuild archive -scheme <span class="si">${</span><span class="nv">scheme</span><span class="si">}</span> -sdk iphonesimulator -archivePath <span class="si">${</span><span class="nv">archive_iphone_simulator_path</span><span class="si">}</span> <span class="nv">BUILD_LIBRARY_FOR_DISTRIBUTION</span><span class="o">=</span>YES <span class="nv">SKIP_INSTALL</span><span class="o">=</span>NO <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 合并</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_xcframework<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_xcframework======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    xcodebuild -create-xcframework -library <span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_iphoneos_path</span><span class="si">}</span><span class="s2">/Products/usr/local/lib/lib</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span><span class="s2">.a&#34;</span> -headers <span class="s2">&#34;</span><span class="si">${</span><span class="nv">library_public_header_path</span><span class="si">}</span><span class="s2">/&#34;</span> -library <span class="s2">&#34;</span><span class="si">${</span><span class="nv">archive_iphone_simulator_path</span><span class="si">}</span><span class="s2">/Products/usr/local/lib/lib</span><span class="si">${</span><span class="nv">scheme</span><span class="si">}</span><span class="s2">.a&#34;</span> -headers <span class="s2">&#34;</span><span class="si">${</span><span class="nv">library_public_header_path</span><span class="si">}</span><span class="s2">&#34;</span> -output <span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>/<span class="si">${</span><span class="nv">library_name</span><span class="si">}</span>.xcframework <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 压缩</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> build_zip <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;======build_zip======&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="si">${</span><span class="nv">out_dir</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">time</span><span class="o">=</span><span class="sb">`</span>date +%y%m%d%H%M%S<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">name</span><span class="o">=</span><span class="si">${</span><span class="nv">library_name</span><span class="si">}</span>_<span class="si">${</span><span class="nv">time</span><span class="si">}</span>.zip
+</span></span><span class="line"><span class="cl">    zip -r -m -o <span class="si">${</span><span class="nv">library_name</span><span class="si">}</span>.xcframework.zip <span class="si">${</span><span class="nv">library_name</span><span class="si">}</span>.xcframework <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用</span>
+</span></span><span class="line"><span class="cl">build_clean
+</span></span><span class="line"><span class="cl">build_library
+</span></span><span class="line"><span class="cl">build_xcframework
+</span></span><span class="line"><span class="cl">build_zip</span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h2 class="heading-element" id="专题系列文章"><span>专题系列文章</span>
+  <a href="#%e4%b8%93%e9%a2%98%e7%b3%bb%e5%88%97%e6%96%87%e7%ab%a0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><h3 class="heading-element" id="ios架构设计"><span>iOS架构设计</span>
+  <a href="#ios%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li><strong><a href="https://juejin.cn/post/7118599362036367391" target="_blank" rel="external nofollow noopener noreferrer">1.iOS架构设计|综述<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></strong></li>
+<li><strong><a href="#">2.iOS架构设计|iOS模块化开发</a>(<code>待输出</code>)</strong></li>
+<li><strong><a href="https://juejin.cn/post/7211072055781261349/" target="_blank" rel="external nofollow noopener noreferrer">3.iOS架构设计|iOS组件化开发-依赖包管理工具Cocoapods常用实践:组件库(本地库、远程库(公有、私有))创建、模板工程、划分、资源管理、优化等<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></strong></li>
+<li><strong><a href="#">4.iOS架构设计|iOS组件化开发【组件管理、组件分类、组件划分、组件开发】</a>(<code>待输出</code>)</strong></li>
+<li><strong><a href="https://juejin.cn/post/7208476031136153655" target="_blank" rel="external nofollow noopener noreferrer">5.iOS架构设计|iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、.xcfameworks等】<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></strong></li>
+</ul>
+<h3 class="heading-element" id="探索ios底层原理"><span>探索iOS底层原理</span>
+  <a href="#%e6%8e%a2%e7%b4%a2ios%e5%ba%95%e5%b1%82%e5%8e%9f%e7%90%86" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><ul>
+<li><strong><a href="https://juejin.cn/post/7089043618803122183/" target="_blank" rel="external nofollow noopener noreferrer">探究iOS底层原理|综述<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></strong></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/" data-title="IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金" data-hashtags="移动客户端架构设计,XCFramework"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/" data-hashtag="移动客户端架构设计"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/tips/ios%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1ios%E5%BC%80%E5%8F%91%E5%8C%85%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96.a%E9%9D%99%E6%80%81%E5%BA%93.framework%E9%9D%99%E6%80%81%E5%BA%93%E5%8A%A8%E6%80%81%E5%BA%93.dyld%E5%8A%A8%E6%80%81%E5%BA%93xcfameworks%E7%AD%89-%E6%8E%98%E9%87%91/" data-title="IOS架构设计!iOS开发包二进制化【.a静态库、.framework(静态库、动态库)、.dyld动态库、XCFameworks等】 - 掘金"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 移动客户端架构设计">移动客户端架构设计</a><a href="/tags/xcframework/" class="post-tag" title="标签 - XCFramework">XCFramework</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="Runloop实际使用"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Runloop实际使用</a><a href="/posts/tips/apple-configurator-2-%E4%B9%8B-web-clips-%E7%AE%80%E4%B9%A6/" class="post-nav-item" rel="next" title="Apple Configurator 2 之 Web Clips - 简书">Apple Configurator 2 之 Web Clips - 简书<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/09664c493062f3e1a77a5660e3763a95.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

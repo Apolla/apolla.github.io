@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>5：推流发布和播放【RTMP】介绍 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="准备工作（表示安装目录）： 1、在/applications下创建一个live文件夹`
+2、在~/conf下创建一个live文件夹，并把conf目录下的Application.xml复制进去
+3、编辑Application.xml： （1）设置Streams/StreamType属性（live：仅直播；record：仅记录；live-record：既直播又记录） live 注意：记录的视频保存在~/content目录下。 （2）设置HTTPStreamers属性： cupertinostreaming,smoothstreaming,sanjosestreaming （3）设置Streams/LiveStreamPacketizers属性： cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer （4）设置RTP/Authentication/PlayMethod属性： none
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="5：推流发布和播放【RTMP】介绍">
+	<meta itemprop="description" content="准备工作（表示安装目录）： 1、在/applications下创建一个live文件夹`
+2、在~/conf下创建一个live文件夹，并把conf目录下的Application.xml复制进去
+3、编辑Application.xml： （1）设置Streams/StreamType属性（live：仅直播；record：仅记录；live-record：既直播又记录） live 注意：记录的视频保存在~/content目录下。 （2）设置HTTPStreamers属性： cupertinostreaming,smoothstreaming,sanjosestreaming （3）设置Streams/LiveStreamPacketizers属性： cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer （4）设置RTP/Authentication/PlayMethod属性： none">
+	<meta itemprop="datePublished" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="dateModified" content="2024-03-10T09:47:41+08:00">
+	<meta itemprop="wordCount" content="662">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="5：推流发布和播放【RTMP】介绍">
+	<meta property="og:description" content="准备工作（表示安装目录）： 1、在/applications下创建一个live文件夹`
+2、在~/conf下创建一个live文件夹，并把conf目录下的Application.xml复制进去
+3、编辑Application.xml： （1）设置Streams/StreamType属性（live：仅直播；record：仅记录；live-record：既直播又记录） live 注意：记录的视频保存在~/content目录下。 （2）设置HTTPStreamers属性： cupertinostreaming,smoothstreaming,sanjosestreaming （3）设置Streams/LiveStreamPacketizers属性： cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer （4）设置RTP/Authentication/PlayMethod属性： none">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-10T09:47:41+08:00">
+		<meta property="article:modified_time" content="2024-03-10T09:47:41+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="5：推流发布和播放【RTMP】介绍">
+  <meta name="twitter:description" content="准备工作（表示安装目录）： 1、在/applications下创建一个live文件夹`
+2、在~/conf下创建一个live文件夹，并把conf目录下的Application.xml复制进去
+3、编辑Application.xml： （1）设置Streams/StreamType属性（live：仅直播；record：仅记录；live-record：既直播又记录） live 注意：记录的视频保存在~/content目录下。 （2）设置HTTPStreamers属性： cupertinostreaming,smoothstreaming,sanjosestreaming （3）设置Streams/LiveStreamPacketizers属性： cupertinostreamingpacketizer, smoothstreamingpacketizer, sanjosestreamingpacketizer （4）设置RTP/Authentication/PlayMethod属性： none"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/" title="5：推流发布和播放【RTMP】介绍 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/" title="7：最简单的基于FFmpeg的推流器" /><link rel="next" type="text/html" href="https://apolla.cc/posts/live/4%E5%A6%82%E4%BD%95%E5%81%9A%E4%B8%80%E6%AC%BEinke%E7%89%88%E7%9A%84app/" title="4：如何做一款inke版的APP" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "5：推流发布和播放【RTMP】介绍",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D\/"
+    },"genre": "posts","wordcount":  662 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D\/","datePublished": "2024-03-10T09:47:41+08:00","dateModified": "2024-03-10T09:47:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>5：推流发布和播放【RTMP】介绍</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-10 09:47:41"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-10">2024-03-10</time></span>&nbsp;<span title="662 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>准备工作（<sub>表示安装目录）：
+1、在</sub>/applications下创建一个live文件夹`</p>
+<p>2、在~/conf下创建一个live文件夹，并把conf目录下的Application.xml复制进去</p>
+<p>3、编辑Application.xml：
+（1）设置Streams/StreamType属性（live：仅直播；record：仅记录；live-record：既直播又记录）
+<StreamType>live</StreamType>
+注意：记录的视频保存在~/content目录下。
+（2）设置HTTPStreamers属性：
+<HTTPStreamers>cupertinostreaming,smoothstreaming,sanjosestreaming</HTTPStreamers>
+（3）设置Streams/LiveStreamPacketizers属性：
+<LiveStreamPacketizers>cupertinostreamingpacketizer, smoothstreamingpacketizer,                     sanjosestreamingpacketizer</LiveStreamPacketizers>
+（4）设置RTP/Authentication/PlayMethod属性：
+<PlayMethod>none</PlayMethod></p>
+<p>4、这一步只有采用RTSP/RTP编码时才需要做：编辑~/conf下的publish.password文件，添加一个用户名和密码来控制RTSP/RTP访问：</p>
+<h1 class="heading-element" id="publish-password-file-format-usernamespacepassword"><span>Publish password file (format [username][space][password])</span>
+  <a href="#publish-password-file-format-usernamespacepassword" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h1 class="heading-element" id="username-password"><span>username password</span>
+  <a href="#username-password" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>myuser mypassword</p>
+<p>5、保存文件，重启服务器
+推流：
+1、基于rtmp，打开encoder，输入以下参数：
+Server URL: rtmp://[wowza-address]/live
+Stream Name: myStream.sdp
+2、基于rtsp，参数如下：
+Host Address: [wowza-address]:1935
+Stream Name: live/myStream.sdp</p>
+<p>播放流：
+1、rtmp（用flash player播放），参数如下：
+Server: rtmp://[wowza-address]/live
+Stream: myStream.sdp
+2、rtsp（用vlc或者QuickTime播放）
+视频源：rtsp://[wowza-address]:1935/live/myStream.sdp</p>
+<p>用rtmp协议推的流，也可以用rtsp协议播放。
+介绍与架构图详细参见 <a href="http://www.cuplayer.com/rtsp/" target="_blank" rel="external nofollow noopener noreferrer">http://www.cuplayer.com/rtsp/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>RTSP视频监控WEB截图效果
+<img loading="lazy" src='/images/4bcf18bf90beebb3ad033f7060a85eaf.png' alt="image.png"></p>
+<p>RTSP视频监控WEB截图效果
+<img loading="lazy" src='/images/26eaf6ce67825f73444b4c07836ba8de.png' alt="image.png"></p>
+<p>基于极酷阳光播放器的调用：</p>
+<script type="text/javascript" src="/player/images/swfobject.js"></script>
+<div class="video" id="CuPlayer"> <b> <img src="/player/images/loading.gif" /> 网页视频播放器加载中，请稍后...</b> </div>
+<script type="text/javascript">
+var so = new SWFObject("/player/player.swf","ply","980","460","9","#000000");
+so.addParam("allowfullscreen","true");
+so.addParam("allowscriptaccess","always");
+so.addParam("wmode","opaque");
+so.addParam("quality","high");
+so.addParam("salign","lt");
+<!-- HTML代码参数/Begin -->
+<p>so.addVariable(&ldquo;JcScpServer&rdquo;,&ldquo;rtmp://www.cuplauyer.com/vod&rdquo;); //注意：wowza流媒体服务器地址
+so.addVariable(&ldquo;JcScpVideoPath&rdquo;,&ldquo;mp4:test.mp4&rdquo;); //wowza视频文件地址
+so.addVariable(&ldquo;JcScpImg&rdquo;,&quot;/player/Images/start.jpg&quot;);
+so.addVariable(&ldquo;JcScpFile&rdquo;,&quot;/player/CuSunV2Set.xml&quot;);</p>
+<!-- HTML代码参数/End -->
+<p>so.write(&ldquo;CuPlayer&rdquo;);
+</script></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-10 09:47:41">更新于 2024-03-10&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/" data-title="5：推流发布和播放【RTMP】介绍"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/5%E6%8E%A8%E6%B5%81%E5%8F%91%E5%B8%83%E5%92%8C%E6%92%AD%E6%94%BErtmp%E4%BB%8B%E7%BB%8D/" data-title="5：推流发布和播放【RTMP】介绍"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/4%E5%A6%82%E4%BD%95%E5%81%9A%E4%B8%80%E6%AC%BEinke%E7%89%88%E7%9A%84app/" class="post-nav-item" rel="prev" title="4：如何做一款inke版的APP"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>4：如何做一款inke版的APP</a><a href="/posts/live/7%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%9F%BA%E4%BA%8Effmpeg%E7%9A%84%E6%8E%A8%E6%B5%81%E5%99%A8/" class="post-nav-item" rel="next" title="7：最简单的基于FFmpeg的推流器">7：最简单的基于FFmpeg的推流器<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/63ae1a9b738b9b60dc7d482de3340d42.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

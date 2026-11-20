@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>6：推荐的直播文章和rtmp直播地址 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content=" 解读：X264和H264 是什么？ 解读：rtmp和http方式在播放flv方面的各自优势和劣势 解读：I,P，B帧和PTS，DTS的关系 解读：移动直播技术秒开优化经验(超级重要，必读！) 解读：iOS8系统H264视频硬件编解码说明 download x264 解读：FFmpeg发送流媒体的命令（UDP，RTP，RTMP） 解读：FFmpeg官网 解读：FFMPEG视音频编解码零基础学习方法（最权威推荐阅读） download x264 GitHub -&gt; jgh-/VideoCore**GitHub -&gt; runner365/LiveVideoCoreSDK 解读：HTTP Live Streaming直播(iOS直播)技术分析与实现 GitHub -&gt; LaiFengiOS/LFLiveKit**GitHub -&gt; BradLarson/GPUImage**GitHub -&gt; BeautifyFaceDemo 解读：iOS实时美颜滤镜是怎样炼成的 GitHub -&gt; Bilibili/ijkplayer 一般做rtmp编程的时候，需要用到rtmp视频源地址，通常可以自己搭建Red5等服务器到自己的机器配置好后，编写客户端，但是这样有点麻烦；
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="6：推荐的直播文章和rtmp直播地址">
+	<meta itemprop="description" content="解读：X264和H264 是什么？ 解读：rtmp和http方式在播放flv方面的各自优势和劣势 解读：I,P，B帧和PTS，DTS的关系 解读：移动直播技术秒开优化经验(超级重要，必读！) 解读：iOS8系统H264视频硬件编解码说明 download x264 解读：FFmpeg发送流媒体的命令（UDP，RTP，RTMP） 解读：FFmpeg官网 解读：FFMPEG视音频编解码零基础学习方法（最权威推荐阅读） download x264 GitHub -&gt; jgh-/VideoCore**GitHub -&gt; runner365/LiveVideoCoreSDK 解读：HTTP Live Streaming直播(iOS直播)技术分析与实现 GitHub -&gt; LaiFengiOS/LFLiveKit**GitHub -&gt; BradLarson/GPUImage**GitHub -&gt; BeautifyFaceDemo 解读：iOS实时美颜滤镜是怎样炼成的 GitHub -&gt; Bilibili/ijkplayer 一般做rtmp编程的时候，需要用到rtmp视频源地址，通常可以自己搭建Red5等服务器到自己的机器配置好后，编写客户端，但是这样有点麻烦；">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="1213">
+	<meta itemprop="keywords" content="直播"><meta property="og:url" content="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="6：推荐的直播文章和rtmp直播地址">
+	<meta property="og:description" content="解读：X264和H264 是什么？ 解读：rtmp和http方式在播放flv方面的各自优势和劣势 解读：I,P，B帧和PTS，DTS的关系 解读：移动直播技术秒开优化经验(超级重要，必读！) 解读：iOS8系统H264视频硬件编解码说明 download x264 解读：FFmpeg发送流媒体的命令（UDP，RTP，RTMP） 解读：FFmpeg官网 解读：FFMPEG视音频编解码零基础学习方法（最权威推荐阅读） download x264 GitHub -&gt; jgh-/VideoCore**GitHub -&gt; runner365/LiveVideoCoreSDK 解读：HTTP Live Streaming直播(iOS直播)技术分析与实现 GitHub -&gt; LaiFengiOS/LFLiveKit**GitHub -&gt; BradLarson/GPUImage**GitHub -&gt; BeautifyFaceDemo 解读：iOS实时美颜滤镜是怎样炼成的 GitHub -&gt; Bilibili/ijkplayer 一般做rtmp编程的时候，需要用到rtmp视频源地址，通常可以自己搭建Red5等服务器到自己的机器配置好后，编写客户端，但是这样有点麻烦；">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="6：推荐的直播文章和rtmp直播地址">
+  <meta name="twitter:description" content="解读：X264和H264 是什么？ 解读：rtmp和http方式在播放flv方面的各自优势和劣势 解读：I,P，B帧和PTS，DTS的关系 解读：移动直播技术秒开优化经验(超级重要，必读！) 解读：iOS8系统H264视频硬件编解码说明 download x264 解读：FFmpeg发送流媒体的命令（UDP，RTP，RTMP） 解读：FFmpeg官网 解读：FFMPEG视音频编解码零基础学习方法（最权威推荐阅读） download x264 GitHub -&gt; jgh-/VideoCore**GitHub -&gt; runner365/LiveVideoCoreSDK 解读：HTTP Live Streaming直播(iOS直播)技术分析与实现 GitHub -&gt; LaiFengiOS/LFLiveKit**GitHub -&gt; BradLarson/GPUImage**GitHub -&gt; BeautifyFaceDemo 解读：iOS实时美颜滤镜是怎样炼成的 GitHub -&gt; Bilibili/ijkplayer 一般做rtmp编程的时候，需要用到rtmp视频源地址，通常可以自己搭建Red5等服务器到自己的机器配置好后，编写客户端，但是这样有点麻烦；"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/" title="6：推荐的直播文章和rtmp直播地址 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/" title="8：FFmpeg在iOS上完美编译" /><link rel="next" type="text/html" href="https://apolla.cc/posts/bluetooth/6swiftybluetooth%E7%9A%84%E4%BD%BF%E7%94%A8/" title="6：SwiftyBluetooth的使用" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "6：推荐的直播文章和rtmp直播地址",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/live\/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80\/"
+    },"genre": "posts","wordcount":  1213 ,
+    "url": "https:\/\/apolla.cc\/posts\/live\/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>6：推荐的直播文章和rtmp直播地址</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%9B%B4%E6%92%AD/" class="post-category" title="分类 - 直播"><i class="fa-regular fa-folder" aria-hidden="true"></i> 直播</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="1213 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><ul>
+<li>解读：<a href="http://blog.sina.com.cn/s/blog_4ad042e50100ijcq.html" target="_blank" rel="external nofollow noopener noreferrer">X264和H264 是什么？<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://bbs.9ria.com/thread-110484-1-1.html" target="_blank" rel="external nofollow noopener noreferrer">rtmp和http方式在播放flv方面的各自优势和劣势<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://www.cnblogs.com/qingquan/archive/2011/07/27/2118967.html" target="_blank" rel="external nofollow noopener noreferrer">I,P，B帧和PTS，DTS的关系<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://weibo.com/ttarticle/p/show?id=2309403969318634263193" target="_blank" rel="external nofollow noopener noreferrer">移动直播技术秒开优化经验(超级重要，必读！)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://www.jianshu.com/p/b78db64acd77" target="_blank" rel="external nofollow noopener noreferrer">iOS8系统H264视频硬件编解码说明<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="http://www.videolan.org/developers/x264.html" target="_blank" rel="external nofollow noopener noreferrer">download x264<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://blog.csdn.net/leixiaohua1020/article/details/38283297" target="_blank" rel="external nofollow noopener noreferrer">FFmpeg发送流媒体的命令（UDP，RTP，RTMP）<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://blog.csdn.net/leixiaohua1020/article/details/38283297" target="_blank" rel="external nofollow noopener noreferrer">FFmpeg官网<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://blog.csdn.net/leixiaohua1020/article/details/15811977/" target="_blank" rel="external nofollow noopener noreferrer">FFMPEG视音频编解码零基础学习方法（最权威推荐阅读）<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="http://www.videolan.org/developers/x264.html" target="_blank" rel="external nofollow noopener noreferrer">download x264<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>GitHub -&gt; <a href="https://github.com/jgh-" target="_blank" rel="external nofollow noopener noreferrer">jgh-<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>/<a href="https://github.com/jgh-/VideoCore" target="_blank" rel="external nofollow noopener noreferrer">VideoCore<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>**GitHub -&gt; <a href="https://github.com/runner365" target="_blank" rel="external nofollow noopener noreferrer">runner365<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>/<a href="https://github.com/runner365/LiveVideoCoreSDK" target="_blank" rel="external nofollow noopener noreferrer">LiveVideoCoreSDK<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://www.cnblogs.com/haibindev/archive/2013/01/30/2880764.html" target="_blank" rel="external nofollow noopener noreferrer">HTTP Live       Streaming直播(iOS直播)技术分析与实现<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+GitHub -&gt; <a href="https://github.com/LaiFengiOS" target="_blank" rel="external nofollow noopener noreferrer">LaiFengiOS<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>/<a href="https://github.com/LaiFengiOS/LFLiveKit" target="_blank" rel="external nofollow noopener noreferrer">LFLiveKit<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>**GitHub -&gt; <a href="https://github.com/BradLarson" target="_blank" rel="external nofollow noopener noreferrer">BradLarson<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>/<a href="https://github.com/BradLarson/GPUImage" target="_blank" rel="external nofollow noopener noreferrer">GPUImage<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>**GitHub -&gt; <a href="https://github.com/Guikunzhi/BeautifyFaceDemo" target="_blank" rel="external nofollow noopener noreferrer">BeautifyFaceDemo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li>解读：<a href="http://www.open-open.com/lib/view/open1463108934371.html" target="_blank" rel="external nofollow noopener noreferrer">iOS实时美颜滤镜是怎样炼成的<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+GitHub -&gt; <a href="https://github.com/Bilibili" target="_blank" rel="external nofollow noopener noreferrer">Bilibili<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>/<a href="https://github.com/Bilibili/ijkplayer" target="_blank" rel="external nofollow noopener noreferrer">ijkplayer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul>
+<p>一般做rtmp编程的时候，需要用到rtmp视频源地址，通常可以自己搭建Red5等服务器到自己的机器配置好后，编写客户端，但是这样有点麻烦；</p>
+<p>为了方便，可以直接用电视台的rtmp直播地址：
+:::info
+rtmp://live.hkstv.hk.lxdns.com/live/hks    测试可用；
+rtmp://www.planeta-online.tv:1936/live/channel_4</p>
+<p>香港卫视 rtmp://live.hkstv.hk.lxdns.com/live/hks
+香港卫视 <a href="http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+香港卫视 <a href="http://124.160.184.137:80/live/5" target="_blank" rel="external nofollow noopener noreferrer">http://124.160.184.137:80/live/5<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; a46720.m3u8?type=tv</p>
+<p>香港卫视精品台 <a href="http://221.120.177.59/hls/i3d7ragr.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://221.120.177.59/hls/i3d7ragr.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+香港卫视精品台 rtmp://221.120.177.59/livestream/ucagm8kk</p>
+<p>香港9DTV  mmsh://media.9dtv.com.hk:8088/9DTVBroadCast        <br>
+酷六V音乐 <a href="http://main.gslb.ku6.com/broadcast/sub?channel=910" target="_blank" rel="external nofollow noopener noreferrer">http://main.gslb.ku6.com/broadcast/sub?channel=910<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+东森新闻   rtsp://adelivery_s.emome.net:554 &hellip; ;at=1&amp;mc=d2d58c
+东森新闻亚洲 rtsp://adelivery_s.emome.net:554 &hellip; ;at=1&amp;mc=d2d58c</p>
+<p>东森幼儿  <a href="http://119.147.242.8:14207" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.8:14207<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>         <br>
+华娱卫视  rtsp://116.199.127.68/huayu</p>
+<p>阳光卫视  <a href="http://wzfree.10043.doftp.com/tvtest/182tv.php/live/id/suntv.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://wzfree.10043.doftp.com/tvtest/182tv.php/live/id/suntv.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="http://proxy.myvst.net/live/7167" target="_blank" rel="external nofollow noopener noreferrer">http://proxy.myvst.net/live/7167<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; 53565151E76D4F.m3u8</p>
+<p>本港卫视   rtsp://116.199.127.68/bengang
+本港卫视   <a href="http://119.147.242.7:14075" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14075<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+本港卫视   rtsp://3ptv.cietv.com/bengang
+本港台     <a href="http://v.hrtv8.com/vip.hrtv8.com/stream/2506.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://v.hrtv8.com/vip.hrtv8.com/stream/2506.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>本港亚洲台 <a href="http://119.147.242.7:14083" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14083<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>本港国际台 <a href="http://119.147.242.7:14082" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14082<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>健康生活台 <a href="http://wzfree.10043.doftp.com/tvtest/182tv.php/live/id/hlc.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://wzfree.10043.doftp.com/tvtest/182tv.php/live/id/hlc.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>TVB  <a href="http://rtsp.vdowowza.tvb.com:193" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:193<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB8 <a href="http://202.102.79.114:554/live/tvb8.stream/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://202.102.79.114:554/live/tvb8.stream/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+TVB8 <a href="http://122.192.35.76:554/live/tvb8.stream/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://122.192.35.76:554/live/tvb8.stream/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+TVB 互动新闻台  <a href="http://119.147.242.7:14078" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14078<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+TVB 互动新闻台  <a href="http://rtsp.vdowowza.tvb.com/tvb" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com/tvb<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB 互动新闻台  <a href="http://rtsp.vdowowza.tvb.com:193" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:193<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB 互动新闻台  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB 互动新闻台  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB 互动新闻台  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+TVB 互动新闻台  rtsp://rtsp.vdowowza.tvb.com/tvblive/mobile_inews_200.stream
+TVB 翡翠台  <a href="http://119.147.242.7:14076" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14076<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+TVB 翡翠台  mmsh://222.84.226.99:88/333</p>
+<p>高清翡翠台  <a href="http://119.147.242.7:14119" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14119<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+高清翡翠台  <a href="http://119.147.242.7:14120" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14120<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+高清翡翠台  <a href="http://119.147.242.7:14164" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14164<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+高清翡翠台  <a href="http://119.147.242.7:14076" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14076<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+翡翠台2     <a href="http://119.147.242.7:14076" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14076<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+翡翠台-珍藏  mmsh://222.84.226.99:88/333
+翡翠台-珍藏  <a href="http://119.147.242.7:14076" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14076<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>互动新闻台1  rtsp://rtsp.vdowowza.tvb.com/tvblive/mobile_inews_200.stream
+互动新闻台1  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台1  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台2  <a href="http://rtsp.vdowowza.tvb.com:193" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:193<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台2  <a href="http://rtsp.vdowowza.tvb.com/tvb" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com/tvb<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台2  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台2  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8
+互动新闻台2  <a href="http://rtsp.vdowowza.tvb.com:554" target="_blank" rel="external nofollow noopener noreferrer">http://rtsp.vdowowza.tvb.com:554<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ream/chunklist.m3u8</p>
+<p>TVB明珠台    <a href="http://119.147.242.7:14080" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14080<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>无线J2       <a href="http://119.147.242.7:14079" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14079<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>新娱乐       <a href="http://live-cdn.kksmg.com/channels/tvie/ylpd/flv:sd/live" target="_blank" rel="external nofollow noopener noreferrer">http://live-cdn.kksmg.com/channels/tvie/ylpd/flv:sd/live<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>龙翔时代     mms://mtv.smallsun.biz/m64
+龙翔时代     rtsp://mtv.smallsun.biz/m3</p>
+<p>卡通卫视    rtsp://adelivery_s.emome.net:554 &hellip; ;at=1&amp;mc=d2d58c</p>
+<p>天映频道    rtmp://victorynet.tv:1935/live/mvcelesx01</p>
+<p>台湾</p>
+<p>TVBS    rtsp://211.79.36.213/tvbs_gphone.sdp
+TVBS新闻台  rtsp://211.79.36.213/tvbsn_gphone.sdp
+TVBS新闻台  rtsp://211.79.36.213:554/tvbsn_gphone.sdp
+台视  rtsp://210.61.68.145/m50
+台视  rtsp://adelivery_s.emome.net:554 &hellip; ;at=1&amp;mc=d2d58c
+台视  <a href="http://202.76.72.141:30080/Entry/8132?m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://202.76.72.141:30080/Entry/8132?m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+台视  rtsp://211.79.36.213:554/ttv_gphone.sdp
+星空卫视  <a href="http://proxy.myvst.net/live/5335" target="_blank" rel="external nofollow noopener noreferrer">http://proxy.myvst.net/live/5335<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; 942336E6A1763C7.flv
+星空卫视  rtsp://stream13.gzcbn.tv:554/app_2/ls_7.stream</p>
+<p>星空制作  <a href="http://starry.mop.com/live/star.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://starry.mop.com/live/star.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>凤凰卫视中文  rtsp://116.199.127.68/fenghuang
+凤凰卫视中文  <a href="http://ifenglive.soooner.com/?uu" target="_blank" rel="external nofollow noopener noreferrer">http://ifenglive.soooner.com/?uu<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; E5DVSDNSOOONERCOM00
+凤凰视频      <a href="http://live.3gv.ifeng.com/live/zhongwen.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/zhongwen.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰视频      <a href="http://live.3gv.ifeng.com/live/zhongwen.m3u8?fmt=x264_0k_mpegt" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/zhongwen.m3u8?fmt=x264_0k_mpegt<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰视频      <a href="http://live.3gv.ifeng.com/live/z" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/z<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ts&amp;size=320x240       <br>
+凤凰视频      rtsp://live.3gv.ifeng.com/live/2256
+凤凰视频      <a href="http://live.3gv.ifeng.com/live/hls/2500.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/hls/2500.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰视频      <a href="http://live.3gv.ifeng.com/live/FHZXHD.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/FHZXHD.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>          <br>
+凤凰资讯台    <a href="http://live.3gv.ifeng.com/live/z" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/z<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ts&amp;size=320x240
+凤凰资讯台    <a href="http://live.3gv.ifeng.com/live/hls/1500.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/hls/1500.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰资讯台    <a href="http://lmyy.7drt.com/s/aa15.phps" target="_blank" rel="external nofollow noopener noreferrer">http://lmyy.7drt.com/s/aa15.phps<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; .php?flvid=42100024
+凤凰资讯台    <a href="http://http:/live.3gv.ifeng.com/live/zixun.m3u8?fmt=x264_0k_mpegts&size=320x240/s/aa15.php?s=234" target="_blank" rel="external nofollow noopener noreferrer">http://http://live.3gv.ifeng.com/live/zixun.m3u8?fmt=x264_0k_mpegts&amp;size=320x240/s/aa15.php?s=234<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰资讯台    <a href="http://ims.veryhd.net/ty/fh_flv.php?flvid=42100024" target="_blank" rel="external nofollow noopener noreferrer">http://ims.veryhd.net/ty/fh_flv.php?flvid=42100024<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰资讯高清  rtsp://live.3gv.ifeng.com/live/71
+凤凰卫视香港台  <a href="http://live.3gv.ifeng.com/live/hongkong.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/hongkong.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰卫视香港台  <a href="http://119.147.242.7:14137" target="_blank" rel="external nofollow noopener noreferrer">http://119.147.242.7:14137<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰卫视香港台  <a href="http://v.znds.com/a8c513fb0aff806867a4613ae509101ef" target="_blank" rel="external nofollow noopener noreferrer">http://v.znds.com/a8c513fb0aff806867a4613ae509101ef<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰卫视香港台  <a href="http://proxy.myvst.net/live/5335" target="_blank" rel="external nofollow noopener noreferrer">http://proxy.myvst.net/live/5335<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; 176333651BB5507.flv
+凤凰卫视香港台  <a href="http://live.3gv.ifeng.com/live/3128" target="_blank" rel="external nofollow noopener noreferrer">http://live.3gv.ifeng.com/live/3128<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰卫视宽屏   <a href="http://itv.hdpfans.com/ty/fh_flv.php?flvid=42100011" target="_blank" rel="external nofollow noopener noreferrer">http://itv.hdpfans.com/ty/fh_flv.php?flvid=42100011<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>资讯卫视       <a href="http://58.221.254.33:1935/live/zhongwen.sdp/playlist.m3u" target="_blank" rel="external nofollow noopener noreferrer">http://58.221.254.33:1935/live/zhongwen.sdp/playlist.m3u<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>SCN TV       <a href="http://zb.v.qq.com:1863/?progid=2674956498&ostype=ios" target="_blank" rel="external nofollow noopener noreferrer">http://zb.v.qq.com:1863/?progid=2674956498&amp;ostype=ios<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>@TV选美频道  <a href="http://live121.cnlive.com:1935/live/shijiexiaojie/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/shijiexiaojie/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV综艺频道  <a href="http://live121.cnlive.com:1935/live/izongyi/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/izongyi/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@tv写真频道  <a href="http://live121.cnlive.com:1935/live/meixingxiezhen/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/meixingxiezhen/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV娱乐频道  <a href="http://live121.cnlive.com:1935/live/xuanhanyu/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/xuanhanyu/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV卡通频道  <a href="http://live121.cnlive.com:1935/live/eyule/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/eyule/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV体育频道  <a href="http://live121.cnlive.com:1935/live/chaotiyu/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/chaotiyu/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@tv火星视频  <a href="http://live121.cnlive.com:1935/live/huoxingshipin/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/huoxingshipin/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV新闻频道  <a href="http://live121.cnlive.com:1935/live/news/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/news/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV美尚生活  <a href="http://live121.cnlive.com:1935/l" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/l<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; nghuo/playlist.m3u8
+@TV动漫频道  <a href="http://live121.cnlive.com:1935/live/dongman/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/dongman/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@tv健康频道  <a href="http://live121.cnlive.com:1935/live/meilizhongguo/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/meilizhongguo/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV影视频道  <a href="http://live121.cnlive.com:1935/live/xinyingshi/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/xinyingshi/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+@TV幸福频道  <a href="http://live121.cnlive.com:1935/live/jidongpindao/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live121.cnlive.com:1935/live/jidongpindao/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>亚太卫视 rtmp://58.61.150.198/live/Livestream</p>
+<p>东方电影 <a href="http://112.117.210.8:80/live/5/4" target="_blank" rel="external nofollow noopener noreferrer">http://112.117.210.8:80/live/5/4<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; bb534ec7d253cc0ed14</p>
+<p>亚太第一卫视 rtmp://v1.one-tv.com/live/mpegts.stream</p>
+<p>希望电视台 rtmp://203.69.85.37/livepkgr/hopestream1?adbe-live-event=hopetv</p>
+<p>台湾TVBS新闻 rtsp://adelivery_s.emome.net:554 &hellip; ;at=1&amp;mc=d2d58c</p>
+<p>GOOD TV 1  rtmp://l.jdjys.net/livefy/livestream
+GOOD TV 1  rtsp://live.jdjys.net/tv1
+GOOD TV 1  <a href="http://210.59.248.53/hls-live/li" target="_blank" rel="external nofollow noopener noreferrer">http://210.59.248.53/hls-live/li<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ent/live-ch1-1.m3u8
+GOOD TV 1  mms://122.226.102.202:1755/tv1</p>
+<p>GOOD TV 2  rtmp://l.jdjys.net/livefy2/livestream
+GOOD TV 2  rtsp://live.jdjys.net/tv2
+GOOD TV 2  <a href="http://210.59.248.53/hls-live/li" target="_blank" rel="external nofollow noopener noreferrer">http://210.59.248.53/hls-live/li<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> &hellip; ent/live-ch2-1.m3u8
+GOOD TV 2  mms://122.226.102.202:1755/tv2</p>
+<p>台湾民视   rtmp://202.39.43.80:80/live_hich/BC000121_1
+台湾民视   <a href="http://202.76.72.141:30080/Entry/8131?m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://202.76.72.141:30080/Entry/8131?m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a><br>
+台湾民视   rtsp://adelivery_s.emome.net:554/ftv_gphone.sdp
+:::</p>
+<p>如果有测试可用的，可以添加到评论中；</p>
+<p>| TVB8 ,<a href="http://proxy.myvst.net/live/53357A52616B5A4D6279424D42336E6A806E82" target="_blank" rel="external nofollow noopener noreferrer">http://proxy.myvst.net/live/5335    &hellip; 9424D42336E6A806E82<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+星空卫视 ,
+华娱卫视,
+凤凰卫视中文台, <a href="http://proxy.myvst.net/live/53357A52616B5A4D6279426A42336E6A18AA44" target="_blank" rel="external nofollow noopener noreferrer">http://proxy.myvst.net/live/5335 &hellip;    9426A42336E6A18AA44<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+凤凰卫视咨询台,
+channel v ,
+本港台, <a href="http://bbs.wobo.tv/rtsp:/116.199.127.68/bengang/" target="_blank" rel="external nofollow noopener noreferrer">rtsp://116.199.127.68/bengang/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+香港卫视, rtmp://live.hkstv.hk.lxdns.com/live/hks
+卫视国际电影台 ,rtmp://202.117.80.19:1935/live/live2
+卫视国际电影台 ,
+卫视合家欢,
+卫视合家欢 ,
+澳门莲花 ,<a href="http://61.14.175.39/zerox/LOTUS/0-39.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://61.14.175.39/zerox/LOTUS/0-39.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+澳亚卫视, rtmp://live.mastv.cc:1935/live/live1
+澳视体育,
+澳视澳门 ,<a href="http://live4.tdm.com.mo:1935/tv/ch1_H.live/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live4.tdm.com.mo:1935/tv/ch1_H.live/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>澳视生活, <a href="http://live4.tdm.com.mo:1935/tv/ch5.live/playlist.m3u8" target="_blank" rel="external nofollow noopener noreferrer">http://live4.tdm.com.mo:1935/tv/ch5.live/playlist.m3u8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/" data-title="6：推荐的直播文章和rtmp直播地址"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/live/6%E6%8E%A8%E8%8D%90%E7%9A%84%E7%9B%B4%E6%92%AD%E6%96%87%E7%AB%A0%E5%92%8Crtmp%E7%9B%B4%E6%92%AD%E5%9C%B0%E5%9D%80/" data-title="6：推荐的直播文章和rtmp直播地址"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/3-rtmp%E7%9B%B4%E6%92%AD%E5%BA%94%E7%94%A8%E4%B8%8E%E5%BB%B6%E6%97%B6%E5%88%86%E6%9E%90/" class="post-nav-item" rel="prev" title="3： RTMP直播应用与延时分析"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>3： RTMP直播应用与延时分析</a><a href="/posts/live/8ffmpeg%E5%9C%A8ios%E4%B8%8A%E5%AE%8C%E7%BE%8E%E7%BC%96%E8%AF%91/" class="post-nav-item" rel="next" title="8：FFmpeg在iOS上完美编译">8：FFmpeg在iOS上完美编译<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/57330b918929c51cc7347ca06afb9280.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

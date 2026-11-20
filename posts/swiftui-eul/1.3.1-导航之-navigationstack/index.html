@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>1.3.1 导航之 NavigationStack - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+iOS 16 废弃了 NavigationView，使用更加灵活的 NavigationStack、NavigationSplitView 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 14, iOS 16, macOS 13'>
+	<meta itemprop="name" content="1.3.1 导航之 NavigationStack">
+	<meta itemprop="description" content="iOS 16 废弃了 NavigationView，使用更加灵活的 NavigationStack、NavigationSplitView 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。">
+	<meta itemprop="datePublished" content="2022-09-05T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2022-09-05T08:00:00+08:00">
+	<meta itemprop="wordCount" content="2196">
+	<meta itemprop="keywords" content="Xcode 14,iOS 16,macOS 13"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="1.3.1 导航之 NavigationStack">
+	<meta property="og:description" content="iOS 16 废弃了 NavigationView，使用更加灵活的 NavigationStack、NavigationSplitView 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2022-09-05T08:00:00+08:00">
+		<meta property="article:modified_time" content="2022-09-05T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 14">
+		<meta property="article:tag" content="iOS 16">
+		<meta property="article:tag" content="macOS 13">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="1.3.1 导航之 NavigationStack">
+  <meta name="twitter:description" content="iOS 16 废弃了 NavigationView，使用更加灵活的 NavigationStack、NavigationSplitView 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/" title="1.3.1 导航之 NavigationStack - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.3-swiftui-%E4%B8%AD%E7%9A%84%E5%9C%BA%E6%99%AF/" title="1.3 SwiftUI 中的场景" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/1.3.2-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationsplitview/" title="1.3.2 导航之 NavigationSplitView" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "1.3.1 导航之 NavigationStack",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack\/"
+    },"genre": "posts","keywords": "Xcode 14, iOS 16, macOS 13","wordcount":  2196 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack\/","datePublished": "2022-09-05T08:00:00+08:00","dateModified": "2022-09-05T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>1.3.1 导航之 NavigationStack</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2022-09-05 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2022-09-05">2022-09-05</time></span>&nbsp;<span title="2196 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<br>
+<p>iOS 16 废弃了 NavigationView，使用更加灵活的 <a href="https://developer.apple.com/documentation/swiftui/navigationstack" target="_blank" rel="external nofollow noopener noreferrer">NavigationStack<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://developer.apple.com/documentation/swiftui/navigationsplitview" target="_blank" rel="external nofollow noopener noreferrer">NavigationSplitView<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 管理导航栈。二者在 iOS、iPadOS、macOS 上均可使用，但在不同平台表现不一。后文主要演示 NavigationStack 在 iPhone、iPad 上的使用，NavigationSplitView 在 iPad、Mac 上的使用。</p>
+<h1 class="heading-element" id="系统自动管理导航状态"><span>系统自动管理导航状态</span>
+  <a href="#%e7%b3%bb%e7%bb%9f%e8%87%aa%e5%8a%a8%e7%ae%a1%e7%90%86%e5%af%bc%e8%88%aa%e7%8a%b6%e6%80%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>NavigationStack 和 NavigationView 一样，依然可以使用 <a href="https://developer.apple.com/documentation/swiftui/navigationlink" target="_blank" rel="external nofollow noopener noreferrer">NavigationLink<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 指定目标视图进行跳转：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">NavigationStack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">NavigationLink</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span> <span class="c1">// destination</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">label</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>NavigationStack 还支持将目标视图和 NavigationLink 分离开来，在声明 NavigationLink 时无需指定 destination，只需传入一个实现 Hashable 协议的 value 参数，然后使用 NavigationStack 的实例方法 <a href="https://developer.apple.com/documentation/swiftui/view/navigationdestination(for:destination:)" target="_blank" rel="external nofollow noopener noreferrer">navigationDestination(for:destination:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 实现跳转，该方法中的 for 参数需要和 NavigationLink 中的 value 参数类型一致。</p>
+<p>NavigationLink 中 value 参数是可选的，如果传入 nil，该导航链接将被禁用，外观样式也有所不同。</p>
+<p>NavigationView 没有充分体现出声明式编程的数据驱动状态更新的优势，使用上的割裂感和对状态管理的局限性，在 NavigationStack 都不复存在了。导航链接和目标视图的分离，有利于集中管理导航事件，导航行为因此变得更加灵活和可控，</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">imgName</span> <span class="p">=</span> <span class="s">&#34;swift&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">numbers</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">NavigationStack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">List</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Section</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">NavigationLink</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">imgName</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="n">imgName</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">      <span class="n">ForEach</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">id</span><span class="p">:</span> <span class="err">\</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// value 为 nil 时，禁用跳转，样式也有所差异</span>
+</span></span><span class="line"><span class="cl">        <span class="n">NavigationLink</span><span class="p">(</span><span class="s">&#34;</span><span class="si">\(</span><span class="nv">$0</span><span class="si">)</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nv">$0</span> <span class="p">==</span> <span class="mi">1</span> <span class="p">?</span> <span class="kc">nil</span> <span class="p">:</span> <span class="nv">$0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">header</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Text</span><span class="p">(</span><span class="s">&#34;点击触发导航跳转&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">navigationDestination</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="nb">String</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">navigationDestination</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;</span><span class="si">\(</span><span class="nv">$0</span><span class="si">)</span><span class="s">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>以上导航事件皆由用户主动点击导航链接时触发，NavigationStack 还支持程序触发导航。如下代码表示当打开开关时触发导航行为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">isPresented</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">NavigationStack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">List</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Section</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Toggle</span><span class="p">(</span><span class="s">&#34;跳转&#34;</span><span class="p">,</span> <span class="n">isOn</span><span class="p">:</span> <span class="err">$</span><span class="n">isPresented</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">header</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Text</span><span class="p">(</span><span class="s">&#34;程序触发导航跳转&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">navigationDestination</span><span class="p">(</span><span class="n">isPresented</span><span class="p">:</span> <span class="err">$</span><span class="n">isPresented</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="手动管理导航状态"><span>手动管理导航状态</span>
+  <a href="#%e6%89%8b%e5%8a%a8%e7%ae%a1%e7%90%86%e5%af%bc%e8%88%aa%e7%8a%b6%e6%80%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>上面的示例中，导航状态由系统自动管理。如果需要手动管理，NavigationStack 提供了两个初始化方法，本质上都是将导航状态与 path 参数进行显式地绑定，当 path 发生改变时，导航行为也会随之变化。</p>
+<p>先来看看第一个方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">init</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">path</span><span class="p">:</span> <span class="n">Binding</span><span class="p">&lt;</span><span class="n">Data</span><span class="p">&gt;,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">root</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Root</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="k">where</span> <span class="n">Data</span> <span class="p">:</span> <span class="n">MutableCollection</span><span class="p">,</span> <span class="n">Data</span> <span class="p">:</span> <span class="n">RandomAccessCollection</span><span class="p">,</span> <span class="n">Data</span> <span class="p">:</span> <span class="n">RangeReplaceableCollection</span><span class="p">,</span> <span class="n">Data</span><span class="p">.</span><span class="n">Element</span> <span class="p">:</span> <span class="nb">Hashable</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>path 参数是集合类型，集合中的元素需要实现 Hashable 协议。path 保存的就是与 NavigationStack 实例绑定的导航状态，当导航行为发生改变时，比如 push 或者 pop，系统会自动对 path 进行入栈和出栈操作。反之，手动改变 path 时，也会触发相应的导航行为。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>这里的示例演示的就是使用整形数组保存 NavigationPath。然而集合类型的限制在于要求元素的数据类型保持一致，如果一个页面有多个类型不一致的数据，该如何解决呢？我们很容易想到使用枚举绑定不同类型的变量，然后使用枚举作为集合的子元素。当然了，根据上面的分析，枚举也需要实现 Hashable 协议。</p>
+<p>使用枚举进行优化的另一个好处在于，当使用 <code>navigationDestination</code> 处理跳转时，代码更利于集中管理、抽取和复用。在示例中可以查看源码，这里就不再贴出具体代码了。</p>
+<p>由于导航行为在 app 中频繁发生，为了省去环境变量的注入和获取步骤，同时避免路由的重复声明，可以采用单例模式来进行优化，如此一来就可以在全局范围内方便地管理导航状态了。以下思路供参考：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kr">final</span> <span class="kd">class</span> <span class="nc">Router</span><span class="p">:</span> <span class="n">ObservableObject</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">@</span><span class="n">Published</span> <span class="kd">var</span> <span class="nv">path</span><span class="p">:</span> <span class="p">[</span><span class="n">Route</span><span class="p">]</span> <span class="p">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="kd">let</span> <span class="nv">shared</span> <span class="p">=</span> <span class="n">Router</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">(</span><span class="kc">_</span> <span class="n">route</span><span class="p">:</span> <span class="n">Route</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">route</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">static</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">_</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">popLast</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">init</span><span class="p">()</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="导航状态的保存与恢复"><span>导航状态的保存与恢复</span>
+  <a href="#%e5%af%bc%e8%88%aa%e7%8a%b6%e6%80%81%e7%9a%84%e4%bf%9d%e5%ad%98%e4%b8%8e%e6%81%a2%e5%a4%8d" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>除了上面提到的使用数组形式保存导航栈的状态之外，NavigationStack 还支持使用 NavigationPath 类型的数据管理导航状态，其初始化方法如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">init</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Binding</span><span class="p">&lt;</span><span class="n">NavigationPath</span><span class="p">&gt;,</span> <span class="n">root</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Root</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><a href="https://developer.apple.com/documentation/swiftui/navigationpath" target="_blank" rel="external nofollow noopener noreferrer">NavigationPath<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是一个擦除类型信息的集合类型，它已经具备集合该有的一些特性，比如 count、append、removeLast 等。其中 append 有两个不同的方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kr">mutating</span> <span class="kd">func</span> <span class="nf">append</span><span class="p">&lt;</span><span class="n">V</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="k">where</span> <span class="n">V</span> <span class="p">:</span> <span class="nb">Hashable</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">mutating</span> <span class="kd">func</span> <span class="nf">append</span><span class="p">&lt;</span><span class="n">V</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="k">where</span> <span class="n">V</span> <span class="p">:</span> <span class="n">Decodable</span><span class="p">,</span> <span class="n">V</span> <span class="p">:</span> <span class="n">Encodable</span><span class="p">,</span> <span class="n">V</span> <span class="p">:</span> <span class="nb">Hashable</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>第一个方法要求 value 遵循 Hashable 协议，第二个是第一个方法的加强版，要求 value 遵循 Codable（Encodable &amp; Decodable）协议。</p>
+<p>要实现导航状态的保存与恢复，需要使用第二个方法，只有实现 Codable 协议的数据才能被序列化存储，然后反序列化恢复导航栈的状态。具体实现效果可以查看示例，当发生跳转行为后，将 app 进程杀掉，然后重新回到示例，会直接唤起 app 被强杀之前导航所处的界面。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>示例代码中已经为需要保存的导航状态实现 Codable 协议：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="nc">Route</span><span class="p">:</span> <span class="n">Codable</span><span class="p">,</span> <span class="nb">Hashable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">string</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">weather</span><span class="p">(</span><span class="n">SampleNavigationStackRestore</span><span class="p">.</span><span class="n">Weather</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">Weather</span><span class="p">:</span> <span class="n">Codable</span><span class="p">,</span> <span class="nb">Hashable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">name</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">degree</span><span class="p">:</span> <span class="nb">Double</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">degreeCelsius</span><span class="p">:</span> <span class="nb">String</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">degree</span><span class="p">.</span><span class="n">celsiusFormat</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>Swift 中的基础数据类型默认实现了 Codable 协议，所以这里的 Weather 直接遵循 Codable 即可。</p>
+<p>导航状态的管理和之前是一样的，只需要维护好 path 就能控制导航行为。我们重点来看如何保存和恢复：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kr">final</span> <span class="kd">class</span> <span class="nc">SampleRestoreRouter</span><span class="p">:</span> <span class="n">ObservableObject</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">path</span> <span class="p">=</span> <span class="n">NavigationPath</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">willSet</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">objectWillChange</span><span class="p">.</span><span class="n">send</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">didSet</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">save</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 2</span>
+</span></span><span class="line"><span class="cl">  <span class="p">@</span><span class="n">AppStorage</span><span class="p">(</span><span class="s">&#34;naviPathStore&#34;</span><span class="p">)</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">naviPathStore</span><span class="p">:</span> <span class="n">Data</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">func</span> <span class="nf">readSerializedData</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Data</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">naviPathStore</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">func</span> <span class="nf">writeSerializedData</span><span class="p">(</span><span class="kc">_</span> <span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">naviPathStore</span> <span class="p">=</span> <span class="n">data</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 3</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">init</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">readSerializedData</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printLog</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">decoding</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="k">as</span><span class="p">:</span> <span class="nb">UTF8</span><span class="p">.</span><span class="kc">self</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">representation</span> <span class="p">=</span> <span class="k">try</span> <span class="n">JSONDecoder</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="n">NavigationPath</span><span class="p">.</span><span class="n">CodableRepresentation</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">from</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">self</span><span class="p">.</span><span class="n">path</span> <span class="p">=</span> <span class="n">NavigationPath</span><span class="p">(</span><span class="n">representation</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">self</span><span class="p">.</span><span class="n">path</span> <span class="p">=</span> <span class="n">NavigationPath</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kc">self</span><span class="p">.</span><span class="n">path</span> <span class="p">=</span> <span class="n">NavigationPath</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 4</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">save</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">representation</span> <span class="p">=</span> <span class="n">path</span><span class="p">.</span><span class="n">codable</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nv">encoder</span> <span class="p">=</span> <span class="n">JSONEncoder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="k">try</span> <span class="n">encoder</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">representation</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="kc">self</span><span class="p">.</span><span class="n">writeSerializedData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printLog</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">decoding</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="k">as</span><span class="p">:</span> <span class="nb">UTF8</span><span class="p">.</span><span class="kc">self</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printLog</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><ol>
+<li>这里将 @Published 改为手动发送订阅通知，目的是在 path 改变时保存当前的导航状态。</li>
+<li>使用 @AppStorage 保存数据，用于恢复导航状态。</li>
+<li>SampleRestoreRouter 实例初始化时，从 @AppStorage 变量中读取保存的数据，然后将反序列化的数据传递给 path，path 的改变触发界面的更新。</li>
+<li>从 NavigationPath 实例变量 <code>codable</code> 中读取数据，将其序列化后保存至 @AppStorage 变量。</li>
+</ol>
+<p>整个过程大致就是这样，核心就在于数据的序列化和反序列化，NavigationPath 已经通过协议的约束指明了方向，我们只需要按照要求读写数据即可。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2022-09-05 08:00:00">更新于 2022-09-05&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/" data-title="1.3.1 导航之 NavigationStack" data-hashtags="Xcode 14,iOS 16,macOS 13"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/" data-hashtag="Xcode 14"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/1.3.1-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationstack/" data-title="1.3.1 导航之 NavigationStack"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-14/" class="post-tag" title="标签 - Xcode 14">Xcode 14</a><a href="/tags/ios-16/" class="post-tag" title="标签 - iOS 16">iOS 16</a><a href="/tags/macos-13/" class="post-tag" title="标签 - macOS 13">macOS 13</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/3-swift-%E4%B8%AD%E7%9A%84-result-builders/" class="post-nav-item" rel="prev" title="3 Swift 中的 Result Builders"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>3 Swift 中的 Result Builders</a><a href="/posts/swiftui-eul/1.3.2-%E5%AF%BC%E8%88%AA%E4%B9%8B-navigationsplitview/" class="post-nav-item" rel="next" title="1.3.2 导航之 NavigationSplitView">1.3.2 导航之 NavigationSplitView<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/1fcad57c873ae5b0146b3925bea9e155.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

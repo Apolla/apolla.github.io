@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>3.2 异步流 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="AsyncStream 的使用 AsyncStream 是一个遵循 AsyncSequence 协议的结构体，借助于它，我们无需手动实现异步迭代器，就可以方便地构建异步序列。相比 AsyncSequence ，它是一个实现异步序列的轻量级方案。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='AsyncSequence, AsyncStream'>
+	<meta itemprop="name" content="3.2 异步流">
+	<meta itemprop="description" content="AsyncStream 的使用 AsyncStream 是一个遵循 AsyncSequence 协议的结构体，借助于它，我们无需手动实现异步迭代器，就可以方便地构建异步序列。相比 AsyncSequence ，它是一个实现异步序列的轻量级方案。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="1936">
+	<meta itemprop="keywords" content="AsyncSequence,AsyncStream"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="3.2 异步流">
+	<meta property="og:description" content="AsyncStream 的使用 AsyncStream 是一个遵循 AsyncSequence 协议的结构体，借助于它，我们无需手动实现异步迭代器，就可以方便地构建异步序列。相比 AsyncSequence ，它是一个实现异步序列的轻量级方案。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:tag" content="AsyncSequence">
+		<meta property="article:tag" content="AsyncStream">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="3.2 异步流">
+  <meta name="twitter:description" content="AsyncStream 的使用 AsyncStream 是一个遵循 AsyncSequence 协议的结构体，借助于它，我们无需手动实现异步迭代器，就可以方便地构建异步序列。相比 AsyncSequence ，它是一个实现异步序列的轻量级方案。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" title="3.2 异步流 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/" title="4.1 actor 的使用" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" title="3.1 异步序列" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "3.2 异步流",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81\/"
+    },"genre": "posts","keywords": "AsyncSequence, AsyncStream","wordcount":  1936 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>3.2 异步流</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="1936 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><h1 class="heading-element" id="asyncstream-的使用"><span>AsyncStream 的使用</span>
+  <a href="#asyncstream-%e7%9a%84%e4%bd%bf%e7%94%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><a href="https://developer.apple.com/documentation/swift/asyncstream" target="_blank" rel="external nofollow noopener noreferrer">AsyncStream<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是一个遵循 <code>AsyncSequence</code> 协议的结构体，借助于它，我们无需手动实现异步迭代器，就可以方便地构建异步序列。相比 <code>AsyncSequence</code> ，它是一个实现异步序列的轻量级方案。</p>
+<p><code>AsyncStream</code> 的构建方法如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">init</span><span class="p">(</span><span class="kc">_</span> <span class="n">elementType</span><span class="p">:</span> <span class="n">Element</span><span class="p">.</span><span class="kr">Type</span> <span class="p">=</span> <span class="n">Element</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">bufferingPolicy</span> <span class="n">limit</span><span class="p">:</span> <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="n">Element</span><span class="p">&gt;.</span><span class="n">Continuation</span><span class="p">.</span><span class="n">BufferingPolicy</span> <span class="p">=</span> <span class="p">.</span><span class="n">unbounded</span><span class="p">,</span> <span class="kc">_</span> <span class="n">build</span><span class="p">:</span> <span class="p">(</span><span class="n">AsyncStream</span><span class="p">&lt;</span><span class="n">Element</span><span class="p">&gt;.</span><span class="n">Continuation</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ul>
+<li>
+<p>elementType：异步流产生的数据的类型。</p>
+</li>
+<li>
+<p>limit：缓冲策略，默认是无限数量的元素。默认情况下，异步流中生产者产出的数据元素都会进入缓冲区，直到被消费者迭代消耗掉。这有可能导致数据的生产速度大于消耗速度，从而引发系统承压或数据丢失，所以有时我们需要设定合理的缓冲策略来应对。</p>
+<p><code>AsyncStream&lt;Element&gt;.Continuation.BufferingPolicy</code> 是一个枚举类型，有如下值：</p>
+<ul>
+<li>case unbounded：无限数量的元素</li>
+<li>case bufferingOldest(Int)：最多缓冲最旧的指定数量的元素</li>
+<li>case bufferingNewest(Int)：最多缓冲最新的指定数量的元素</li>
+</ul>
+</li>
+<li>
+<p>build：闭包内可以获取 <code>AsyncStream&lt;Element&gt;.Continuation</code> 类型的结构体实例，它提供了一个 <code>yield(_:)</code> 方法将产出的数据放入缓冲区，当迭代器请求该数据时才会被消耗掉。</p>
+</li>
+</ul>
+<p>以前面的指数计算为例，我们可以使用 <code>AsyncStream</code> 作更精简的实现：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">powerStream</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="p">[(</span><span class="n">CGFloat</span><span class="p">,</span> <span class="n">CGFloat</span><span class="p">)])</span> <span class="p">-&gt;</span> <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="n">CGFloat</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">AsyncStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="n">input</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 模拟耗时的异步操作</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">0.</span><span class="p">..</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">continuation</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">random</span> <span class="p">=</span> <span class="p">{</span> <span class="n">CGFloat</span><span class="p">(</span><span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="nv">$0</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">input</span> <span class="p">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">10</span><span class="p">).</span><span class="bp">map</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span> <span class="p">(</span><span class="n">random</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">await</span> <span class="n">value</span> <span class="k">in</span> <span class="n">powerStream</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="bp">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>上例中的 <em>continuation</em> 实例在发送完所有的数据后，调用了 <code>finish()</code> 方法，这会使异步流进入终止状态。异步流一旦进入终止状态，就不会再生产新的数据，再次调用 <code>yield(_:)</code>、<code>finishe()</code> 方法也不再起任何作用。</p>
+<p>在合适的时机调用 <code>finish()</code> 方法，可以条件终止异步流：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">powerStream1</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="p">[(</span><span class="n">CGFloat</span><span class="p">,</span> <span class="n">CGFloat</span><span class="p">)])</span> <span class="p">-&gt;</span> <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="n">CGFloat</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">AsyncStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="n">input</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">0.</span><span class="p">..</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">n</span> <span class="p">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">continuation</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果出现小于 100 的值，则终止异步流</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 如果没有出现小于 100 的值，别忘了这里调用 `finish()` 终止异步流</span>
+</span></span><span class="line"><span class="cl">      <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><em>continuation</em> 可以通过回调函数 <code>onTermination</code> 监听异步流的终止行为，<code>onTermination</code> 会返回一个类型为 <code>AsyncStream&lt;Element&gt;.Continuation.Termanation</code> 的枚举实例，它有两个枚举值：</p>
+<ul>
+<li>case finished：<em>continuation</em> 调用 <code>finish()</code> 时触发</li>
+<li>case cancelled：包含异步流的任务取消时触发</li>
+</ul>
+<p>我们在上面的代码基础上尝试监听异步流的终止行为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">powerStream2</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="p">[(</span><span class="n">CGFloat</span><span class="p">,</span> <span class="n">CGFloat</span><span class="p">)])</span> <span class="p">-&gt;</span> <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="n">CGFloat</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">AsyncStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">continuation</span><span class="p">.</span><span class="n">onTermination</span> <span class="p">=</span> <span class="p">{</span> <span class="n">termination</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="k">switch</span> <span class="n">termination</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="p">.</span><span class="n">cancelled</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="s">&#34;cancelled&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="p">.</span><span class="n">finished</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="s">&#34;finished&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">@</span><span class="n">unknown</span> <span class="k">default</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="s">&#34;unknown&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="n">input</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">0.</span><span class="p">..</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">n</span> <span class="p">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">continuation</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">random</span> <span class="p">=</span> <span class="p">{</span> <span class="n">CGFloat</span><span class="p">(</span><span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="nv">$0</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">input</span> <span class="p">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">10</span><span class="p">).</span><span class="bp">map</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span> <span class="p">(</span><span class="n">random</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="n">await</span> <span class="n">value</span> <span class="k">in</span> <span class="n">powerStream2</span><span class="p">(</span><span class="n">input</span><span class="p">:</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">task</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>运行程序后，观察控制台，它会按照如下逻辑输出：</p>
+<ul>
+<li>3 秒内，没有出现小于 100 的值，任务会取消，控制台会打印 &ldquo;cancelled&rdquo;</li>
+<li>3 秒内，出现小于 100 的值，异步流会提前结束，控制台会打印 &ldquo;finished&rdquo;</li>
+<li>3 秒后，出现小于 100 的值，异步流会提前结束，控制台会打印 &ldquo;finished&rdquo;</li>
+<li>3 秒后，一直没有出现小于 100 的值，缓冲区的所有数据迭代完后，异步流会结束，控制台会打印 &ldquo;finished&rdquo;</li>
+</ul>
+<p>如果异步流可能会抛出错误，可以使用 <a href="https://developer.apple.com/documentation/swift/asyncthrowingstream" target="_blank" rel="external nofollow noopener noreferrer">AsyncThrowingStream<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，使用方法与 <code>AsyncStream</code> 类似，此处不再赘述。</p>
+<p><code>AsyncStream</code> 还有一个构造方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">init</span><span class="p">(</span><span class="n">unfolding</span> <span class="n">produce</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">()</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">Element</span><span class="p">?,</span> <span class="n">onCancel</span><span class="p">:</span> <span class="p">(@</span><span class="n">Sendable</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">)?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>此方法可以便利地将一个生成元素的闭包“展开”成异步流，并且有个可选闭包 <code>onCancel</code> 来处理取消事件。</p>
+<p>比如下面的代码，就是一个从闭包中构建异步流的例子。每隔一秒，异步流就会产生一个 100 以内的随机数。3 秒后，我们取消了任务，因此触发了 <code>onCancel</code> 回调。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">unfoldingStream</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">AsyncStream</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">onCancel</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;Cancelled&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">unfoldingStream</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">?</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">task</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="使用异步流迁移旧有的回调代码"><span>使用异步流迁移旧有的回调代码</span>
+  <a href="#%e4%bd%bf%e7%94%a8%e5%bc%82%e6%ad%a5%e6%b5%81%e8%bf%81%e7%a7%bb%e6%97%a7%e6%9c%89%e7%9a%84%e5%9b%9e%e8%b0%83%e4%bb%a3%e7%a0%81" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>在 <em>Swift 并发新体验</em> 一节中，介绍过如何将旧有的回调代码快速迁移至 <code>async/await</code> 范式。对于异步返回单个结果的情况，迁移至 <code>async/await</code> 是简单且明智的做法。但有些需求场景并非如此，比如下载文件时，下载进度是实时更新的，类似这种异步事件会随着时间的推移持续地向调用方返回一系列数据的场景，我们可以使用异步流来升级旧有的 API。</p>
+<p>下面的代码是基于回调机制模拟下载文件的过程，每隔 0.25 秒控制台就会打印一次下载进度，直到文件下载完成。如果发生了错误，下载过程会终止，控制台会打印错误信息。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">CallbackToAsyncStream</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">donwloadFile</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">progress</span><span class="p">,</span> <span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">data</span> <span class="p">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">?</span> <span class="s">&#34;&#34;</span> <span class="p">:</span> <span class="nb">String</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">v</span><span class="p">.</span><span class="n">data</span><span class="p">!,</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="n">errorHandler</span><span class="p">:</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">enum</span> <span class="nc">DownloadError</span><span class="p">:</span> <span class="n">Error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">downloadFileError</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">struct</span> <span class="nc">DownloadData</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">progress</span><span class="p">:</span> <span class="n">CGFloat</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">donwloadFile</span><span class="p">(</span><span class="n">progressHandler</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">DownloadData</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="p">(),</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">errorHandler</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">DownloadError</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="n">DownloadData</span><span class="p">(</span><span class="n">progress</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">error</span><span class="p">:</span> <span class="n">DownloadError</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mf">1.</span><span class="p">..</span><span class="mi">4</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">asyncAfter</span><span class="p">(</span><span class="n">deadline</span><span class="p">:</span> <span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="nb">Double</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">progress</span> <span class="o">+=</span> <span class="mf">0.25</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">res</span><span class="p">.</span><span class="n">progress</span> <span class="o">&gt;=</span> <span class="mf">1.0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">res</span><span class="p">.</span><span class="n">data</span> <span class="p">=</span> <span class="s">&#34;Hello&#34;</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">using</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">error</span> <span class="p">==</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">progressHandler</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">Bool</span><span class="p">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">error</span> <span class="p">==</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">error</span> <span class="p">=</span> <span class="p">.</span><span class="n">downloadFileError</span>
+</span></span><span class="line"><span class="cl">          <span class="n">errorHandler</span><span class="p">(</span><span class="n">error</span><span class="p">!)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>由于下载文件可能会发生错误，这里我们使用 <code>AsyncThrowingStream</code> 来构建异步流。显然，<code>DownloadData</code> 实例是随着时间推移不断更新的，它就是需要缓冲的数据。</p>
+<p>代码很简单，参考如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">asyncDownloadData</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">AsyncThrowingStream</span><span class="p">&lt;</span><span class="n">DownloadData</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">AsyncThrowingStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">donwloadFile</span> <span class="p">{</span> <span class="n">v</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="n">continuation</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 下载完成后，终止异步流</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="n">v</span><span class="p">.</span><span class="n">data</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span> <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">()</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">errorHandler</span><span class="p">:</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 抛出错误，终止异步流</span>
+</span></span><span class="line"><span class="cl">      <span class="n">continuation</span><span class="p">.</span><span class="n">finish</span><span class="p">(</span><span class="n">throwing</span><span class="p">:</span> <span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" data-title="3.2 异步流" data-hashtags="AsyncSequence,AsyncStream"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" data-hashtag="AsyncSequence"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" data-title="3.2 异步流"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/asyncsequence/" class="post-tag" title="标签 - AsyncSequence">AsyncSequence</a><a href="/tags/asyncstream/" class="post-tag" title="标签 - AsyncStream">AsyncStream</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/3.1-%E5%BC%82%E6%AD%A5%E5%BA%8F%E5%88%97/" class="post-nav-item" rel="prev" title="3.1 异步序列"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>3.1 异步序列</a><a href="/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="4.1 Actor 的使用">4.1 Actor 的使用<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/4f2b63e2dd5b53b59024e67b9df065ef.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

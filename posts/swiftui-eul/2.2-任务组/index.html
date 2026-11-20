@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>2.2 任务组 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="任务组的创建 async let 和 Task 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='async let, Task, ids, async'>
+	<meta itemprop="name" content="2.2 任务组">
+	<meta itemprop="description" content="任务组的创建 async let 和 Task 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="3178">
+	<meta itemprop="keywords" content="async let,Task,ids,async"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="2.2 任务组">
+	<meta property="og:description" content="任务组的创建 async let 和 Task 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:tag" content="async let">
+		<meta property="article:tag" content="Task">
+		<meta property="article:tag" content="ids">
+		<meta property="article:tag" content="async">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2.2 任务组">
+  <meta name="twitter:description" content="任务组的创建 async let 和 Task 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" title="2.2 任务组 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" title="2.3 小结" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.1-%E4%BB%BB%E5%8A%A1/" title="2.1 任务" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "2.2 任务组",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84\/"
+    },"genre": "posts","keywords": "async let, Task, ids, async","wordcount":  3178 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>2.2 任务组</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="3178 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><h1 class="heading-element" id="任务组的创建"><span>任务组的创建</span>
+  <a href="#%e4%bb%bb%e5%8a%a1%e7%bb%84%e7%9a%84%e5%88%9b%e5%bb%ba" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><code>async let</code> 和 <code>Task</code> 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。</p>
+<p>假设我们已经完成了第一步，使用 <code>ids</code> 保存所有书籍的 id。下一步就是下载所有的书籍，如果使用 <code>async</code> 我们可能会这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">Book</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">data</span><span class="p">:</span> <span class="n">Data</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">fetchBooks</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="p">[</span><span class="nb">Int</span><span class="p">])</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="p">[</span><span class="n">Book</span><span class="p">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="p">[</span><span class="n">Book</span><span class="p">]()</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="n">id</span> <span class="k">in</span> <span class="n">ids</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">async</span> <span class="kd">let</span> <span class="nv">book</span> <span class="p">=</span> <span class="n">fetchBook</span><span class="p">(</span><span class="n">id</span><span class="p">:</span> <span class="n">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">await</span> <span class="n">book</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">fetchBook</span><span class="p">(</span><span class="n">id</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">Book</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// after a while, return a book</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>上面的代码问题在于，下载书籍的过程不是并行的，而是串行的。因为在 <code>fetchBooks(ids:)</code> 方法中，每当我们进入一次 <code>for</code> 循环，调用 <code>fetchbook(id:)</code> 时就会开启一个异步任务，但 <code>await book</code> 这行代码会导致程序挂起，直到异步任务返回结果，代码才会继续执行，进入下一个循环。使用 <code>Task</code> 也会存在同样的问题，我们来看看 <code>TaskGroup</code> 是如何解决这个问题的。</p>
+<p>全局函数 <a href="https://developer.apple.com/documentation/swift/3917365-withtaskgroup" target="_blank" rel="external nofollow noopener noreferrer">withTaskGroup(of:returning:body:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 用于创建一个任务组，它完整的函数名如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">withTaskGroup</span><span class="p">&lt;</span><span class="n">ChildTaskResult</span><span class="p">,</span> <span class="n">GroupResult</span><span class="p">&gt;(</span><span class="n">of</span> <span class="n">childTaskResultType</span><span class="p">:</span> <span class="n">ChildTaskResult</span><span class="p">.</span><span class="kr">Type</span><span class="p">,</span> <span class="n">returning</span> <span class="n">returnType</span><span class="p">:</span> <span class="n">GroupResult</span><span class="p">.</span><span class="kr">Type</span> <span class="p">=</span> <span class="n">GroupResult</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="p">(</span><span class="kr">inout</span> <span class="n">TaskGroup</span><span class="p">&lt;</span><span class="n">ChildTaskResult</span><span class="p">&gt;)</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">GroupResult</span><span class="p">)</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="n">GroupResult</span> <span class="k">where</span> <span class="n">ChildTaskResult</span> <span class="p">:</span> <span class="n">Sendable</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><ul>
+<li>参数
+<ul>
+<li>childTaskResultType：ChildTaskResult 类型的泛型参数，ChildTaskResult 遵循 Sendable 协议，以确保数据安全</li>
+<li>returnType：GroupResult 类型的泛型参数，可省略</li>
+<li>body：任务组执行异步任务的闭包。在闭包内使用 <code>addTask()</code> 方法可以添加一个子任务，调用该方法时，子任务会立即开始执行。</li>
+</ul>
+</li>
+<li>返回值
+<ul>
+<li>GroupResult 类型的值</li>
+</ul>
+</li>
+</ul>
+<p>使用任务组“下载全部”书籍：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">fetchBooks</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="p">[</span><span class="nb">Int</span><span class="p">])</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="p">[</span><span class="n">Book</span><span class="p">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">await</span> <span class="n">withTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">Book</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">returning</span><span class="p">:</span> <span class="p">[</span><span class="n">Book</span><span class="p">].</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">id</span> <span class="k">in</span> <span class="n">ids</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 添加子任务，返回值的类型和 childTaskResultType 参数相同</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// 子任务一旦被添加至任务组，就会立即开始执行</span>
+</span></span><span class="line"><span class="cl">      <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">await</span> <span class="n">fetchBook</span><span class="p">(</span><span class="n">id</span><span class="p">:</span> <span class="n">id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="p">[</span><span class="n">Book</span><span class="p">]()</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 异步迭代</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取子任务结果的顺序是无序的，先到先得</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">group</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">res</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 所有子任务运行完成后，group 才返回结果</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>returnType</code> 参数可以省略，Swift 可以根据上下文推断其类型，因此上面示例中的创建任务组方法，我们还可以这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">await</span> <span class="n">withTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">Book</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="p">-&gt;</span> <span class="p">[</span><span class="n">Book</span><span class="p">]</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 同上</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Swift 并没有像 <code>Task</code> 一样提供任务组的初始化方法，<code>withTaskGroup</code> 方法也没有返回可引用的任务组实例，这意味着任务组实例难以进行传递。为什么要如此设计呢？因为任务组的 <code>addTask</code>、<code>next()</code> 等方法是异变操作，而考虑到线程安全问题，并发环境是不支持异变操作的。所以，为了减少我们在使用任务组时导致潜在的安全问题，Swift 将 <code>withTaskGroup</code> 闭包设计成非逃逸的，目的就是希望我们在闭包限定的作用域内使用任务组。当然，如果你在闭包内使用外部变量引用任务组实例，编译器也不会告警，但强烈建议不要这么做，这无异于自寻烦恼。</p>
+<p>同样是使用了 for 循环，为什么 <code>TaskGroup</code> 可以解决上文中 <code>async let</code> 遇到的难题呢？因为 TaskGroup 遵循了 <code>AsyncSequence</code> 协议，它支持异步迭代，每当一个异步任务完成时，group 就能获取到结果并将其返回。关于 <code>AsyncSequence</code>，后面章节还会有更详细的介绍。</p>
+<p>同 <code>Sequence</code> 一样，遵循 <code>AsyncSequence</code> 协议的 TaskGroup 同样支持 <code>map</code>、<code>reduce</code> 等转换操作，上面的 <code>for await</code>  可以使用更精巧的写法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">return</span> <span class="n">await</span> <span class="n">group</span><span class="p">.</span><span class="bp">reduce</span><span class="p">(</span><span class="n">into</span><span class="p">:</span> <span class="p">[])</span> <span class="p">{</span> <span class="nv">$0</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nv">$1</span><span class="p">)</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>for await</code> 同普通的 for 循环一样，可以使用 <code>break</code> 提前退出循环。如下代码模拟的是一个多个异步任务在任务组内执行完成后返回数字的示例，这里我们使用了 <a href="https://developer.apple.com/documentation/swift/3917370-withthrowingtaskgroup" target="_blank" rel="external nofollow noopener noreferrer">withThrowingTaskGroup(of:returning:body:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 来创建可以抛出错误的任务组，其使用和 <code>withTaskGroup</code> 是类似的。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">ContentView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello, World!&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kd">let</span> <span class="nv">res</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">mockAddtion</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">          <span class="n">printLog</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">printLog</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">mockAddtion</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="n">await</span> <span class="n">withThrowingTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="mf">1.</span><span class="p">.&lt;</span><span class="mi">5</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="k">return</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="k">try</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">group</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">v</span> <span class="p">==</span> <span class="mi">3</span> <span class="p">{</span> <span class="k">break</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span> <span class="o">+=</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>控制台每隔一秒就会打印一个数字（1，2，3，4），所有的子任务完成后，才会执行 <code>for await</code> 循环，由于我们使用 <code>break</code> 提前结束了异步迭代，所以最终返回的结果是 3。</p>
+<p>TaskGroup 有一个实例方法 <code>next()</code>，可以获取下一个子任务返回的值。我们将上面的代码稍加改造：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">mockAddtion</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">try</span> <span class="n">await</span> <span class="n">withThrowingTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="mf">1.</span><span class="p">.&lt;</span><span class="mi">5</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">(</span><span class="n">arc4random_uniform</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span><span class="o">/</span><span class="mf">10.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">first</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">group</span><span class="p">.</span><span class="n">next</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="bp">first</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><ol>
+<li>2s 内的随机时间后，子任务返回结果；</li>
+<li>所有子任务完成后，获取第一个子任务的值并返回。</li>
+</ol>
+<p>我们有多个异步操作同时进行时，如果需要取第一个或前几个先返回的结果， <code>next()</code> 非常实用。当然，我们也可以使用占位数组配合 <code>break</code> 来实现，但 <code>next()</code> 简化了工作。</p>
+<p>由于父任务总是会等待所有子任务的完成，所以在这里的示例中，为了得到第一个返回的值，我们要进行无谓地等待，这显然是非常多余的。如何在得到第一个异步结果后立即返回并取消剩余的子任务呢？这就是下面要介绍的内容：任务组的取消。</p>
+<h1 class="heading-element" id="任务组的取消"><span>任务组的取消</span>
+  <a href="#%e4%bb%bb%e5%8a%a1%e7%bb%84%e7%9a%84%e5%8f%96%e6%b6%88" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>前面我们已经讲过，任务的取消行为不是单一行为，而是协同式的，该机制同样适用于 TaskGroup。</p>
+<p><code>withTaskGroup</code> 和 <code>withThrowingTaskGroup</code>  可以使用 <code>group.cancelAll()</code> 取消任务组内所有剩余的子任务，它会将 <code>isCancelled</code> 标记为 true，剩下的取消工作需要子任务协同处理。如果子任务没有对取消行为进行检查，那么仍然会继续执行任务。</p>
+<p>比如下面的代码，虽然我们调用了 <code>cancelAll()</code> 方法，但三个子任务还是会执行完成，最终返回的结果是 6。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">cancelGroup</span><span class="p">()</span> <span class="n">async</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">await</span> <span class="n">withTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">cancelAll</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">group</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">res</span> <span class="o">+=</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">res</span> <span class="p">=</span> <span class="n">await</span> <span class="n">cancelGroup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">printLog</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>前文已述，我们可以使用 <code>Task.isCancelled</code> 和 <code>Task.checkCancellation()</code> 两种方式来取消任务。这两种方法的区别在于，前者需要我们手动处理终止任务的逻辑，后者会抛出 <code>CancellationError</code> 类型的错误并自动终止任务。我们来看看这两种方法是否也同样适用于任务组，先添加如下代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">Task</span><span class="p">.</span><span class="n">isCancelled</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span> <span class="p">}</span> <span class="c1">// +</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>重新执行后，返回的结果是 4，这和预期是一致的。注意第三个子任务，虽然我们是在调用 <code>cancelAll()</code> 之后添加的，但子任务依然会被添加进任务组。其实，只要我们调用 <code>addTask</code> 方法，子任务都会被无条件地添加进任务组。如果我们希望在任务组取消后，不再添加子任务，可以使用 <code>addTaskUnlessCancelled</code> 方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span> <span class="c1">// -</span>
+</span></span><span class="line"><span class="cl"><span class="n">group</span><span class="p">.</span><span class="n">addTaskUnlessCancelled</span> <span class="p">{</span> <span class="c1">// +</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>addTaskUnlessCancelled</code> 返回一个 Bool 值，表明子任务是否被成功添加至任务组。</p>
+<p>回到之前的场景，我们将添加第二个子任务的代码修改成：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">try</span><span class="p">?</span> <span class="n">Task</span><span class="p">.</span><span class="n">checkCancellation</span><span class="p">()</span> <span class="c1">// +</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这次执行后，程序并没有抛出错误，执行过程和返回的结果和没有调用 <code>cancellAll()</code> 时是完全一样的。这是因为 <code>withTaskGroup</code> 不支持通过响应 <code>CancellationError</code> 类型的错误来取消任务，而 <code>withThrowingTaskGroup</code> 是支持这一点的。再看看这两个函数，我们发现它们的命名其实已经宣告了它们不同的职责。</p>
+<p>再回看我们上面提出的问题：如何尽快返回多个异步任务的第一个结果，并取消剩余的任务？相信你已经有思路了，参考代码如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">getFirstResult</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">try</span> <span class="n">await</span> <span class="n">withThrowingTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="nb">Int</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="p">-&gt;</span> <span class="nb">Int</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">v</span> <span class="k">in</span> <span class="mf">1.</span><span class="p">.&lt;</span><span class="mi">5</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// `Task.sleep` 隐式地实现了 `Task.checkCancellation`，所以这里我们不必显式调用。</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">Double</span><span class="p">(</span><span class="n">arc4random_uniform</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span><span class="o">/</span><span class="mf">10.0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printLog</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">first</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">group</span><span class="p">.</span><span class="n">next</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printLog</span><span class="p">(</span><span class="bp">first</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">group</span><span class="p">.</span><span class="n">cancelAll</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="bp">first</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">throw</span> <span class="n">CancellationError</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><h1 class="heading-element" id="子任务返回不同类型的数据"><span>子任务返回不同类型的数据</span>
+  <a href="#%e5%ad%90%e4%bb%bb%e5%8a%a1%e8%bf%94%e5%9b%9e%e4%b8%8d%e5%90%8c%e7%b1%bb%e5%9e%8b%e7%9a%84%e6%95%b0%e6%8d%ae" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>由于创建任务组时的泛型约束，所有子任务必须返回相同的数据类型。如需返回不同的类型的数据，我们应该优先选择 <code>async let</code>。遇到不得不使用任务组且子任务需要返回不同类型的数据，我们需要做点额外的工作来实现。</p>
+<p>下面的示例代码模拟的是这样一个需求场景：获取订单详情时，同时还要获取推荐商品。两个网络请求返回的是不同的数据结构，使用 <code>async let</code> 是明智的选择，这里使用 <code>TaskGroup</code> 仅作为示范如何让子任务返回不同类型的数据。</p>
+<p>思路很简单，既然 TaskGroup 要求返回一致的数据类型。那么我们可以在不同的数据类型外层包装一个相同的“盒子”，使其看上去保持一致即可。这里的“盒子”就是代码中的枚举类型 <code>OrderDataType</code>，在获取到相应的数据后，将数据装进这个“盒子”里。需要使用数据时，根据枚举值将其从“盒子”中取出即可。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">OrderInfo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">desc</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">recommends</span><span class="p">:</span> <span class="p">[</span><span class="n">Goods</span><span class="p">]?</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">struct</span> <span class="nc">Goods</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">name</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">enum</span> <span class="nc">OrderBox</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">desc</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="n">recommends</span><span class="p">([</span><span class="n">OrderInfo</span><span class="p">.</span><span class="n">Goods</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">fetchVaryingResults</span><span class="p">()</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">OrderInfo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">try</span> <span class="n">await</span> <span class="n">withThrowingTaskGroup</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="n">OrderBox</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">group</span> <span class="p">-&gt;</span> <span class="n">OrderInfo</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">.</span><span class="n">desc</span><span class="p">(</span><span class="s">&#34;Order description&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">group</span><span class="p">.</span><span class="n">addTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">try</span> <span class="n">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">.</span><span class="n">recommends</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&#34;Goods 1&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&#34;Goods 2&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="n">OrderInfo</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="k">try</span> <span class="n">await</span> <span class="n">v</span> <span class="k">in</span> <span class="n">group</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">switch</span> <span class="n">v</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">desc</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">desc</span> <span class="p">=</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">recommends</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">.</span><span class="n">recommends</span> <span class="p">=</span> <span class="n">v</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" data-title="2.2 任务组" data-hashtags="async let,Task,ids,async"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" data-hashtag="async let"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/" data-title="2.2 任务组"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/async-let/" class="post-tag" title="标签 - async let">async let</a><a href="/tags/task/" class="post-tag" title="标签 - Task">Task</a><a href="/tags/ids/" class="post-tag" title="标签 - ids">ids</a><a href="/tags/async/" class="post-tag" title="标签 - async">async</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.1-%E4%BB%BB%E5%8A%A1/" class="post-nav-item" rel="prev" title="2.1 任务"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.1 任务</a><a href="/posts/swiftui-eul/2.3-%E5%B0%8F%E7%BB%93/" class="post-nav-item" rel="next" title="2.3 小结">2.3 小结<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/e51e505c81d2ed85062ae54f29c627ea.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

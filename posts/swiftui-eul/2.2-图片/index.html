@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>2.2 图片 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+Image Image 用于展示图片，它可以加载资源包（Bundle）中的图片和系统内置的图标。
+"><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 15b3, iOS 17, macOS 14'>
+	<meta itemprop="name" content="2.2 图片">
+	<meta itemprop="description" content="Image Image 用于展示图片，它可以加载资源包（Bundle）中的图片和系统内置的图标。">
+	<meta itemprop="datePublished" content="2023-07-24T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2023-07-24T08:00:00+08:00">
+	<meta itemprop="wordCount" content="1990">
+	<meta itemprop="keywords" content="Xcode 15b3,iOS 17,macOS 14"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="2.2 图片">
+	<meta property="og:description" content="Image Image 用于展示图片，它可以加载资源包（Bundle）中的图片和系统内置的图标。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2023-07-24T08:00:00+08:00">
+		<meta property="article:modified_time" content="2023-07-24T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 15b3">
+		<meta property="article:tag" content="iOS 17">
+		<meta property="article:tag" content="macOS 14">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2.2 图片">
+  <meta name="twitter:description" content="Image Image 用于展示图片，它可以加载资源包（Bundle）中的图片和系统内置的图标。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" title="2.2 图片 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" title="4.4 基础动画" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.5-%E6%BB%91%E5%8A%A8%E8%A7%86%E5%9B%BEscrollview/" title="3.5 滑动视图（ScrollView）" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "2.2 图片",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.2-%E5%9B%BE%E7%89%87\/"
+    },"genre": "posts","keywords": "Xcode 15b3, iOS 17, macOS 14","wordcount":  1990 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/2.2-%E5%9B%BE%E7%89%87\/","datePublished": "2023-07-24T08:00:00+08:00","dateModified": "2023-07-24T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>2.2 图片</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2023-07-24 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2023-07-24">2023-07-24</time></span>&nbsp;<span title="1990 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#资源图片">资源图片</a></li>
+    <li><a href="#sf-symbols">SF Symbols</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><br>
+<h1 class="heading-element" id="image"><span>Image</span>
+  <a href="#image" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><a href="https://developer.apple.com/documentation/swiftui/image" target="_blank" rel="external nofollow noopener noreferrer">Image<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 用于展示图片，它可以加载资源包（Bundle）中的图片和系统内置的图标。</p>
+<h2 class="heading-element" id="资源图片"><span>资源图片</span>
+  <a href="#%e8%b5%84%e6%ba%90%e5%9b%be%e7%89%87" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>资源图片直接使用 Image 展示时，会保持自身原有的尺寸。如果图片过大，会超出屏幕显示区域。使用 <a href="https://developer.apple.com/documentation/swiftui/image/resizable(capinsets:resizingmode:)" target="_blank" rel="external nofollow noopener noreferrer">resizable(capInsets:resizingMode:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 可以将图片缩放至合适的大小，其中的 <code>resizingMode</code> 参数有如下两个枚举值：</p>
+<ul>
+<li>stretch：拉伸。如果图片尺寸不够，会拉伸填充。</li>
+<li>tile：平铺。如果图片尺寸不够，会平铺填充。试试在示例中将 resizingMode 置为 <code>.tile</code>，打开小图开关，则显示平铺效果。</li>
+</ul>
+<p>此外，Xcode 15 新增了一个非常实用的功能：<strong>Image 可以直接引用资源图片！</strong></p>
+<p>以前只能传入和图片名相同的字符串，比如本地有一张名为 “parrot” 的图片，代码需要这样写：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Image</span><span class="p">(</span><span class="s">&#34;parrot&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>而借助 <a href="https://developer.apple.com/documentation/swiftui/image/init(_:)" target="_blank" rel="external nofollow noopener noreferrer">init(_ resource: ImageResource)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法，编译器会自动提示，我们可以非常方便地引用资源图片：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Image</span><span class="p">(.</span><span class="n">parrot</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>不仅是图片，Color 也支持直接引用 Color Set。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<h2 class="heading-element" id="sf-symbols"><span>SF Symbols</span>
+  <a href="#sf-symbols" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>SF Symbols 是一套系统内置的图标库，包含多达 5000 多个样式丰富、风格统一的图标。要在如此繁多的图标中找到想要的并非易事，虽然 Xcode 可以通过快捷键 ⌘ + ⇧ + L 快速唤出图标库，但更推荐下载 <a href="https://developer.apple.com/sf-symbols/" target="_blank" rel="external nofollow noopener noreferrer">SF Symbols<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 后打开程序，通过分类和搜索去提高查找效率。</p>
+<p>要调整图标尺寸，有如下三种方式：</p>
+<ul>
+<li>
+<p>使用 <a href="https://developer.apple.com/documentation/swiftui/view/imagescale(_:)" target="_blank" rel="external nofollow noopener noreferrer">imageScale(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 指定放大模式。</p>
+</li>
+<li>
+<p>通过 <code>.font</code> 设置字体。</p>
+</li>
+<li>
+<p>通过 <a href="https://developer.apple.com/documentation/swiftui/view/scaleeffect(_:anchor:)-7q7as" target="_blank" rel="external nofollow noopener noreferrer">scaleEffect(_: anchor:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 进行放大。</p>
+<p>scaleEffect 适用于任何 view，后面的动画部分会经常使用这个方法。</p>
+</li>
+</ul>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>在 《文本》 中介绍过 foregroundStyle 最多可以使用三种样式，SF Symbols 中的部分图标是支持多样式的。而且可以结合 <a href="https://developer.apple.com/documentation/swiftui/view/symbolrenderingmode(_:)" target="_blank" rel="external nofollow noopener noreferrer">.symbolRenderingMode(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 来渲染更丰富的样式，symbolRenderingMode 有如下几个选项：</p>
+<ul>
+<li>hierarchical：多层渲染，使用不同透明度的前景样式（foregroundStyle）。</li>
+<li>monochrome：单层渲染，使用 foregroundStyle 填充。</li>
+<li>multicolor：多层渲染，使用系统内置的多色样式。</li>
+<li>palette：多层渲染，在不同层上使用 foregroundStyle 中的样式。</li>
+</ul>
+<p>此外，SF Symbols 还支持可变状态，比如示例中改变 variableValue 时，图标会渲染成不同的状态。</p>
+<p>要在 SF Symbols 应用程序内查看可变效果，选择如下图所示的<strong>可变</strong>分类，调整右侧红框内的滑块。</p>
+<p><img loading="lazy" src='/images/sf_symbols_1.png' alt="/images/sf_symbols_1.png"></p>
+<p>WWDC 23 演示了 SF Symbols 5 的新特性：动画！为了支持这一特性，甚至推出了一个新的框架：<a href="https://developer.apple.com/documentation/symbols" target="_blank" rel="external nofollow noopener noreferrer">Symbols<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。该框架内置了一些动画，在 SwiftUI 中可以通过以下几个新增的方法来方便地为 SF Symbols 添加和移除动画效果：</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/symboleffect(_:options:isactive:)" target="_blank" rel="external nofollow noopener noreferrer">symbolEffect(_:options:isActive:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/symboleffect(_:options:value:)" target="_blank" rel="external nofollow noopener noreferrer">symbolEffect(_:options:value:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/view/symboleffectsremoved(_:)" target="_blank" rel="external nofollow noopener noreferrer">symbolEffectsRemoved(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul>
+<p>前两个方法用于添加动画效果，第三个方法用于移除动画效果。</p>
+<p>以 <code>symbolEffect(_:options:value:)</code> 方法为例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="k">if</span> <span class="cp">#available</span><span class="p">(</span><span class="cp">iOS</span> <span class="mi">17</span><span class="p">,</span> <span class="cp">macOS</span> <span class="mi">14</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">VStack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">images</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">symbolEffect</span><span class="p">(.</span><span class="n">variableColor</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="p">.</span><span class="n">repeating</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">images</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">symbolEffect</span><span class="p">(.</span><span class="n">pulse</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="p">.</span><span class="k">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="n">speed</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">value</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">images</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">symbolEffect</span><span class="p">(.</span><span class="n">bounce</span><span class="p">.</span><span class="n">down</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">symbolAnimated</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Toggle</span><span class="p">(</span><span class="s">&#34;animated&#34;</span><span class="p">,</span> <span class="n">isOn</span><span class="p">:</span> <span class="err">$</span><span class="n">symbolAnimated</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Text</span><span class="p">(</span><span class="s">&#34;iOS 17, macOS 14 才支持动画&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>effect</code> 参数用于指定动画的样式，这里只演示了其中的几种，更多内容请查看 <a href="https://developer.apple.com/documentation/symbols" target="_blank" rel="external nofollow noopener noreferrer">Symbols<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 文档，或者在 <a href="https://developer.apple.com/sf-symbols/" target="_blank" rel="external nofollow noopener noreferrer">SF Symbols<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 应用内预览各种动画效果。</p>
+<p><code>options</code> 默认为 <code>.default</code>，正如示例所示，如果我们将其指定为 <code>.repeat(3).speed(2)</code>，那么动画会以 2 倍速重复三次。</p>
+<p><code>value</code> 参数用于控制动画的执行。</p>
+<h1 class="heading-element" id="asyncimage"><span>AsyncImage</span>
+  <a href="#asyncimage" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>Image 适用于加载体积<strong>较小</strong>的<strong>本地</strong>资源图片，如果要渲染本地<strong>大图</strong>或者加载<strong>远程</strong>图片，那么可以使用能够异步加载的 <a href="https://developer.apple.com/documentation/swiftui/asyncimage" target="_blank" rel="external nofollow noopener noreferrer">AsyncImage<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 。</p>
+<p>要加载远程图片只需要一行代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">AsyncImage</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>不过这样渲染的图片和 Image 一样贪婪，如果它自身尺寸过大，会超出屏幕显示区域。和 Image 稍有不同，我们无法直接对 AsyncImage 使用 <code>.resizable</code> 将其调整至合适的尺寸。因为图片是异步加载的，只有加载完之后才能获取图片真实尺寸。所以我们需要在 AsyncImage 的闭包中获取返回的图片，再对其进行调整：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">AsyncImage</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="n">image</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 条件渲染，源码见 Extensions</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="k">if</span><span class="p">(</span><span class="n">resizable</span><span class="p">)</span> <span class="p">{</span> <span class="n">view</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="n">view</span><span class="p">.</span><span class="n">resizable</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">aspectRatio</span><span class="p">(</span><span class="n">contentMode</span><span class="p">:</span> <span class="p">.</span><span class="n">fill</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">placeholder</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 自定义 placeholder</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Color</span><span class="p">.</span><span class="n">gray</span><span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">ProgressView</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>AsyncImage 还支持监听图片下载过程，添加动画效果：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">AsyncImage</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="n">url</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 动画</span>
+</span></span><span class="line"><span class="cl">  <span class="n">transaction</span><span class="p">:</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">animation</span><span class="p">:</span> <span class="p">.</span><span class="k">default</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span> <span class="n">phase</span> <span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="k">switch</span> <span class="n">phase</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 图片未下载</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="p">.</span><span class="n">empty</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ProgressView</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 图片已下载</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">resizable</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">scaledToFit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">cornerRadius</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">.</span><span class="n">transition</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">edge</span><span class="p">:</span> <span class="p">.</span><span class="n">top</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">combined</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="p">.</span><span class="n">opacity</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 图片下载失败</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="p">.</span><span class="n">failure</span><span class="p">(</span><span class="kc">_</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="s">&#34;xmark.circle&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">@</span><span class="n">unknown</span> <span class="k">default</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Image</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="s">&#34;xmark.circle&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p><code>transaction </code> 参数是 <a href="https://developer.apple.com/documentation/swiftui/transaction?changes=latest_major" target="_blank" rel="external nofollow noopener noreferrer">Transaction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 类型，它表示视图发生变化时的上下文，其主要作用是方便管理视图变化时的动画。在它的初始化方法中传入一个 animation，当视图变化时会执行相应的 animation。</p>
+<p>如果网速太快导致无法细察异步事件的变化，可参考如下网速控制技巧：</p>
+<ul>
+<li>macOS：安装 <a href="https://developer.apple.com/download/all/?q=Hardware%20IO%20Tools" target="_blank" rel="external nofollow noopener noreferrer">Network Link Conditioner <i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</li>
+<li>iPhone：在 <em>设置 &gt; 开发者 &gt; Network Link Conditioner</em> 中进行设置。</li>
+</ul>
+<p>从 iOS 17、macOS 14 开始，Image 和 AsyncImage 支持 HDR 图像的显示，具体查看 <a href="https://developer.apple.com/documentation/swiftui/image/alloweddynamicrange(_:)" target="_blank" rel="external nofollow noopener noreferrer">allowedDynamicRange(_:)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h1 class="heading-element" id="imagerenderer"><span>ImageRenderer</span>
+  <a href="#imagerenderer" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>ImageRenderer 用于从 SwiftUI 视图生成图片，而且它仅支持 SwiftUI 渲染的视图。</p>
+<p><span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">&gt; 查看示例</span></p>
+<p>以下是示例中的生辰图片的代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="p">@</span><span class="n">MainActor</span> <span class="kd">private</span> <span class="kd">func</span> <span class="nf">createSnapshot</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">renderer</span> <span class="p">=</span> <span class="n">ImageRenderer</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 设置分辨率，默认为 1.0</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 这里从环境变量获取当前屏幕分辨率</span>
+</span></span><span class="line"><span class="cl">  <span class="n">renderer</span><span class="p">.</span><span class="n">scale</span> <span class="p">=</span> <span class="n">displayScale</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="kd">let</span> <span class="nv">uiImage</span> <span class="p">=</span> <span class="n">renderer</span><span class="p">.</span><span class="n">uiImage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">snapshot</span> <span class="p">=</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">uiImage</span><span class="p">:</span> <span class="n">uiImage</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>ImageRenderer 遵循 ObservableObject 协议，我们只需要在构造方法中传入需要生成图片的视图，然后就可以通过 <code>renderer.uiImage</code> 获取相应的图片了。</p>
+<p>这里我们使用 @MainActor 来确保生成图片的操作在主线程进行，关于 @MainActor 的使用，请参考 《 @globalActor、@MainActor 的使用》。</p>
+<p>获取的图片类型除了 uiImage，还支持 cgImage、nsImage。除此之外，还能生成 PDF，<a href="https://developer.apple.com/documentation/swiftui/imagerenderer" target="_blank" rel="external nofollow noopener noreferrer">ImageRenderer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的文档中已经有非常详细的示例代码了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-07-24 08:00:00">更新于 2023-07-24&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" data-title="2.2 图片" data-hashtags="Xcode 15b3,iOS 17,macOS 14"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" data-hashtag="Xcode 15b3"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/2.2-%E5%9B%BE%E7%89%87/" data-title="2.2 图片"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-15b3/" class="post-tag" title="标签 - Xcode 15b3">Xcode 15b3</a><a href="/tags/ios-17/" class="post-tag" title="标签 - iOS 17">iOS 17</a><a href="/tags/macos-14/" class="post-tag" title="标签 - macOS 14">macOS 14</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/3.6-%E5%88%97%E8%A1%A8list/" class="post-nav-item" rel="prev" title="3.6 列表（List）"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>3.6 列表（List）</a><a href="/posts/swiftui-eul/4.4-%E5%9F%BA%E7%A1%80%E5%8A%A8%E7%94%BB/" class="post-nav-item" rel="next" title="4.4 基础动画">4.4 基础动画<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/fffb0eb0d37f0518e2d41ea2d46e99d4.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

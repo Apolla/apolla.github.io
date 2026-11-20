@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content=" 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 //添加水印 &#43; (UIImage *)getWaterMarkWith:(UIImage *)image waterText:(NSString *)str{ CGSize imageSize = image.size; CGFloat imageWidth = imageSize.width; CGFloat imageHeight = imageSize.height; UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0); [image drawAtPoint:CGPointZero]; CGFloat textFont = 10 * ceilf(imageWidth / [UIScreen mainScreen].bounds.size.width); CGSize perSize = [self getSize:imageWidth font:[UIFont systemFontOfSize:textFont] str:str lineSpace:0]; CGRect rect = CGRectMake(ceilf(imageWidth - perSize.width - 20), ceilf(imageHeight - perSize.height - 20), ceilf(perSize.width &#43; 10), ceilf(perSize.height &#43; 5)); NSDictionary *colorInfo = [self mostColor:image scale:1 rect:rect]; CGFloat red = [colorInfo[@&#34;red&#34;] floatValue]; CGFloat green = [colorInfo[@&#34;green&#34;] floatValue]; CGFloat blue = [colorInfo[@&#34;blue&#34;] floatValue]; CGFloat alpha = [colorInfo[@&#34;alpha&#34;] floatValue]; BOOL colorDark = [self isDarkColor:[UIColor colorWithRed:red green:green blue:blue alpha:alpha]]; [str drawAtPoint:rect.origin withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:textFont], NSForegroundColorAttributeName:colorDark ? [UIColor whiteColor] : [UIColor blackColor]}]; image = UIGraphicsGetImageFromCurrentImageContext(); UIGraphicsEndImageContext(); return image; } // 获取图片、区域的主色 &#43; (NSDictionary *)mostColor:(UIImage *)image scale:(CGFloat)scale rect:(CGRect)rect{ #if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1 int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast; #else int bitmapInfo = kCGImageAlphaPremultipliedLast; #endif if (scale &lt;= 0.1) { scale = 0.1; }else if(scale &gt;= 1){ scale = 1; } if (rect.size.width &gt; 0 &amp;&amp; rect.size.height &gt; 0) { image = [self cropSquareImage:image rect:rect]; } //第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大 CGSize thumbSize = CGSizeMake([image size].width * scale, [image size].height * scale); CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); CGContextRef context = CGBitmapContextCreate(NULL, thumbSize.width, thumbSize.height, 8,//bits per component thumbSize.width*4, colorSpace, bitmapInfo); CGRect drawRect = CGRectMake(0, 0, thumbSize.width, thumbSize.height); CGContextDrawImage(context, drawRect, image.CGImage); CGColorSpaceRelease(colorSpace); //第二步 取每个点的像素值 unsigned char* data = CGBitmapContextGetData (context); if (data == NULL){ CGContextRelease(context); return nil; } NSCountedSet *cls = [NSCountedSet setWithCapacity:thumbSize.width*thumbSize.height]; for (int x=0; x&lt;thumbSize.height; x&#43;&#43;) { for (int y=0; y&lt;thumbSize.width; y&#43;&#43;) { int offset = 4*(x*thumbSize.width &#43; y); int red = data[offset]; int green = data[offset&#43;1]; int blue = data[offset&#43;2]; int alpha = data[offset&#43;3]; NSArray *clr=@[@(red),@(green),@(blue),@(alpha)]; [cls addObject:clr]; } } CGContextRelease(context); //第三步 找到出现次数最多的那个颜色 NSEnumerator *enumerator = [cls objectEnumerator]; NSArray *curColor = nil; NSArray *MaxColor=nil; NSUInteger MaxCount=0; while ( (curColor = [enumerator nextObject]) != nil ){ NSUInteger tmpCount = [cls countForObject:curColor]; if ( tmpCount &lt; MaxCount ) continue; MaxCount=tmpCount; MaxColor=curColor; } //返回三色值&#43;透明度 NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:0]; [dic setValue:@([MaxColor[0] intValue]/255.0f) forKey:@&#34;red&#34;]; [dic setValue:@([MaxColor[1] intValue]/255.0f) forKey:@&#34;green&#34;]; [dic setValue:@([MaxColor[2] intValue]/255.0f) forKey:@&#34;blue&#34;]; [dic setValue:@([MaxColor[3] intValue]/255.0f) forKey:@&#34;alpha&#34;]; return dic; } //裁剪图片 &#43; (UIImage *)cropSquareImage:(UIImage *)image rect:(CGRect)rect{ CGImageRef sourceImageRef = [image CGImage]; CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect); UIImage *newImage = [UIImage imageWithCGImage:newImageRef]; return newImage; } //判断颜色深浅 &#43; (BOOL)isDarkColor:(UIColor *)newColor{ const CGFloat *componentColors = CGColorGetComponents(newColor.CGColor); CGFloat colorBrightness = ((componentColors[0] * 299) &#43; (componentColors[1] * 587) &#43; (componentColors[2] * 114)) / 1000; if (colorBrightness &lt; 0.5){ //深色 return YES; } else{ //浅色 return NO; } } "><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="iOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合">
+	<meta itemprop="description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 //添加水印 &#43; (UIImage *)getWaterMarkWith:(UIImage *)image waterText:(NSString *)str{ CGSize imageSize = image.size; CGFloat imageWidth = imageSize.width; CGFloat imageHeight = imageSize.height; UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0); [image drawAtPoint:CGPointZero]; CGFloat textFont = 10 * ceilf(imageWidth / [UIScreen mainScreen].bounds.size.width); CGSize perSize = [self getSize:imageWidth font:[UIFont systemFontOfSize:textFont] str:str lineSpace:0]; CGRect rect = CGRectMake(ceilf(imageWidth - perSize.width - 20), ceilf(imageHeight - perSize.height - 20), ceilf(perSize.width &#43; 10), ceilf(perSize.height &#43; 5)); NSDictionary *colorInfo = [self mostColor:image scale:1 rect:rect]; CGFloat red = [colorInfo[@&#34;red&#34;] floatValue]; CGFloat green = [colorInfo[@&#34;green&#34;] floatValue]; CGFloat blue = [colorInfo[@&#34;blue&#34;] floatValue]; CGFloat alpha = [colorInfo[@&#34;alpha&#34;] floatValue]; BOOL colorDark = [self isDarkColor:[UIColor colorWithRed:red green:green blue:blue alpha:alpha]]; [str drawAtPoint:rect.origin withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:textFont], NSForegroundColorAttributeName:colorDark ? [UIColor whiteColor] : [UIColor blackColor]}]; image = UIGraphicsGetImageFromCurrentImageContext(); UIGraphicsEndImageContext(); return image; } // 获取图片、区域的主色 &#43; (NSDictionary *)mostColor:(UIImage *)image scale:(CGFloat)scale rect:(CGRect)rect{ #if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1 int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast; #else int bitmapInfo = kCGImageAlphaPremultipliedLast; #endif if (scale &lt;= 0.1) { scale = 0.1; }else if(scale &gt;= 1){ scale = 1; } if (rect.size.width &gt; 0 &amp;&amp; rect.size.height &gt; 0) { image = [self cropSquareImage:image rect:rect]; } //第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大 CGSize thumbSize = CGSizeMake([image size].width * scale, [image size].height * scale); CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); CGContextRef context = CGBitmapContextCreate(NULL, thumbSize.width, thumbSize.height, 8,//bits per component thumbSize.width*4, colorSpace, bitmapInfo); CGRect drawRect = CGRectMake(0, 0, thumbSize.width, thumbSize.height); CGContextDrawImage(context, drawRect, image.CGImage); CGColorSpaceRelease(colorSpace); //第二步 取每个点的像素值 unsigned char* data = CGBitmapContextGetData (context); if (data == NULL){ CGContextRelease(context); return nil; } NSCountedSet *cls = [NSCountedSet setWithCapacity:thumbSize.width*thumbSize.height]; for (int x=0; x&lt;thumbSize.height; x&#43;&#43;) { for (int y=0; y&lt;thumbSize.width; y&#43;&#43;) { int offset = 4*(x*thumbSize.width &#43; y); int red = data[offset]; int green = data[offset&#43;1]; int blue = data[offset&#43;2]; int alpha = data[offset&#43;3]; NSArray *clr=@[@(red),@(green),@(blue),@(alpha)]; [cls addObject:clr]; } } CGContextRelease(context); //第三步 找到出现次数最多的那个颜色 NSEnumerator *enumerator = [cls objectEnumerator]; NSArray *curColor = nil; NSArray *MaxColor=nil; NSUInteger MaxCount=0; while ( (curColor = [enumerator nextObject]) != nil ){ NSUInteger tmpCount = [cls countForObject:curColor]; if ( tmpCount &lt; MaxCount ) continue; MaxCount=tmpCount; MaxColor=curColor; } //返回三色值&#43;透明度 NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:0]; [dic setValue:@([MaxColor[0] intValue]/255.0f) forKey:@&#34;red&#34;]; [dic setValue:@([MaxColor[1] intValue]/255.0f) forKey:@&#34;green&#34;]; [dic setValue:@([MaxColor[2] intValue]/255.0f) forKey:@&#34;blue&#34;]; [dic setValue:@([MaxColor[3] intValue]/255.0f) forKey:@&#34;alpha&#34;]; return dic; } //裁剪图片 &#43; (UIImage *)cropSquareImage:(UIImage *)image rect:(CGRect)rect{ CGImageRef sourceImageRef = [image CGImage]; CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect); UIImage *newImage = [UIImage imageWithCGImage:newImageRef]; return newImage; } //判断颜色深浅 &#43; (BOOL)isDarkColor:(UIColor *)newColor{ const CGFloat *componentColors = CGColorGetComponents(newColor.CGColor); CGFloat colorBrightness = ((componentColors[0] * 299) &#43; (componentColors[1] * 587) &#43; (componentColors[2] * 114)) / 1000; if (colorBrightness &lt; 0.5){ //深色 return YES; } else{ //浅色 return NO; } }">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="624">
+	<meta itemprop="keywords" content="碎片芝士收藏"><meta property="og:url" content="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="iOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合">
+	<meta property="og:description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 //添加水印 &#43; (UIImage *)getWaterMarkWith:(UIImage *)image waterText:(NSString *)str{ CGSize imageSize = image.size; CGFloat imageWidth = imageSize.width; CGFloat imageHeight = imageSize.height; UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0); [image drawAtPoint:CGPointZero]; CGFloat textFont = 10 * ceilf(imageWidth / [UIScreen mainScreen].bounds.size.width); CGSize perSize = [self getSize:imageWidth font:[UIFont systemFontOfSize:textFont] str:str lineSpace:0]; CGRect rect = CGRectMake(ceilf(imageWidth - perSize.width - 20), ceilf(imageHeight - perSize.height - 20), ceilf(perSize.width &#43; 10), ceilf(perSize.height &#43; 5)); NSDictionary *colorInfo = [self mostColor:image scale:1 rect:rect]; CGFloat red = [colorInfo[@&#34;red&#34;] floatValue]; CGFloat green = [colorInfo[@&#34;green&#34;] floatValue]; CGFloat blue = [colorInfo[@&#34;blue&#34;] floatValue]; CGFloat alpha = [colorInfo[@&#34;alpha&#34;] floatValue]; BOOL colorDark = [self isDarkColor:[UIColor colorWithRed:red green:green blue:blue alpha:alpha]]; [str drawAtPoint:rect.origin withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:textFont], NSForegroundColorAttributeName:colorDark ? [UIColor whiteColor] : [UIColor blackColor]}]; image = UIGraphicsGetImageFromCurrentImageContext(); UIGraphicsEndImageContext(); return image; } // 获取图片、区域的主色 &#43; (NSDictionary *)mostColor:(UIImage *)image scale:(CGFloat)scale rect:(CGRect)rect{ #if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1 int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast; #else int bitmapInfo = kCGImageAlphaPremultipliedLast; #endif if (scale &lt;= 0.1) { scale = 0.1; }else if(scale &gt;= 1){ scale = 1; } if (rect.size.width &gt; 0 &amp;&amp; rect.size.height &gt; 0) { image = [self cropSquareImage:image rect:rect]; } //第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大 CGSize thumbSize = CGSizeMake([image size].width * scale, [image size].height * scale); CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); CGContextRef context = CGBitmapContextCreate(NULL, thumbSize.width, thumbSize.height, 8,//bits per component thumbSize.width*4, colorSpace, bitmapInfo); CGRect drawRect = CGRectMake(0, 0, thumbSize.width, thumbSize.height); CGContextDrawImage(context, drawRect, image.CGImage); CGColorSpaceRelease(colorSpace); //第二步 取每个点的像素值 unsigned char* data = CGBitmapContextGetData (context); if (data == NULL){ CGContextRelease(context); return nil; } NSCountedSet *cls = [NSCountedSet setWithCapacity:thumbSize.width*thumbSize.height]; for (int x=0; x&lt;thumbSize.height; x&#43;&#43;) { for (int y=0; y&lt;thumbSize.width; y&#43;&#43;) { int offset = 4*(x*thumbSize.width &#43; y); int red = data[offset]; int green = data[offset&#43;1]; int blue = data[offset&#43;2]; int alpha = data[offset&#43;3]; NSArray *clr=@[@(red),@(green),@(blue),@(alpha)]; [cls addObject:clr]; } } CGContextRelease(context); //第三步 找到出现次数最多的那个颜色 NSEnumerator *enumerator = [cls objectEnumerator]; NSArray *curColor = nil; NSArray *MaxColor=nil; NSUInteger MaxCount=0; while ( (curColor = [enumerator nextObject]) != nil ){ NSUInteger tmpCount = [cls countForObject:curColor]; if ( tmpCount &lt; MaxCount ) continue; MaxCount=tmpCount; MaxColor=curColor; } //返回三色值&#43;透明度 NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:0]; [dic setValue:@([MaxColor[0] intValue]/255.0f) forKey:@&#34;red&#34;]; [dic setValue:@([MaxColor[1] intValue]/255.0f) forKey:@&#34;green&#34;]; [dic setValue:@([MaxColor[2] intValue]/255.0f) forKey:@&#34;blue&#34;]; [dic setValue:@([MaxColor[3] intValue]/255.0f) forKey:@&#34;alpha&#34;]; return dic; } //裁剪图片 &#43; (UIImage *)cropSquareImage:(UIImage *)image rect:(CGRect)rect{ CGImageRef sourceImageRef = [image CGImage]; CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect); UIImage *newImage = [UIImage imageWithCGImage:newImageRef]; return newImage; } //判断颜色深浅 &#43; (BOOL)isDarkColor:(UIColor *)newColor{ const CGFloat *componentColors = CGColorGetComponents(newColor.CGColor); CGFloat colorBrightness = ((componentColors[0] * 299) &#43; (componentColors[1] * 587) &#43; (componentColors[2] * 114)) / 1000; if (colorBrightness &lt; 0.5){ //深色 return YES; } else{ //浅色 return NO; } }">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合">
+  <meta name="twitter:description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 //添加水印 &#43; (UIImage *)getWaterMarkWith:(UIImage *)image waterText:(NSString *)str{ CGSize imageSize = image.size; CGFloat imageWidth = imageSize.width; CGFloat imageHeight = imageSize.height; UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0); [image drawAtPoint:CGPointZero]; CGFloat textFont = 10 * ceilf(imageWidth / [UIScreen mainScreen].bounds.size.width); CGSize perSize = [self getSize:imageWidth font:[UIFont systemFontOfSize:textFont] str:str lineSpace:0]; CGRect rect = CGRectMake(ceilf(imageWidth - perSize.width - 20), ceilf(imageHeight - perSize.height - 20), ceilf(perSize.width &#43; 10), ceilf(perSize.height &#43; 5)); NSDictionary *colorInfo = [self mostColor:image scale:1 rect:rect]; CGFloat red = [colorInfo[@&#34;red&#34;] floatValue]; CGFloat green = [colorInfo[@&#34;green&#34;] floatValue]; CGFloat blue = [colorInfo[@&#34;blue&#34;] floatValue]; CGFloat alpha = [colorInfo[@&#34;alpha&#34;] floatValue]; BOOL colorDark = [self isDarkColor:[UIColor colorWithRed:red green:green blue:blue alpha:alpha]]; [str drawAtPoint:rect.origin withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:textFont], NSForegroundColorAttributeName:colorDark ? [UIColor whiteColor] : [UIColor blackColor]}]; image = UIGraphicsGetImageFromCurrentImageContext(); UIGraphicsEndImageContext(); return image; } // 获取图片、区域的主色 &#43; (NSDictionary *)mostColor:(UIImage *)image scale:(CGFloat)scale rect:(CGRect)rect{ #if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1 int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast; #else int bitmapInfo = kCGImageAlphaPremultipliedLast; #endif if (scale &lt;= 0.1) { scale = 0.1; }else if(scale &gt;= 1){ scale = 1; } if (rect.size.width &gt; 0 &amp;&amp; rect.size.height &gt; 0) { image = [self cropSquareImage:image rect:rect]; } //第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大 CGSize thumbSize = CGSizeMake([image size].width * scale, [image size].height * scale); CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); CGContextRef context = CGBitmapContextCreate(NULL, thumbSize.width, thumbSize.height, 8,//bits per component thumbSize.width*4, colorSpace, bitmapInfo); CGRect drawRect = CGRectMake(0, 0, thumbSize.width, thumbSize.height); CGContextDrawImage(context, drawRect, image.CGImage); CGColorSpaceRelease(colorSpace); //第二步 取每个点的像素值 unsigned char* data = CGBitmapContextGetData (context); if (data == NULL){ CGContextRelease(context); return nil; } NSCountedSet *cls = [NSCountedSet setWithCapacity:thumbSize.width*thumbSize.height]; for (int x=0; x&lt;thumbSize.height; x&#43;&#43;) { for (int y=0; y&lt;thumbSize.width; y&#43;&#43;) { int offset = 4*(x*thumbSize.width &#43; y); int red = data[offset]; int green = data[offset&#43;1]; int blue = data[offset&#43;2]; int alpha = data[offset&#43;3]; NSArray *clr=@[@(red),@(green),@(blue),@(alpha)]; [cls addObject:clr]; } } CGContextRelease(context); //第三步 找到出现次数最多的那个颜色 NSEnumerator *enumerator = [cls objectEnumerator]; NSArray *curColor = nil; NSArray *MaxColor=nil; NSUInteger MaxCount=0; while ( (curColor = [enumerator nextObject]) != nil ){ NSUInteger tmpCount = [cls countForObject:curColor]; if ( tmpCount &lt; MaxCount ) continue; MaxCount=tmpCount; MaxColor=curColor; } //返回三色值&#43;透明度 NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithCapacity:0]; [dic setValue:@([MaxColor[0] intValue]/255.0f) forKey:@&#34;red&#34;]; [dic setValue:@([MaxColor[1] intValue]/255.0f) forKey:@&#34;green&#34;]; [dic setValue:@([MaxColor[2] intValue]/255.0f) forKey:@&#34;blue&#34;]; [dic setValue:@([MaxColor[3] intValue]/255.0f) forKey:@&#34;alpha&#34;]; return dic; } //裁剪图片 &#43; (UIImage *)cropSquareImage:(UIImage *)image rect:(CGRect)rect{ CGImageRef sourceImageRef = [image CGImage]; CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect); UIImage *newImage = [UIImage imageWithCGImage:newImageRef]; return newImage; } //判断颜色深浅 &#43; (BOOL)isDarkColor:(UIColor *)newColor{ const CGFloat *componentColors = CGColorGetComponents(newColor.CGColor); CGFloat colorBrightness = ((componentColors[0] * 299) &#43; (componentColors[1] * 587) &#43; (componentColors[2] * 114)) / 1000; if (colorBrightness &lt; 0.5){ //深色 return YES; } else{ //浅色 return NO; } }"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/" title="iOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/reading/ios-%E8%B7%B3%E8%BD%ACapp-store%E8%BF%9B%E8%A1%8C%E8%AF%84%E5%88%86/" title="iOS 跳转App Store进行评分" /><link rel="next" type="text/html" href="https://apolla.cc/posts/reading/ios-%E7%94%B5%E8%84%91wifi%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E5%88%B0iphone/" title="iOS 电脑WiFi传输文件到iphone" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "iOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/tips\/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88\/"
+    },"genre": "posts","wordcount":  624 ,
+    "url": "https:\/\/apolla.cc\/posts\/tips\/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%A2%8E%E7%89%87%E8%8A%9D%E5%A3%AB%E6%94%B6%E8%97%8F/" class="post-category" title="分类 - 碎片芝士收藏"><i class="fa-regular fa-folder" aria-hidden="true"></i> 碎片芝士收藏</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="624 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-objectivec"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="3" style="--fi-max-shown-lines:10;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-objectivec" data-lang="objectivec"><span class="line"><span class="cl"><span class="c1">//添加水印
+</span></span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nf">getWaterMarkWith:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span> <span class="nf">waterText:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">str</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">CGSize</span> <span class="n">imageSize</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">imageWidth</span> <span class="o">=</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">imageHeight</span> <span class="o">=</span> <span class="n">imageSize</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">UIGraphicsBeginImageContextWithOptions</span><span class="p">(</span><span class="n">imageSize</span><span class="p">,</span> <span class="nb">NO</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">image</span> <span class="nl">drawAtPoint</span><span class="p">:</span><span class="n">CGPointZero</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">textFont</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">ceilf</span><span class="p">(</span><span class="n">imageWidth</span> <span class="o">/</span> <span class="p">[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGSize</span> <span class="n">perSize</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">getSize</span><span class="p">:</span><span class="n">imageWidth</span> <span class="nl">font</span><span class="p">:[</span><span class="n">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="n">textFont</span><span class="p">]</span> <span class="nl">str</span><span class="p">:</span><span class="n">str</span> <span class="nl">lineSpace</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGRect</span> <span class="n">rect</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">ceilf</span><span class="p">(</span><span class="n">imageWidth</span> <span class="o">-</span> <span class="n">perSize</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">20</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">ceilf</span><span class="p">(</span><span class="n">imageHeight</span> <span class="o">-</span> <span class="n">perSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">20</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">ceilf</span><span class="p">(</span><span class="n">perSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">ceilf</span><span class="p">(</span><span class="n">perSize</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">5</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">colorInfo</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">mostColor</span><span class="p">:</span><span class="n">image</span> <span class="nl">scale</span><span class="p">:</span><span class="mi">1</span> <span class="nl">rect</span><span class="p">:</span><span class="n">rect</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">red</span> <span class="o">=</span> <span class="p">[</span><span class="n">colorInfo</span><span class="p">[</span><span class="s">@&#34;red&#34;</span><span class="p">]</span> <span class="n">floatValue</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">green</span> <span class="o">=</span> <span class="p">[</span><span class="n">colorInfo</span><span class="p">[</span><span class="s">@&#34;green&#34;</span><span class="p">]</span> <span class="n">floatValue</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">blue</span> <span class="o">=</span> <span class="p">[</span><span class="n">colorInfo</span><span class="p">[</span><span class="s">@&#34;blue&#34;</span><span class="p">]</span> <span class="n">floatValue</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="n">colorInfo</span><span class="p">[</span><span class="s">@&#34;alpha&#34;</span><span class="p">]</span> <span class="n">floatValue</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">BOOL</span> <span class="n">colorDark</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">isDarkColor</span><span class="p">:[</span><span class="n">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:</span><span class="n">red</span> <span class="nl">green</span><span class="p">:</span><span class="n">green</span> <span class="nl">blue</span><span class="p">:</span><span class="n">blue</span> <span class="nl">alpha</span><span class="p">:</span><span class="n">alpha</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">str</span> <span class="nl">drawAtPoint</span><span class="p">:</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span> <span class="nl">withAttributes</span><span class="p">:</span><span class="l">@{</span><span class="nl">NSFontAttributeName</span><span class="p">:[</span><span class="n">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="n">textFont</span><span class="p">],</span> <span class="nl">NSForegroundColorAttributeName</span><span class="p">:</span><span class="n">colorDark</span> <span class="o">?</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">]</span> <span class="o">:</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">blackColor</span><span class="p">]</span><span class="l">}</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span> <span class="o">=</span> <span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">UIGraphicsEndImageContext</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">image</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取图片、区域的主色
+</span></span></span><span class="line"><span class="cl"><span class="p">+</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">mostColor:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span> <span class="nf">scale:</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nv">scale</span> <span class="nf">rect:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">rect</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cp">#if __IPHONE_OS_VERSION_MAX_ALLOWED &gt; __IPHONE_6_1
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">bitmapInfo</span> <span class="o">=</span> <span class="n">kCGBitmapByteOrderDefault</span> <span class="o">|</span> <span class="n">kCGImageAlphaPremultipliedLast</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#else
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">bitmapInfo</span> <span class="o">=</span> <span class="n">kCGImageAlphaPremultipliedLast</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">scale</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">scale</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">cropSquareImage</span><span class="p">:</span><span class="n">image</span> <span class="nl">rect</span><span class="p">:</span><span class="n">rect</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大
+</span></span></span><span class="line"><span class="cl">    <span class="n">CGSize</span> <span class="n">thumbSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">([</span><span class="n">image</span> <span class="n">size</span><span class="p">].</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="p">[</span><span class="n">image</span> <span class="n">size</span><span class="p">].</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGColorSpaceRef</span> <span class="n">colorSpace</span> <span class="o">=</span> <span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGContextRef</span> <span class="n">context</span> <span class="o">=</span> <span class="n">CGBitmapContextCreate</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="n">thumbSize</span><span class="p">.</span><span class="n">height</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="mi">8</span><span class="p">,</span><span class="c1">//bits per component
+</span></span></span><span class="line"><span class="cl">                                                 <span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="n">colorSpace</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="n">bitmapInfo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">CGRect</span> <span class="n">drawRect</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">thumbSize</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGContextDrawImage</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">drawRect</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">CGImage</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGColorSpaceRelease</span><span class="p">(</span><span class="n">colorSpace</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//第二步 取每个点的像素值
+</span></span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">CGBitmapContextGetData</span> <span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CGContextRelease</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">NSCountedSet</span> <span class="o">*</span><span class="n">cls</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSCountedSet</span> <span class="nl">setWithCapacity</span><span class="p">:</span><span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="n">thumbSize</span><span class="p">.</span><span class="n">height</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">thumbSize</span><span class="p">.</span><span class="n">height</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">y</span><span class="o">&lt;</span><span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">thumbSize</span><span class="p">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">red</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">green</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">blue</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="o">+</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">alpha</span> <span class="o">=</span>  <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="o">+</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">NSArray</span> <span class="o">*</span><span class="n">clr</span><span class="o">=</span><span class="l">@[@(</span><span class="n">red</span><span class="l">)</span><span class="p">,</span><span class="l">@(</span><span class="n">green</span><span class="l">)</span><span class="p">,</span><span class="l">@(</span><span class="n">blue</span><span class="l">)</span><span class="p">,</span><span class="l">@(</span><span class="n">alpha</span><span class="l">)]</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">[</span><span class="n">cls</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">clr</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGContextRelease</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//第三步 找到出现次数最多的那个颜色
+</span></span></span><span class="line"><span class="cl">    <span class="n">NSEnumerator</span> <span class="o">*</span><span class="n">enumerator</span> <span class="o">=</span> <span class="p">[</span><span class="n">cls</span> <span class="n">objectEnumerator</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSArray</span> <span class="o">*</span><span class="n">curColor</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">NSArray</span> <span class="o">*</span><span class="n">MaxColor</span><span class="o">=</span><span class="nb">nil</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSUInteger</span> <span class="n">MaxCount</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span> <span class="p">(</span><span class="n">curColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">enumerator</span> <span class="n">nextObject</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">NSUInteger</span> <span class="n">tmpCount</span> <span class="o">=</span> <span class="p">[</span><span class="n">cls</span> <span class="nl">countForObject</span><span class="p">:</span><span class="n">curColor</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span> <span class="n">tmpCount</span> <span class="o">&lt;</span> <span class="n">MaxCount</span> <span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MaxCount</span><span class="o">=</span><span class="n">tmpCount</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MaxColor</span><span class="o">=</span><span class="n">curColor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//返回三色值+透明度
+</span></span></span><span class="line"><span class="cl">    <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">dic</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSMutableDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCapacity</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">dic</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="p">[</span><span class="n">MaxColor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="n">intValue</span><span class="p">]</span><span class="o">/</span><span class="mf">255.0f</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&#34;red&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">dic</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="p">[</span><span class="n">MaxColor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">intValue</span><span class="p">]</span><span class="o">/</span><span class="mf">255.0f</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&#34;green&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">dic</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="p">[</span><span class="n">MaxColor</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="n">intValue</span><span class="p">]</span><span class="o">/</span><span class="mf">255.0f</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&#34;blue&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">dic</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="p">[</span><span class="n">MaxColor</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="n">intValue</span><span class="p">]</span><span class="o">/</span><span class="mf">255.0f</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&#34;alpha&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">dic</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//裁剪图片
+</span></span></span><span class="line"><span class="cl">  <span class="o">+</span> <span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nl">cropSquareImage</span><span class="p">:(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="n">image</span> <span class="nl">rect</span><span class="p">:(</span><span class="n">CGRect</span><span class="p">)</span><span class="n">rect</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGImageRef</span> <span class="n">sourceImageRef</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGImageRef</span> <span class="n">newImageRef</span> <span class="o">=</span> <span class="n">CGImageCreateWithImageInRect</span><span class="p">(</span><span class="n">sourceImageRef</span><span class="p">,</span> <span class="n">rect</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">UIImage</span> <span class="o">*</span><span class="n">newImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageWithCGImage</span><span class="p">:</span><span class="n">newImageRef</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">newImage</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">//判断颜色深浅
+</span></span></span><span class="line"><span class="cl">  <span class="o">+</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isDarkColor</span><span class="p">:(</span><span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="n">newColor</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">CGFloat</span> <span class="o">*</span><span class="n">componentColors</span> <span class="o">=</span> <span class="n">CGColorGetComponents</span><span class="p">(</span><span class="n">newColor</span><span class="p">.</span><span class="n">CGColor</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CGFloat</span> <span class="n">colorBrightness</span> <span class="o">=</span> <span class="p">((</span><span class="n">componentColors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">299</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">componentColors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">587</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">componentColors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">114</span><span class="p">))</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">colorBrightness</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//深色
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//浅色
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/" data-title="IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/tips/ios-%E8%8E%B7%E5%8F%96%E5%9B%BE%E7%89%87%E5%8C%BA%E5%9F%9F%E7%9A%84%E4%B8%BB%E8%89%B2%E6%B0%B4%E5%8D%B0%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2%E5%A4%84%E7%90%86%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95%E6%9D%A5%E8%87%AA%E5%85%B6%E4%BB%96%E6%96%87%E6%A1%A3%E8%87%AA%E5%B7%B1%E5%86%8D%E4%BF%AE%E6%94%B9%E6%95%B4%E5%90%88/" data-title="IOS 获取图片、区域的主色。水印文字颜色处理,主要方法来自其他文档，自己再修改整合"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/bluetooth/4readvaluesetnotifyvaluewritevalue%E7%9A%84%E5%90%AB%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="4：readValue、setNotifyValue、writeValue的含义和使用"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>4：readValue、setNotifyValue、writeValue的含义和使用</a><a href="/posts/tips/runloop%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="Runloop实际使用">Runloop实际使用<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a56a619304009ce371e772253c06edc7.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

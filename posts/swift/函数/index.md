@@ -1,0 +1,184 @@
+# 函数
+
+
+ ## 函数定义
+ 
+ ```swift
+ //有返回值
+func sum(v1: Int, v2: Int) -> Int {
+    return v1 + v2
+}
+sum(v1: 10, v2: 20)
+
+//无返回值
+func sayHello(){
+    print("Hello")
+}
+```
+> 形参默认是let 也只能是let
+
+## 隐式返回
+> 如果整个函数体是一个单一表达式，那么函数会隐式返回这个表达式
+```swift
+func sum(v1: Int, v2: Int) -> Int {
+     v1 + v2
+}
+```
+
+## 返回元祖（多返回值）
+```swift
+func sum(v1: Int, v2: Int) -> (v1:Int,v2:Int,total:Int) {
+    return (v1,v2,v1+v2)
+}
+let result = sum(v1: 10, v2: 20)
+print("v1:\(result.v1) v2:\(result.v2) total:\(result.total)")
+```
+
+## 参数标签
+```swift
+func goToWork(time: String) {
+    print("this time is \(time)")
+}
+
+goToWork(time: "08:00")
+
+func goToWork(at: String) {
+    print("this time is \(at)")
+}
+goToWork(at: "08:00")
+
+func goToWork(at time: String) {
+    print("this time is \(time)")
+}
+goToWork(at: "08:00")
+```
+* 省略参数标签
+> 使用_ 可以省略参数标签
+```swift
+func sum(_ v1: Int, _ v2: Int) -> Int {
+    v1 + v2
+}
+sum(10, 20)
+```
+
+## 默认参数值
+* 参数可以有默认值
+* C++的默认参数值有个限制：必须从右往左设置。由于Swift拥有参数标签，因此并没有此类限制
+* 但是在省略参数标签时，需要特别注意，避免出错
+```swift
+func check(name:String = "Jack",age:Int,job:String = "none")  {
+
+    print("name = \(name) age:\(age) job:\(job)")
+
+}
+
+check(age: 10) //name = Jack age:10 job:none
+
+check(name: "rose", age: 20) //name = rose age:20 job:none
+
+check(name: "jane", age: 30,job: "hh")//name = jane age:30 job:hh
+
+// 当省略参数时
+func check(_ name:String = "Jack",age:Int, _ job:String = "none")  {
+
+    print("name = \(name) age:\(age) job:\(job)")
+
+}
+check(age: 10) //name = Jack age:10 job:none
+check("rose", age: 20) //name = rose age:20 job:none
+check("jane", age: 30,"hh")//name = jane age:30 job:hh
+```
+
+## 可变参数
+
+* 一个函数最多只能有1个可变参数
+* 紧跟在可变参数后面的参数不能省略参数标签
+```swift
+func sum(_ numbers: Int...) -> Int {
+
+    var total = 0
+
+    for number in numbers {
+
+        total += number
+
+    }
+
+    return total
+
+}
+```
+
+## 输入输出参数
+* 可以用inout定义一个输入输出参数：可以在函数内部修改外部实参的值
+* 可变参数不能标记为inout
+* inout参数不能有默认值
+* inout参数只能传入可以被多次赋值的
+* inout参数的本质是地址传递（引用传递）
+```swift
+func sum(_ v1: inout Int, _ v2: inout Int) -> Int {
+    v1 + v2
+}
+
+var num1 = 10
+
+var num2 = 20
+
+sum(&num1, &num2)
+```
+
+## 函数重载
+* 函数名相同
+* 参数个数不同 || 参数类型不同 || 参数标签不同
+* 返回值类型与函数重载无关
+* 默认参数值和函数重载一起使用产生二义性时，编译器并不会报错（在C++中会报错）
+* 可变参数、省略参数标签、函数重载一起使用产生二义性时，编译器有可能会报错
+
+## 内联函数
+> 如果开启了编译器优化（ Release模式默认会开启优化），编译器会自动将某些函数变成内联函数
+> 将函数调用展开成函数体
+
+### 哪些函数不会被自动内联？
+* 函数体比较长
+* 包含递归调用
+* 包含动态派发
+* @inline
+!
+
+## 函数类型作为函数参数
+!
+
+## 函数类型作为函数返回值
+!
+
+## typealias
+
+> `typealias`用来给类型起别名
+
+```swift
+typealias Byte =  Int8
+
+typealias Short =  Int16
+
+typealias Long =  Int64
+
+typealias Date = (year:  Int, month:  Int, day:  Int)
+
+func test (_ date:Date){
+    print(date.year)
+    print(date.month)
+    print(date.day)
+}
+test((2011,  9,  10))
+```
+
+## 嵌套函数
+> 将函数定义在函数内部
+!
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swift/%E5%87%BD%E6%95%B0/  
+

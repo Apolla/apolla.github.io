@@ -1,0 +1,311 @@
+# 2.2 任务组
+
+
+# 任务组的创建
+
+`async let` 和 `Task` 能够满足我们大多数的并发需求，但在某些更复杂的需求场景下，它们力所不及。比如这样的需求：我们先发起一个网络请求，拉取所有要下载的书籍并展示在列表上。然后，我们要实现“下载全部”的功能。
+
+假设我们已经完成了第一步，使用 `ids` 保存所有书籍的 id。下一步就是下载所有的书籍，如果使用 `async` 我们可能会这样写：
+
+```swift
+struct Book {
+  
+  var data: Data
+}
+
+func fetchBooks(ids: [Int]) async -> [Book] {
+  var res = [Book]()
+  for id in ids {
+    async let book = fetchBook(id: id)
+    res.append(await book)
+  }
+  return res
+}
+
+func fetchBook(id: Int) async -> Book {
+  // after a while, return a book
+}
+```
+
+上面的代码问题在于，下载书籍的过程不是并行的，而是串行的。因为在 `fetchBooks(ids:)` 方法中，每当我们进入一次 `for` 循环，调用 `fetchbook(id:)` 时就会开启一个异步任务，但 `await book` 这行代码会导致程序挂起，直到异步任务返回结果，代码才会继续执行，进入下一个循环。使用 `Task` 也会存在同样的问题，我们来看看 `TaskGroup` 是如何解决这个问题的。
+
+全局函数 [withTaskGroup(of:returning:body:)](https://developer.apple.com/documentation/swift/3917365-withtaskgroup) 用于创建一个任务组，它完整的函数名如下：
+
+```swift
+func withTaskGroup<ChildTaskResult, GroupResult>(of childTaskResultType: ChildTaskResult.Type, returning returnType: GroupResult.Type = GroupResult.self, body: (inout TaskGroup<ChildTaskResult>) async -> GroupResult) async -> GroupResult where ChildTaskResult : Sendable
+```
+
+- 参数
+  - childTaskResultType：ChildTaskResult 类型的泛型参数，ChildTaskResult 遵循 Sendable 协议，以确保数据安全
+  - returnType：GroupResult 类型的泛型参数，可省略
+  - body：任务组执行异步任务的闭包。在闭包内使用 `addTask()` 方法可以添加一个子任务，调用该方法时，子任务会立即开始执行。
+- 返回值
+  - GroupResult 类型的值
+
+使用任务组“下载全部”书籍：
+
+```swift
+func fetchBooks(ids: [Int]) async -> [Book] {
+  await withTaskGroup(of: Book.self, returning: [Book].self) { group in
+    for id in ids {
+      // 添加子任务，返回值的类型和 childTaskResultType 参数相同
+      // 子任务一旦被添加至任务组，就会立即开始执行
+      group.addTask {
+        await fetchBook(id: id)
+      }
+    }
+    
+    var res = [Book]()
+    // 异步迭代
+    // 获取子任务结果的顺序是无序的，先到先得
+    for await v in group {
+      res.append(v)
+    }
+    // 所有子任务运行完成后，group 才返回结果
+    return res
+  }
+}
+```
+
+`returnType` 参数可以省略，Swift 可以根据上下文推断其类型，因此上面示例中的创建任务组方法，我们还可以这样写：
+
+```swift
+await withTaskGroup(of: Book.self) { group -> [Book] in
+  // 同上
+}
+```
+
+Swift 并没有像 `Task` 一样提供任务组的初始化方法，`withTaskGroup` 方法也没有返回可引用的任务组实例，这意味着任务组实例难以进行传递。为什么要如此设计呢？因为任务组的 `addTask`、`next()` 等方法是异变操作，而考虑到线程安全问题，并发环境是不支持异变操作的。所以，为了减少我们在使用任务组时导致潜在的安全问题，Swift 将 `withTaskGroup` 闭包设计成非逃逸的，目的就是希望我们在闭包限定的作用域内使用任务组。当然，如果你在闭包内使用外部变量引用任务组实例，编译器也不会告警，但强烈建议不要这么做，这无异于自寻烦恼。
+
+同样是使用了 for 循环，为什么 `TaskGroup` 可以解决上文中 `async let` 遇到的难题呢？因为 TaskGroup 遵循了 `AsyncSequence` 协议，它支持异步迭代，每当一个异步任务完成时，group 就能获取到结果并将其返回。关于 `AsyncSequence`，后面章节还会有更详细的介绍。
+
+同 `Sequence` 一样，遵循 `AsyncSequence` 协议的 TaskGroup 同样支持 `map`、`reduce` 等转换操作，上面的 `for await`  可以使用更精巧的写法：
+
+```swift
+return await group.reduce(into: []) { $0.append($1) }
+```
+
+`for await` 同普通的 for 循环一样，可以使用 `break` 提前退出循环。如下代码模拟的是一个多个异步任务在任务组内执行完成后返回数字的示例，这里我们使用了 [withThrowingTaskGroup(of:returning:body:)](https://developer.apple.com/documentation/swift/3917370-withthrowingtaskgroup) 来创建可以抛出错误的任务组，其使用和 `withTaskGroup` 是类似的。
+
+```swift
+struct ContentView: View {
+  
+  var body: some View {
+    Text("Hello, World!")
+      .task {
+        do {
+          let res = try await mockAddtion()
+          printLog(res)
+        } catch {
+          printLog(error)
+        }
+      }
+  }
+  
+  func mockAddtion() async throws -> Int {
+    try await withThrowingTaskGroup(of: Int.self) { group -> Int in
+      for v in 1..<5 {
+        group.addTask {
+          try await Task.sleep(seconds: Double(v))
+          printLog(v)
+          return v
+        }
+      }
+      var res = 0
+      for try await v in group {
+        if v == 3 { break }
+        res += v
+      }
+      return res
+    }
+  }
+}
+```
+
+控制台每隔一秒就会打印一个数字（1，2，3，4），所有的子任务完成后，才会执行 `for await` 循环，由于我们使用 `break` 提前结束了异步迭代，所以最终返回的结果是 3。
+
+TaskGroup 有一个实例方法 `next()`，可以获取下一个子任务返回的值。我们将上面的代码稍加改造：
+
+```swift
+func mockAddtion() async throws -> Int {
+  try await withThrowingTaskGroup(of: Int.self) { group -> Int in
+    for v in 1..<5 {
+      group.addTask {
+        // 1
+        try await Task.sleep(seconds: Double(arc4random_uniform(20))/10.0)
+        printLog(v)
+        return v
+      }
+    }
+    // 2
+    if let first = try await group.next() {
+      return first
+    }
+    return -1
+  }
+}
+```
+
+1. 2s 内的随机时间后，子任务返回结果；
+2. 所有子任务完成后，获取第一个子任务的值并返回。
+
+我们有多个异步操作同时进行时，如果需要取第一个或前几个先返回的结果， `next()` 非常实用。当然，我们也可以使用占位数组配合 `break` 来实现，但 `next()` 简化了工作。
+
+由于父任务总是会等待所有子任务的完成，所以在这里的示例中，为了得到第一个返回的值，我们要进行无谓地等待，这显然是非常多余的。如何在得到第一个异步结果后立即返回并取消剩余的子任务呢？这就是下面要介绍的内容：任务组的取消。
+
+# 任务组的取消
+
+前面我们已经讲过，任务的取消行为不是单一行为，而是协同式的，该机制同样适用于 TaskGroup。
+
+`withTaskGroup` 和 `withThrowingTaskGroup`  可以使用 `group.cancelAll()` 取消任务组内所有剩余的子任务，它会将 `isCancelled` 标记为 true，剩下的取消工作需要子任务协同处理。如果子任务没有对取消行为进行检查，那么仍然会继续执行任务。
+
+比如下面的代码，虽然我们调用了 `cancelAll()` 方法，但三个子任务还是会执行完成，最终返回的结果是 6。
+
+```swift
+func cancelGroup() async -> Int {
+  await withTaskGroup(of: Int.self) { group in
+    group.addTask {
+      return 1
+    }
+    
+    group.addTask {
+      return 2
+    }
+    
+    group.cancelAll()
+    
+    group.addTask {
+      return 3
+    }
+    
+    var res = 0
+    for await v in group {
+      printLog(v)
+      res += v
+    }
+    return res
+  }
+}
+
+let res = await cancelGroup()
+printLog(res)
+```
+
+前文已述，我们可以使用 `Task.isCancelled` 和 `Task.checkCancellation()` 两种方式来取消任务。这两种方法的区别在于，前者需要我们手动处理终止任务的逻辑，后者会抛出 `CancellationError` 类型的错误并自动终止任务。我们来看看这两种方法是否也同样适用于任务组，先添加如下代码：
+
+```swift
+group.addTask {
+  if Task.isCancelled { return 0 } // +
+  return 2
+}
+```
+
+重新执行后，返回的结果是 4，这和预期是一致的。注意第三个子任务，虽然我们是在调用 `cancelAll()` 之后添加的，但子任务依然会被添加进任务组。其实，只要我们调用 `addTask` 方法，子任务都会被无条件地添加进任务组。如果我们希望在任务组取消后，不再添加子任务，可以使用 `addTaskUnlessCancelled` 方法：
+
+```swift
+group.addTask { // -
+group.addTaskUnlessCancelled { // +
+  return 3
+}
+```
+
+`addTaskUnlessCancelled` 返回一个 Bool 值，表明子任务是否被成功添加至任务组。
+
+回到之前的场景，我们将添加第二个子任务的代码修改成：
+
+```swift
+group.addTask {
+  try? Task.checkCancellation() // +
+  return 2
+}
+```
+
+这次执行后，程序并没有抛出错误，执行过程和返回的结果和没有调用 `cancellAll()` 时是完全一样的。这是因为 `withTaskGroup` 不支持通过响应 `CancellationError` 类型的错误来取消任务，而 `withThrowingTaskGroup` 是支持这一点的。再看看这两个函数，我们发现它们的命名其实已经宣告了它们不同的职责。
+
+再回看我们上面提出的问题：如何尽快返回多个异步任务的第一个结果，并取消剩余的任务？相信你已经有思路了，参考代码如下：
+
+```swift
+func getFirstResult() async throws -> Int {
+  try await withThrowingTaskGroup(of: Int.self) { group -> Int in
+    for v in 1..<5 {
+      group.addTask {
+        // `Task.sleep` 隐式地实现了 `Task.checkCancellation`，所以这里我们不必显式调用。
+        try await Task.sleep(seconds: Double(arc4random_uniform(20))/10.0)
+        printLog(v)
+        return v
+      }
+    }
+    
+    if let first = try await group.next() {
+      printLog(first)
+      group.cancelAll()
+      return first
+    }
+    
+    throw CancellationError()
+  }
+}
+```
+
+# 子任务返回不同类型的数据
+
+由于创建任务组时的泛型约束，所有子任务必须返回相同的数据类型。如需返回不同的类型的数据，我们应该优先选择 `async let`。遇到不得不使用任务组且子任务需要返回不同类型的数据，我们需要做点额外的工作来实现。
+
+下面的示例代码模拟的是这样一个需求场景：获取订单详情时，同时还要获取推荐商品。两个网络请求返回的是不同的数据结构，使用 `async let` 是明智的选择，这里使用 `TaskGroup` 仅作为示范如何让子任务返回不同类型的数据。
+
+思路很简单，既然 TaskGroup 要求返回一致的数据类型。那么我们可以在不同的数据类型外层包装一个相同的“盒子”，使其看上去保持一致即可。这里的“盒子”就是代码中的枚举类型 `OrderDataType`，在获取到相应的数据后，将数据装进这个“盒子”里。需要使用数据时，根据枚举值将其从“盒子”中取出即可。
+
+```swift
+struct OrderInfo {
+  var desc: String?
+  var recommends: [Goods]?
+  
+  struct Goods {
+    var name: String
+  }
+}
+
+enum OrderBox {
+  case desc(String)
+  case recommends([OrderInfo.Goods])
+}
+
+func fetchVaryingResults() async throws -> OrderInfo {
+  try await withThrowingTaskGroup(of: OrderBox.self) { group -> OrderInfo in
+    group.addTask {
+      try await Task.sleep(seconds: 1)
+      return .desc("Order description")
+    }
+    
+    group.addTask {
+      try await Task.sleep(seconds: 2)
+      return .recommends([
+        .init(name: "Goods 1"),
+        .init(name: "Goods 2"),
+      ])
+    }
+    
+    var res = OrderInfo()
+    for try await v in group {
+      switch v {
+      case let .desc(v):
+        res.desc = v
+      case let .recommends(v):
+        res.recommends = v
+      }
+    }
+    return res
+  }
+}
+```
+
+
+
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/2.2-%E4%BB%BB%E5%8A%A1%E7%BB%84/  
+

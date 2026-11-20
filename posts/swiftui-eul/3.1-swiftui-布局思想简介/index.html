@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>3.1 SwiftUI 布局思想简介 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="
+SwiftUI 的布局过程大致如下：
+父视图为子视图提供布局空间。
+若指定了尺寸，父视图提供的布局空间就是指定的尺寸范围。 若没指定尺寸： 若父视图是无边界的，比如 Color 还有下面提到的 ScrollView，它的尺寸默认是无限大（这里的无限大指可以利用的一切空间，下同）。 若父视图是有边界的，比如 HStack、VStack 等，它的尺寸取决于子视图的尺寸。 子视图根据自身内容计算尺寸，并将该信息提供给父视图。
+SwiftUI 中的视图层级类似树状结构，对每个节点视图的 body 属性的计算是个递归的过程，终止条件是遇到 body 属性为 Never 的视图，它们又称为原始视图，是这颗树上的叶子结点。这里提到的父子关系并非绝对概念，子视图可能也作为其它视图的父视图，父子其实是个相对概念。
+父视图根据子视图提供的尺寸信息计算自身尺寸并对子视图进行布局。
+若父视图指定了尺寸，则根据指定的尺寸对子视图进行布局。 若父视图没指定尺寸，则根据子视图提供的尺寸信息计算自身的尺寸并对子视图进行布局。父视图在计算自身尺寸时如果它本身就是无边界的，那么它的尺寸不受子视图的影响。 "><meta name="robots" content="index, follow"><meta name="keywords" content='Xcode 14, iOS 16, macOS 13'>
+	<meta itemprop="name" content="3.1 SwiftUI 布局思想简介">
+	<meta itemprop="description" content="SwiftUI 的布局过程大致如下：
+父视图为子视图提供布局空间。
+若指定了尺寸，父视图提供的布局空间就是指定的尺寸范围。 若没指定尺寸： 若父视图是无边界的，比如 Color 还有下面提到的 ScrollView，它的尺寸默认是无限大（这里的无限大指可以利用的一切空间，下同）。 若父视图是有边界的，比如 HStack、VStack 等，它的尺寸取决于子视图的尺寸。 子视图根据自身内容计算尺寸，并将该信息提供给父视图。
+SwiftUI 中的视图层级类似树状结构，对每个节点视图的 body 属性的计算是个递归的过程，终止条件是遇到 body 属性为 Never 的视图，它们又称为原始视图，是这颗树上的叶子结点。这里提到的父子关系并非绝对概念，子视图可能也作为其它视图的父视图，父子其实是个相对概念。
+父视图根据子视图提供的尺寸信息计算自身尺寸并对子视图进行布局。
+若父视图指定了尺寸，则根据指定的尺寸对子视图进行布局。 若父视图没指定尺寸，则根据子视图提供的尺寸信息计算自身的尺寸并对子视图进行布局。父视图在计算自身尺寸时如果它本身就是无边界的，那么它的尺寸不受子视图的影响。">
+	<meta itemprop="datePublished" content="2022-12-21T08:00:00+08:00">
+	<meta itemprop="dateModified" content="2022-12-21T08:00:00+08:00">
+	<meta itemprop="wordCount" content="1608">
+	<meta itemprop="keywords" content="Xcode 14,iOS 16,macOS 13"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="3.1 SwiftUI 布局思想简介">
+	<meta property="og:description" content="SwiftUI 的布局过程大致如下：
+父视图为子视图提供布局空间。
+若指定了尺寸，父视图提供的布局空间就是指定的尺寸范围。 若没指定尺寸： 若父视图是无边界的，比如 Color 还有下面提到的 ScrollView，它的尺寸默认是无限大（这里的无限大指可以利用的一切空间，下同）。 若父视图是有边界的，比如 HStack、VStack 等，它的尺寸取决于子视图的尺寸。 子视图根据自身内容计算尺寸，并将该信息提供给父视图。
+SwiftUI 中的视图层级类似树状结构，对每个节点视图的 body 属性的计算是个递归的过程，终止条件是遇到 body 属性为 Never 的视图，它们又称为原始视图，是这颗树上的叶子结点。这里提到的父子关系并非绝对概念，子视图可能也作为其它视图的父视图，父子其实是个相对概念。
+父视图根据子视图提供的尺寸信息计算自身尺寸并对子视图进行布局。
+若父视图指定了尺寸，则根据指定的尺寸对子视图进行布局。 若父视图没指定尺寸，则根据子视图提供的尺寸信息计算自身的尺寸并对子视图进行布局。父视图在计算自身尺寸时如果它本身就是无边界的，那么它的尺寸不受子视图的影响。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2022-12-21T08:00:00+08:00">
+		<meta property="article:modified_time" content="2022-12-21T08:00:00+08:00">
+		<meta property="article:tag" content="Xcode 14">
+		<meta property="article:tag" content="iOS 16">
+		<meta property="article:tag" content="macOS 13">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="3.1 SwiftUI 布局思想简介">
+  <meta name="twitter:description" content="SwiftUI 的布局过程大致如下：
+父视图为子视图提供布局空间。
+若指定了尺寸，父视图提供的布局空间就是指定的尺寸范围。 若没指定尺寸： 若父视图是无边界的，比如 Color 还有下面提到的 ScrollView，它的尺寸默认是无限大（这里的无限大指可以利用的一切空间，下同）。 若父视图是有边界的，比如 HStack、VStack 等，它的尺寸取决于子视图的尺寸。 子视图根据自身内容计算尺寸，并将该信息提供给父视图。
+SwiftUI 中的视图层级类似树状结构，对每个节点视图的 body 属性的计算是个递归的过程，终止条件是遇到 body 属性为 Never 的视图，它们又称为原始视图，是这颗树上的叶子结点。这里提到的父子关系并非绝对概念，子视图可能也作为其它视图的父视图，父子其实是个相对概念。
+父视图根据子视图提供的尺寸信息计算自身尺寸并对子视图进行布局。
+若父视图指定了尺寸，则根据指定的尺寸对子视图进行布局。 若父视图没指定尺寸，则根据子视图提供的尺寸信息计算自身的尺寸并对子视图进行布局。父视图在计算自身尺寸时如果它本身就是无边界的，那么它的尺寸不受子视图的影响。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/" title="3.1 SwiftUI 布局思想简介 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/2.6-%E8%A7%86%E5%9B%BE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95/" title="2.6 视图生命周期方法" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%A0%86%E5%8F%A0stacks/" title="3.2 堆叠（Stacks）" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "3.1 SwiftUI 布局思想简介",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B\/"
+    },"genre": "posts","keywords": "Xcode 14, iOS 16, macOS 13","wordcount":  1608 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B\/","datePublished": "2022-12-21T08:00:00+08:00","dateModified": "2022-12-21T08:00:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>3.1 SwiftUI 布局思想简介</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2022-12-21 08:00:00"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2022-12-21">2022-12-21</time></span>&nbsp;<span title="1608 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><br>
+<br>
+<p>SwiftUI 的布局过程大致如下：</p>
+<ol>
+<li>
+<p>父视图为子视图提供布局空间。</p>
+<ul>
+<li>若指定了尺寸，父视图提供的布局空间就是指定的尺寸范围。</li>
+<li>若没指定尺寸：
+<ul>
+<li>若父视图是无边界的，比如 Color 还有下面提到的 ScrollView，它的尺寸默认是无限大（这里的无限大指可以利用的一切空间，下同）。</li>
+<li>若父视图是有边界的，比如 HStack、VStack 等，它的尺寸取决于子视图的尺寸。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>子视图根据自身内容计算尺寸，并将该信息提供给父视图。</p>
+<p>SwiftUI 中的视图层级类似树状结构，对每个节点视图的 body 属性的计算是个递归的过程，终止条件是遇到 body 属性为 Never 的视图，它们又称为原始视图，是这颗树上的叶子结点。这里提到的父子关系并非绝对概念，子视图可能也作为其它视图的父视图，父子其实是个相对概念。</p>
+</li>
+<li>
+<p>父视图根据子视图提供的尺寸信息计算自身尺寸并对子视图进行布局。</p>
+<ul>
+<li>若父视图指定了尺寸，则根据指定的尺寸对子视图进行布局。</li>
+<li>若父视图没指定尺寸，则根据子视图提供的尺寸信息计算自身的尺寸并对子视图进行布局。父视图在计算自身尺寸时如果它本身就是无边界的，那么它的尺寸不受子视图的影响。</li>
+</ul>
+</li>
+</ol>
+<p>SwiftUI 中大部分视图都是有边界的，比如 Text、Button、VStack 等，它们的尺寸是自适应于内容的，即使周围有可以利用的空间，它们只占用自身尺寸所需要的空间。而有些视图是无边界的，只要不指定尺寸去约束，它们就会贪婪地占用一切可以利用的空间。</p>
+<p>接下来通过示例来加深对 SwiftUI 布局过程的理解，首先添加一个 ScrollView，并添加一个蓝色背景：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">SampleLayoutSystem</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ScrollView</span><span class="p">(.</span><span class="n">vertical</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>由于 ScrollView 是无边界的，它没有指定尺寸，也没有子视图提供尺寸信息给它，因此它的尺寸是无限大的。前文提到过，Color 本身也是 view，而且是无边界的。这里的蓝色背景实际上是在 ScrollView 的下面一层添加了一个蓝色的 view，它的尺寸取决于 ScrollView 的尺寸，而 ScrollView 是无限大的，所以我们看到蓝色铺满了 SampleLayoutSystem 整个视图。</p>
+<p>如果将 ScrollView 换成 HStack、VStack 等有边界视图，是无法看见蓝色背景的。因为它们本身不具备 ScrollView 的贪婪特性，又没有子视图将其“撑大”，所以自身没有尺寸，无法看见蓝色。</p>
+<p>然后给 ScrollView 添加一个子视图：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-diff"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl">// 默认滑动方向是 .vertical
+</span></span><span class="line"><span class="cl">ScrollView(axis) {
+</span></span><span class="line"><span class="cl"><span class="gi">+   Text(&#34;Hello World&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="gi">+     .background(.orange)
+</span></span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Text 根据文本内容计算出自身的尺寸后将其告知 ScrollView，ScrollView 获取该信息后计算出自身宽度后重新布局，最终可见的蓝色背景的宽度和 Text 的文本内容宽度是一致的。</p>
+<p>这里需要说明一下 ScrollView 的特殊性，它是一个可以滑动的视图，在指定可滑动的轴向上是无边界的，在未指定滑动轴向上是有边界的。</p>
+<p>这里我们没有指定滑动轴向，初始化时默认是 <code>.vertical</code> ，所以在添加 Text 之后，ScrollView 在垂直方向上的高度是无限大的，在水平方向上的宽度是根据 Text 所需空间计算出来的。</p>
+<p>如果将代码做如下修改，那么蓝色区域高度和 Text 一致，宽度是无限大。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-diff"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl"><span class="gd">- ScrollView {
+</span></span></span><span class="line"><span class="cl"><span class="gi">+ ScrollView(.horizontal) {
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果将代码做如下修改，那么 ScrollView 的尺寸不再受 Text 的约束，蓝色区域会铺满整个视图。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-diff"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl"><span class="gd">- ScrollView {
+</span></span></span><span class="line"><span class="cl"><span class="gi">+ ScrollView([.horizontal, .vertical]) {
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>前文也曾提到，修饰器方法的顺序会影响到视图的外观，比如下面的两套代码呈现的结果是不一样的。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello World&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">orange</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">padding</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">purple</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 2</span>
+</span></span><span class="line"><span class="cl"><span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello World&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">orange</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">padding</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">purple</span><span class="p">)</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>原因之前也提到过，SwiftUI 中的 frame 有别于 UIKit，它不是视图的属性，而是一个返回 <code>some View</code> 的修饰器方法，它的作用是向父视图提供尺寸信息作布局之用。</p>
+<p>比如下面的代码，父视图从子视图中获取到的尺寸信息如下：</p>
+<ul>
+<li>橙色区域的尺寸是 200 * 100。</li>
+<li>文本是左上角对齐。</li>
+</ul>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="p">.</span><span class="n">topLeading</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">orange</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>于是父视图给子视图分配 200 * 100 的空间，然后将 Text 置于橙色区域的左上角。</p>
+<p>又比如下面的代码，VStack 中的子视图的尺寸由自身决定，它们向父视图传递的尺寸信息也决定了 VStack 的尺寸，VStack 能够通过改变 alignment 来决定它们的对齐方式。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">VStack</span><span class="p">(</span><span class="n">alignment</span><span class="p">:</span> <span class="p">.</span><span class="n">leading</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Text</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">blue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="p">.</span><span class="n">topLeading</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">orange</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">Text</span><span class="p">(</span><span class="s">&#34;World&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">orange</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">background</span><span class="p">(.</span><span class="n">purple</span><span class="p">)</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>SwiftUI 的布局系统稍微有点复杂，视图的布局是由父视图和子视图协同完成的。以上仅为抛砖引玉，深入理解需要更多的实践和总结。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2022-12-21 08:00:00">更新于 2022-12-21&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/" data-title="3.1 SwiftUI 布局思想简介" data-hashtags="Xcode 14,iOS 16,macOS 13"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/" data-hashtag="Xcode 14"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/3.1-swiftui-%E5%B8%83%E5%B1%80%E6%80%9D%E6%83%B3%E7%AE%80%E4%BB%8B/" data-title="3.1 SwiftUI 布局思想简介"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/xcode-14/" class="post-tag" title="标签 - Xcode 14">Xcode 14</a><a href="/tags/ios-16/" class="post-tag" title="标签 - iOS 16">iOS 16</a><a href="/tags/macos-13/" class="post-tag" title="标签 - macOS 13">macOS 13</a></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/2.7-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%86%E5%9B%BE/" class="post-nav-item" rel="prev" title="2.7 自定义视图"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>2.7 自定义视图</a><a href="/posts/swiftui-eul/3.2-%E5%A0%86%E5%8F%A0stacks/" class="post-nav-item" rel="next" title="3.2 堆叠（Stacks）">3.2 堆叠（Stacks）<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/ce5c76695a9d6f568ce9b80b03f609d3.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

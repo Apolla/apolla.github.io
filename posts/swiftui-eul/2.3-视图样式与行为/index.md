@@ -1,0 +1,113 @@
+# 2.3 视图样式与行为
+
+
+<br>
+
+
+# 字体
+
+**SwiftUI** 内置了许多不同大小的字体，它们具有动态缩放特性：
+
+- 在不同设备上动态缩放。
+- 在支持动态缩放的 App 中，根据手机设置的字体大小动态缩放。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+如需指定字体大小，可使用 `.system(size:)` 方法，但不支持动态缩放，使用 @ScaledMetric 可以解决，参考 《SwiftUI 中的属性包装器》 。
+
+如果要支持等宽字体，使用示例中演示的 `.monospaced()` 方法。此外，还有一个只支持文本中的数字等宽的方法：[monospacedDigit()](https://developer.apple.com/documentation/swiftui/font/monospaceddigit()) 。
+
+关于自定义字体参考 [Applying custom fonts to text](https://developer.apple.com/documentation/swiftui/applying-custom-fonts-to-text)，更多字体样式设置参见 [Font](https://developer.apple.com/documentation/swiftui/font) 。
+
+# 颜色
+
+SwiftUI 中 [Color](https://developer.apple.com/documentation/swiftui/color)  也是视图，比如下面代码中 `Color.blue` 其实是生成了一个新的 view，而 `.background(Color.purple)` 是将新生成的 view 作用于 Text 的背景层。
+
+```swift
+struct ContentView: View {
+  var body: some View {
+    ZStack {
+      Color.blue
+      Text("Hello")
+        .foregroundColor(.white)
+        .background(Color.purple)
+    }
+  }
+}
+```
+
+SwiftUI 中的 view 一般都会根据自身内容动态调整尺寸，比如 Text、Button 或 VStack 等。Color 却很贪婪，它会铺满可利用的所有空间。所以上面的代码中，紫色背景会铺满 Text 占有的所有空间，而蓝色背景会铺满整个视图，它的贪婪也改变了父视图 ZStack 的尺寸。如果没有 `Color.blue` ，ZStack 的尺寸也仅仅只是 Text 实例的大小。这和 SwiftUI 的布局思想有关，这里先作简单了解即可。
+
+SwiftUI 内置了许多不同的颜色，支持 light/dark mode，而且在不同平台表现不一。具体效果和色值可以参考：[HIG/Color](https://developer.apple.com/design/human-interface-guidelines/foundations/color/) 。
+
+示例中也演示了各种内置颜色，可以添加渐变效果和改变透明度。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+# 外观
+
+[preferredColorScheme(_:)](https://developer.apple.com/documentation/swiftui/view/preferredcolorscheme(_:)) 可以指定外观模式。
+
+> 注意：当调用这个修饰器时，影响的并非当前的 view，而是它所属的 presentation: ***"the nearest enclosing presentation, like a popover, a sheet, or a window. "***。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+# 阴影
+
+使用 `.shadow` 为视图添加阴影时，只有一个必须参数 `radius`，默认颜色是根据 colorScheme 动态适配的。
+
+各参数的使用及效果：<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span> 。
+
+`.shadow` 生成的是外阴影，iOS 16 新增了一个可以生成内阴影的方法：
+
+```swift
+Circle()
+  .fill(.shadow(.inner(radius: 5)))
+```
+
+效果见示例，两种阴影可以制造出不同的凹凸效果。
+
+# 模糊
+
+使用 `.blur` 方法可以为视图添加模糊效果，iOS 15/macOS 12 新增了 [Material](https://developer.apple.com/documentation/swiftui/material) 风格的背景。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+# 显示与隐藏
+
+## 视图的显隐
+
+视图的显隐有如下三种方法：
+
+- `.opacity`：改变透明度，会占用位置。
+- `.hidden()` ：隐藏视图，会占用位置。
+- 条件渲染：不会占用位置。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+推荐优先使用前两种方法，条件渲染是次选，原因请参考 《SwiftUI 视图管理机制》 。
+
+## 隐藏敏感信息
+
+`.privacySensitive()` 可以隐藏敏感信息，在 iOS 下拉通知中心或者挂起程序时，视图会隐藏，只显示一个系统默认的占位视图。
+
+如需指定某个视图是非敏感的，使用 `.unredacted()` 方法。
+
+如需根据状态更灵活地控制视图的敏感态，可以使用 [.redacted](https://developer.apple.com/documentation/swiftui/view/redacted(reason:)) 方法。结合环境变量，还能实现自定义占位视图。
+
+# 视图的可交互性
+
+disabled 方法可以禁用视图交互，某些视图样式在禁用前后也有细微的变化。
+
+allowsHitTesting 同样可以禁用交互，区别在于 disabled 会阻断事件的传递，而 allowsHitTesting 只是禁用当前视图的交互，事件依然会沿着响应链继续传递，这非常适合用于视图需要穿透点击的场景。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/2.3-%E8%A7%86%E5%9B%BE%E6%A0%B7%E5%BC%8F%E4%B8%8E%E8%A1%8C%E4%B8%BA/  
+

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>4.1 Actor 的使用 - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="Actor 并发模型 actor 并发模型首次发表于 1973 年，是一个用于并发计算的数学模型。
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="4.1 actor 的使用">
+	<meta itemprop="description" content="Actor 并发模型 actor 并发模型首次发表于 1973 年，是一个用于并发计算的数学模型。">
+	<meta itemprop="datePublished" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="dateModified" content="2024-04-19T15:20:05+08:00">
+	<meta itemprop="wordCount" content="3477">
+	<meta itemprop="keywords" content="SwiftUI"><meta property="og:url" content="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="4.1 actor 的使用">
+	<meta property="og:description" content="Actor 并发模型 actor 并发模型首次发表于 1973 年，是一个用于并发计算的数学模型。">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-04-19T15:20:05+08:00">
+		<meta property="article:modified_time" content="2024-04-19T15:20:05+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="4.1 actor 的使用">
+  <meta name="twitter:description" content="Actor 并发模型 actor 并发模型首次发表于 1973 年，是一个用于并发计算的数学模型。"><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/" title="4.1 actor 的使用 - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/swiftui-eul/4.2-@globalactor@mainactor-%E7%9A%84%E4%BD%BF%E7%94%A8/" title="4.2 @globalActor、@MainActor 的使用" /><link rel="next" type="text/html" href="https://apolla.cc/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" title="3.2 异步流" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "4.1 actor 的使用",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","wordcount":  3477 ,
+    "url": "https:\/\/apolla.cc\/posts\/swiftui-eul\/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished": "2024-04-19T15:20:05+08:00","dateModified": "2024-04-19T15:20:05+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>4.1 Actor 的使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/swiftui/" class="post-category" title="分类 - SwiftUI"><i class="fa-regular fa-folder" aria-hidden="true"></i> SwiftUI</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-04-19 15:20:05"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-04-19">2024-04-19</time></span>&nbsp;<span title="3477 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#actor-类型">actor 类型</a></li>
+    <li><a href="#nonisolated-关键字">nonisolated 关键字</a></li>
+    <li><a href="#actor-的可重入特性">actor 的可重入特性</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><h1 class="heading-element" id="actor-并发模型"><span>Actor 并发模型</span>
+  <a href="#actor-%e5%b9%b6%e5%8f%91%e6%a8%a1%e5%9e%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p><img loading="lazy" src='/images/actor.png' alt="/images/actor.png"></p>
+<p>actor 并发模型首次发表于 1973 年，是一个用于并发计算的数学模型。</p>
+<p>在 actor 并发模型中，万物皆为 actor。一个 actor 就是一个轻量级的基本计算单元，各个 actor 是完全隔离的，维护各自的私有状态，它们不共享包括内存、状态在内的任何东西，而是通过传递消息来进行通信。一个 actor 一次只能处理一个消息，每个 actor 都有一个绑定的邮箱（Mailbox）用于存储消息，接收、处理消息只能串行执行，而多个 actor 可以同时异步运行。</p>
+<p>下面的例子是上面这段描述的形象化表达，你也可以理解为 actor 并发模型抽象于这个贴近现实的例子：</p>
+<p>有个邮局需要负责收发某一地区的信件，它本身就是一个 actor。它会将任务分派给很多不同的邮差，它们分别负责某一片区的业务，每个邮差其实也是一个 actor。邮局以及各个邮差是互为隔离的，只有自身能够访问和修改内部状态，外部只能通过发送消息来通信。比如某个邮差想知道另一个同事的工作进展，他只能发消息给他去询问，而不能通过其它途径直接获取。邮局 actor 在将任务分派给各个邮差 actor 后，邮差可以选择自己去送信，也可以发展下线 actor 去送信。每个邮差 actor 有个邮箱来存储邮件或者其它任务，他会按顺序将信件送到不同的地址。信件的接收者其实也是一个 actor，他不必在家门口等待邮差，邮差只需将信件放在家门口的信箱即可，收信人会在闲暇时取走信件。</p>
+<p>数据竞争导致的安全问题是并发世界的一大难点，常用的解决方案是使用多线程加锁的模型。但锁的滥用导致的性能损耗以及难以调试的问题，令人生畏，而 actor 模型的强隔离机制带来了便于单测、容错性高、易于分布式等优点。当然，任何事物都有优缺点，actor 并发模型亦是如此。比如邮箱溢出问题，就是 actor 模型特有的缺陷。不过，它的长处带来的优势优于短处带来的劣势。</p>
+<p>受 actor 并发模型的启发，Swift 引入了 actor 类型来确保并发访问可变状态的安全性。</p>
+<h1 class="heading-element" id="swift-中的-actors"><span>Swift 中的 Actors</span>
+  <a href="#swift-%e4%b8%ad%e7%9a%84-actors" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><h2 class="heading-element" id="actor-类型"><span>actor 类型</span>
+  <a href="#actor-%e7%b1%bb%e5%9e%8b" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>actor 与 class、struct、enum、protocol 类型一样，同属于命名类型。它和 class 类似，但也有显著的不同：</p>
+<ul>
+<li>actor 和 class 一样可以定义属性、方法、下标、初始化方法，可以遵循协议，可以当作泛型使用。</li>
+<li>actor 也是引用类型，因为 actor 的初衷就是在并发环境中安全地共享可变状态，只有引用类型才有“共享”一说。</li>
+<li>actor 的内部状态和外部是隔离的，支持安全的并发访问，而 class 不支持。</li>
+<li>class 可以继承，但是 actor 不可以。原因很简单，继承支持重写，这和 actor 的状态隔离是冲突的。</li>
+<li>所有的 actor 隐式遵循 <a href="https://developer.apple.com/documentation/swift/actor" target="_blank" rel="external nofollow noopener noreferrer">Actor 协议<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，这是一个比较特别的协议，它无法用于被声明的具体类型，比如 <code>class ClassName: Actor { ... }</code> 这样的写法是无法通过编译的。</li>
+</ul>
+<p>我们来看下面的示例，使用 class 类型声明了一个产品，每卖出去一个，库存就会相应地减少：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Product</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nv">name</span><span class="p">:</span> <span class="nb">String</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nv">inventory</span><span class="p">:</span> <span class="nb">UInt</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">inventory</span><span class="p">:</span> <span class="nb">UInt</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="n">name</span>
+</span></span><span class="line"><span class="cl">    <span class="kc">self</span><span class="p">.</span><span class="n">inventory</span> <span class="p">=</span> <span class="n">inventory</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">sell</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">UInt</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">inventory</span> <span class="p">==</span> <span class="mi">0</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">inventory</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">inventory</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">product</span> <span class="p">=</span> <span class="n">Product</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&#34;Book&#34;</span><span class="p">,</span> <span class="n">inventory</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">product</span><span class="p">.</span><span class="n">sell</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">product</span><span class="p">.</span><span class="n">sell</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>上面两次调用 <code>sell()</code> 都是异步的，由于 <code>Product</code> 内部没有同步机制，因此库存的数量会因为数据竞争导致偏差。使用线程加锁的方法固然可以解决问题，但比较繁琐。我们试着使用 actor 来替换 class：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">actor</span> <span class="n">Product</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">...</span> <span class="c1">// 代码同上</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nv">product</span> <span class="p">=</span> <span class="n">Product</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&#34;Book&#34;</span><span class="p">,</span> <span class="n">inventory</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">await</span> <span class="n">product</span><span class="p">.</span><span class="n">sell</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printLog</span><span class="p">(</span><span class="n">await</span> <span class="n">product</span><span class="p">.</span><span class="n">sell</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>就是这么简单！当我们将 <code>Prodcuct</code> 声明为 actor 类型时，就表示它的内部状态与外界是隔离的，其内部的可变状态只能由自身维护，这和 actor 并发模型的理念是一致的。直接从外部修改库存变量 <code>inventory</code> 是不合法的，因为外部环境脱离了 <code>Product</code> 实例内部的隔离环境。<code>sell()</code> 方法就是上文提到的 actor 并发模型中的消息传递，每次调用 <code>sell()</code> 方法相当于传递了一个消息，它会被放进一个按顺序执行的队列中，这个队列其实就是上文提到的 actor 绑定的邮箱。<code>sell()</code> 被放进邮箱后，并不一定马上会执行并返回结果，这是一个异步过程，因此，当我们从外部调用它时，需要使用 <code>await</code> 标记来表明该访问是异步的，它可能会被挂起。</p>
+<p>actor 的状态隔离保护了其内部的可变状态，外部异步访问可变状态的行为，在内部会按照顺序串行执行，这保证的数据的同步性。状态隔离和同步机制阻止了外部对可变状态的并发访问，更重要的是，在编译期间我们就可以借助 actor 最大程度地消除数据竞争带来的安全隐患。</p>
+<p>actor 外部对不可变状态进行访问时，我们无需担心数据同步问题。因此，当我们获取 <code>product.name</code> 时，无需使用 <code>await</code> 关键字标记。actor 内部访问属性、方法、下标时，也无需使用 <code>await</code> 标记，因为 actor 内部是一个隔离环境，所有的访问本身就是同步行为。</p>
+<p>actor 和 class 一样可以使用 static 关键字声明静态属性和方法，但不具备隔离特性。因为 actor 实例内部的私有状态只有它自身能够修改，即实例的隐式属性 <code>self</code> 所代表的实例本身才能访问不可变状态。而 actor 静态属性、方法的内存布局和 class 是一样的，不属于 <code>self</code> 范畴。</p>
+<h2 class="heading-element" id="nonisolated-关键字"><span>nonisolated 关键字</span>
+  <a href="#nonisolated-%e5%85%b3%e9%94%ae%e5%ad%97" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>actor 实例内的方法、计算属性默认是被隔离的，因此调用时总是需要使用 <code>await</code> 进行访问。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">extension</span> <span class="nc">Product</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nonisolated</span> <span class="kd">func</span> <span class="nf">showName</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;The name is: </span><span class="si">\(</span><span class="n">name</span><span class="si">)</span><span class="s">.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>上面我们给 <code>Product</code> 扩展了一个方法，展示最新的库存，调用如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">await</span> <span class="n">product</span><span class="p">.</span><span class="n">showName</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>但这里似乎有点不对劲，我们只是读取了 <code>name</code> 的值，但没有写操作，这不会导致数据竞争。actor 的状态隔离和同步机制反而导致并发访问 <code>name</code> 的效率会降低，这简直是画蛇添足。</p>
+<p>为此，Swift 引入了 <code>nonisolated</code> 关键字来解决这一问题，该关键字向编译器宣告被它修饰的方法、计算属性无需被隔离：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">extension</span> <span class="nc">Product</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nonisolated</span> <span class="kd">func</span> <span class="nf">showName</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">print</span><span class="p">(</span><span class="s">&#34;The name is: </span><span class="si">\(</span><span class="n">name</span><span class="si">)</span><span class="s">.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Task</span><span class="p">.</span><span class="n">detached</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">product</span><span class="p">.</span><span class="n">showName</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="actor-的可重入特性"><span>actor 的可重入特性</span>
+  <a href="#actor-%e7%9a%84%e5%8f%af%e9%87%8d%e5%85%a5%e7%89%b9%e6%80%a7" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>actor 能从编译层面消除绝大部分数据竞争带来的并发安全问题，但没有编译错误的代码，并不意味着绝对的安全。</p>
+<p>我们来看一段选自 <a href="https://developer.apple.com/videos/play/wwdc2021/10133/" target="_blank" rel="external nofollow noopener noreferrer">WWDC21/Protect mutable state with Swift actors<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的示例代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">actor</span> <span class="n">ImageDownloader</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">var</span> <span class="nv">cache</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span><span class="p">:</span> <span class="n">Image</span><span class="p">]</span> <span class="p">=</span> <span class="p">[:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">image</span><span class="p">(</span><span class="n">from</span> <span class="n">url</span><span class="p">:</span> <span class="n">URL</span><span class="p">)</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">Image</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">cached</span> <span class="p">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">cached</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">downloadImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="c1">// 1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">cache</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="p">=</span> <span class="n">image</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">image</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>这段代码实现的是单张图片的网络下载功能。如果缓存有值，返回缓存图片，如果没有，下载图片并缓存，同时返回下载的图片。乍一看，似乎没有什么问题。但是在某些情况下，结果会出乎我们的意料，这是由<strong>actor 的可重入特性</strong>所导致的。</p>
+<p>当 actor 内执行的任务暂停时，在它恢复运行之前，可重入性允许 actor 可以去执行其它的任务。</p>
+<p>以上面为例，假设程序中有多个视图展示同一张图片，那么有可能会导致同一个 url 的图片下载操作会同时进行。这里我们仅以两个同时下载操作为例：</p>
+<ul>
+<li>A 操作调用 <code>image(from:)</code> 开始下载图片，运行至 // 1 处会暂停，等待图片下载完成。此时图片的下载会在另一个线程执行，但函数所在的线程不会被阻塞，它会继续执行其它由系统分派的任务。</li>
+<li>A 操作在暂停时，B 操作可以重新进入 actor 下载图片，此时 A、B处于“交织执行”的状态。B 操作进入 <code>image(from:)</code> 函数时，由于 A 尚未下载完图片，缓存中找不到图片，B 操作会继续执行后面的代码，再次下载同一个 url 的图片。</li>
+<li>A、B 操作是两个几乎同时进行的异步操作，完成的先后顺序是不确定的。假设 A 操作先完成，它更新了缓存。此时服务端恰好将图片更新了，B 操作下载回来的图片和 A 的结果是不一致的，这就是问题所在。</li>
+</ul>
+<p>由上可知，actor 的可重入特性，会导致如下问题：</p>
+<ul>
+<li>如果图片没有更新，多次下载会导致资源的浪费。</li>
+<li>如果图片更新，不仅会导致资源浪费，还会导致数据错误。</li>
+</ul>
+<p>既然如此，为何 Swift 仍然要将 actor 函数设计为可重入呢？基于两个原因：</p>
+<ul>
+<li>防止死锁：如果两个 actor 互相调用，会造成相互等待，造成死锁。</li>
+<li>提升性能：可重入减少了非必要阻塞，提高了整体性能。另外，系统可以更方便地调度任务，优先级高的任务将有机会被优先执行。</li>
+</ul>
+<p>WWDC 21 的另一个 session 也有助于理解 actor 的可重入性，建议观看：<a href="https://developer.apple.com/videos/play/wwdc2021/10254/?time=1975" target="_blank" rel="external nofollow noopener noreferrer">Swift concurrency: Behind the scenes<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p>actor 函数的可重入特性对于高效并发是必要的存在，但它带来了副作用。如何解决呢？可以参考以下两点：</p>
+<ul>
+<li>在同步环境中修改 actor 的可变状态。</li>
+<li>在 <code>await</code> 之后，检查 actor 内部的最新状态，然后据此执行后续逻辑。</li>
+</ul>
+<p>回到上面的例子，我们可以将缓存中保存的 url 对应的数据改为一个枚举值，它表示对应图片的下载状态。如果正在下载，那么就不需要开启新的下载，直接等待正在执行的下载 任务返回图片。如果已经下载完成，直接返回缓存的图片即可。优化后的代码如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-swift"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="n">actor</span> <span class="n">ImageDownloader2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">enum</span> <span class="nc">ImageStatus</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">downloading</span><span class="p">(</span><span class="kc">_</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Image</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="n">downloaded</span><span class="p">(</span><span class="kc">_</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">var</span> <span class="nv">cache</span><span class="p">:</span> <span class="p">[</span><span class="n">URL</span><span class="p">:</span> <span class="n">ImageStatus</span><span class="p">]</span> <span class="p">=</span> <span class="p">[:]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kd">func</span> <span class="nf">image</span><span class="p">(</span><span class="n">from</span> <span class="n">url</span><span class="p">:</span> <span class="n">URL</span><span class="p">)</span> <span class="n">async</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">Image</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="kd">let</span> <span class="nv">status</span> <span class="p">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">switch</span> <span class="n">status</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">downloading</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">try</span> <span class="n">await</span> <span class="n">task</span><span class="p">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="kd">let</span> <span class="p">.</span><span class="n">downloaded</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">image</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">Task</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">try</span> <span class="n">await</span> <span class="n">downloadImage</span><span class="p">(</span><span class="n">from</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">cache</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="p">=</span> <span class="p">.</span><span class="n">downloading</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="k">try</span> <span class="n">await</span> <span class="n">task</span><span class="p">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl">      <span class="n">cache</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="p">=</span> <span class="p">.</span><span class="n">downloaded</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">image</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">cache</span><span class="p">.</span><span class="n">removeValue</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">throw</span> <span class="n">error</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
+</div>
+</div><p>如何嗅到可重入导致的 bad smell 呢？有一个快速判断的依据：是否有跨 <code>await</code> 访问 actor 的可变状态。</p>
+<p>以上面的下载图片为例，在异步等待下载图片返回时，我们使用了 <code>await</code> 标记。在 <code>await</code> 之前，我们读取了 <code>cache</code> 来判定是否有缓存。在图片下载完成后，即 <code>await</code> 之后，我们更新了 <code>cache</code>。这就是跨 <code>await</code> 访问，在 <code>await</code> 前后，<code>cache</code> 可能会发生变化，这也是导致结果可能异常的原因，而我们要做的就是消除跨 <code>await</code> 导致状态变化带来的数据不一致性。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-04-19 15:20:05">更新于 2024-04-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="4.1 Actor 的使用"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/swiftui-eul/4.1-actor-%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="4.1 Actor 的使用"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/swiftui-eul/3.2-%E5%BC%82%E6%AD%A5%E6%B5%81/" class="post-nav-item" rel="prev" title="3.2 异步流"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>3.2 异步流</a><a href="/posts/swiftui-eul/4.2-@globalactor@mainactor-%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="4.2 @GlobalActor、@MainActor 的使用">4.2 @GlobalActor、@MainActor 的使用<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/e38597b2ef5c8c1a11639cfd4f2d6e11.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>

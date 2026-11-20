@@ -1,0 +1,50 @@
+# 2.4.4 控件-指示器
+
+
+<br>
+
+
+# [ProgressView](https://developer.apple.com/documentation/swiftui/progressview)
+
+ProgressView 有菊花和进度条两种样式，<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span> 。
+
+简单介绍一下自定义 [ProgressViewStyle](https://developer.apple.com/documentation/swiftui/progressviewstyle) ，ProgressViewStyle 中的 configuration 类型为 ProgressViewStyleConfiguration，它有三个属性：
+
+```swift
+// 对应 ProgressView 构建时的 label
+var label: ProgressViewStyleConfiguration.Label?
+
+// 对应 ProgressView 构建时的 currentValueLabel
+var currentValueLabel: ProgressViewStyleConfiguration.CurrentValueLabel?
+
+// ProgressView 的完成进度，范围是 0.0...1.0
+// 如果 ProgressView 没有 value 参数或是通过日期范围构建，则为 nil
+let fractionCompleted: Double?
+```
+
+示例中的圆环进度条样式实现的核心思路就是根据 fractionCompleted 的值去绘制路径。
+
+ProgressView 还有个初始化方法：[init(ProgressViewStyleConfiguration)](https://developer.apple.com/documentation/swiftui/progressview/init(_:)-9dmp3) ，它可以让我们基于现有的 style 更方便的自定义样式。
+
+# [Gauge](https://developer.apple.com/documentation/swiftui/gauge)
+
+ProgressView 一般用于加载进度，Gauge 一般用作仪表盘，二者皆为指示器类型的控件，使用也类似。
+
+<span style="background: #007BFF; color: white; padding: 3px 10px; border-radius: 5px">> 查看示例</span>
+
+示例中演示了各种 [GaugeStyle](https://developer.apple.com/documentation/swiftui/gaugestyle) 的效果，实现并不复杂。其中的渐变色用到的是 `.tint` 方法，值得一提的是 SwiftUI 中的 tint 方法不仅支持 Color，还能使用 ShapeStyle 进行渲染。这两个方法如下：
+
+- [func tint(_ tint: Color?) -> some View](https://developer.apple.com/documentation/swiftui/view/tint(_:)-23xyq)
+- [func tint< S >(_ tint: S?) -> some View where S : ShapeStyle](https://developer.apple.com/documentation/swiftui/view/tint(_:)-93mfq)
+
+据测试，使用第二个方法，只能在部分 view 上生效。比如使用 Gradient 或 LinearGradient 能使 Button 的文字变成渐变色，但对 ProgressView、Slider 等却是无效的。
+
+示例还通过自定义 GaugeStyle 实现了一个简陋的速度计，供读者参考。
+
+
+
+---
+
+> 作者: 宋明  
+> URL: https://apolla.cc/posts/swiftui-eul/2.4.4-%E6%8E%A7%E4%BB%B6-%E6%8C%87%E7%A4%BA%E5%99%A8/  
+

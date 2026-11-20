@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>模块化与解耦（网络摘要） - 宋明的博客</title><meta name="author" content="宋明">
+<meta name="description" content="简述 本文主要讲述了在iOS开发过程中，模块化工程架构的一种组织方式，本文主要讲述基于cocoapods来做模块化的方案，详细讲述了iOS开发怎么进行模块划分的内容，主要会在以下方面做阐述：
+"><meta name="robots" content="index, follow">
+	<meta itemprop="name" content="模块化与解耦（网络摘要）">
+	<meta itemprop="description" content="简述 本文主要讲述了在iOS开发过程中，模块化工程架构的一种组织方式，本文主要讲述基于cocoapods来做模块化的方案，详细讲述了iOS开发怎么进行模块划分的内容，主要会在以下方面做阐述：">
+	<meta itemprop="datePublished" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="dateModified" content="2024-03-09T23:21:58+08:00">
+	<meta itemprop="wordCount" content="3538">
+	<meta itemprop="keywords" content="组件化"><meta property="og:url" content="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/">
+	<meta property="og:site_name" content="宋明的博客">
+	<meta property="og:title" content="模块化与解耦（网络摘要）">
+	<meta property="og:description" content="简述 本文主要讲述了在iOS开发过程中，模块化工程架构的一种组织方式，本文主要讲述基于cocoapods来做模块化的方案，详细讲述了iOS开发怎么进行模块划分的内容，主要会在以下方面做阐述：">
+	<meta property="og:locale" content="zh_cn">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2024-03-09T23:21:58+08:00">
+		<meta property="article:modified_time" content="2024-03-09T23:21:58+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="模块化与解耦（网络摘要）">
+  <meta name="twitter:description" content="简述 本文主要讲述了在iOS开发过程中，模块化工程架构的一种组织方式，本文主要讲述基于cocoapods来做模块化的方案，详细讲述了iOS开发怎么进行模块划分的内容，主要会在以下方面做阐述："><meta name="application-name" content="宋明的博客">
+<meta name="apple-mobile-web-app-title" content="宋明的博客"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#2d89ef"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF7359"><link rel="canonical" type="text/html" href="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/" title="模块化与解耦（网络摘要） - 宋明的博客" /><link rel="prev" type="text/html" href="https://apolla.cc/posts/reading/%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96/" title="隐私政策" /><link rel="next" type="text/html" href="https://apolla.cc/posts/interview/%E9%9D%A2%E8%AF%95-9-%E9%AB%98%E7%BA%A7%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试 9 高级面试题" /><link rel="alternate" type="text/markdown" href="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/index.md"><link rel="stylesheet" href="/css/unocss.min.css"><link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/pages/posts.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.min.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "模块化与解耦（网络摘要）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/apolla.cc\/posts\/modularization\/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81\/"
+    },"genre": "posts","wordcount":  3538 ,
+    "url": "https:\/\/apolla.cc\/posts\/modularization\/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81\/","datePublished": "2024-03-09T23:21:58+08:00","dateModified": "2024-03-09T23:21:58+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "宋明"
+      },"description": ""
+  }
+  </script><script src="/js/head.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div>
+    <nav class="nav-main" aria-label="主菜单">
+      <ul class="menu"><li class="menu-item">
+            <a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item">
+            <a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item">
+            <a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item">
+            <a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item">
+            <a class="menu-link" href="/about/" title="关于">关于</a></li></ul>
+    </nav><nav class="nav-system" aria-label="站点功能">
+      <ul class="menu"><li class="menu-item delimiter"></li><li class="menu-item search">
+            <button type="button" class="search-trigger desktop" aria-label="搜索" title="搜索">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+              搜索
+              <kbd></kbd>
+            </button>
+          </li>
+          <li class="menu-item delimiter"></li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="宋明的博客" class="header-title-link"><span class="header-title-text">宋明的博客</span></a><span class="header-subtitle"></span></div><button type="button" class="search-trigger mobile" aria-label="搜索"><i class="fa-solid fa-search" aria-hidden="true"></i></button><button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/" title="宋明的博客">首页</a></li><li class="menu-item"><a class="menu-link" href="/archives/" title="归档">归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/" title="categories">分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/" title="tags">标签</a></li><li class="menu-item"><a class="menu-link" href="/about/" title="关于">关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside><article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>模块化与解耦（网络摘要）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="/authors/%E5%AE%8B%E6%98%8E/" title="作者" rel="author" class="author"><i class="fa-solid fa-user-circle me-1" aria-hidden="true"></i>宋明</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BB%84%E4%BB%B6%E5%8C%96/" class="post-category" title="分类 - 组件化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 组件化</a></span></div>
+      <div class="post-meta-line"><span title="发布于 2024-03-09 23:21:58"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-03-09">2024-03-09</time></span>&nbsp;<span title="3538 字"><i class="fa-solid fa-pencil me-1" aria-hidden="true"></i>约 3600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"></div>
+      </div><template data-toc><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1为什么要做模块化">1.为什么要做模块化？</a></li>
+    <li><a href="#2-模块设计原则">2. 模块设计原则</a></li>
+    <li><a href="#3-模块化开发有哪些优点和缺点">3. 模块化开发有哪些优点和缺点</a></li>
+    <li><a href="#4-解耦与通信">4. 解耦与通信</a>
+      <ul>
+        <li><a href="#41-公共模块下沉">4.1 公共模块下沉</a></li>
+        <li><a href="#42-面向接口调用">4.2 面向接口调用</a></li>
+        <li><a href="#43-面向协议调用">4.3 面向协议调用</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-源码推荐">5. 源码推荐</a></li>
+  </ul>
+</nav></template><div class="content" id="content"><h1 class="heading-element" id="简述"><span>简述</span>
+  <a href="#%e7%ae%80%e8%bf%b0" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h1><p>本文主要讲述了在iOS开发过程中，模块化工程架构的一种组织方式，本文主要讲述基于cocoapods来做模块化的方案，详细讲述了iOS开发怎么进行模块划分的内容，主要会在以下方面做阐述：</p>
+<ul>
+<li>为什么要做模块化</li>
+<li>模块设计原则</li>
+<li>模块化开发有哪些优点和缺点</li>
+<li>解耦与通信</li>
+</ul>
+<h2 class="heading-element" id="1为什么要做模块化"><span>1.为什么要做模块化？</span>
+  <a href="#1%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%81%9a%e6%a8%a1%e5%9d%97%e5%8c%96" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>我们都知道最基本的代码设计原则：“Don’t repeat yourself!”，每一个工程都会有自己的架构，即使你是刚入门的开发者，写几天代码也会发现要把一些常用到的重复代码单独拿出来放在一个叫common的地方，实现代码复用。这样看来每个开发者其实都或多或少的做过架构方面的事情，每个团队至少有1~2个人在做这样的事情。
+说道app代码架构，记得Samurai的开发者郭虹宇在群里说过这段精辟的话，引用一下:
+一派是说app开发并不需要什么狗P架构，第二派说我们有自己NB的架构，第三派说只要模块化够好，每个模块应该有自己的架构。
+这三个观点的出发点，我觉得也比较好理解，第一种应该是一些个人开发者，个人能力很强，经常一个人很快搞出来一个app，他的映像中不需要弄太多的框框框住自己，但是其实他也是有一套自己的架构的。第二派应该是一些公司或者大公司，有一套NB的架构对于团队的意义就比较大了，可以保证稳定迭代，保证规范和持久可维护性。第三派应该是BAT这样的有很多BU的超级公司，或者一些先进的开源开发者们，模块化能够更好的实现跨app的代码和功能的复用, 能够更好的共享资源，避免重复造轮子。
+那么为什么要做模块化？已经很明显了，模块化的代码框架最屌，不信，看看苹果的框架怎么做的，你就明白了。</p>
+<h2 class="heading-element" id="2-模块设计原则"><span>2. 模块设计原则</span>
+  <a href="#2-%e6%a8%a1%e5%9d%97%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>既然模块化最屌，那怎么才能做好project的模块化拆分呢，哪些代码应该被放到一个模块？这里分享一些我的经验。
+越底层的模块，应该越稳定，越抽象，越具有高复用度。
+这一点，目测大家应该比较认同，越是底层的SDK，就应该越稳定，稳定的最直观表现就是API很久都不用变化，所有的变化因子不要暴露出来，避免传递给依赖它的模块。但是要做到设计一套API很久都不用改变，那么就需要设计的时候能越抽象, 即需要我们抽象总结的能力。
+稳定性 还有一个特点就是会传递，比如 B 模块依赖了 A 模块，如果 B 模块很稳定，但是 A 模块不稳定，那么B模块也会变的不稳定了，因此下一个原则：
+不要让稳定的模块依赖不稳定的模块， 减少依赖
+既然上面说最好不要依赖，但是我发现我的 B 模块的确依赖了 A 模块里面不可或缺的代码怎么办？ 假设依赖的代码段为 x , 现在来看x的特性, 如果X是一个可能高复用的代码段，那么无妨把x从 A 模块里面拿出来，单做成一个模块 X, 那么 B 模块依赖 X 模块就好了；灵一种情况，x是一个方法或函数，而且不太适合单做成一个模块，所以那就在B模块里面拷贝一份 x 代码就ok了，因为这样可以保证模块的 稳定性 和 自完备性.
+如果上面两种方法都不太合适，我们会在后面解耦里面讲到如何解耦
+提升模块的复用度，自完备性有时候要优于代码复用
+什么是自完备性，就是尽可能的依赖少的模块来达到代码可复用。
+举个例子，我有个模块 Utils 里面放了大量的category工具方法等，在日常UI产品开发中，依赖这个Utils会很方便，但是我现在要写一个比较基础的模块，应该就要求复用度更高一些，这个时候需要用到Utils里面的几个方法，那这个时候还适合直接依赖Utils吗，当然不合适了，这与我们上面的设计原则相悖了啊，因此我们这时候为了这个模块的自完备性，就可以重新实现下这几个方法，而不是依赖Utils模块
+每个模块只做好一件事情，不要让Common出现
+模块化结构是让工程结构更清晰，每个模块都只做一件事情，都有自己的一个命名，这样这个模块才能良性发展， 但是这个名字千万不要再叫Common了，试想下你有没有做过这样的事情：“哎呀，这块代码放哪都不太合适，放Common吧”， 日久以后，这个Common就变成了毒瘤，大家都依赖它，还一堆不相关的代码，这个Common模块就是我们设计原则第一点的反面教材： “非常不稳定，大量依赖，全是耦合，整个模块无法复用到其他app”, 所以删掉工程里面的Common吧，再遇到不知道放哪的代码，就要好好思考模块的设计，再不行如果具有可复用性就单建一个模块吧，为什么不可以呢？
+按照你架构的层数从上到下依赖，不要出现下层模块依赖上层模块的现象
+业务模块之间也尽量不要耦合</p>
+<h2 class="heading-element" id="3-模块化开发有哪些优点和缺点"><span>3. 模块化开发有哪些优点和缺点</span>
+  <a href="#3-%e6%a8%a1%e5%9d%97%e5%8c%96%e5%bc%80%e5%8f%91%e6%9c%89%e5%93%aa%e4%ba%9b%e4%bc%98%e7%82%b9%e5%92%8c%e7%bc%ba%e7%82%b9" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>优点： 1、不只提高了代码的复用度，还可以实现真正的功能复用，比如同样的功能模块如果实现了自完备性，可以在多个app中复用 2、业务隔离，跨团队开发代码控制和版本风险控制的实现 3、模块化对代码的封装性、合理性都有一定的要求，提升开发同学的设计能力。
+缺点,模块化当然也有它的缺点： 1、入门门槛较高，新手入门需要的成本也更高 2、工具的使用成本，团队间和模块间的配合成本升高，开发效率短期会降低。
+但是从长期的影响来说，带来的好处远大于坏处的，因此模块化仍然是最佳的架构选择。</p>
+<h2 class="heading-element" id="4-解耦与通信"><span>4. 解耦与通信</span>
+  <a href="#4-%e8%a7%a3%e8%80%a6%e4%b8%8e%e9%80%9a%e4%bf%a1" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>我先说说为什么要解耦吧，模块化并不是说你把工程的代码拆分成 50 个 pod 或者framework就算完事了，要实现模块之间真正的解耦才算真正的模块化，否则如果模块之间还都是互相调用代码，循环依赖，那么和原本放文件夹里面没啥两样。那么什么是模块间的解耦呢？
+模块解耦的目标就是, 在基于模块设计原则上, 让模块之间没有循环依赖, 让业务模块之间解除依赖。</p>
+<h3 class="heading-element" id="41-公共模块下沉"><span>4.1 公共模块下沉</span>
+  <a href="#41-%e5%85%ac%e5%85%b1%e6%a8%a1%e5%9d%97%e4%b8%8b%e6%b2%89" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>这块其实还是讲的模块设计，一个工程的架构可能会分为很多层，然而在开发的过程中，很容易有人不注意让应该处于较底层的模块依赖了上层的模块，这种情况下应该对模块的设计进行改造实现单向依赖。
+比如一个常见的普遍的例子： 一个公共的WebView模块，里面可能有WebViewController的基类，然后还有JSBridge的服务，如果设计的时候没有注意，很容易在开发过程中，这个模块被塞入大量的其他业务代码，依赖了一大堆业务模块，因为经常注册JSBridge服务需要跟业务耦合。
+这个时候怎么做呢，首先我们要思考WebView模块的定位，从更全局的角度思考，每个app的架构应该都需要这样一个模块，那么我们完全可以把这个模块单独拎出来下沉为基础模块，这个时候的解耦就需要你对WebView模块做出一些设计，添加一些注册型Api，修改JSBridge的服务为可以通过注册的方式添加逻辑，这样来实现与业务解耦，业务完全可以把与自己业务相关的代码放在自己的模块里面，然后通过你设计的Api注册到WebView模块中。</p>
+<h3 class="heading-element" id="42-面向接口调用"><span>4.2 面向接口调用</span>
+  <a href="#42-%e9%9d%a2%e5%90%91%e6%8e%a5%e5%8f%a3%e8%b0%83%e7%94%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>虽然说公共模块可以通过架构设计来避免耦合业务，但是业务模块之间还是会有耦合的啊，而且这种情况是最多的，比如页面跳转啊，数据传递啊，这些情况前面的方法已经不够用了。那如何解耦不同业务模块之间的代码调用呢？
+那就是面向接口调用，我们知道只要直接引用代码，就会有依赖，比如：</p>
+<p>| 1
+2
+3
+4
+5
+6
+7
+8
+9 | // A 模块</p>
+<ul>
+<li>(void)getSomeDataFromB {
+B.getSomeData();
+}
+// B 模块</li>
+<li>(void)getSomeData {
+return self.data;
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div></li>
+</ul>
+<p>那么我们可以实现一个 getSomeDataFromB 的接口，让 A 只依赖这个接口，而 B 来实现这个接口，这样就实现了 A 与 B 的解耦。</p>
+<p>| 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19 | // 接口
+@protocol BService <NSObject></p>
+<ul>
+<li>(void)getSomeData;
+@end
+// A 模块, 只依赖接口</li>
+<li>(void)getSomeDataFromB {
+id  b = findService(@protocol(BService));
+b.getSomeData;
+}
+// B 模块，实现BService接口
+@interface B : NSObject <BService></li>
+<li>(void)getSomeData {
+return self.data;
+}
+<div class="table-wrapper">
+  <table data-sortable><thead>
+        <tr>
+            <th>@end</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div></li>
+</ul>
+<p>这样就可以实现了即满足了模块之间调用，也实现了解耦
+优点：
+1、接口类似代码，可以非常灵活的定义函数和回调等。
+缺点：
+1、接口定义文件需要放在一个模块以供依赖，但是这个模块不回贡献代码，所以还好。
+2、使用较为麻烦，每各调用都需要定义一个service，并实现, 对于一些具有普适性规律的场景不太合适，比如页面统一跳转</p>
+<h3 class="heading-element" id="43-面向协议调用"><span>4.3 面向协议调用</span>
+  <a href="#43-%e9%9d%a2%e5%90%91%e5%8d%8f%e8%ae%ae%e8%b0%83%e7%94%a8" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h3><p>面向接口调用的缺点导致并不能满足所有的需求，也解耦的不够彻底，那么终极手段就是通过定义一套协议来实现模块间的通信，协议现成的，那就是URL跳转协议，基本满足需要，简单易上手，基本上现在很多的App架构里面都会有“统一跳转” 这一套东西的，这个不光是对模块解耦有帮助，对于统一化运营都是有极好的帮助的，比如app里面的任何页面，或者任何操作都是通过一个URL来唤起的话，这样是不是就把各个复杂的业务之间解耦了呢，通信都使用URL.</p>
+<h2 class="heading-element" id="5-源码推荐"><span>5. 源码推荐</span>
+  <a href="#5-%e6%ba%90%e7%a0%81%e6%8e%a8%e8%8d%90" class="heading-mark"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>
+</h2><p>说了这么多，也要放点干货吧，下面给出2个库的介绍，对你模块化的进程希望有帮助。
+1、 <a href="https://github.com/joeldev/JLRoutes" target="_blank" rel="external nofollow noopener noreferrer">JLRoutes<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是一个URL跳转协议支持的库，跟我想要的简直很契合，强烈推荐。
+2、 我自己写的一个解耦框架 <a href="https://github.com/NianJi/AppLord" target="_blank" rel="external nofollow noopener noreferrer">AppLord<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>. 简单介绍一下几个概念</p>
+<ul>
+<li>Module 是负责管理启动模块的工具，可以帮助你把AppDelegate里面一坨初始化的代码分别放到不同的module里面去</li>
+<li>Service 就是对上面 4.2 中面向接口解耦方式的一种封装</li>
+<li>Task, 全局的后台任务管理器，有时候一些不知道放哪的任务执行可以塞进去</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-09 23:21:58">更新于 2024-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span></div><div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/" data-title="模块化与解耦（网络摘要）"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+<a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://apolla.cc/posts/modularization/%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E8%A7%A3%E8%80%A6%E7%BD%91%E7%BB%9C%E6%91%98%E8%A6%81/" data-title="模块化与解耦（网络摘要）"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+</span>
+        </div></div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section class="post-actions print-hidden"><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>
+      <span class="separator" aria-hidden="true"></span>
+      <span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/live/10-ios%E5%AE%89%E8%A3%85ffmpeg%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" class="post-nav-item" rel="prev" title="10： IOS安装FFmpeg问题总结"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>10： IOS安装FFmpeg问题总结</a><a href="/posts/modularization/ios-cocoapods%E7%BB%84%E4%BB%B6%E5%B9%B3%E6%BB%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E5%8F%8A%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="next" title="IOS CocoaPods组件平滑二进制化解决方案及详细教程">IOS CocoaPods组件平滑二进制化解决方案及详细教程<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+</article><aside class="toc animate__animated animate__fadeIn animate__faster" id="toc-auto" aria-label="目录"><h2 class="toc-title">
+      <span>目录<i class="toc-icon fa-solid fa-angle-down ms-1" aria-hidden="true"></i></span>
+      <button type="button" class="toc-print-btn" onclick="event.stopPropagation(); window.print()" aria-label="打印"><i class="fa-solid fa-print" aria-hidden="true"></i></button>
+    </h2>
+    <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+  <div class="footer-container"><div class="footer-bottom"><div class="footer-legal"><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+                  <span itemprop="copyrightYear">2020 - 2026</span><span class="author" itemprop="copyrightHolder">
+                    <a href="/authors/%E5%AE%8B%E6%98%8E/">宋明</a></span></div></div><div class="footer-tech"><div class="footer-line powered">由 <a href="https://github.com/gohugoio/hugo?v=0.170.0" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.170.0">Hugo</a> 与 <a href="https://github.com/hugo-fixit/FixIt?v=v1.0.0-rc.5" target="_blank" rel="external" title="FixIt v1.0.0-rc.5">FixIt</a> 驱动
+              </div></div></div></div>
+</footer>
+</div><div class="widgets"><div id="mask"></div><dialog id="nav-dialog" aria-labelledby="nav-dialog-title" closedby="any">
+    <button type="button" class="nav-close-btn" aria-label="Close 导航"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+    <div class="toc">
+      <h2 class="toc-title" id="nav-dialog-title">导航</h2><div class="toc-content" id="toc-content-drawer"></div></div>
+  </dialog><dialog id="search-dialog" class="search-dialog" aria-label="搜索" closedby="any">
+      <div class="search-modal">
+        <div class="search-modal-header">
+          <span class="search-delimiter"></span>
+          <button type="button" class="search-close-btn" aria-label="Close Search Dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="search-source-footer">
+          <div class="search-shortcuts max-sm:!hidden">
+            <span class="search-shortcut">
+              <kbd><i class="lucide-arrow-up" aria-hidden="true"></i></kbd>
+              <kbd><i class="lucide-arrow-down" aria-hidden="true"></i></kbd>
+              切换
+            </span>
+            <span class="search-shortcut">
+              <kbd><i class="lucide-corner-down-left" aria-hidden="true"></i></kbd>
+              选择
+            </span>
+            <span class="search-shortcut">
+              <kbd>ESC</kbd>
+              关闭
+            </span>
+          </div><span class="search-engine">搜索引擎 <a href="https://fusejs.io/" target="_blank" rel="external nofollow noopener noreferrer">Fuse.js</a></span></div>
+      </div>
+    </dialog><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster hidden" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="nav-drawer-button" class="fixed-button nav-drawer-button hidden" aria-label="导航" aria-controls="nav-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><noscript>
+    <div class="noscript-warning bg-danger text-white text-base font-bold fixed text-center inset-x-0 bottom-0 w-full z-fixed">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete-js/index.production.js" defer></script><script src="/js/lib/fuse.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.min.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/lib/table-sort.min.js" defer></script><script src="/js/config/46407ff9fc47c14ab946e785f3542a72.min.js" defer></script><script src="/js/lib/file-tree.min.js" defer></script><script src="/js/main.min.js" defer></script></body>
+</html>
